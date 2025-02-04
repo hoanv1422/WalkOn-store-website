@@ -1,17 +1,17 @@
-  
+
   {{-- sidebar menu start --}}
   <ul id="sidebar_menu">
     <li class="mm-active">
-        <a class="has-arrow" href="#" aria-expanded="false">
+        <a class="has-arrow" aria-expanded="false">
             <div class="icon_menu">
                 <img src="img/menu-icon/dashboard.svg" alt="">
             </div>
             <span>Thông kê</span>
         </a>
         <ul>
-            <li><a class="active" href="index.html">Sales</a></li>
-            <li><a href="index_2.html">Default</a></li>
-            <li><a href="index_3.html">Dark Menu</a></li>
+            <li><a class="active" href="{{url('/')}}">Sales</a></li>
+            <li><a href="{{url('/')}}">Default</a></li>
+            <li><a href="{{url('/')}}">Dark Menu</a></li>
         </ul>
     </li>
     <li class="">
@@ -22,10 +22,24 @@
             <span>Danh mục</span>
         </a>
         <ul>
-            <li><a href="editor.html">Danh sách</a></li>
-            <li><a href="mail_box.html">Thêm mới </a></li>
-            <li><a href="chat.html">Sửa</a></li>
-            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="{{url('/categories')}}">Danh sách</a></li>
+            <li><a href="{{url('/categories/create')}}">Thêm mới </a></li>
+            <li><a href="{{url('/categories')}}">Sửa</a></li>
+            <li><a href="{{url('/')}}">Faq</a></li>
+        </ul>
+    </li>
+    <li class="">
+        <a class="has-arrow" href="#" aria-expanded="false">
+            <div class="icon_menu">
+                <img src="img/menu-icon/2.svg" alt="">
+            </div>
+            <span>Sản phẩm</span>
+        </a>
+        <ul>
+            <li><a href="{{url('/products')}}">Danh sách</a></li>
+            <li><a href="{{url('/products/create')}}">Thêm mới </a></li>
+            <li><a href="{{url('/products')}}">Sửa</a></li>
+            <li><a href="{{url('/')}}">Faq</a></li>
         </ul>
     </li>
     <li class="">
@@ -34,7 +48,7 @@
             <div class="icon_menu">
                 <img src="img/menu-icon/3.svg" alt="">
             </div>
-            <span>Sản phẩm</span>
+            <span>Tools </span>
         </a>
         <ul>
             <li><a href="colors.html">colors</a></li>
@@ -251,9 +265,9 @@
                         <div class="search_inner">
                             <form action="#">
                                 <div class="search_field">
-                                    <input type="text" placeholder="Search here..." >
+                                    <input type="text" placeholder="Tìm kiếm..." >
                                 </div>
-                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                <button type="submit"> <img src="{{url('img/icon/icon_search.svg')}}" alt=""> </button>
                             </form>
                         </div>
                         <span class="f_s_14 f_w_400 ml_25 white_text text_white" >Apps</span>
@@ -261,8 +275,8 @@
                 <div class="header_right d-flex justify-content-between align-items-center">
                     <div class="header_notification_warp d-flex align-items-center">
                         <li>
-                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="img/icon/bell.svg" alt="">
-                                
+                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="{{url('img/icon/bell.svg')}}" alt="">
+
                             </a>
                             <!-- Menu_NOtification_Wrap  -->
                         <div class="Menu_NOtification_Wrap">
@@ -273,7 +287,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/2.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -283,7 +297,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/4.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -293,7 +307,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/3.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -303,7 +317,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/4.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -313,7 +327,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/4.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -323,7 +337,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="{{url('img/staf/3.png')}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -340,20 +354,20 @@
                         <!--/ Menu_NOtification_Wrap  -->
                         </li>
                         <li>
-                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="img/icon/msg.svg" alt="">   </a>
+                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="{{url('img/icon/msg.svg')}}" alt="">   </a>
                         </li>
                     </div>
                     <div class="profile_info">
-                        <img src="img/client_img.png" alt="#">
+                        <img src="{{url('img/client_img.png')}}" alt="#">
                         <div class="profile_info_iner">
                             <div class="profile_author_name">
-                                <p>Neurologist </p>
-                                <h5>Dr. Robar Smith</h5>
+                                <p>Admin </p>
+                                <h5>WalkOn Store</h5>
                             </div>
                             <div class="profile_info_details">
-                                <a href="#">My Profile </a>
-                                <a href="#">Settings</a>
-                                <a href="#">Log Out </a>
+                                <a href="#">Tài khoản của tôi </a>
+                                <a href="#">Cài đặt</a>
+                                <a href="#">Đăng xuất </a>
                             </div>
                         </div>
                     </div>
