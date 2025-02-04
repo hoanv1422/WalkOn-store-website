@@ -22,7 +22,7 @@
                     <div class="header_notification_warp d-flex align-items-center">
                         <li>
                             <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="img/icon/bell.svg" alt="">
-                                
+
                             </a>
                             <!-- Menu_NOtification_Wrap  -->
                         <div class="Menu_NOtification_Wrap">
@@ -107,13 +107,13 @@
                         <img src="img/client_img.png" alt="#">
                         <div class="profile_info_iner">
                             <div class="profile_author_name">
-                                <p>Neurologist </p>
-                                <h5>Dr. Robar Smith</h5>
+                                <p>Admin </p>
+                                <h5>WalkOn Shop</h5>
                             </div>
                             <div class="profile_info_details">
-                                <a href="#">My Profile </a>
-                                <a href="#">Settings</a>
-                                <a href="#">Log Out </a>
+                                <a href="#">Tài khoản của tôi </a>
+                                <a href="#">Cài đặt</a>
+                                <a href="#">Đăng xuất </a>
                             </div>
                         </div>
                     </div>
