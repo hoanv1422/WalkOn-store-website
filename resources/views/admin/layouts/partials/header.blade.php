@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
-
-
-
 <head>
    <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="{{ asset('admin_views/css/bootstrap1.min.css') }}" />
@@ -43,7 +40,7 @@
 <body class="crm_body_bg">
     <nav class="sidebar vertical-scroll  ps-container ps-theme-default ps-active-y">
         <div class="logo d-flex justify-content-between">
-            <a href="index.html"><img src="img/logo.png" alt=""></a>
+            <a href="{{url('/admin')}}"><img src="{{asset('img/logo.png')}}" alt=""></a>
             <div class="sidebar_close_icon d-lg-none">
                 <i class="ti-close"></i>
             </div>
