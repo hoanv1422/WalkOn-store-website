@@ -13,7 +13,7 @@
                                 <div class="search_field">
                                     <input type="text" placeholder="Search here..." >
                                 </div>
-                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                <button type="submit"> <img src="admin_views/img/icon/icon_search.svg" alt=""> </button>
                             </form>
                         </div>
                         <span class="f_s_14 f_w_400 ml_25 white_text text_white" >Apps</span>
@@ -21,7 +21,7 @@
                 <div class="header_right d-flex justify-content-between align-items-center">
                     <div class="header_notification_warp d-flex align-items-center">
                         <li>
-                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="img/icon/bell.svg" alt="">
+                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="admin_views/img/icon/bell.svg" alt="">
                                 
                             </a>
                             <!-- Menu_NOtification_Wrap  -->
@@ -33,7 +33,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/2.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -43,7 +43,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/4.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -53,7 +53,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/3.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -63,7 +63,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/2.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -73,7 +73,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/4.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -83,7 +83,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/img/staf/3.png" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -100,11 +100,11 @@
                         <!--/ Menu_NOtification_Wrap  -->
                         </li>
                         <li>
-                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="img/icon/msg.svg" alt="">   </a>
+                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="admin_views/img/icon/msg.svg" alt="">   </a>
                         </li>
                     </div>
                     <div class="profile_info">
-                        <img src="img/client_img.png" alt="#">
+                        <img src="admin_views/img/client_img.png" alt="#">
                         <div class="profile_info_iner">
                             <div class="profile_author_name">
                                 <p>Neurologist </p>

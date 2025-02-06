@@ -3,7 +3,7 @@
       <li class="mm-active">
           <a class="has-arrow" href="#" aria-expanded="false">
               <div class="icon_menu">
-                  <img src="img/menu-icon/dashboard.svg" alt="">
+                  <img src="admin_views/img/menu-icon/dashboard.svg" alt="">
               </div>
               <span>Thông kê</span>
           </a>
@@ -16,7 +16,7 @@
       <li class="">
           <a class="has-arrow" href="#" aria-expanded="false">
               <div class="icon_menu">
-                  <img src="img/menu-icon/2.svg" alt="">
+                  <img src="admin_views/img/menu-icon/2.svg" alt="">
               </div>
               <span>Danh mục</span>
           </a>
@@ -29,7 +29,7 @@
           <a class="has-arrow" href="#" aria-expanded="false">
 
               <div class="icon_menu">
-                  <img src="img/menu-icon/8.svg" alt="">
+                  <img src="admin_views/img/menu-icon/8.svg" alt="">
               </div>
               <span>Sản phẩm</span>
           </a>
@@ -43,7 +43,7 @@
           <a class="has-arrow" href="#" aria-expanded="false">
 
               <div class="icon_menu">
-                  <img src="img/menu-icon/4.svg" alt="">
+                  <img src="admin_views/img/menu-icon/4.svg" alt="">
               </div>
               <span>Người dùng</span>
           </a>
