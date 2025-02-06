@@ -51,35 +51,35 @@
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/1.png" alt="">
+                            <img src="admin_views/img/staf/1.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/2.png" alt="">
+                            <img src="admin_views/img/staf/2.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/3.png" alt="">
+                            <img src="admin_views/img/staf/3.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/4.png" alt="">
+                            <img src="admin_views/img/staf/4.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/5.png" alt="">
+                            <img src="admin_views/img/staf/5.png" alt="">
                         </div>
                     </a>
                 </li>
@@ -106,7 +106,7 @@
 
         <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
             <div class="SEND_SMS_VIEW">
                 <P>Hi! Welcome .
@@ -120,7 +120,7 @@
                 <P>Hello</P>
             </div>
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
         </div>
 
@@ -217,35 +217,35 @@
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/1.png" alt="">
+                            <img src="admin_views/img/staf/1.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/2.png" alt="">
+                            <img src="admin_views/img/staf/2.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/3.png" alt="">
+                            <img src="admin_views/img/staf/3.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/4.png" alt="">
+                            <img src="admin_views/img/staf/4.png" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="img/staf/5.png" alt="">
+                            <img src="admin_views/img/staf/5.png" alt="">
                         </div>
                     </a>
                 </li>
@@ -272,7 +272,7 @@
 
         <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
             <div class="SEND_SMS_VIEW">
                 <P>Hi! Welcome .
@@ -286,7 +286,7 @@
                 <P>Hello</P>
             </div>
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
         </div>
 

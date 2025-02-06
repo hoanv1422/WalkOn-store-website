@@ -14,9 +14,9 @@
                                     <input type="text" placeholder="Search here..." >
                                 </div>
 <<<<<<< HEAD
-                                <button type="submit"> <img src="admin_views/img/icon/icon_search.svg" alt=""> </button>
+                                <button type="submit"> <img src="admin_views/admin_views/img/icon/icon_search.svg" alt=""> </button>
 =======
-                                <button type="submit"> <img src="{{asset('img/icon/icon_search.svg')}}" alt=""> </button>
+                                <button type="submit"> <img src="{{asset('admin_views/img/icon/icon_search.svg')}}" alt=""> </button>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                             </form>
                         </div>
@@ -26,10 +26,10 @@
                     <div class="header_notification_warp d-flex align-items-center">
                         <li>
 <<<<<<< HEAD
-                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="admin_views/img/icon/bell.svg" alt="">
+                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="admin_views/admin_views/img/icon/bell.svg" alt="">
                                 
 =======
-                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="{{asset('img/icon/bell.svg')}}" alt="">
+                            <a class="bell_notification_clicker nav-link-notify" href="#"> <img src="{{asset('admin_views/img/icon/bell.svg')}}" alt="">
 
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                             </a>
@@ -43,9 +43,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/2.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/2.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -57,9 +57,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/4.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/4.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/4.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -71,9 +71,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/3.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/3.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/3.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -85,9 +85,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/2.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/2.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -99,9 +99,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/4.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/4.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/4.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -113,9 +113,9 @@
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
 <<<<<<< HEAD
-                                        <a href="#"><img src="admin_views/img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="admin_views/admin_views/img/staf/3.png" alt=""></a>
 =======
-                                        <a href="#"><img src="{{asset('img/staf/3.png')}}" alt=""></a>
+                                        <a href="#"><img src="{{asset('admin_views/img/staf/3.png')}}" alt=""></a>
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     </div>
                                     <div class="notify_content">
@@ -134,17 +134,17 @@
                         </li>
                         <li>
 <<<<<<< HEAD
-                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="admin_views/img/icon/msg.svg" alt="">   </a>
+                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="admin_views/admin_views/img/icon/msg.svg" alt="">   </a>
                         </li>
                     </div>
                     <div class="profile_info">
-                        <img src="admin_views/img/client_img.png" alt="#">
+                        <img src="admin_views/admin_views/img/client_img.png" alt="#">
 =======
-                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="{{asset('img/icon/msg.svg')}}" alt="">   </a>
+                            <a class="CHATBOX_open nav-link-notify" href="#"> <img src="{{asset('admin_views/img/icon/msg.svg')}}" alt="">   </a>
                         </li>
                     </div>
                     <div class="profile_info">
-                        <img src="{{asset('img/client_img.png')}}" alt="#">
+                        <img src="{{asset('admin_views/img/client_img.png')}}" alt="#">
 >>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                         <div class="profile_info_iner">
                             <div class="profile_author_name">
