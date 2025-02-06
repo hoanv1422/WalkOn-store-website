@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="white_card_body">
-                        <form action="{{url('categories/')}}" method="POST">
+                        <form action="{{url('/admin/categories/')}}" method="POST">
                             <div class="mb-3 row">
                                 <label for="name" class="form-label col-sm-4 col-form-label">Tên danh mục</label>
                                 <div class="col-sm-8">
@@ -46,7 +46,7 @@
                             <div class=" row">
                                 <div class="col-sm-10">
                                     <div class="add_button ">
-                                        <a href="{{url('categories/')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
+                                        <a href="{{url('/admin/categories/')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
                                             <i class="fas fa-plus me-1"></i> Add new
                                         </a>
                                     </div>

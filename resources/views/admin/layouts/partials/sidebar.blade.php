@@ -8,8 +8,8 @@
               <span>Trang Chủ</span>
           </a>
           <ul>
-              <li><a class="active" href="{{url('/')}}">Sales Mode</a></li>
-              <li><a href="{{url('/')}}">Default Mode</a></li>
+              <li><a class="active" href="{{url('/admin')}}">Sales Mode</a></li>
+              <li><a href="{{url('/admin')}}">Default Mode</a></li>
 
           </ul>
       </li>
@@ -21,8 +21,8 @@
               <span>Danh mục</span>
           </a>
           <ul>
-              <li><a href="{{url('/categories')}}">Danh sách</a></li>
-              <li><a href="{{url('/categories/create')}}">Thêm mới </a></li>
+              <li><a href="{{url('/admin/categories')}}">Danh sách</a></li>
+              <li><a href="{{url('/admin/categories/create')}}">Thêm mới </a></li>
           </ul>
       </li>
       <li class="">
@@ -34,8 +34,8 @@
               <span>Sản phẩm</span>
           </a>
           <ul>
-              <li><a href="{{url('/products')}}">Danh sách</a></li>
-              <li><a href="{{url('/products/create')}}">Thêm mới</a></li>
+              <li><a href="{{url('/admin/products')}}">Danh sách</a></li>
+              <li><a href="{{url('/admin/products/create')}}">Thêm mới</a></li>
 
           </ul>
       </li>
@@ -48,8 +48,8 @@
               <span>Người dùng</span>
           </a>
           <ul>
-              <li><a href="Basic_Elements.html">Danh sách</a></li>
-              <li><a href="Groups.html">Thêm mới</a></li>
+              <li><a href="{{url('/admin/users')}}">Danh sách</a></li>
+              <li><a href="{{url('/admin/users/create')}}">Thêm mới</a></li>
           </ul>
       </li>
 

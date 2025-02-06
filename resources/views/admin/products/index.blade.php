@@ -33,7 +33,7 @@
 
                             <div class="QA_table mb_30">
                                 <div class="add_button ">
-                                    <a href="{{url('products/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
+                                    <a href="{{url('admin/products/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
                                         <i class="fas fa-plus me-1"></i> Add new
                                     </a>
                                 </div>
@@ -68,7 +68,7 @@
                                             <td class="text-danger small fw-semibold">321</td>
                                             <td class="text-danger small fw-semibold">320</td>
                                             <td class="d-flex gap-2">
-                                                <a href="{{url('products/edit')}}">
+                                                <a href="{{url('/admin/products/edit')}}">
                                                     <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Edit</button>
                                                 </a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
@@ -87,7 +87,7 @@
                                             <td class="text-danger small fw-semibold">321</td>
                                             <td class="text-danger small fw-semibold">123</td>
                                             <td class="d-flex gap-2">
-                                                <a href="{{url('products/edit')}}">
+                                                <a href="{{url('/admin/products/edit')}}">
                                                     <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Edit</button>
                                                 </a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
@@ -106,7 +106,7 @@
                                             <td class="text-danger small fw-semibold">321</td>
                                             <td class="text-danger small fw-semibold">123</td>
                                             <td class="d-flex gap-2">
-                                                <a href="{{url('products/edit')}}">
+                                                <a href="{{url('/admin/products/edit')}}">
                                                     <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Edit</button>
                                                 </a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
@@ -125,7 +125,7 @@
                                             <td class="text-danger small fw-semibold">321</td>
                                             <td class="text-danger small fw-semibold">123</td>
                                             <td class="d-flex gap-2">
-                                                <a href="{{url('products/edit')}}">
+                                                <a href="{{url('/admin/products/edit')}}">
                                                     <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Edit</button>
                                                 </a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>

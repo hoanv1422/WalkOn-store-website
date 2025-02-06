@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="white_card_body">
-                        <form action="{{url('products/')}}" method="POST">
+                        <form action="{{url('admin/products/')}}" method="POST">
                             <div class="mb-3 row">
                                 <label for="product_name" class="form-label col-sm-4 col-form-label">Tên sản phẩm</label>
                                 <div class="col-sm-8">
@@ -78,7 +78,7 @@
                             <div class=" row">
                                 <div class="col-sm-10">
                                     <div class="add_button ">
-                                        <a href="{{url('products/')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
+                                        <a href="{{url('admin/products/')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
                                             <i class="fas fa-plus me-1"></i> Edit
                                         </a>
                                     </div>

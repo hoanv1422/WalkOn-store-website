@@ -33,7 +33,7 @@
 
                             <div class="QA_table mb_30">
                                 <div class="add_button ">
-                                    <a href="{{url('categories/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
+                                    <a href="{{url('/admin/categories/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
                                         <i class="fas fa-plus me-1"></i> Add new
                                     </a>
                                 </div>
@@ -59,7 +59,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -73,7 +73,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -87,7 +87,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -101,7 +101,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -115,7 +115,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -129,7 +129,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -143,7 +143,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -157,7 +157,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -171,7 +171,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -185,7 +185,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
@@ -200,7 +200,7 @@
                                             <td>2025-02-01 00:15</td>
                                             <td>2025-02-01 00:20</td>
                                             <td>
-                                                <a href="{{url('categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
+                                                <a href="{{url('/admin/categories/edit')}}"><button class="btn btn-success btn-sm mx-1"><i class="fas fa-edit"></i> Edit</button></a>
                                                 <button class="btn btn-danger btn-sm mx-1"><i class="fas fa-trash-alt"></i> <a href="#" onclick="alert('cannot delete !')" class="btn btn-danger btn-sm"></a>Delete</button>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i><a href="#" onclick="alert('no view detail !')" class="btn btn-danger btn-sm"></a> View</button>
                                             </td>
