@@ -3,11 +3,8 @@
       <li class="mm-active">
           <a class="has-arrow" href="#" aria-expanded="false">
               <div class="icon_menu">
-<<<<<<< HEAD
-                  <img src="admin_views/admin_views/img/menu-icon/dashboard.svg" alt="">
-=======
                   <img src="{{asset('admin_views/img/menu-icon/dashboard.svg')}}" alt="">
->>>>>>> d9266c90830ab88443a19d121d531f38606588f6
+
               </div>
               <span>Trang Chủ</span>
           </a>
@@ -20,11 +17,9 @@
       <li class="">
           <a class="has-arrow" href="#" aria-expanded="false">
               <div class="icon_menu">
-<<<<<<< HEAD
-                  <img src="admin_views/admin_views/img/menu-icon/2.svg" alt="">
-=======
+
                   <img src="{{asset('admin_views/img/menu-icon/2.svg')}}" alt="">
->>>>>>> d9266c90830ab88443a19d121d531f38606588f6
+
               </div>
               <span>Danh mục</span>
           </a>
@@ -37,11 +32,9 @@
           <a class="has-arrow" href="#" aria-expanded="false">
 
               <div class="icon_menu">
-<<<<<<< HEAD
-                  <img src="admin_views/admin_views/img/menu-icon/8.svg" alt="">
-=======
+
                   <img src="{{asset('admin_views/img/menu-icon/4.svg')}}" alt="">
->>>>>>> d9266c90830ab88443a19d121d531f38606588f6
+
               </div>
               <span>Sản phẩm</span>
           </a>
@@ -55,11 +48,9 @@
           <a class="has-arrow" href="#" aria-expanded="false">
 
               <div class="icon_menu">
-<<<<<<< HEAD
-                  <img src="admin_views/admin_views/img/menu-icon/4.svg" alt="">
-=======
+
                   <img src="{{asset('admin_views/img/menu-icon/5.svg')}}" alt="">
->>>>>>> d9266c90830ab88443a19d121d531f38606588f6
+
               </div>
               <span>Người dùng</span>
           </a>

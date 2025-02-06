@@ -73,18 +73,25 @@
                                             <td>{{$user->email_verified_at}}</td>
                                             <td>{{ $user->role }}</td>
                                             <td class="d-flex gap-2">
-                                                <a href="{{route('admin.user.edit',['id'=>$user->id])}}">
-                                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Edit</button>
+                                                <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}">
+                                                    <button class="btn btn-success btn-sm">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
                                                 </a>
-                                                <form class="delete-form" action="{{route('admin.user.delete',['id'=>$user->id])}}" method="POST">
+                                                
+                                                <form class="delete-form" action="{{ route('admin.user.delete', ['id' => $user->id]) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm mx-1">
                                                         <i class="fas fa-trash-alt"></i> Delete
                                                     </button>
                                                 </form>
-                                                <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i> View</button>
-                                                <td />
+                                            
+                                                <button class="btn btn-light btn-sm mx-1">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                            </td> 
+                                            
                                         </tr>
                                         @endforeach
                                     </tbody>
