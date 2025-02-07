@@ -84,7 +84,7 @@
                                                     </button>
                                                 </form>
                                                 <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i> View</button>
-                                                <td />
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -103,14 +103,14 @@
 @endsection
 @push('scripts');
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".delete-form").forEach(form => {
-        form.addEventListener("submit", function(e) {
-            if (!confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
-                e.preventDefault();
-            }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".delete-form").forEach(form => {
+            form.addEventListener("submit", function(e) {
+                if (!confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+                    e.preventDefault();
+                }
+            });
         });
     });
-});
 </script>
 @endscript
