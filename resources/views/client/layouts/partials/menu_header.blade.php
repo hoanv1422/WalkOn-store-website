@@ -27,6 +27,8 @@
                     <div class="dashboard">
                         <div class="account-menu">
                             <ul>
+<<<<<<< HEAD
+=======
                                 <li class="search">
                                     <a href="#">
                                         <i class="fa fa-search"></i>
@@ -40,6 +42,7 @@
                                         </li>
                                     </ul>
                                 </li>
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                 <li>
                                     <a href="#">
                                         <i class="fa fa-bars"></i>
@@ -57,12 +60,20 @@
                         </div>
                         <div class="cart-menu">
                             <ul>
+<<<<<<< HEAD
+                                <li><a href="#"> <img src="client_views/img/icon-cart.png" alt=""> <span>2</span> </a>
+=======
                                 <li><a href="#"> <img src="{{asset('img/icon-cart.png')}}" alt=""> <span>2</span> </a>
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                     <div class="cart-info">
                                         <ul>
                                             <li>
                                                 <div class="cart-img">
+<<<<<<< HEAD
+                                                    <img src="client_views/img/cart/1.png" alt="">
+=======
                                                     <img src="{{asset('img/cart/1.png')}}" alt="">
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                                 </div>
                                                 <div class="cart-details">
                                                     <a href="#">Fusce aliquam</a>
@@ -73,7 +84,11 @@
                                             </li>
                                             <li>
                                                 <div class="cart-img">
+<<<<<<< HEAD
+                                                    <img src="client_views/img/cart/2.png" alt="">
+=======
                                                     <img src="{{asset('img/cart/2.png')}}" alt="">
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                                                 </div>
                                                 <div class="cart-details">
                                                     <a href="#">Fusce aliquam</a>
@@ -94,6 +109,8 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
     <div class="mainmenu-area home2 product-items">
         <div class="container">
             <div class="row">
@@ -356,3 +373,4 @@
         </div>
     </div>
 </header>
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6

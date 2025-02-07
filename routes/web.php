@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
+
     return view('client.index');
 });
 Route::get('/admin', function () {
@@ -30,6 +31,7 @@ Route::get('/admin/categories/edit', function () {
 });
 Route::get('/admin/products', function () {
     return view('admin.products.index');
+
 });
 Route::get('/admin/products/create', function () {
     return view('admin.products.create');

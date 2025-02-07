@@ -4,11 +4,14 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="footer_iner text-center">
+
                     <p>2025 © Influence - Designed by WalkOn-Store<a href="#"> <i class="ti-heart"></i> </a><a href="{{url('/admin')}}"> Dashboard</a></p>
+
                 </div>
             </div>
         </div>
     </div>
+
     </div>
     </section>
     <!-- main content part end -->
@@ -22,69 +25,72 @@
         <path d="M7.09939 5.98831L11.772 10.661C12.076 10.965 12.076 11.4564 11.772 11.7603C11.468 12.0643 10.9766 12.0643 10.6726 11.7603L5.99994 7.08762L1.32737 11.7603C1.02329 12.0643 0.532002 12.0643 0.228062 11.7603C-0.0760207 11.4564 -0.0760207 10.965 0.228062 10.661L4.90063 5.98831L0.228062 1.3156C-0.0760207 1.01166 -0.0760207 0.520226 0.228062 0.216286C0.379534 0.0646715 0.578697 -0.0114918 0.777717 -0.0114918C0.976738 -0.0114918 1.17576 0.0646715 1.32737 0.216286L5.99994 4.889L10.6726 0.216286C10.8243 0.0646715 11.0233 -0.0114918 11.2223 -0.0114918C11.4213 -0.0114918 11.6203 0.0646715 11.772 0.216286C12.076 0.520226 12.076 1.01166 11.772 1.3156L7.09939 5.98831Z" fill="white"/>
         </svg>
 
+
         </div>
-            <h3>Chat with us</h3>
-            <div class="Chat_Listed_member">
-                <ul>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/1.png" alt="">
+        <h3>Chat with us</h3>
+        <div class="Chat_Listed_member">
+            <ul>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/1.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/2.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/3.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/4.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/5.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <div class="more_member_count">
+                                <span>90+</span>
                             </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/2.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/3.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/4.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/5.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <div class="more_member_count">
-                                    <span>90+</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="CHAT_POPUP_BODY">
-            <p class="mesaged_send_date">
+    </div>
+    <div class="CHAT_POPUP_BODY">
+        <p class="mesaged_send_date">
             Sunday, 12 January
+
             </p>
+
 
         <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
             <div class="SEND_SMS_VIEW">
                 <P>Hi! Welcome .
-                How can I help you?</P>
+                    How can I help you?</P>
             </div>
         </div>
 
@@ -94,9 +100,10 @@
                 <P>Hello</P>
             </div>
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
         </div>
+
 
         </div>
         <div class="CHAT_POPUP_BOTTOM">
@@ -122,10 +129,12 @@
                              <input type="file">
                         </button>
                     </div>
+>>>>>>> d9266c90830ab88443a19d121d531f38606588f6
                 </div>
             </div>
         </div>
     </div>
+
 
     <!--/### CHAT_MESSAGE_BOX  ### -->
 
@@ -136,69 +145,72 @@
         <path d="M7.09939 5.98831L11.772 10.661C12.076 10.965 12.076 11.4564 11.772 11.7603C11.468 12.0643 10.9766 12.0643 10.6726 11.7603L5.99994 7.08762L1.32737 11.7603C1.02329 12.0643 0.532002 12.0643 0.228062 11.7603C-0.0760207 11.4564 -0.0760207 10.965 0.228062 10.661L4.90063 5.98831L0.228062 1.3156C-0.0760207 1.01166 -0.0760207 0.520226 0.228062 0.216286C0.379534 0.0646715 0.578697 -0.0114918 0.777717 -0.0114918C0.976738 -0.0114918 1.17576 0.0646715 1.32737 0.216286L5.99994 4.889L10.6726 0.216286C10.8243 0.0646715 11.0233 -0.0114918 11.2223 -0.0114918C11.4213 -0.0114918 11.6203 0.0646715 11.772 0.216286C12.076 0.520226 12.076 1.01166 11.772 1.3156L7.09939 5.98831Z" fill="white"/>
         </svg>
 
+
         </div>
-            <h3>Chat with us</h3>
-            <div class="Chat_Listed_member">
-                <ul>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/1.png" alt="">
+        <h3>Chat with us</h3>
+        <div class="Chat_Listed_member">
+            <ul>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/1.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/2.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/3.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/4.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <img src="admin_views/img/staf/5.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="member_thumb">
+                            <div class="more_member_count">
+                                <span>90+</span>
                             </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/2.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/3.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/4.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                             <img src="img/staf/5.png" alt="">
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <div class="more_member_count">
-                                    <span>90+</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="CHAT_POPUP_BODY">
-            <p class="mesaged_send_date">
+    </div>
+    <div class="CHAT_POPUP_BODY">
+        <p class="mesaged_send_date">
             Sunday, 12 January
+
             </p>
+
 
         <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
             <div class="SEND_SMS_VIEW">
                 <P>Hi! Welcome .
-                How can I help you?</P>
+                    How can I help you?</P>
             </div>
         </div>
 
@@ -208,9 +220,10 @@
                 <P>Hello</P>
             </div>
             <div class="SMS_thumb">
-                <img src="img/staf/1.png" alt="">
+                <img src="admin_views/img/staf/1.png" alt="">
             </div>
         </div>
+
 
         </div>
         <div class="CHAT_POPUP_BOTTOM">
@@ -236,53 +249,57 @@
                              <input type="file">
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-<script src="{{ asset('./js/jquery1-3.4.1.min.js') }}"></script>
-<script src="{{ asset('./js/popper1.min.js') }}"></script>
-<script src="{{ asset('./js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('./js/metisMenu.js') }}"></script>
-<script src="{{ asset('./vendors/count_up/jquery.waypoints.min.js') }}"></script>
-<script src="{{ asset('./vendors/chartlist/Chart.min.js') }}"></script>
-<script src="{{ asset('./vendors/count_up/jquery.counterup.min.js') }}"></script>
-<script src="{{ asset('./vendors/niceselect/js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ asset('./vendors/owl_carousel/js/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/buttons.flash.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/jszip.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/pdfmake.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/vfs_fonts.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('./vendors/datatable/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('./vendors/datepicker/datepicker.js') }}"></script>
-<script src="{{ asset('./vendors/datepicker/datepicker.en.js') }}"></script>
-<script src="{{ asset('./vendors/datepicker/datepicker.custom.js') }}"></script>
-<script src="{{ asset('./js/chart.min.js') }}"></script>
-<script src="{{ asset('./vendors/chartjs/roundedBar.min.js') }}"></script>
-<script src="{{ asset('./vendors/progressbar/jquery.barfiller.js') }}"></script>
-<script src="{{ asset('./vendors/tagsinput/tagsinput.js') }}"></script>
-<script src="{{ asset('./vendors/text_editor/summernote-bs4.js') }}"></script>
-<script src="{{ asset('./vendors/am_chart/amcharts.js') }}"></script>
-<script src="{{ asset('./vendors/scroll/perfect-scrollbar.min.js') }}"></script>
-<script src="{{ asset('./vendors/scroll/scrollable-custom.js') }}"></script>
-<script src="{{ asset('.vendors/vectormap-home/vectormap-2.0.2.min.js') }}"></script>
-<script src="{{ asset('./vendors/vectormap-home/vectormap-world-mill-en.js') }}"></script>
-<script src="{{ asset('./vendors/apex_chart/apex-chart2.js') }}"></script>
-<script src="{{ asset('./vendors/apex_chart/apex_dashboard.js') }}"></script>
-<script src="{{ asset('./vendors/echart/echarts.min.js') }}"></script>
-<script src="{{ asset('./vendors/chart_am/core.js') }}"></script>
-<script src="{{ asset('./vendors/chart_am/charts.js') }}"></script>
-<script src="{{ asset('./vendors/chart_am/animated.js') }}"></script>
-<script src="{{ asset('./vendors/chart_am/kelly.js') }}"></script>
-<script src="{{ asset('./vendors/chart_am/chart-custom.js') }}"></script>
-<script src="{{ asset('./js/dashboard_init.js') }}"></script>
-<script src="{{ asset('./js/custom.js') }}"></script>
+</div>
+<script src="{{ asset('admin_views/js/jquery1-3.4.1.min.js') }}"></script>
+<script src="{{ asset('admin_views/js/popper1.min.js') }}"></script>
+<script src="{{ asset('admin_views/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('admin_views/js/metisMenu.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/count_up/jquery.waypoints.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chartlist/Chart.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/count_up/jquery.counterup.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/niceselect/js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/owl_carousel/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/buttons.flash.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/jszip.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/pdfmake.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/vfs_fonts.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datatable/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datepicker/datepicker.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datepicker/datepicker.en.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/datepicker/datepicker.custom.js') }}"></script>
+<script src="{{ asset('admin_views/js/chart.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chartjs/roundedBar.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/progressbar/jquery.barfiller.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/tagsinput/tagsinput.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/text_editor/summernote-bs4.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/am_chart/amcharts.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/scroll/perfect-scrollbar.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/scroll/scrollable-custom.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/vectormap-home/vectormap-2.0.2.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/vectormap-home/vectormap-world-mill-en.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/apex_chart/apex-chart2.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/apex_chart/apex_dashboard.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/echart/echarts.min.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chart_am/core.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chart_am/charts.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chart_am/animated.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chart_am/kelly.js') }}"></script>
+<script src="{{ asset('admin_views/vendors/chart_am/chart-custom.js') }}"></script>
+<script src="{{ asset('admin_views/js/dashboard_init.js') }}"></script>
+<script src="{{ asset('admin_views/js/custom.js') }}"></script>
 </body>
 
+
 <!-- Mirrored from demo.dashboardpack.com/sales-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 18 Jan 2025 15:30:56 GMT -->
+
 
 </html>
