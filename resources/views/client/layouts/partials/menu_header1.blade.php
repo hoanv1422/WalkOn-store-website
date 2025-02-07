@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="{{url('/')}}">
                             <img src="client_views/img/logo.png" alt="">
                         </a>
                     </div>
@@ -12,7 +12,7 @@
                     <div class="mainmenu">
                         <nav>
                             <ul>
-                                <li><a href="index.html">Home</a>
+                                <li><a href="{{url('/')}}">Home</a>
                                     <div class="sub-menu">
                                         <span>
                                             <a href="index.html">Home version 1</a>

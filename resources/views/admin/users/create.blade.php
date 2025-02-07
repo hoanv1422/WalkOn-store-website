@@ -29,7 +29,7 @@
                                 <label for="inputPassword3" class="form-label col-sm-4 col-form-label">password</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="password" value="{{old('password')}}"
-                                        placeholder="Password">
+                                        placeholder="Password.......">
                                 </div>
                             </div>
                             @error('password') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror

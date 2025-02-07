@@ -2,7 +2,6 @@
 @section('title', 'forgot-password')
 @section('content')
 
-@include('client.layouts.partials.menu_header')
 
             <div class="mainmenu-area home2 product-items">
                 @include('client.layouts.partials.menu_header1')
@@ -30,8 +29,8 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="login-links">
-                                            <a href="#">Back to Login</a>
+                                        <div class="login-links mt-2">
+                                            <a href="{{url('/login')}}">Back to Login</a>
                                         </div>
                                     </div>
                                 </div>
@@ -39,5 +38,5 @@
                         </div>
                     </div>
                 </div>
-                
+
 @endsection
