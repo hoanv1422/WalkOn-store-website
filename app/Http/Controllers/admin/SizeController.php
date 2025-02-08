@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Size;
 use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 
 class SizeController extends Controller
 {
+    const PATH_VIEW = 'admin.sizes.';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $data = Size::query()->latest('id')->with(['productVariant'])->paginate();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 
     /**
@@ -21,7 +24,7 @@ class SizeController extends Controller
      */
     public function create()
     {
-        //
+        return view(self::PATH_VIEW.__FUNCTION__);
     }
 
     /**
@@ -29,7 +32,9 @@ class SizeController extends Controller
      */
     public function store(StoreSizeRequest $request)
     {
-        //
+       $data=$request->all();
+       Size::query()->create($data);
+       return redirect()->route('sizes.index');
     }
 
     /**
@@ -45,7 +50,7 @@ class SizeController extends Controller
      */
     public function edit(Size $size)
     {
-        //
+        return view(self::PATH_VIEW.__FUNCTION__,compact('size'));
     }
 
     /**
@@ -53,7 +58,9 @@ class SizeController extends Controller
      */
     public function update(UpdateSizeRequest $request, Size $size)
     {
-        //
+        $data=$request->all();
+        $size->update($data);       
+        return redirect()->route('sizes.index');
     }
 
     /**
@@ -61,6 +68,7 @@ class SizeController extends Controller
      */
     public function destroy(Size $size)
     {
-        //
+        $size->delete();
+        return redirect()->route('sizes.index');
     }
 }

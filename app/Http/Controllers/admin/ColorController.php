@@ -1,19 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Http\Requests\StoreColorRequest;
 use App\Http\Requests\UpdateColorRequest;
 
-class ColorController extends Controller
+
+class ColorController extends Controller 
 {
+    const PATH_VIEW = 'admin.colors.';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
     }
 
     /**
@@ -21,7 +25,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        //
+        return view(self::PATH_VIEW.__FUNCTION__);
     }
 
     /**
@@ -29,7 +33,10 @@ class ColorController extends Controller
      */
     public function store(StoreColorRequest $request)
     {
-        //
+        $data = $request->all();
+        Color::query()->create($data);
+        return redirect()->route('colors.index');
+
     }
 
     /**
@@ -37,7 +44,7 @@ class ColorController extends Controller
      */
     public function show(Color $color)
     {
-        //
+        
     }
 
     /**
@@ -45,7 +52,7 @@ class ColorController extends Controller
      */
     public function edit(Color $color)
     {
-        //
+        return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
     }
 
     /**
@@ -53,7 +60,9 @@ class ColorController extends Controller
      */
     public function update(UpdateColorRequest $request, Color $color)
     {
-        //
+        $data=$request->all();
+        $color->update($data);
+        return redirect()->route('colors.index');
     }
 
     /**
@@ -61,6 +70,7 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-        //
+        $color->delete();
+        return redirect()->route('colors.index')->with('success','xoa thanh cong');
     }
 }

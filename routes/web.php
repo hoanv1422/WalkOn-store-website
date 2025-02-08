@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\admin\ColorController;
+use App\Http\Controllers\admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,9 +67,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');;
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('admin.index')->middleware('admin');
-    Route::get('/', function () {})->name('client.index');
-});
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/admin', function () {
+//         return view('admin.index');
+//     })->name('admin.index')->middleware('admin');
+//     Route::get('/', function () {})->name('client.index');
+// });
+Route::resource('admin/colors', ColorController::class);
+Route::resource('admin/sizes',SizeController::class);
