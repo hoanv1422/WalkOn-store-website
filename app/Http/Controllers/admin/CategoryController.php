@@ -87,6 +87,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    //123
     public function destroy(Category $category)
     {
         $category->delete();
