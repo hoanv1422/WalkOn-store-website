@@ -3,7 +3,7 @@
 @section('content')
 
 
-@include('client.layouts.partials.menu_header')
+<!-- @include('client.layouts.partials.menu_header') -->
 
     <div class="mainmenu-area product-items">
   @include('client.layouts.partials.menu_header1')

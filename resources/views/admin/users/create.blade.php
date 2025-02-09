@@ -24,23 +24,23 @@
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="Username...." name="username" value="{{old('username')}}">
                                 </div>
                             </div>
-                            @error('username') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('username') <span style="color:red">{{$message}}</span> @enderror
                             <div class="mb-3 row">
-                                <label for="inputPassword3" class="form-label col-sm-4 col-form-label">password</label>
+                                <label for="inputPassword3" class="form-label col-sm-4 col-form-label">Mật khẩu</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="password" value="{{old('password')}}"
                                         placeholder="Password.......">
                                 </div>
                             </div>
-                            @error('password') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('password') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Name</label>
+                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Tên người dùng</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="Name...." name="name" value="{{old('name')}}">
                                 </div>
                             </div>
-                            @error('name') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('username') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
                                 <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Mail</label>
@@ -48,49 +48,52 @@
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="Mail...." name="mail" value="{{old('mail')}}">
                                 </div>
                             </div>
-                            @error('mail') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('mail') <span style="color:red">{{ $message }}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Avatar</label>
+                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Ảnh đại diện</label>
                                 <div class="col-sm-8">
-                                <input type="file" name="avatar" value="{{old('avatar')}} class="form-control">
+                                    <input type="file" name="avatar" value="{{old('avatar')}} class=" form-control">
                                 </div>
                             </div>
-                            @error('avatar') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('avatar') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Phone</label>
+                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Số điện thoại</label>
                                 <div class="col-sm-8">
                                     <input type="number" class="form-control" id="inputEmail3" placeholder="Phone...." name="phone" value="{{old('phone')}}">
                                 </div>
                             </div>
-                            @error('phone') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('phone') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Address</label>
+                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Địa chỉ</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="Address...." name="address" value="{{old('address')}}">
                                 </div>
                             </div>
-                            @error('address') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('address') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
                                 <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Email_verified</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="inputEmail3" placeholder="Email_verified...." name="email_verified_at" value="{{old('email_verified_at')}}">
+                                    <input type="text" class="form-control" id="inputEmail3" placeholder="Điền ngày tháng năm đầy đủ...." name="email_verified_at" value="{{old('email_verified_at')}}">
                                 </div>
                             </div>
-                            @error('email_verified_at') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('email_verified_at') <span style="color:red">{{$message}}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Role</label>
+                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Vai trò</label>
                                 <div class="col-sm-8">
                                     <select name="role" class="form-control">
-                                        <option value="user">User</option>
-                                        <option value="admin">Admin</option>
+                                        <option value="" disabled selected>===Chọn vai trò===</option>
+                                        <option value="user" {{ old('role', $user->role ?? '') == 'user' ? 'selected' : '' }}>User</option>
+                                        <option value="admin" {{ old('role', $user->role ?? '') == 'admin' ? 'selected' : '' }}>Admin</option>
                                     </select>
                                 </div>
                             </div>
+                            @error('role') <span style="color:red">{{$message}}</span> @enderror
+
                             <div class=" row">
                                 <div class="col-sm-10">
                                     <div class="add_button ">

@@ -49,6 +49,9 @@ Route::get('/admin/products/create', function () {
 Route::get('/admin/products/edit', function () {
     return view('admin.products.edit');
 });
+Route::get('/admin/users/detail', function () {
+    return view('admin.users.detail');
+});
 
 Route::get('/admin/users/create', function () {
     return view('admin.users.create');
@@ -59,6 +62,8 @@ Route::get('/admin/user/create', [UserController::class, 'create_user'])->name('
 Route::post('/admin/user/add', [UserController::class, 'add_user'])->name('admin.user.add');
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit_user'])->name('admin.user.edit');
 Route::put('/admin/user/update', [UserController::class, 'update_user'])->name('admin.user.update');
+
+Route::get('/admin/user/detail/{id}', [UserController::class, 'detail_user'])->name('admin.user.detail');
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');;
 Route::post('/login', [AuthController::class, 'login'])->name('login');;

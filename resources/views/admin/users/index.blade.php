@@ -42,21 +42,26 @@
                                     {{ session('status') }}
                                 </div>
                                 @endif
+                                @if(session('error'))
+                                <div class="alert alert-danger mt-2">
+                                    <span style="color:red">{{ session('error') }}</span>
+                                </div>
+                                @endif
                                 <!-- table-responsive -->
                                 <table class="table-responsive lms_table_active text-center">
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Username</th>
-                                            <th scope="col">Password</th>
-                                            <th scope="col">Name</th>
+                                            <th scope="col">Mật khẩu</th>
+                                            <th scope="col">Tên người dùng</th>
                                             <th scope="col">Mail</th>
-                                            <th scope="col">Avatar</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
+                                            <th scope="col">Ảnh đại diện</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col">Địa chỉ</th>
                                             <th scope="col">Email_Verified_At</th>
-                                            <th scope="col">Role</th>
-                                            <th scope="col">Actions</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Tính năng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -86,7 +91,9 @@
                                                         <i class="fas fa-trash-alt"></i> Delete
                                                     </button>
                                                 </form>
-                                                <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i> View</button>
+                                                <a href="{{ route('admin.user.detail', ['id' => $user->id]) }}">
+                                                    <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i> View</button>
+                                                </a>
                                                 <td />
                                         </tr>
                                         @endforeach

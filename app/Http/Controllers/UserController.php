@@ -32,11 +32,11 @@ class UserController extends Controller
             'username' => 'required|string|unique:users,username|max:255',
             'password' => 'required|string|min:6',
             'name' => 'required|string|max:255',
-            'mail' => 'nullable|email|unique:users,mail|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'phone' => 'nullable|string|max:15',
-            'address' => 'nullable|string|max:500',
-            'role' => 'required|string|max:50',
+            'mail' => 'email|unique:users,mail|max:255',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'phone' => 'string|max:15',
+            'address' => 'string|max:500',
+            'role' => 'required|string|in:user,admin|max:50',
         ]);
 
         $user = new User();
@@ -111,5 +111,15 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('admin.users')->with('status', 'Edit user success');
+    }
+
+    public function detail_user($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('admin.users')->with('error', 'Người dùng chưa có');
+        }
+        return view('admin.users.detail', compact('user'));
     }
 }

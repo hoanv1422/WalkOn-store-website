@@ -12,10 +12,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:users',
-            'password' => 'required|min:6',
-            'name' => 'required',
-            'mail' => 'nullable|email|unique:users',
+            'username' => 'required|string|unique:users,username|max:255',
+            'password' => 'required|string|min:6',
+            'name' => 'required|string|max:255',
+            'mail' => 'nullable|email|unique:users,mail|max:255',
         ]);
 
         $user = User::create([
@@ -33,8 +33,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required',
-            'password' => 'required'
+            'username' => 'required|string|unique:users,username|max:255',
+            'password' => 'required|string|min:6',
         ]);
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
