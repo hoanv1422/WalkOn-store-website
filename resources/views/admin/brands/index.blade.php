@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">Danh Mục</h4>
+                        <h4 class="mb-sm-0">Thương Hiệu</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Mại Điện Tử</a></li>
-                                <li class="breadcrumb-item active">Danh Mục</li>
+                                <li class="breadcrumb-item active">Thương Hiệu</li>
                             </ol>
                         </div>
 
@@ -30,7 +30,7 @@
                             <div class="row g-4 align-items-center">
                                 <div class="col-sm">
                                     <div>
-                                        <h5 class="card-title mb-0">Danh Sách Danh Mục</h5>
+                                        <h5 class="card-title mb-0">Danh Sách Thương Hiệu</h5>
                                     </div>
                                 </div>
                                 <div class="col-sm-auto">
@@ -39,7 +39,7 @@
                                             onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                             id="create-btn" data-bs-target="#showModalCreate"><i
-                                                class="ri-add-line align-bottom me-1"></i> Thêm Danh Mục</button>
+                                                class="ri-add-line align-bottom me-1"></i> Thêm Thương Hiệu</button>
 
                                     </div>
                                 </div>
@@ -105,13 +105,15 @@
                                                         <input class="form-check-input" type="checkbox" id="checkAll">
                                                     </div>
                                                 </th>
-                                                <th class="sort" data-sort="name">Tên Danh Mục</th>
-                                                <th class="sort" data-sort="status">Trạng Thái</th>
+                                                <th class="sort" data-sort="name"  style="width: 200px;">Tên Thương Hiệu</th>
+                                                <th class="sort" data-sort="logo"  style="width: 50px;">Logo</th>
+                                                <th class="sort" data-sort="description"  style="width: 500px;">Mô tả</th>
+                                                <th class="sort" data-sort="status"  style="width: 100px;">Trạng Thái</th>
                                                 <th class="sort" data-sort="action">Hành Động</th>
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
-                                            @foreach ($categories as $item)
+                                            @foreach ($brands as $item)
                                                 <tr>
                                                     <th scope="row">
                                                         <div class="form-check">
@@ -120,11 +122,20 @@
                                                         </div>
                                                     </th>
 
-                                                    <td class="customer_name">{{ $item->name }}</td>
+                                                    <td class="name">{{ $item->name }}</td>
+                                                    <td class="logo">
+                                                        <div class="flex-shrink-">
+                                                            <div class="avatar-sm bg-light rounded p-1">
+                                                                <img src="{{ Storage::url($item->logo) }}" alt=""
+                                                                    class="img-fluid d-block">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="description">{{ $item->description }}</td>
                                                     <td class="status">
                                                         <span
                                                             class="badge {{ $item->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                                            {{ $item->is_active ? 'ACTIVE' : 'BLOCK' }}
+                                                            {{ $item->is_active ? 'ACTIVE' : 'INACTIVE' }}
                                                         </span>
                                                     </td>
                                                     <td>
@@ -340,6 +351,7 @@
                             </div>
                             <!--end modal -->
                         </div>
+                        
                     </div>
 
                 </div>

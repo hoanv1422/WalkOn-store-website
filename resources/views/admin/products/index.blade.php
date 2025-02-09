@@ -867,9 +867,6 @@
             $('#deleteForm').attr('action', actionUrl);
             // $('#deleteItemId').val(itemId); 
         });
-
-
-
     </script>
     {{-- <script src="{{ asset('templates/admin/assets/js/pages/ecommerce-product-list.init.js') }}"></script> --}}
 @endsection

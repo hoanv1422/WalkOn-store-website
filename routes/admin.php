@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Models\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +26,22 @@ Route::prefix('admin')->group(function () {
         return view('admin.index');
     });
     Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
+    Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
+    Route::prefix('attributes')->group(function () {
+        Route::get('/', [SizeController::class, 'index']);
+
+        Route::post('size', [SizeController::class, 'store']);
+        Route::put('size/{size}', [SizeController::class, 'update']);
+        Route::delete('size/{size}', [SizeController::class, 'destroy']);
+
+        Route::post('color', [ColorController::class, 'store']);
+        Route::put('color/{color}', [ColorController::class, 'update']);
+        Route::delete('color/{color}', [ColorController::class, 'destroy']);
+    });
+
+
 
     
 });
