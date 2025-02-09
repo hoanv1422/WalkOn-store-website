@@ -40,11 +40,4 @@ Route::prefix('admin')->group(function () {
         Route::put('color/{color}', [ColorController::class, 'update']);
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
-
-
-
-    
 });
-
-
-

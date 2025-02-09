@@ -20,7 +20,6 @@
                                 <li class="breadcrumb-item active">Sửa Sản Phẩm</li>
                             </ol>
                         </div>
-
                     </div>
                 </div>
             </div>
