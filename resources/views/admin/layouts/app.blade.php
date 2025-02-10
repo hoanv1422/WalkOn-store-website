@@ -1196,7 +1196,7 @@
 
     <!-- JAVASCRIPT -->
 
-    <script src="{{ asset('templates/admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script src="{{ asset('templates/admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
     <script src="{{ asset('templates/admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/node-waves/waves.min.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/feather-icons/feather.min.js') }}"></script>
