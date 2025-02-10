@@ -120,7 +120,7 @@
                                                         </div>
                                                     </th>
 
-                                                    <td class="customer_name">{{ $item->name }}</td>
+                                                    <td class="name">{{ $item->name }}</td>
                                                     <td class="status">
                                                         <span
                                                             class="badge {{ $item->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
@@ -133,7 +133,10 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Edit">
                                                                 <a href="#showModalEdit" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                                    class="text-primary d-inline-block edit-item-btn"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-name="{{ $item->name }}"
+                                                                    data-status="{{ $item->is_active }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -141,7 +144,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                    data-bs-toggle="modal" data-id="{{ $item->id }}"
+                                                                    href="#deleteRecordModal">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -156,162 +160,114 @@
 
 
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Customer
-                                                            Name</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Enter name" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="email-field" class="form-label">Email</label>
-                                                        <input type="email" id="email-field" class="form-control"
-                                                            placeholder="Enter email" required />
-                                                        <div class="invalid-feedback">Please enter an email.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="phone-field" class="form-label">Phone</label>
-                                                        <input type="text" id="phone-field" class="form-control"
-                                                            placeholder="Enter phone no." required />
-                                                        <div class="invalid-feedback">Please enter a phone.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="date-field" class="form-label">Joining Date</label>
-                                                        <input type="date" id="date-field" class="form-control"
-                                                            data-provider="flatpickr" data-date-format="d M, Y" required
-                                                            placeholder="Select date" />
-                                                        <div class="invalid-feedback">Please select a date.</div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="status-field" class="form-label">Status</label>
-                                                        <select class="form-control" data-choices data-choices-search-false
-                                                            name="status-field" id="status-field" required>
-                                                            <option value="">Status</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Block">Block</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm Danh Mục</button>
-                                                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Thêm Mới</h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="{{ route('categories.store') }}" method="POST"
+                                            class="tablelist-form" autocomplete="off">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <input type="hidden" id="id-field" />
 
-                                    </div>
-                                </div>
-                            </form>
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
+                                                <div class="mb-3">
+                                                    <label for="name-field" class="form-label">
+                                                        Name</label>
+                                                    <input type="text" id="name-field" class="form-control"
+                                                        placeholder="Enter name" name="name" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+                                                <div>
+                                                    <label for="status-field" class="form-label">Status</label>
+                                                    <select class="form-control" data-choices data-choices-search-false
+                                                        name="is_active" id="status-field" required>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">Block</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Customer
-                                                            Name</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Enter name" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="email-field" class="form-label">Email</label>
-                                                        <input type="email" id="email-field" class="form-control"
-                                                            placeholder="Enter email" required />
-                                                        <div class="invalid-feedback">Please enter an email.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="phone-field" class="form-label">Phone</label>
-                                                        <input type="text" id="phone-field" class="form-control"
-                                                            placeholder="Enter phone no." required />
-                                                        <div class="invalid-feedback">Please enter a phone.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="date-field" class="form-label">Joining Date</label>
-                                                        <input type="date" id="date-field" class="form-control"
-                                                            data-provider="flatpickr" data-date-format="d M, Y" required
-                                                            placeholder="Select date" />
-                                                        <div class="invalid-feedback">Please select a date.</div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="status-field" class="form-label">Status</label>
-                                                        <select class="form-control" data-choices data-choices-search-false
-                                                            name="status-field" id="status-field" required>
-                                                            <option value="">Status</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Block">Block</option>
-                                                        </select>
-                                                    </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Thêm
+                                                        Danh Mục</button>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Cập Nhật Danh Mục</button>
-                                                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-
+                                            </div>
+                                        </form>
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
+
+
+                            <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Sửa </h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
+                                        </div>
+                                        <form action="" method="POST" class="tablelist-form edit"
+                                            autocomplete="off">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="id-field-edit" />
+
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="name-field-edit" class="form-label">
+                                                        Tên Danh Mục</label>
+                                                    <input type="text" id="name-field-edit" class="form-control"
+                                                        placeholder="Enter name" name="name" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="status-field-edit" class="form-label">Status</label>
+                                                    <select class="form-control" data-choices data-choices-search-false
+                                                        name="is_active" id="status-field-edit" required>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">Block</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Cập
+                                                        Nhật Danh Mục</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -323,16 +279,20 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Are you sure ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
-                                                        record ?</p>
+                                                    <h4>Bạn có chắc không ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không ?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn w-sm btn-danger"
-                                                    id="delete-record">Yes, Delete It!</button>
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <form id="deleteForm" method="POST" action="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -354,6 +314,9 @@
 @endsection
 
 @section('script')
+
+    <script src="{{ asset('templates/admin/assets/libs/validates/category.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('table.dataTable').each(function() {
@@ -366,6 +329,13 @@
                     "lengthChange": false
                 });
             });
+        });
+
+        $(document).on('click', '.remove-item-btn', function() {
+            let userId = $(this).data('id'); // Lấy ID người dùng
+            let actionUrl = "/admin/categories/" + userId; // Tạo URL xóa
+
+            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
         });
     </script>
 @endsection

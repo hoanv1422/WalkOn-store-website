@@ -82,22 +82,22 @@ class DatabaseSeeder extends Seeder
         }
 
         //User
-        for ($i = 0; $i < 5; $i++) {
-            User::create([
-                'username'          => 'user' . ($i + 1),
-                'name'              => 'User ' . ($i + 1),
-                'mail'             => 'user' . ($i + 1) . '@example.com',
-                'password'          => 123456,
-                'avatar'            => 'https://i.pravatar.cc/150?img=' . ($i + 1), // Ảnh avatar giả
-                'phone'             => '09876543' . $i,
-                'address'           => 'Address ' . ($i + 1),
-                'email_verified_at' => null,
-                'role'              => $i % 2 == 0 ? 'admin' : 'user', // Xen kẽ giữa admin và user
-                'is_active'         => $i % 2 == 0, // Xen kẽ true/false
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ]);
-        }
+        // for ($i = 0; $i < 5; $i++) {
+        //     User::create([
+        //         'username'          => 'user' . ($i + 1),
+        //         'name'              => 'User ' . ($i + 1),
+        //         'mail'             => 'user' . ($i + 1) . '@example.com',
+        //         'password'          => 123456,
+        //         'avatar'            => 'https://i.pravatar.cc/150?img=' . ($i + 1), // Ảnh avatar giả
+        //         'phone'             => '09876543' . $i,
+        //         'address'           => 'Address ' . ($i + 1),
+        //         'email_verified_at' => null,
+        //         'role'              => $i % 2 == 0 ? 'admin' : 'user', // Xen kẽ giữa admin và user
+        //         'is_active'         => $i % 2 == 0, // Xen kẽ true/false
+        //         'created_at'        => now(),
+        //         'updated_at'        => now(),
+        //     ]);
+        // }
 
 
     }

@@ -30,14 +30,14 @@ Route::prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::prefix('attributes')->group(function () {
-        Route::get('/', [SizeController::class, 'index']);
+        Route::get('/', [SizeController::class, 'index'])->name('attributes.index');;
 
-        Route::post('size', [SizeController::class, 'store']);
-        Route::put('size/{size}', [SizeController::class, 'update']);
+        Route::post('size', [SizeController::class, 'store'])->name('sizes.store');
+        Route::put('size/{size}', [SizeController::class, 'update'])->name('sizes.update');
         Route::delete('size/{size}', [SizeController::class, 'destroy']);
 
-        Route::post('color', [ColorController::class, 'store']);
-        Route::put('color/{color}', [ColorController::class, 'update']);
+        Route::post('color', [ColorController::class, 'store'])->name('colors.store');
+        Route::put('color/{color}', [ColorController::class, 'update'])->name('colors.update');
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
 });

@@ -7,6 +7,7 @@ use App\Models\Size;
 use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 use App\Models\Color;
+use Illuminate\Support\Facades\DB;
 
 class SizeController extends Controller
 {
@@ -21,35 +22,24 @@ class SizeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreSizeRequest $request)
     {
-        //
-    }
+        $data = $request->all();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Size $size)
-    {
-        //
-    }
+        try {
+            DB::beginTransaction();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Size $size)
-    {
-        //
+            Size::query()->create($data);
+
+            DB::Commit();
+            return redirect()->route('attributes.index')->with('success', 'Thêm kích cỡ thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
     }
 
     /**
@@ -57,7 +47,20 @@ class SizeController extends Controller
      */
     public function update(UpdateSizeRequest $request, Size $size)
     {
-        //
+        $data = $request->all();
+
+        try {
+            DB::beginTransaction();
+
+            $size->update($data);
+
+            DB::Commit();
+            return redirect()->route('attributes.index')->with('success', 'Sửa kích cỡ thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
     }
 
     /**
@@ -65,6 +68,15 @@ class SizeController extends Controller
      */
     public function destroy(Size $size)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $size->delete();
+            DB::commit();
+            return redirect()->route('attributes.index')->with('success', 'Xóa thành công');
+        } catch (\Exception $exception) {
+            DB::rollback();
+            dd($exception);
+            return back()->with('error', 'Lỗi');
+        }
     }
 }

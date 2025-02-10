@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -116,7 +117,6 @@ class UserController extends Controller
 
             DB::commit();
             return redirect()->route('users.index')->with('success', 'Xóa thành công');
-
         } catch (\Exception $exception) {
             DB::rollback();
             dd($exception);

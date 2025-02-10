@@ -154,8 +154,8 @@
                                                                     data-username="{{ $user->username }}"
                                                                     data-name="{{ $user->name }}"
                                                                     data-email="{{ $user->mail }}"
-                                                                    data-phone="{{ $user->phone }}" 
-                                                                    data-password="{{$user->password}}"
+                                                                    data-phone="{{ $user->phone }}"
+                                                                    data-password="{{ $user->password }}"
                                                                     data-address="{{ $user->address }}"
                                                                     data-status="{{ $user->is_active }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
@@ -165,7 +165,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" data-id="{{$user->id}}" href="#deleteRecordModal">
+                                                                    data-bs-toggle="modal" data-id="{{ $user->id }}"
+                                                                    href="#deleteRecordModal">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -217,7 +218,8 @@
                                                                         onchange="previewImage(event)">
                                                                 </div>
                                                                 <div class="avatar-lg">
-                                                                    <div class="avatar-title bg-light rounded overflow-hidden">
+                                                                    <div
+                                                                        class="avatar-title bg-light rounded overflow-hidden">
                                                                         <img src="" id="product-img"
                                                                             class="avatar-md h-auto " />
                                                                     </div>
@@ -287,8 +289,8 @@
                                                                 Thái</label>
                                                             <select class="form-control" name="is_active"
                                                                 id="status-field" required>
-                                                                <option>Hoạt động</option>
-                                                                <option >Khoá</option>
+                                                                <option value="1">Hoạt động</option>
+                                                                <option value="0">Khoá</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -317,8 +319,8 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
                                         </div>
-                                        <form action="" method="POST"
-                                            class="tablelist-form edit" autocomplete="off" enctype="multipart/form-data">
+                                        <form action="" method="POST" class="tablelist-form edit"
+                                            autocomplete="off" enctype="multipart/form-data">
                                             @csrf
                                             @method('PATCH')
                                             <div class="modal-body">
@@ -346,7 +348,8 @@
                                                                         onchange="previewImageEdit(event)">
                                                                 </div>
                                                                 <div class="avatar-lg">
-                                                                    <div class="avatar-title bg-light rounded overflow-hidden">
+                                                                    <div
+                                                                        class="avatar-title bg-light rounded overflow-hidden">
                                                                         <img src="" id="product-img-edit"
                                                                             class="avatar-md h-auto" />
                                                                     </div>
@@ -365,8 +368,9 @@
 
                                                         <div class="mb-3">
                                                             <label for="mail-field-edit" class="form-label">Email</label>
-                                                            <input type="text" id="mail-field-edit" class="form-control"
-                                                                placeholder="Nhập email" name="mail" required />
+                                                            <input type="text" id="mail-field-edit"
+                                                                class="form-control" placeholder="Nhập email"
+                                                                name="mail" required />
                                                             <div class="invalid-feedback">Vui lòng nhập email.</div>
                                                         </div>
 
@@ -386,15 +390,16 @@
                                                         <div class="mb-3">
                                                             <label for="phone-field-edit" class="form-label">Số Điện
                                                                 Thoại</label>
-                                                            <input type="text" id="phone-field-edit" class="form-control"
-                                                                placeholder="Nhập Số Điện Thoại" name="phone"
-                                                                required />
+                                                            <input type="text" id="phone-field-edit"
+                                                                class="form-control" placeholder="Nhập Số Điện Thoại"
+                                                                name="phone" required />
                                                             <div class="invalid-feedback">Vui lòng nhập số điện thoại.
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="address-field-edit" class="form-label">Địa chỉ</label>
+                                                            <label for="address-field-edit" class="form-label">Địa
+                                                                chỉ</label>
                                                             <textarea type="text" id="address-field-edit" class="form-control" placeholder="Nhập địa chỉ" name="address"
                                                                 required> </textarea>
                                                             <div class="invalid-feedback">Vui lòng nhập địa chỉ.
@@ -443,18 +448,19 @@
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                                                     <h4>Bạn có chắc không ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không ?</p>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không ?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
                                                     data-bs-dismiss="modal">Đóng</button>
-                                                    <form id="deleteForm" method="POST"  action="">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn w-sm btn-danger"
-                                                            id="delete-record">Xóa!</button>
-                                                    </form>
+                                                <form id="deleteForm" method="POST" action="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -493,13 +499,11 @@
         });
 
         $(document).on('click', '.remove-item-btn', function() {
-                let userId = $(this).data('id'); // Lấy ID người dùng
-                let actionUrl = "/admin/users/" + userId; // Tạo URL xóa
+            let userId = $(this).data('id'); // Lấy ID người dùng
+            let actionUrl = "/admin/users/" + userId; // Tạo URL xóa
 
-                $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
-            });
-
-
+            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
+        });
     </script>
 
 @endsection
