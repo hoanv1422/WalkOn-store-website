@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\client\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('client.index');
-// });
+Route::get('/', function () {
+    return view('client.pages.home1');
+});
+Route::get('/users/index', [HomeController::class, 'index'])->name('users.index');
