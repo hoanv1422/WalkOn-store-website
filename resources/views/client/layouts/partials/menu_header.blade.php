@@ -41,26 +41,35 @@
                                     </ul>
                                 </li>
                                 <li>
+                                    @auth
+                                    <a href="#">
+                                        <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar" class="rounded-circle" style="border: 0.5px solid #ddd;" width="35" height="35">
+                                        </a>
+                                    @else
                                     <a href="#">
                                         <i class="fa fa-bars"></i>
                                     </a>
+                                    @endauth
+
                                     <ul>
-                                        <li><a href="my-account.html">my account</a></li>
-                                        <li><a href="wishlist.html">my wishlist</a></li>
-                                        <li><a href="cart.html">my cart</a></li>
+                                        @auth
+                                        <li><a href="my-account.html">My Account</a></li>
+                                        <li><a href="wishlist.html">My Wishlist</a></li>
+                                        <li><a href="cart.html">My Cart</a></li>
                                         <li><a href="checkout.html">Checkout</a></li>
                                         <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="{{route('login')}}">Log in</a></li>
-                                        <li><a href="{{route('register')}}">Register</a></li>
                                         <li>
                                             <form action="{{ route('logout') }}" method="POST">
                                                 @csrf
                                                 <button onclick="return confirm('Đăng xuất khỏi tài khoản?')" type="submit" style="color:white;background: none; border: none; font-weight: bold; cursor: pointer; font-size: 13px;">
-                                                  Logout
+                                                    Logout
                                                 </button>
                                             </form>
                                         </li>
-
+                                        @else
+                                        <li><a href="{{ route('login') }}">Log in</a></li>
+                                        <li><a href="{{ route('register') }}">Register</a></li>
+                                        @endauth
                                     </ul>
                                 </li>
                             </ul>

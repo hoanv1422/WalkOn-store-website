@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 
 class UserController extends Controller
@@ -52,9 +53,8 @@ class UserController extends Controller
             $file_extention = $image->extension();
             $file_name = Carbon::now()->timestamp . '.' . $file_extention;
 
-            // $this->GenerateUserImage($image, $file_name);
-
-            $user->avatar = $file_name;
+            $path = $image->storeAs('public/users', $file_name);
+            $user->avatar = 'users/' . $file_name;
         }
 
         $user->save();
@@ -62,15 +62,6 @@ class UserController extends Controller
         return redirect()->route('admin.users')->with('status', 'Add user success');
     }
 
-    // public function GenerateUserImage($image, $imageName)
-    // {
-    //     $destinationPath = public_path('users/');
-    //     $img = Image::make($image->path());
-    //     $img->fit(124, 124, function ($constraint) {
-    //         $constraint->upsize();
-    //     });
-    //     $img->save($destinationPath . '/' . $imageName);
-    // }
     public function edit_user($id)
     {
         $user = User::find($id);
@@ -99,13 +90,15 @@ class UserController extends Controller
         $user->address = $request->address;
         $user->role = $request->role;
         if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::delete('public/' . $user->avatar);
+            }
+
             $image = $request->file('avatar');
-            $file_extention = $image->extension();
-            $file_name = Carbon::now()->timestamp . '.' . $file_extention;
-
-            // $this->GenerateUserImage($image, $file_name);
-
-            $user->avatar = $file_name;
+            $file_name = Carbon::now()->timestamp . '.' . $image->extension();
+            $path = $image->storePubliclyAs('users', $file_name, 'public');
+            
+            $user->avatar = 'users/' . $file_name;
         }
 
         $user->save();

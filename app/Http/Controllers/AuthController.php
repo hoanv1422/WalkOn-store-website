@@ -33,8 +33,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|unique:users,username|max:255',
-            'password' => 'required|string|min:6',
+            'username' => 'required',
+            'password' => 'required',
         ]);
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {

@@ -72,7 +72,11 @@
                                             <td>{{$user->password}}</td>
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->mail}}</td>
-                                            <td><img src="{{asset('users/')}}/{{$user->avatar}}" alt="{{$user->name}}" width="50"></td>
+                                            <td>
+                                                @if(isset($user->avatar))
+                                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" style="width:50px">
+                                                @endif
+                                            </td>
                                             <td>{{$user->phone}}</td>
                                             <td>{{$user->address}}</td>
                                             <td>{{$user->email_verified_at}}</td>

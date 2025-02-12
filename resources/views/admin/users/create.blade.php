@@ -51,12 +51,18 @@
                             @error('mail') <span style="color:red">{{ $message }}</span> @enderror
 
                             <div class="mb-3 row">
-                                <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Ảnh đại diện</label>
+                                <label for="inputAvatar" class="form-label col-sm-4 col-form-label">Ảnh đại diện</label>
                                 <div class="col-sm-8">
-                                    <input type="file" name="avatar" value="{{old('avatar')}} class=" form-control">
+                                    <input type="file" name="avatar" id="inputAvatar" class="form-control" onchange="previewImage(event)">
+                                    <img id="avatarPreview" src="#" alt="Ảnh đại diện" class="d-none mt-2" style="max-width: 150px;">
                                 </div>
                             </div>
-                            @error('avatar') <span style="color:red">{{$message}}</span> @enderror
+                            @error('avatar') <span style="color:red">{{ $message }}</span> @enderror
+
+                            @if(isset($user->avatar))
+                            <img src="{{ asset($user->avatar) }}" alt="Avatar" style="max-width: 150px;">
+                            @endif
+
 
                             <div class="mb-3 row">
                                 <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Số điện thoại</label>
@@ -110,3 +116,20 @@
     </div>
 </div>
 @endsection
+@push('script')
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("avatarPreview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove("d-none");
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@endpush

@@ -48,7 +48,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="about-avatar">
-                    <img src="{{asset('users/')}}/{{$user->avatar}}" alt="{{$user->name}}" style="margin-left:40px;border:0.5px solid #ddd;border-radius:5px">
+                    <img src="{{asset('storage/')}}/{{$user->avatar}}" alt="{{$user->name}}" style="margin-left:40px;border:0.5px solid #ddd;border-radius:5px;width:400px;height:400px">
                 </div>
             </div>
         </div>

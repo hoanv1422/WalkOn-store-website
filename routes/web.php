@@ -63,7 +63,7 @@ Route::post('/admin/user/add', [UserController::class, 'add_user'])->name('admin
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit_user'])->name('admin.user.edit');
 Route::put('/admin/user/update', [UserController::class, 'update_user'])->name('admin.user.update');
 
-Route::get('/admin/user/detail/{id}', [UserController::class, 'detail_user'])->name('admin.user.detail');
+Route::get('/admin/user/detail/{id}', action: [UserController::class, 'detail_user'])->name('admin.user.detail');
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');;
 Route::post('/login', [AuthController::class, 'login'])->name('login');;

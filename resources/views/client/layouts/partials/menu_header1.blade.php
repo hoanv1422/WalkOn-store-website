@@ -132,10 +132,10 @@
                                     <a href="single-product.html">Single Shop</a>
                                 </span>
                                 <span>
-                                    <a href="login.html">Login page</a>
+                                    <a href="{{route('login')}}">Login page</a>
                                 </span>
                                 <span>
-                                    <a href="register.html">Ragister page</a>
+                                    <a href="{{route('register')}}">Ragister page</a>
                                 </span>
                                 <span>
                                     <a href="wishlist.html">Wishlist</a>
@@ -249,7 +249,14 @@
                                 <li><a href="wishlist.html">Wishlist</a></li>
                                 <li><a href="{{route('login')}}">login page</a></li>
                                 <li><a href="{{route('register')}}">register page</a></li>
-                                <li><a href="{{route('logout')}}">logout</a></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button onclick="return confirm('Đăng xuất khỏi tài khoản?')" type="submit" style="color:white;background: none; border: none; font-weight: bold; cursor: pointer; font-size: 13px;">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </li>
                     </ul>

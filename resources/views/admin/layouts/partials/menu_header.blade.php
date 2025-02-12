@@ -129,15 +129,16 @@
                             </li>
                         </div>
                         <div class="profile_info">
-                            <img src="{{asset('admin_views/img/client_img.png')}}" alt="#">
-
+                            @auth
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('admin_views/img/client_img.png') }}" alt="Avatar">
                             <div class="profile_info_iner">
                                 <div class="profile_author_name">
-                                    <p>Admin </p>
-                                    <h5>WalkOn Shop</h5>
+                                    <p>{{ Auth::user()->role == 'admin' ? 'Admin' : 'User' }}</p>
+                                    <h5>{{ Auth::user()->name ?? Auth::user()->username }}</h5>
                                 </div>
                                 <div class="profile_info_details">
-                                    <a href="#">Tài khoản của tôi </a>
+                                    <a href="{{ route('admin.user.detail', ['id' => Auth::user()->id]) }}">Tài khoản của tôi</a>
+
                                     <a href="#">Cài đặt</a>
                                     <form action="{{ route('logout') }}" method="POST">
                                         @csrf
@@ -147,6 +148,7 @@
                                     </form>
                                 </div>
                             </div>
+                            @endauth
                         </div>
                     </div>
                 </div>

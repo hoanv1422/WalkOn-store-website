@@ -55,12 +55,15 @@
                                 <label for="inputAvatar" class="form-label col-sm-4 col-form-label">Ảnh đại diện</label>
                                 <div class="col-sm-8">
                                     @if($user->avatar)
-                                    <img src="{{ asset('users/' . $user->avatar) }}" alt="{{$user->name}}" class="img-thumbnail mb-2" width="100">
+                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="img-thumbnail mb-2" width="100">
                                     @endif
                                     <input type="file" name="avatar" class="form-control" id="inputAvatar">
                                 </div>
                             </div>
-                            @error('avatar') <span class="alert-alert-danger text-center">{{$message}}</span> @enderror
+                            @error('avatar')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                            @enderror
+
 
                             <div class="mb-3 row">
                                 <label for="inputEmail3" class="form-label col-sm-4 col-form-label">Số điện thoại</label>
