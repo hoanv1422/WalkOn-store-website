@@ -20,26 +20,15 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="single-product-img tab-content">
-                            <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
-                                <a href="#"><img class="optima_zoom" src="client_views/img/product/7.png"
-                                        data-zoom-image="client_views/img/product/7.png" alt="optima" /></a>
-                            </div>
-                            <div class="single-pro-main-image tab-pane" id="pro-large-img-2">
-                                <a href="#"><img class="optima_zoom" src="client_views/img/product/2.png"
-                                        data-zoom-image="client_views/img/product/2.png" alt="optima" /></a>
-                            </div>
-                            <div class="single-pro-main-image tab-pane" id="pro-large-img-3">
-                                <a href="#"><img class="optima_zoom" src="client_views/img/product/8.png"
-                                        data-zoom-image="client_views/img/product/8.png" alt="optima" /></a>
-                            </div>
-                            <div class="single-pro-main-image tab-pane" id="pro-large-img-4">
-                                <a href="#"><img class="optima_zoom" src="client_views/img/product/1.png"
-                                        data-zoom-image="client_views/img/product/1.png" alt="optima" /></a>
-                            </div>
-                            <div class="single-pro-main-image tab-pane" id="pro-large-img-5">
-                                <a href="#"><img class="optima_zoom" src="client_views/img/product/9.png"
-                                        data-zoom-image="client_views/img/product/9.png" alt="optima" /></a>
-                            </div>
+                            @foreach ($product->galleries as $key => $gallery)
+                                <div class="single-pro-main-image tab-pane {{ $key === 0 ? 'active' : '' }}"
+                                    id="pro-large-img-{{ $key + 1 }}">
+                                    <a href="#">
+                                        <img class="optima_zoom" src="{{ asset('storage/' . $gallery->image) }}"
+                                            data-zoom-image="{{ asset('storage/' . $gallery->image) }}" alt="Product Image">
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="nav product-page-slider">
                             @foreach ($product->galleries as $key => $gallery)
@@ -51,6 +40,7 @@
                                 </div>
                             @endforeach
                         </div>
+
 
                     </div>
                     <div class="col-lg-6">
@@ -123,7 +113,7 @@
                                         <select id="select-1">
                                             <option value="">-- Please Select --</option>
                                             @foreach ($product->colors as $color)
-                                                <option value="{{ $color->id }}">{{ ucfirst($color->color) }}</option>
+                                                <option value="{{ $color->id }}" data-color="{{ $color->color }}">{{ ucfirst($color->color) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -136,8 +126,7 @@
                                         <select id="select-2">
                                             <option value="">-- Please Select --</option>
                                             @foreach ($product->sizes as $size)
-                                                <option value="{{ $size->id }}">{{ strtoupper($size->size) }}
-                                                </option>
+                                                <option value="{{ $size->id }}" data-size="{{ $size->size }}">{{ strtoupper($size->size) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -179,8 +168,7 @@
                                         data-bs-toggle="tab">Product Description</a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#tab2" aria-controls="tab2" role="tab"
-                                        data-bs-toggle="tab">reviews</a>
+                                    <a href="#tab2" aria-controls="tab2" role="tab" data-bs-toggle="tab">reviews</a>
                                 </li>
                                 <li role="presentation">
                                     <a href="#tab3" aria-controls="tab3" role="tab" data-bs-toggle="tab">product
@@ -192,15 +180,7 @@
                             <div class="tab-content single-product-page">
                                 <div role="tabpanel" class="tab-pane fade show active" id="tab1">
                                     <div class="single-p-tab-content">
-                                        <p>Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et mattis
-                                            vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis
-                                            in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean eleifend
-                                            laoreet congue. Vivamus adipiscing nisl ut dolor dignissim semper. Nulla luctus
-                                            malesuada tincidunt. Class aptent taciti sociosqu ad litora torquent per conubia
-                                            nostra, per inceptos himenaeos. Integer enim purus, posuere at ultricies eu,
-                                            placerat a felis. Suspendisse aliquet urna pretium eros convallis interdum.
-                                            Quisque in arcu id dui vulputate mollis eget non arcu. Aenean et nulla purus.
-                                            Mauris vel tellus non nunc mattis lobortis. </p>
+                                        <p>{{ $product->description }}</p>
                                     </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade" id="tab2">
@@ -355,26 +335,32 @@
         <!-- related product area end-->
         <!-- footer top area start -->
     @endsection
+ 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let basePrice = {{ $product->price_sale ?? $product->price }};
-            let variants = @json($product->variants);
-
-            function updatePrice() {
-                let selectedColor = document.getElementById("select-color").value;
-                let selectedSize = document.getElementById("select-size").value;
-                let extraPrice = 0;
-
-                variants.forEach(variant => {
-                    if (variant.color_id == selectedColor && variant.size_id == selectedSize) {
-                        extraPrice = parseFloat(variant.price);
-                    }
-                });
-
-                document.getElementById("product-price").innerText = extraPrice.toLocaleString("vi-VN") + " VNĐ";
-            }
-
-            document.getElementById("select-color").addEventListener("change", updatePrice);
-            document.getElementById("select-size").addEventListener("change", updatePrice);
-        });
+        const productVariants = @json($product->variants);
     </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const selectColor = document.getElementById("select-1");
+    const selectSize = document.getElementById("select-2");
+    const priceBox = document.querySelector(".price-box span");
+
+    function updatePrice() {
+        const selectedColor = selectColor.value;
+        const selectedSize = selectSize.value;
+
+        if (selectedColor && selectedSize) {
+            const variant = productVariants.find(
+                (v) => v.color_id == selectedColor && v.size_id == selectedSize
+            );
+
+            if (variant) {
+                priceBox.textContent = new Intl.NumberFormat("vi-VN").format(variant.price) + " VNĐ";
+            }
+        }
+    }
+
+    selectColor.addEventListener("change", updatePrice);
+    selectSize.addEventListener("change", updatePrice);
+});
+</script>    
