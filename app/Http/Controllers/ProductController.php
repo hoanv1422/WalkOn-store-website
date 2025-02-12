@@ -66,8 +66,13 @@ class ProductController extends Controller
     public function productDetail(string $slug)
     { 
        $product = Product::with('galleries','variants','colors','sizes')->where('slug',$slug)->first();
+  
+
+       // Lấy sản phẩm liên quan cùng danh mục (trừ sản phẩm hiện tại)
+       $relatedProducts = $product->relatedProducts();
+      
     //    dd($product);
-        return view('client.pages.shop.detail',compact('product'));
+        return view('client.pages.shop.detail',compact('product','relatedProducts'));
     }
 
 }
