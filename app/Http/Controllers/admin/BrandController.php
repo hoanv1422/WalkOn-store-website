@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
@@ -11,9 +12,14 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    const PATH_VIEW = 'admin.brands.';
+    const PATH_UPLOAD = 'brands';
+
     public function index()
     {
-        
+        $brands = Brand::all();
+        return view(self::PATH_VIEW . __FUNCTION__, compact('brands'));
     }
 
     /**

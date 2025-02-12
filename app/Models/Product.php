@@ -22,6 +22,7 @@ class Product extends Model
         'sold_quantity',
         'average_rating',
         'category_id',
+        'view_count',
         'brand_id',
         'is_active',
     ];
@@ -29,6 +30,11 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug'; // Laravel sẽ tự động tìm theo 'slug' thay vì 'id'
+    }
 
     public function category()
     {

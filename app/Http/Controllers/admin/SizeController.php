@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Size;
 use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
+use App\Models\Color;
 
 class SizeController extends Controller
 {
@@ -13,7 +15,9 @@ class SizeController extends Controller
      */
     public function index()
     {
-        //
+        $sizes = Size::all();
+        $colors = Color::all();
+        return view('admin.attributes.index', compact('sizes', 'colors'));
     }
 
     /**

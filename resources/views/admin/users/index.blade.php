@@ -1,123 +1,325 @@
 @extends('admin.layouts.app')
 @section('title', 'Danh sách người dùng')
 @section('content')
-<div class="main_content_iner ">
-    <div class="container-fluid p-0">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Danh sách</h3>
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                        <h4 class="mb-sm-0">Customers</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                <li class="breadcrumb-item active">Customers</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card" id="customerList">
+                        <div class="card-header border-bottom-dashed">
+
+                            <div class="row g-4 align-items-center">
+                                <div class="col-sm">
+                                    <div>
+                                        <h5 class="card-title mb-0">Customer List</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="d-flex flex-wrap align-items-start gap-2">
+                                        <button class="btn btn-soft-danger" id="remove-actions"
+                                            onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                        <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
+                                            id="create-btn" data-bs-target="#showModal"><i
+                                                class="ri-add-line align-bottom me-1"></i> Add Customer</button>
+                                        <button type="button" class="btn btn-info"><i
+                                                class="ri-file-download-line align-bottom me-1"></i> Import</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Danh sách người dùng</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="search_field_2">
-                                        <div class="search_inner">
-                                            <form action="#" class="d-flex">
-                                                <input type="text" class="form-control" placeholder="Search here..." aria-label="Search">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </form>
+                        <div class="card-body border-bottom-dashed border-bottom">
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-xl-6">
+                                        <div class="search-box">
+                                            <input type="text" class="form-control search"
+                                                placeholder="Search for customer, email, phone, status or something...">
+                                            <i class="ri-search-line search-icon"></i>
                                         </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-xl-6">
+                                        <div class="row g-3">
+                                            <div class="col-sm-4">
+                                                <div class="">
+                                                    <input type="text" class="form-control" id="datepicker-range"
+                                                        data-provider="flatpickr" data-date-format="d M, Y"
+                                                        data-range-date="true" placeholder="Select date">
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <select class="form-control" data-plugin="choices" data-choices
+                                                        data-choices-search-false name="choices-single-default"
+                                                        id="idStatus">
+                                                        <option value="">Status</option>
+                                                        <option value="all" selected>All</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Block">Block</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <button type="button" class="btn btn-primary w-100"
+                                                        onclick="SearchData();"> <i
+                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end row-->
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="table-responsive table-card mb-1">
+                                    <table id="userTable" class="table align-middle dataTable">
+                                        <thead class="table-light text-muted">
+                                            <tr>
+                                                <th scope="col" style="width: 15px;">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="checkAll">
+                                                    </div>
+                                                </th>
+                                                <th class="sort" data-sort="avatar" style="width: 50px;">Ảnh</th>
+                                                <th class="sort" data-sort="customer_name">Tên Người Dùng</th>
+                                                <th class="sort" data-sort="email">Email</th>
+                                                <th class="sort" data-sort="phone">Số Điện Thoại</th>
+                                                <th class="sort" data-sort="date">Ngày Tạo</th>
+                                                <th class="sort" data-sort="authentic">Xác thực</th>
+                                                <th class="sort" data-sort="status">Trạng Thái</th>
+                                                <th class="sort" data-sort="action">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list form-check-all">
+                                            @foreach ($users as $user)
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="chk_child">
+                                                        </div>
+                                                    </th>
+                                                    <td class="avatar">
+                                                        <div class="flex-shrink-">
+                                                            <div class="avatar-sm bg-light rounded p-1">
+                                                                <img src="{{ Storage::url($user->avatar) }}" alt=""
+                                                                    class="img-fluid d-block">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="customer_name">{{ $user->name }}</td>
+                                                    <td class="email">{{ $user->mail }}</td>
+                                                    <td class="phone">{{ $user->phone }}</td>
+                                                    <td class="date">{{ $user->created_at->format('d M, Y') }}</td>
+                                                    <td class="authentic"></td>
+                                                    <td class="status">
+                                                        <span
+                                                            class="badge {{ $user->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+                                                            {{ $user->is_active ? 'ACTIVE' : 'BLOCK' }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="Edit">
+                                                                <a href="#showModal" data-bs-toggle="modal"
+                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="Remove">
+                                                                <a class="text-danger d-inline-block remove-item-btn"
+                                                                    data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    {{-- <div class="noresult" style="display: none">
+                                        <div class="text-center">
+                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                                colors="primary:#121331,secondary:#08a88a"
+                                                style="width:75px;height:75px"></lord-icon>
+                                            <h5 class="mt-2">Sorry! No Result Found</h5>
+                                            <p class="text-muted mb-0">We've searched more than 150+ customer We did not
+                                                find any customer for you search.</p>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                                {{-- <div class="d-flex justify-content-end">
+                                    <div class="pagination-wrap hstack gap-2">
+                                        <a class="page-item pagination-prev disabled" href="#">
+                                            Previous
+                                        </a>
+                                        <ul class="pagination listjs-pagination mb-0"></ul>
+                                        <a class="page-item pagination-next" href="#">
+                                            Next
+                                        </a>
+                                    </div>
+                                </div> --}}
+                            </div>
+                            <div class="modal fade" id="showModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
+                                        </div>
+                                        <form class="tablelist-form" autocomplete="off">
+                                            <div class="modal-body">
+                                                <input type="hidden" id="id-field" />
+
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="customername-field" class="form-label">Customer
+                                                        Name</label>
+                                                    <input type="text" id="customername-field" class="form-control"
+                                                        placeholder="Enter name" required />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="email-field" class="form-label">Email</label>
+                                                    <input type="email" id="email-field" class="form-control"
+                                                        placeholder="Enter email" required />
+                                                    <div class="invalid-feedback">Please enter an email.</div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="phone-field" class="form-label">Phone</label>
+                                                    <input type="text" id="phone-field" class="form-control"
+                                                        placeholder="Enter phone no." required />
+                                                    <div class="invalid-feedback">Please enter a phone.</div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="date-field" class="form-label">Joining Date</label>
+                                                    <input type="date" id="date-field" class="form-control"
+                                                        data-provider="flatpickr" data-date-format="d M, Y" required
+                                                        placeholder="Select date" />
+                                                    <div class="invalid-feedback">Please select a date.</div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="status-field" class="form-label">Status</label>
+                                                    <select class="form-control" data-choices data-choices-search-false
+                                                        name="status-field" id="status-field" required>
+                                                        <option value="">Status</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Block">Block</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Add
+                                                        Customer</button>
+                                                    <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="QA_table mb_30">
-                                <div class="add_button ">
-                                    <a href="{{url('admin/users/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
-                                        <i class="fas fa-plus me-1"></i> Add new
-                                    </a>
+                            <!-- Modal -->
+                            <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" id="deleteRecord-close"
+                                                data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mt-2 text-center">
+                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                                    colors="primary:#f7b84b,secondary:#f06548"
+                                                    style="width:100px;height:100px"></lord-icon>
+                                                <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                                    <h4>Are you sure ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
+                                                        record ?</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                                                <button type="button" class="btn w-sm btn-light"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn w-sm btn-danger"
+                                                    id="delete-record">Yes, Delete It!</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                @if(session('status'))
-                                <div class="alert alert-success mt-2">
-                                    {{ session('status') }}
-                                </div>
-                                @endif
-                                <!-- table-responsive -->
-                                <table class="table-responsive lms_table_active text-center">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Username</th>
-                                            <th scope="col">Password</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Mail</th>
-                                            <th scope="col">Avatar</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Email_Verified_At</th>
-                                            <th scope="col">Role</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($users as $user )
-                                        <tr>
-                                            <td>{{$user->id}}</td>
-                                            <td>{{$user->username}}</td>
-                                            <td>{{$user->password}}</td>
-                                            <td>{{$user->name}}</td>
-                                            <td>{{$user->mail}}</td>
-                                            <td><img src="{{asset('users/')}}/{{$user->avatar}}" alt="{{$user->name}}" width="50"></td>
-                                            <td>{{$user->phone}}</td>
-                                            <td>{{$user->address}}</td>
-                                            <td>{{$user->email_verified_at}}</td>
-                                            <td>{{ $user->role }}</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}">
-                                                    <button class="btn btn-success btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </button>
-                                                </a>
-                                                
-                                                <form class="delete-form" action="{{ route('admin.user.delete', ['id' => $user->id]) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm mx-1">
-                                                        <i class="fas fa-trash-alt"></i> Delete
-                                                    </button>
-                                                </form>
-                                            
-                                                <button class="btn btn-light btn-sm mx-1">
-                                                    <i class="fas fa-eye"></i> View
-                                                </button>
-                                            </td> 
-                                            
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
                             </div>
+                            <!--end modal -->
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-12">
 
+                </div>
+                <!--end col-->
             </div>
+            <!--end row-->
+
         </div>
+        <!-- container-fluid -->
     </div>
-</div>
+    <!-- End Page-content -->
 @endsection
-@push('scripts');
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".delete-form").forEach(form => {
-        form.addEventListener("submit", function(e) {
-            if (!confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
-                e.preventDefault();
-            }
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('table.dataTable').each(function() {
+                $(this).DataTable({
+                    "paging": true, // Hiển thị phân trang
+                    "searching": false, // Tắt tìm kiếm
+                    "ordering": true, // Bật sắp xếp
+                    "info": true, // Hiển thị thông tin tổng
+                    "pageLength": 10, // Giới hạn số lượng bản ghi mỗi trang
+                    "lengthChange": false
+                });
+            });
         });
-    });
-});
-</script>
-@endscript
+    </script>
+@endsection
