@@ -1,15 +1,10 @@
 @extends('client.layouts.app')
 @section('title', 'trang chủ')
 @section('content')
-
-
 @include('client.layouts.partials.menu_header')
-
     <div class="mainmenu-area product-items">
   @include('client.layouts.partials.menu_header1')
-
 @include('client.layouts.slider.slider')
-
 <!-- slider area end -->
 <!-- banner area start -->
 @include('client.layouts.banner.banner')

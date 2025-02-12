@@ -49,5 +49,15 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function colors()
+{
+    return $this->hasManyThrough(Color::class, ProductVariant::class, 'product_id', 'id', 'id', 'color_id')->distinct();
+}
 
+public function sizes()
+{
+    return $this->hasManyThrough(Size::class, ProductVariant::class, 'product_id', 'id', 'id', 'size_id')->distinct();
+}
+
+    
 }
