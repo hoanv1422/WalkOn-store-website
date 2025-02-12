@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 'name' => $brands[$i],
                 'slug' => Str::slug($brands[$i]),
                 'logo' => '',
-                'description' => '',    
+                'description' => '',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -80,6 +80,29 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // Product
+        $productNames = ['Nike Air Max', 'Adidas Ultraboost', 'Puma Suede', 'Reebok Classic', 'New Balance 574', 'Nike Air Force', 'Adidas NMD', 'Puma RS-X', 'Reebok Zig'];
+        for ($i = 0; $i < 9; $i++) {
+            Product::query()->create([
+                'sku' => 'SKU' . ($i + 1),
+                'name' => $productNames[$i],
+                'slug' => Str::slug($productNames[$i]),
+                'description' => 'A great pair of ' . $productNames[$i] . ' shoes.',
+                'price_income' => rand(30, 70),
+                'price' => rand(50, 150),
+                'price_sale' => rand(40, 140),
+                'image' => '',
+                'quantity' => rand(10, 100),
+                'sold_quantity' => rand(0, 50),
+                'average_rating' => rand(0, 50) / 10,
+                'category_id' => ($i % 5) + 1,
+                'brand_id' => ($i % 5) + 1,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
+        Schema::enableForeignKeyConstraints();
     }
 }
