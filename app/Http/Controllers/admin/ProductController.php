@@ -57,7 +57,6 @@ class ProductController extends Controller
     {
 
 
-        // dd($request->all());
 
         // Data Product
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
@@ -77,8 +76,8 @@ class ProductController extends Controller
         $totalQuantity = 0;
         foreach ($listProVariants as $item) {
             $dataProVariants[] = [
-                'size_id' => $item['color'],
-                'color_id' => $item['size'],
+                'size_id' => $item['size'],
+                'color_id' => $item['color'],
                 'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
                 'quantity' => $item['quantity'],
                 'price' => $item['price']

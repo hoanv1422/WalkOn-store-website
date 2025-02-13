@@ -60,5 +60,5 @@
         <link rel="stylesheet" href="{{asset("client/css/responsive.css")}}"/>
         <!-- modernizr JS
         ============================================ -->
-        <script src="{{asset("client/js/vendor/modernizr-2.8.3.min.js")}}"/></script>
+        <script src="{{asset("client/js/vendor/modernizr-2.8.3.min.js")}}"></script>
     </head>
