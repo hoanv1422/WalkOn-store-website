@@ -105,10 +105,11 @@
                                                         <input class="form-check-input" type="checkbox" id="checkAll">
                                                     </div>
                                                 </th>
-                                                <th class="sort" data-sort="name"  style="width: 200px;">Tên Thương Hiệu</th>
-                                                <th class="sort" data-sort="logo"  style="width: 50px;">Logo</th>
-                                                <th class="sort" data-sort="description"  style="width: 500px;">Mô tả</th>
-                                                <th class="sort" data-sort="status"  style="width: 100px;">Trạng Thái</th>
+                                                <th class="sort" data-sort="name" style="width: 200px;">Tên Thương Hiệu
+                                                </th>
+                                                <th class="sort" data-sort="logo" style="width: 50px;">Logo</th>
+                                                <th class="sort" data-sort="description" style="width: 500px;">Mô tả</th>
+                                                <th class="sort" data-sort="status" style="width: 100px;">Trạng Thái</th>
                                                 <th class="sort" data-sort="action">Hành Động</th>
                                             </tr>
                                         </thead>
@@ -125,7 +126,7 @@
                                                     <td class="name">{{ $item->name }}</td>
                                                     <td class="logo">
                                                         <div class="flex-shrink-">
-                                                            <div class="avatar-sm bg-light rounded p-1">
+                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
                                                                 <img src="{{ Storage::url($item->logo) }}" alt=""
                                                                     class="img-fluid d-block">
                                                             </div>
@@ -144,7 +145,12 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Edit">
                                                                 <a href="#showModalEdit" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                                    class="text-primary d-inline-block edit-item-btn"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-logo="{{ Storage::url($item->logo) }}"
+                                                                    data-name="{{ $item->name }}"
+                                                                    data-description="{{ $item->description }}"
+                                                                    data-status="{{ $item->is_active }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -152,7 +158,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                    data-bs-toggle="modal" href="#deleteRecordModal"
+                                                                    data-id="{{ $item->id }}">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -167,162 +174,181 @@
 
 
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
 
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Customer
-                                                            Name</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Enter name" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="email-field" class="form-label">Email</label>
-                                                        <input type="email" id="email-field" class="form-control"
-                                                            placeholder="Enter email" required />
-                                                        <div class="invalid-feedback">Please enter an email.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="phone-field" class="form-label">Phone</label>
-                                                        <input type="text" id="phone-field" class="form-control"
-                                                            placeholder="Enter phone no." required />
-                                                        <div class="invalid-feedback">Please enter a phone.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="date-field" class="form-label">Joining Date</label>
-                                                        <input type="date" id="date-field" class="form-control"
-                                                            data-provider="flatpickr" data-date-format="d M, Y" required
-                                                            placeholder="Select date" />
-                                                        <div class="invalid-feedback">Please select a date.</div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="status-field" class="form-label">Status</label>
-                                                        <select class="form-control" data-choices data-choices-search-false
-                                                            name="status-field" id="status-field" required>
-                                                            <option value="">Status</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Block">Block</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm Danh Mục</button>
-                                                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="{{ route('brands.store') }}" method="POST" class="tablelist-form"
+                                            autocomplete="off" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <input type="hidden" id="id-field" />
 
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="text-center">
+                                                    <div class="position-relative d-inline-block">
+                                                        <div class="position-absolute top-100 start-100 translate-middle">
+                                                            <label for="product-image-input" class="mb-0"
+                                                                data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                title="Chọn ảnh">
+                                                                <div class="avatar-xs">
+                                                                    <div
+                                                                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                        <i class="ri-image-fill"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
+                                                            <input class="form-control d-none" id="product-image-input"
+                                                                name="logo" type="file"
+                                                                accept="image/png, image/gif, image/jpeg"
+                                                                onchange="previewImage(event)">
+                                                        </div>
+                                                        <div class="avatar-lg">
+                                                            <div class="avatar-title bg-light rounded overflow-hidden">
+                                                                <img src="" id="product-img"
+                                                                    class="avatar-md h-auto " />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="name-field" class="form-label">Tên Thương Hiệu</label>
+                                                    <input type="text" id="name-field" class="form-control"
+                                                        placeholder="Nhập tên thương hiệu" name="name" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="description-field" class="form-label">Mô Tả</label>
+                                                    <input type="text" id="description-field" class="form-control"
+                                                        placeholder="Nhập mô tả" name="description" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="status-field" class="form-label">Trạng Thái</label>
+                                                    <select class="form-control" data-choices data-choices-search-false
+                                                        name="is_active" id="status-field" required>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">Block</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Thêm
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Customer
-                                                            Name</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Enter name" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="email-field" class="form-label">Email</label>
-                                                        <input type="email" id="email-field" class="form-control"
-                                                            placeholder="Enter email" required />
-                                                        <div class="invalid-feedback">Please enter an email.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="phone-field" class="form-label">Phone</label>
-                                                        <input type="text" id="phone-field" class="form-control"
-                                                            placeholder="Enter phone no." required />
-                                                        <div class="invalid-feedback">Please enter a phone.</div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="date-field" class="form-label">Joining Date</label>
-                                                        <input type="date" id="date-field" class="form-control"
-                                                            data-provider="flatpickr" data-date-format="d M, Y" required
-                                                            placeholder="Select date" />
-                                                        <div class="invalid-feedback">Please select a date.</div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="status-field" class="form-label">Status</label>
-                                                        <select class="form-control" data-choices data-choices-search-false
-                                                            name="status-field" id="status-field" required>
-                                                            <option value="">Status</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Block">Block</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Cập Nhật Danh Mục</button>
-                                                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Sửa </h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="" method="POST" class="tablelist-form edit"
+                                            autocomplete="off" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="id-field-edit" />
 
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="text-center">
+                                                    <div class="position-relative d-inline-block">
+                                                        <div class="position-absolute top-100 start-100 translate-middle">
+                                                            <label for="product-image-input-edit" class="mb-0"
+                                                                data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                title="Chọn ảnh">
+                                                                <div class="avatar-xs">
+                                                                    <div
+                                                                        class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                        <i class="ri-image-fill"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
+                                                            <input class="form-control d-none"
+                                                                id="product-image-input-edit" name="logo"
+                                                                type="file" accept="image/png, image/gif, image/jpeg"
+                                                                onchange="previewImageEdit(event)">
+                                                        </div>
+                                                        <div class="avatar-lg">
+                                                            <div class="avatar-title bg-light rounded overflow-hidden">
+                                                                <img src="" id="product-img-edit"
+                                                                    class="avatar-md h-auto" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="name-field-edit" class="form-label">
+                                                        Tên Danh Mục</label>
+                                                    <input type="text" id="name-field-edit" class="form-control"
+                                                        placeholder="Enter name" name="name" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="description-field-edit" class="form-label">
+                                                        Mô tả</label>
+                                                    <textarea type="text" id="description-field-edit" class="form-control" placeholder="Nhập mô tả"
+                                                        name="description"> </textarea>
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+
+                                                <div>
+                                                    <label for="status-field-edit" class="form-label">Status</label>
+                                                    <select class="form-control" data-choices data-choices-search-false
+                                                        name="is_active" id="status-field-edit" required>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">Block</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Cập
+                                                        Nhật</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
 
                             <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -334,16 +360,20 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Are you sure ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
-                                                        record ?</p>
+                                                    <h4>Bạn có chắc không ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa thương hiệu này không ?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn w-sm btn-danger"
-                                                    id="delete-record">Yes, Delete It!</button>
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <form id="deleteForm" method="POST" action="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -351,7 +381,7 @@
                             </div>
                             <!--end modal -->
                         </div>
-                        
+
                     </div>
 
                 </div>
@@ -366,6 +396,10 @@
 @endsection
 
 @section('script')
+
+    <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/validates/brand.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('table.dataTable').each(function() {
@@ -378,6 +412,13 @@
                     "lengthChange": false
                 });
             });
+        });
+
+        $(document).on('click', '.remove-item-btn', function() {
+            let userId = $(this).data('id'); // Lấy ID người dùng
+            let actionUrl = "/admin/brands/" + userId; // Tạo URL xóa
+
+            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
         });
     </script>
 @endsection

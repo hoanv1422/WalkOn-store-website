@@ -6,47 +6,29 @@ use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Http\Requests\StoreColorRequest;
 use App\Http\Requests\UpdateColorRequest;
+use Illuminate\Support\Facades\DB;
 
 class ColorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreColorRequest $request)
     {
-        //
-    }
+        $data = $request->all();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Color $color)
-    {
-        //
-    }
+        try {
+            DB::beginTransaction();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Color $color)
-    {
-        //
+            Color::query()->create($data);
+
+            DB::Commit();
+            return redirect()->route('attributes.index')->with('success', 'Thêm màu sắc thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
     }
 
     /**
@@ -54,7 +36,20 @@ class ColorController extends Controller
      */
     public function update(UpdateColorRequest $request, Color $color)
     {
-        //
+        $data = $request->all();
+
+        try {
+            DB::beginTransaction();
+
+            $color->update($data);
+
+            DB::Commit();
+            return redirect()->route('attributes.index')->with('success', 'Sửa màu sắc thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
     }
 
     /**
@@ -62,6 +57,15 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $color->delete();
+            DB::commit();
+            return redirect()->route('attributes.index')->with('success', 'Xóa thành công');
+        } catch (\Exception $exception) {
+            DB::rollback();
+            dd($exception);
+            return back()->with('error', 'Lỗi');
+        }
     }
 }

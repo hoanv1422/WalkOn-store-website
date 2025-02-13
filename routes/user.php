@@ -35,10 +35,10 @@ Route::get('/forgot_password', function () {
 // Route::get('/admin/user/edit/{id}', [UserController::class, 'edit_user'])->name('admin.user.edit');
 // Route::put('/admin/user/update', [UserController::class, 'update_user'])->name('admin.user.update');
 
-// Route::post('/register', [AuthController::class, 'register'])->name('register');;
-// Route::post('/login', [AuthController::class, 'login'])->name('login');;
+Route::post('/register', [AuthController::class, 'register'])->name('register');;
+Route::post('/login', [AuthController::class, 'login'])->name('login');;
 
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/admin', function () {

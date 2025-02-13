@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::get('/', function () {
-//     return view('admin.index');
+//     return 1;
 // });
-Route::get('/categories', function () {
-    return view('admin.categories.index');
-});
-Route::get('/categories/create', function () {
-    return view('admin.categories.create');
-});
-Route::get('/categories/edit', function () {
-    return view('admin.categories.edit');
-});
-

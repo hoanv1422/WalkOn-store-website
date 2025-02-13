@@ -117,7 +117,10 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Edit">
                                                                 <a href="#showModalEditSize" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                                    class="text-primary d-inline-block edit-item-btn"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-type="size"
+                                                                    data-size="{{ $item->size }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -125,7 +128,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModalSize">
+                                                                    data-bs-toggle="modal" href="#deleteRecordModalSize"
+                                                                    data-id="{{ $item->id }}" data-type="size">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -141,96 +145,94 @@
 
 
                             <!--Modal Sizes -->
-                            <form class="" action="" method="POST">
-                                @csrf
-                                <div class="modal fade" id="showModalCreateSize" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h4>Thêm Mới Kích Cỡ</h4>
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Tên</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Nhập tên" name="size" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalCreateSize" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Thêm Mới Kích Cỡ</h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="{{ route('sizes.store') }}" method="POST" class="tablelist-form"
+                                            autocomplete="off">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <input type="hidden" id="id-field" />
 
-                                    </div>
-                                </div>
-                            </form>
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="modal fade" id="showModalEditSize" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h4>Sửa Kích Cỡ</h4>
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
+                                                <div class="mb-3">
+                                                    <label for="size-field" class="form-label">Tên</label>
+                                                    <input type="text" id="size-field" class="form-control"
+                                                        placeholder="Nhập tên" name="size" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
                                             </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" name="id" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Tên</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Nhập tên" name="size" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success"
+                                                        id="add-btn">Thêm</button>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-
+                                            </div>
+                                        </form>
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
+
+                            <div class="modal fade" id="showModalEditSize" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Sửa Kích Cỡ</h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
+                                        </div>
+                                        <form action="" method="POST" class="tablelist-form edit-size"
+                                            autocomplete="off">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="id-field-edit-size" />
+
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" name="id"
+                                                        class="form-control" placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="size-field" class="form-label">Tên</label>
+                                                    <input type="text" id="size-field-edit" class="form-control"
+                                                        placeholder="Nhập tên" name="size" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Cập
+                                                        Nhật</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModalSize" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -242,16 +244,20 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Are you sure ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
-                                                        record ?</p>
+                                                    <h4>Bạn có chắc không ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa kích cỡ này không ?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn w-sm btn-danger"
-                                                    id="delete-record">Yes, Delete It!</button>
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <form id="deleteFormSize" action="" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -265,13 +271,11 @@
                 </div>
                 <!--end col-->
             </div>
-
-
             <!--end row-->
-
         </div>
-        <div class="container-fluid">
 
+
+        <div class="container-fluid">
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -386,7 +390,10 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Edit">
                                                                 <a href="#showModalEditColor" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                                    class="text-primary d-inline-block edit-item-btn"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-type="color"
+                                                                    data-color="{{ $item->color }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -394,7 +401,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModalColor">
+                                                                    data-bs-toggle="modal" href="#deleteRecordModalColor"
+                                                                    data-id="{{ $item->id }}" data-type="color">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -409,96 +417,94 @@
 
 
                             <!--Modal Colors -->
-                            <form class="" action="" method="POST">
-                                @csrf
-                                <div class="modal fade" id="showModalCreateColor" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h4>Thêm Mới Màu Sắc</h4>
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Tên</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Nhập tên" name="color" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalCreateColor" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Thêm Mới Màu Sắc</h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="{{ route('colors.store') }}" method="POST" class="tablelist-form"
+                                            autocomplete="off">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <input type="hidden" id="id-field" />
+
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" readonly />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="color-field" class="form-label">Tên</label>
+                                                    <input type="text" id="color-field" class="form-control"
+                                                        placeholder="Nhập tên" name="color" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success"
+                                                        id="add-btn">Thêm</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
 
-                            <form class="" action="" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="modal fade" id="showModalEditColor" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h4>Sửa Màu Sắc</h4>
-                                                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close" id="close-modal"></button>
-                                            </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field" />
-
-                                                    <div class="mb-3" id="modal-id" style="display: none;">
-                                                        <label for="id-field1" class="form-label">ID</label>
-                                                        <input type="text" id="id-field1" class="form-control"
-                                                            placeholder="ID" name="id" readonly />
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="customername-field" class="form-label">Tên</label>
-                                                        <input type="text" id="customername-field"
-                                                            class="form-control" placeholder="Nhập tên" name="color" required />
-                                                        <div class="invalid-feedback">Please enter a customer name.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Thêm</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                            <div class="modal fade" id="showModalEditColor" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h4>Sửa Màu Sắc</h4>
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
                                         </div>
+                                        <form action="" method="POST" class="tablelist-form edit-color"
+                                            autocomplete="off">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="id-field-edit-color" />
 
+                                                <div class="mb-3" id="modal-id" style="display: none;">
+                                                    <label for="id-field1" class="form-label">ID</label>
+                                                    <input type="text" id="id-field1" class="form-control"
+                                                        placeholder="ID" name="id" readonly />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="color-field" class="form-label">Tên</label>
+                                                    <input type="text" id="color-field-edit" class="form-control"
+                                                        placeholder="Nhập tên" name="color" />
+                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success"
+                                                        id="add-btn">Cập Nhật</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
 
                             <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModalColor" tabindex="-1"
                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -510,16 +516,20 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Are you sure ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
-                                                        record ?</p>
+                                                    <h4>Bạn có chắc không ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa màu sắc này không?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn w-sm btn-danger"
-                                                    id="delete-record">Yes, Delete It!</button>
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <form id="deleteFormColor" method="POST" action="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -545,6 +555,9 @@
 @endsection
 
 @section('script')
+
+    <script src="{{ asset('templates/admin/assets/libs/validates/attributes.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('table.dataTable').each(function() {
@@ -557,6 +570,20 @@
                     "lengthChange": false
                 });
             });
+        });
+
+
+        $(document).on('click', '.remove-item-btn', function() {
+            let userId = $(this).data('id'); // Lấy ID người dùng
+            let type = $(this).data('type'); // Lấy loại thuộc tính (size hoặc color)
+
+            let actionUrl = "/admin/attributes/" + type + "/" + userId; // Tạo URL xóa
+
+            if (type === 'size') {
+                $('#deleteFormSize').attr('action', actionUrl); // Cập nhật action form size
+            } else if (type === 'color') {
+                $('#deleteFormColor').attr('action', actionUrl); // Cập nhật action form color
+            }
         });
     </script>
 @endsection
