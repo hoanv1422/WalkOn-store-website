@@ -84,7 +84,7 @@
                                                 <div>
                                                     <button type="button" class="btn btn-primary w-100"
                                                         onclick="SearchData();"> <i
-                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
+                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Lọc</button>
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -124,7 +124,7 @@
                                                     <td class="status">
                                                         <span
                                                             class="badge {{ $item->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                                            {{ $item->is_active ? 'ACTIVE' : 'BLOCK' }}
+                                                            {{ $item->is_active ? 'Hoạt Động' : 'Ẩn' }}
                                                         </span>
                                                     </td>
                                                     <td>
@@ -183,17 +183,17 @@
 
                                                 <div class="mb-3">
                                                     <label for="name-field" class="form-label">
-                                                        Name</label>
+                                                        Tên Danh Mục</label>
                                                     <input type="text" id="name-field" class="form-control"
                                                         placeholder="Enter name" name="name" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
                                                 </div>
                                                 <div>
-                                                    <label for="status-field" class="form-label">Status</label>
+                                                    <label for="status-field" class="form-label">Trạng Thái</label>
                                                     <select class="form-control" data-choices data-choices-search-false
                                                         name="is_active" id="status-field" required>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Block</option>
+                                                        <option value="1">Hoạt Động</option>
+                                                        <option value="0">Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -243,11 +243,11 @@
                                                 </div>
 
                                                 <div>
-                                                    <label for="status-field-edit" class="form-label">Status</label>
+                                                    <label for="status-field-edit" class="form-label">Trạng Thái</label>
                                                     <select class="form-control" data-choices data-choices-search-false
                                                         name="is_active" id="status-field-edit" required>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Block</option>
+                                                        <option value="1">Hoạt Động</option>
+                                                        <option value="0">Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -280,7 +280,7 @@
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                                                     <h4>Bạn có chắc không ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không ?
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không?
                                                     </p>
                                                 </div>
                                             </div>

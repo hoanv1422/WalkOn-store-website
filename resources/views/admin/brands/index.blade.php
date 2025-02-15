@@ -84,7 +84,7 @@
                                                 <div>
                                                     <button type="button" class="btn btn-primary w-100"
                                                         onclick="SearchData();"> <i
-                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
+                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Lọc</button>
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -240,8 +240,8 @@
                                                     <label for="status-field" class="form-label">Trạng Thái</label>
                                                     <select class="form-control" data-choices data-choices-search-false
                                                         name="is_active" id="status-field" required>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Block</option>
+                                                        <option value="1">Hoạt Động</option>
+                                                        <option value="0">Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -327,8 +327,8 @@
                                                     <label for="status-field-edit" class="form-label">Status</label>
                                                     <select class="form-control" data-choices data-choices-search-false
                                                         name="is_active" id="status-field-edit" required>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Block</option>
+                                                        <option value="1">Hoạt Động</option>
+                                                        <option value="0">Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
