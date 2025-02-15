@@ -20,13 +20,17 @@
                                 <li class="breadcrumb-item active">Sửa Sản Phẩm</li>
                             </ol>
                         </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> hoa_dev
                     </div>
                 </div>
             </div>
             <!-- end page title -->
 
-            <form action="{{ route('products.update', $product) }}" method="POST" onsubmit="removeCurrencyFormat()" class="needs-validation"
-                enctype="multipart/form-data">
+            <form action="{{ route('products.update', $product) }}" method="POST" onsubmit="removeCurrencyFormat()"
+                class="needs-validation" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -188,10 +192,11 @@
                                                     <label class="form-label" for="product-price-input">Giá nhập</label>
                                                     <div class="input-group has-validation mb-3">
                                                         <span class="input-group-text" id="product-price-addon">VNĐ</span>
-                                                        <input type="text" class="form-control @error('price_income') is-invalid @elseif(old('price_income')) is-valid @enderror"
+                                                        <input type="text"
+                                                            class="form-control @error('price_income') is-invalid @elseif(old('price_income')) is-valid @enderror"
                                                             id="product-price-input" placeholder="" aria-label="Price"
                                                             aria-describedby="product-price-addon" name="price_income"
-                                                            value="{{ old('price_income', number_format($product->price_income, 0, ',', '.') )}}"
+                                                            value="{{ old('price_income', number_format($product->price_income, 0, ',', '.')) }}"
                                                             oninput="formatCurrency(this)">
                                                         @error('price_income')
                                                             <span class="invalid-feedback">{{ $message }}</span>
@@ -210,12 +215,13 @@
                                                     <label class="form-label" for="product-price-input">Giá bán</label>
                                                     <div class="input-group has-validation mb-3">
                                                         <span class="input-group-text" id="product-price-addon">VNĐ</span>
-                                                        <input type="text" class="form-control  @error('price') is-invalid @elseif(old('price')) is-valid @enderror"
+                                                        <input type="text"
+                                                            class="form-control  @error('price') is-invalid @elseif(old('price')) is-valid @enderror"
                                                             id="product-price-input" placeholder="" aria-label="Price"
                                                             aria-describedby="product-price-addon" name="price"
                                                             value="{{ old('price', number_format($product->price, 0, ',', '.')) }}"
                                                             oninput="formatCurrency(this)">
-                                                            @error('price')
+                                                        @error('price')
                                                             <span class="invalid-feedback">{{ $message }}</span>
                                                         @enderror
                                                     </div>
@@ -228,12 +234,13 @@
                                                         mãi</label>
                                                     <div class="input-group has-validation mb-3">
                                                         <span class="input-group-text" id="product-price-addon">VNĐ</span>
-                                                        <input type="text" class="form-control @error('price_sale') is-invalid @elseif(old('price_sale')) is-valid @enderror"
+                                                        <input type="text"
+                                                            class="form-control @error('price_sale') is-invalid @elseif(old('price_sale')) is-valid @enderror"
                                                             id="product-price-input" placeholder="" aria-label="Price"
                                                             aria-describedby="product-price-addon" name="price_sale"
                                                             value="{{ old('price_sale', number_format($product->price_sale, 0, ',', '.')) }}"
                                                             oninput="formatCurrency(this)">
-                                                            @error('price_sale')
+                                                        @error('price_sale')
                                                             <span class="invalid-feedback">{{ $message }}</span>
                                                         @enderror
                                                     </div>

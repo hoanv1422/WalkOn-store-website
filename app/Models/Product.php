@@ -55,5 +55,25 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function colors()
+{
+    return $this->hasManyThrough(Color::class, ProductVariant::class, 'product_id', 'id', 'id', 'color_id')->distinct();
+}
 
+public function sizes()
+{
+    return $this->hasManyThrough(Size::class, ProductVariant::class, 'product_id', 'id', 'id', 'size_id')->distinct();
+}
+
+public function relatedProducts()
+{
+    return Product::where('id', '!=', $this->id)
+                  ->where(function ($query) {
+                      $query->where('category_id', $this->category_id)
+                            ->orWhere('brand_id', $this->brand_id);
+                  })
+                  ->inRandomOrder()
+                  ->limit(4)
+                  ->get();
+}
 }

@@ -7,9 +7,6 @@
     <!-- gridjs css -->
     {{-- <link rel="stylesheet" href="{{ asset('templates/admin/assets/libs/gridjs/theme/mermaid.min.css') }}"> --}}
 
-
-
-
 @endsection
 @section('content')
 

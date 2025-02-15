@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', function () {
 
-// Route::get('/', function () {
-//     return 1;
-// });
+    return view('client.pages.shop.detail');
+});
+Route::get('/shop/{slug}', [ProductController::class, 'productDetail'])->name('product.detail');

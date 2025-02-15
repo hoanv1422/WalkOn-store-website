@@ -67,12 +67,20 @@
                         </div>
                         <div class="cart-menu">
                             <ul>
+<<<<<<< HEAD
                                 <li><a href="#"> <img src="{{asset('img/icon-cart.png')}}" alt=""> <span>2</span> </a>
+=======
+                                <li><a href="#"> <img src="{{asset('client_views/img/icon-cart.png')}}" alt=""> <span>2</span> </a>
+>>>>>>> hoa_dev
                                     <div class="cart-info">
                                         <ul>
                                             <li>
                                                 <div class="cart-img">
+<<<<<<< HEAD
                                                     <img src="{{asset('img/cart/1.png')}}" alt="">
+=======
+                                                    <img src="{{asset('client_views/img/cart/1.png')}}" alt="">
+>>>>>>> hoa_dev
                                                 </div>
                                                 <div class="cart-details">
                                                     <a href="#">Fusce aliquam</a>
@@ -83,7 +91,11 @@
                                             </li>
                                             <li>
                                                 <div class="cart-img">
+<<<<<<< HEAD
                                                     <img src="{{asset('img/cart/2.png')}}" alt="">
+=======
+                                                    <img src="{{asset('client_views/img/cart/2.png')}}" alt="">
+>>>>>>> hoa_dev
                                                 </div>
                                                 <div class="cart-details">
                                                     <a href="#">Fusce aliquam</a>
@@ -104,3 +116,8 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> hoa_dev
