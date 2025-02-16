@@ -81,26 +81,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-<<<<<<< HEAD
-        //User
-        // for ($i = 0; $i < 5; $i++) {
-        //     User::create([
-        //         'username'          => 'user' . ($i + 1),
-        //         'name'              => 'User ' . ($i + 1),
-        //         'mail'             => 'user' . ($i + 1) . '@example.com',
-        //         'password'          => 123456,
-        //         'avatar'            => 'https://i.pravatar.cc/150?img=' . ($i + 1), // Ảnh avatar giả
-        //         'phone'             => '09876543' . $i,
-        //         'address'           => 'Address ' . ($i + 1),
-        //         'email_verified_at' => null,
-        //         'role'              => $i % 2 == 0 ? 'admin' : 'user', // Xen kẽ giữa admin và user
-        //         'is_active'         => $i % 2 == 0, // Xen kẽ true/false
-        //         'created_at'        => now(),
-        //         'updated_at'        => now(),
-        //     ]);
-        // }
-
-=======
         // Product
         $productNames = ['Nike Air Max', 'Adidas Ultraboost', 'Puma Suede', 'Reebok Classic', 'New Balance 574', 'Nike Air Force', 'Adidas NMD', 'Puma RS-X', 'Reebok Zig'];
         for ($i = 0; $i < 9; $i++) {
@@ -123,7 +103,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
->>>>>>> hoang_dev
 
         Schema::enableForeignKeyConstraints();
     }

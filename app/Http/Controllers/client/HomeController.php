@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,20 +15,8 @@ class HomeController extends Controller
     {
         $products = Product::all();
         
-        return view('client.pages.home1',compact('products'));
+        return view('client.pages.home.index',compact('products'));
        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    
 }

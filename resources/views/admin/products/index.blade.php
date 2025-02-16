@@ -10,13 +10,6 @@
 @endsection
 @section('content')
 
- {{-- @if(session('success'))
-   @php
-       dd(session('success'));
-   @endphp
-@endif --}}
-
-
     <div class="page-content">
         
         <div class="container-fluid">

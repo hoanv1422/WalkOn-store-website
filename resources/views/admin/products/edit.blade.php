@@ -20,10 +20,6 @@
                                 <li class="breadcrumb-item active">Sửa Sản Phẩm</li>
                             </ol>
                         </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> hoa_dev
                     </div>
                 </div>
             </div>

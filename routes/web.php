@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
@@ -13,8 +14,19 @@ use App\Http\Controllers\ProductController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
 
-    return view('client.pages.shop.detail');
+
+
+Route::get('/register', function () {
+    return view('auth.register');
 });
-Route::get('/shop/{slug}', [ProductController::class, 'productDetail'])->name('product.detail');
+Route::get('/login', function () {
+    return view('auth.login');
+});
+Route::get('/forgot_password', function () {
+    return view('auth.forgot_password');
+});
+Route::post('/register', [AuthController::class, 'register'])->name('register');;
+Route::post('/login', [AuthController::class, 'login'])->name('login');;
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
