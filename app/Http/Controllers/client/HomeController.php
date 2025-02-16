@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::take(6)->get();
         
         return view('client.pages.home.index',compact('products'));
        

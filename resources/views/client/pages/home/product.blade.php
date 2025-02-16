@@ -51,8 +51,10 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane fade show active" id="tab1">
-                                <div class="product-slider carousel-margin">
-                                    <div class="col">
+                                <div class="row">
+                                    {{-- class="product-slider carousel-margin " --}}
+                                    @foreach ($products as $product )
+                                    <div class="col-4">
                                         <div class="single-product">
                                             <div class="level-pro-new">
                                                 <span>new</span>
@@ -64,10 +66,10 @@
                                                 </a>
                                             </div>
                                             <div class="product-name">
-                                                <a href="single-product.html" title="Fusce aliquam">Fusce aliquam</a>
+                                                <a href="single-product.html" title="Fusce aliquam">{{$product->name}}</a>
                                             </div>
                                             <div class="price-rating">
-                                                <span>$170.00</span>
+                                                <span>{{$product->price}}</span>
                                                 <div class="ratings">
                                                     <i class="fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
@@ -88,7 +90,8 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="single-product">
+                                        
+                                        {{-- <div class="single-product">
                                             <div class="level-pro-sale">
                                                 <span>sale</span>
                                             </div>
@@ -100,11 +103,11 @@
                                                 </a>
                                             </div>
                                             <div class="product-name">
-                                                <a href="single-product.html" title="Fusce aliquam">Fusce aliquam</a>
+                                                <a href="single-product.html" title="Fusce aliquam">{{$product->name}}</a>
                                             </div>
                                             <div class="price-rating">
                                                 <span class="old-price">$700.00</span>
-                                                <span>$800.00</span>
+                                                <span>{{$product->price}}</span>
                                                 <div class="ratings">
                                                     <i class="fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
@@ -124,9 +127,11 @@
                                                     <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
                                                 </ul>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
-                                    <div class="col">
+                                    @endforeach
+                                    
+                                    {{-- <div class="col">
                                         <div class="single-product">
                                             <div class="level-pro-sale">
                                                 <span>sale</span>
@@ -567,7 +572,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="tab2">
