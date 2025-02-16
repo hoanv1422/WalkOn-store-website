@@ -10,13 +10,6 @@
 @endsection
 @section('content')
 
- {{-- @if(session('success'))
-   @php
-       dd(session('success'));
-   @endphp
-@endif --}}
-
-
     <div class="page-content">
         
         <div class="container-fluid">
@@ -643,7 +636,7 @@
                                                                                     Sửa</a></li>
                                                                             <li class="dropdown-divider"></li>
                                                                             <li><a class="dropdown-item remove-list"
-                                                                                    href="#" data-id="1"
+                                                                                    href="#" data-id="{{ $item->id }}"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#removeItemModal"><i
                                                                                         class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
@@ -769,7 +762,7 @@
                                                                                     Sửa</a></li>
                                                                             <li class="dropdown-divider"></li>
                                                                             <li><a class="dropdown-item remove-list"
-                                                                                    href="#" data-id="1"
+                                                                                    href="#" data-id="{{ $item->id }}"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#removeItemModal"><i
                                                                                         class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
@@ -829,7 +822,8 @@
 
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
+    <!-- /.modal -->
 @endsection
 
 @section('script')

@@ -25,8 +25,8 @@ return new class extends Migration
             $table->integer('sold_quantity')->default(0)->comment('Số lượng đã bán');
             $table->decimal('average_rating', 3, 1)->default(0)->comment('Đánh giá trung bình');
             $table->integer('view_count')->default(0)->comment('Lượt xem sản phẩm');
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('is_active')->default(true)->comment('Trạng thái sản phẩm');
             $table->timestamps();
         });

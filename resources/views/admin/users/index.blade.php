@@ -38,10 +38,8 @@
                                         <button class="btn btn-soft-danger" id="remove-actions"
                                             onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
-                                            id="create-btn" data-bs-target="#showModal"><i
-                                                class="ri-add-line align-bottom me-1"></i> Add Customer</button>
-                                        <button type="button" class="btn btn-info"><i
-                                                class="ri-file-download-line align-bottom me-1"></i> Import</button>
+                                            id="create-btn" data-bs-target="#showModalCreate"><i
+                                                class="ri-add-line align-bottom me-1"></i> Thêm Người Dùng</button>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +105,8 @@
                                                     </div>
                                                 </th>
                                                 <th class="sort" data-sort="avatar" style="width: 50px;">Ảnh</th>
-                                                <th class="sort" data-sort="customer_name">Tên Người Dùng</th>
+                                                <th class="sort" data-sort="username">Tên Người Dùng</th>
+                                                <th class="sort" data-sort="name">Tên Tài Khoản</th>
                                                 <th class="sort" data-sort="email">Email</th>
                                                 <th class="sort" data-sort="phone">Số Điện Thoại</th>
                                                 <th class="sort" data-sort="date">Ngày Tạo</th>
@@ -127,13 +126,14 @@
                                                     </th>
                                                     <td class="avatar">
                                                         <div class="flex-shrink-">
-                                                            <div class="avatar-sm bg-light rounded p-1">
-                                                                <img src="{{ Storage::url($user->avatar) }}" alt=""
-                                                                    class="img-fluid d-block">
+                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
+                                                                <img src="{{ Storage::url($user->avatar) }}"
+                                                                    alt="" class="img-fluid d-block ">
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td class="customer_name">{{ $user->name }}</td>
+                                                    <td class="username">{{ $user->username }}</td>
+                                                    <td class="name">{{ $user->name }}</td>
                                                     <td class="email">{{ $user->mail }}</td>
                                                     <td class="phone">{{ $user->phone }}</td>
                                                     <td class="date">{{ $user->created_at->format('d M, Y') }}</td>
@@ -146,11 +146,18 @@
                                                     </td>
                                                     <td>
                                                         <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top"
-                                                                title="Edit">
-                                                                <a href="#showModal" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn">
+                                                            <li class="list-inline-item edit">
+                                                                <a href="#showModalEdit" data-bs-toggle="modal"
+                                                                    class="text-primary d-inline-block edit-item-btn"
+                                                                    data-id="{{ $user->id }}"
+                                                                    data-avatar="{{ Storage::url($user->avatar) }}"
+                                                                    data-username="{{ $user->username }}"
+                                                                    data-name="{{ $user->name }}"
+                                                                    data-email="{{ $user->mail }}"
+                                                                    data-phone="{{ $user->phone }}"
+                                                                    data-password="{{ $user->password }}"
+                                                                    data-address="{{ $user->address }}"
+                                                                    data-status="{{ $user->is_active }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -158,7 +165,8 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                    data-bs-toggle="modal" data-id="{{ $user->id }}"
+                                                                    href="#deleteRecordModal">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -168,94 +176,256 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    {{-- <div class="noresult" style="display: none">
-                                        <div class="text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                colors="primary:#121331,secondary:#08a88a"
-                                                style="width:75px;height:75px"></lord-icon>
-                                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted mb-0">We've searched more than 150+ customer We did not
-                                                find any customer for you search.</p>
-                                        </div>
-                                    </div> --}}
                                 </div>
-                                {{-- <div class="d-flex justify-content-end">
-                                    <div class="pagination-wrap hstack gap-2">
-                                        <a class="page-item pagination-prev disabled" href="#">
-                                            Previous
-                                        </a>
-                                        <ul class="pagination listjs-pagination mb-0"></ul>
-                                        <a class="page-item pagination-next" href="#">
-                                            Next
-                                        </a>
-                                    </div>
-                                </div> --}}
                             </div>
-                            <div class="modal fade" id="showModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+
+
+
+                            <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header bg-light p-3">
                                             <h5 class="modal-title" id="exampleModalLabel"></h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
                                         </div>
-                                        <form class="tablelist-form" autocomplete="off">
+                                        <form action="{{ route('users.store') }}" method="POST" class="tablelist-form"
+                                            autocomplete="off" enctype="multipart/form-data">
+                                            @csrf
                                             <div class="modal-body">
                                                 <input type="hidden" id="id-field" />
 
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="text-center">
+                                                            <div class="position-relative d-inline-block">
+                                                                <div
+                                                                    class="position-absolute top-100 start-100 translate-middle">
+                                                                    <label for="product-image-input" class="mb-0"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="Chọn ảnh">
+                                                                        <div class="avatar-xs">
+                                                                            <div
+                                                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                                <i class="ri-image-fill"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input class="form-control d-none"
+                                                                        id="product-image-input" name="avatar"
+                                                                        type="file"
+                                                                        accept="image/png, image/gif, image/jpeg"
+                                                                        onchange="previewImage(event)">
+                                                                </div>
+                                                                <div class="avatar-lg">
+                                                                    <div
+                                                                        class="avatar-title bg-light rounded overflow-hidden">
+                                                                        <img src="" id="product-img"
+                                                                            class="avatar-md h-auto " />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="customername-field" class="form-label">Tên Tài
+                                                                Khoản</label>
+                                                            <input type="text" id="customername-field"
+                                                                class="form-control" placeholder="Nhập tên tài khoản"
+                                                                name="username" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập tên tài khoản.
+                                                            </div>
+                                                        </div>
 
-                                                <div class="mb-3">
-                                                    <label for="customername-field" class="form-label">Customer
-                                                        Name</label>
-                                                    <input type="text" id="customername-field" class="form-control"
-                                                        placeholder="Enter name" required />
-                                                    <div class="invalid-feedback">Please enter a customer name.</div>
-                                                </div>
+                                                        <div class="mb-3">
+                                                            <label for="email-field" class="form-label">Email</label>
+                                                            <input type="text" id="email-field" class="form-control"
+                                                                placeholder="Nhập email" name="mail" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập email.</div>
+                                                        </div>
 
-                                                <div class="mb-3">
-                                                    <label for="email-field" class="form-label">Email</label>
-                                                    <input type="email" id="email-field" class="form-control"
-                                                        placeholder="Enter email" required />
-                                                    <div class="invalid-feedback">Please enter an email.</div>
-                                                </div>
+                                                        <div class="mb-3">
+                                                            <label for="passwword-field" class="form-label">Mật
+                                                                Khẩu</label>
+                                                            <input type="text" id="password-field"
+                                                                class="form-control" placeholder="Nhập mật khẩu"
+                                                                name="password" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                                                        </div>
 
-                                                <div class="mb-3">
-                                                    <label for="phone-field" class="form-label">Phone</label>
-                                                    <input type="text" id="phone-field" class="form-control"
-                                                        placeholder="Enter phone no." required />
-                                                    <div class="invalid-feedback">Please enter a phone.</div>
-                                                </div>
+                                                    </div>
 
-                                                <div class="mb-3">
-                                                    <label for="date-field" class="form-label">Joining Date</label>
-                                                    <input type="date" id="date-field" class="form-control"
-                                                        data-provider="flatpickr" data-date-format="d M, Y" required
-                                                        placeholder="Select date" />
-                                                    <div class="invalid-feedback">Please select a date.</div>
-                                                </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="customername-field" class="form-label">Tên Người
+                                                                Dùng</label>
+                                                            <input type="text" id="customername-field"
+                                                                class="form-control" placeholder="Nhập tên người dùng"
+                                                                name="name" />
+                                                            <div class="invalid-feedback">Vui lòng nhập tên người dùng.
+                                                            </div>
+                                                        </div>
 
-                                                <div>
-                                                    <label for="status-field" class="form-label">Status</label>
-                                                    <select class="form-control" data-choices data-choices-search-false
-                                                        name="status-field" id="status-field" required>
-                                                        <option value="">Status</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Block">Block</option>
-                                                    </select>
+                                                        <div class="mb-3">
+                                                            <label for="phone-field" class="form-label">Số Điện
+                                                                Thoại</label>
+                                                            <input type="text" id="phone-field" class="form-control"
+                                                                placeholder="Nhập Số Điện Thoại" name="phone"
+                                                                required />
+                                                            <div class="invalid-feedback">Vui lòng nhập số điện thoại.
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="address-field" class="form-label">Địa chỉ</label>
+                                                            <textarea type="text" id="address-field" class="form-control" placeholder="Nhập địa chỉ" name="address"
+                                                                required> </textarea>
+                                                            <div class="invalid-feedback">Vui lòng nhập địa chỉ.
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="mb-3">
+                                                            <label for="status-field" class="form-label">Trạng
+                                                                Thái</label>
+                                                            <select class="form-control" name="is_active"
+                                                                id="status-field" required>
+                                                                <option value="1">Hoạt động</option>
+                                                                <option value="0">Khoá</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <button type="button" class="btn btn-light"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-success" id="add-btn">Add
-                                                        Customer</button>
-                                                    <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Thêm
+                                                        Người Dùng</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-light p-3">
+                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="close-modal"></button>
+                                        </div>
+                                        <form action="" method="POST" class="tablelist-form edit"
+                                            autocomplete="off" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" id="id-field-edit" />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="text-center">
+                                                            <div class="position-relative d-inline-block">
+                                                                <div
+                                                                    class="position-absolute top-100 start-100 translate-middle">
+                                                                    <label for="product-image-input-edit" class="mb-0"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="Chọn ảnh">
+                                                                        <div class="avatar-xs">
+                                                                            <div
+                                                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                                <i class="ri-image-fill"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input class="form-control d-none"
+                                                                        id="product-image-input-edit" name="avatar"
+                                                                        type="file"
+                                                                        accept="image/png, image/gif, image/jpeg"
+                                                                        onchange="previewImageEdit(event)">
+                                                                </div>
+                                                                <div class="avatar-lg">
+                                                                    <div
+                                                                        class="avatar-title bg-light rounded overflow-hidden">
+                                                                        <img src="" id="product-img-edit"
+                                                                            class="avatar-md h-auto" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="username-field-edit" class="form-label">Tên Tài
+                                                                Khoản</label>
+                                                            <input type="text" id="username-field-edit"
+                                                                class="form-control" placeholder="Nhập tên tài khoản"
+                                                                name="username" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập tên tài khoản.
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="mail-field-edit" class="form-label">Email</label>
+                                                            <input type="text" id="mail-field-edit"
+                                                                class="form-control" placeholder="Nhập email"
+                                                                name="mail" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập email.</div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="name-field-edit" class="form-label">Tên Người
+                                                                Dùng</label>
+                                                            <input type="text" id="name-field-edit"
+                                                                class="form-control" placeholder="Nhập tên người dùng"
+                                                                name="name" />
+                                                            <div class="invalid-feedback">Vui lòng nhập tên người dùng.
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="phone-field-edit" class="form-label">Số Điện
+                                                                Thoại</label>
+                                                            <input type="text" id="phone-field-edit"
+                                                                class="form-control" placeholder="Nhập Số Điện Thoại"
+                                                                name="phone" required />
+                                                            <div class="invalid-feedback">Vui lòng nhập số điện thoại.
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="address-field-edit" class="form-label">Địa
+                                                                chỉ</label>
+                                                            <textarea type="text" id="address-field-edit" class="form-control" placeholder="Nhập địa chỉ" name="address"
+                                                                required> </textarea>
+                                                            <div class="invalid-feedback">Vui lòng nhập địa chỉ.
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="mb-3">
+                                                            <label for="status-field-edit" class="form-label">Trạng
+                                                                Thái</label>
+                                                            <select class="form-control" name="is_active"
+                                                                id="status-field-edit" required>
+                                                                <option value="1">Hoạt động</option>
+                                                                <option value="0">Khoá</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Cập
+                                                        Nhật
+                                                        Người Dùng</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -265,7 +435,7 @@
 
                             <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -277,16 +447,20 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Are you sure ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Are you sure you want to remove this
-                                                        record ?</p>
+                                                    <h4>Bạn có chắc không ?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không ?
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                 <button type="button" class="btn w-sm btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn w-sm btn-danger"
-                                                    id="delete-record">Yes, Delete It!</button>
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <form id="deleteForm" method="POST" action="">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn w-sm btn-danger"
+                                                        id="delete-record">Xóa!</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -308,6 +482,8 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/validates/user.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('table.dataTable').each(function() {
@@ -321,5 +497,13 @@
                 });
             });
         });
+
+        $(document).on('click', '.remove-item-btn', function() {
+            let userId = $(this).data('id'); // Lấy ID người dùng
+            let actionUrl = "/admin/users/" + userId; // Tạo URL xóa
+
+            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
+        });
     </script>
+
 @endsection

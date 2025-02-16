@@ -1,51 +1,56 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Định Dạng Tiền VNĐ</title>
+    <title>Test Preloader</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input {
+        /* CSS cho preloader */
+        #preloader {
+            position: fixed;
             width: 100%;
-            padding: 8px;
-            font-size: 16px;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="form-group">
-        <label for="price">Nhập giá sản phẩm:</label>
-        <input type="text" id="price" name="price" oninput="formatCurrency(this)" placeholder="Nhập giá...">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div id="content" style="display: none; text-align: center; padding: 50px;">
+        <h1>Trang đã tải xong!</h1>
     </div>
 
     <script>
-        function formatCurrency(input) {
-            // Lấy giá trị nhập vào và loại bỏ các ký tự không phải số
-            let value = input.value.replace(/\D/g, "");
-
-            // Chuyển đổi thành số nguyên
-            let number = parseInt(value, 10);
-
-            // Kiểm tra nếu không có số thì đặt lại input rỗng
-            if (isNaN(number)) {
-                input.value = "";
-                return;
-            }
-
-            // Định dạng số theo chuẩn tiền tệ Việt Nam (có dấu chấm ngăn cách hàng nghìn)
-            input.value = number.toLocaleString("vi-VN");
-        }
+        window.onload = function () {
+            setTimeout(() => {
+                document.getElementById("preloader").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            }, 10000); // Thêm độ trễ 1s để kiểm tra
+        };
     </script>
 
 </body>
