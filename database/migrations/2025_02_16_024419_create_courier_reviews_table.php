@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('courier_reviews', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('courier_id')->constrained('couriers')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
+            $table->decimal('rating', 2, 1); // Thang điểm từ 0.0 - 5.0
+            $table->text('comment')->nullable(); // Nhận xét từ khách hàng
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('courier_reviews');
+    }
+};

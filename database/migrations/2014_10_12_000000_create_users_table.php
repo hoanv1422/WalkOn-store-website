@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('address')->nullable()->comment('Địa chỉ');
             $table->timestamp('email_verified_at')->nullable()->comment('Thời gian xác nhận email');
             $table->string('role')->comment('Vai trò');
+            $table->boolean('is_active')->default(true)->comment('Trạng thái');
             $table->timestamps();
         });
     }
