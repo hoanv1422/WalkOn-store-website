@@ -4,34 +4,31 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
-                        <a href="#"><img class="optima_zoom" src="img/product/7.png"
-                                data-zoom-image="img/product/7.png" alt="optima" /></a>
+                        <a href="#"><img class="optima_zoom" src="{{Storage::url($product->image)}}"
+                                data-zoom-image="{{Storage::url($product->image)}}" alt="optima" /></a>
                     </div>
-                    <div class="single-pro-main-image tab-pane" id="pro-large-img-2">
-                        <a href="#"><img class="optima_zoom" src="img/product/2.png"
-                                data-zoom-image="img/product/2.png" alt="optima" /></a>
-                    </div>
-                    <div class="single-pro-main-image tab-pane" id="pro-large-img-3">
-                        <a href="#"><img class="optima_zoom" src="img/product/8.png"
-                                data-zoom-image="img/product/8.png" alt="optima" /></a>
-                    </div>
-                    <div class="single-pro-main-image tab-pane" id="pro-large-img-4">
-                        <a href="#"><img class="optima_zoom" src="img/product/1.png"
-                                data-zoom-image="img/product/1.png" alt="optima" /></a>
-                    </div>
-                    <div class="single-pro-main-image tab-pane" id="pro-large-img-5">
-                        <a href="#"><img class="optima_zoom" src="img/product/9.png"
-                                data-zoom-image="img/product/9.png" alt="optima" /></a>
-                    </div>
+                    @foreach ($product->galleries as $key => $gallery)
+                        <div class="single-pro-main-image tab-pane"
+                            id="pro-large-img-{{ $key + 2 }}">
+                            <a href="#">
+                                <img class="optima_zoom" src="{{Storage::url($gallery->image)}}"
+                                    data-zoom-image="{{Storage::url($gallery->image)}}" alt="Product Image">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="nav product-page-slider">
                     <div class="single-product-slider">
                         <a class="active" href="#pro-large-img-1" data-bs-toggle="tab">
-                            <img src="img/product/28.png" alt="">
+                            <img src="{{Storage::url($product->image)}}" alt="">
                         </a>
                     </div>
+<<<<<<< HEAD
                     <div class="single-product-slider">
                         <a href="#pro-large-img-2" data-bs-toggle="tab">
                             <img src="img/product/30.png" alt="">
@@ -73,10 +70,21 @@
                     </div>
                 @endforeach
 {{-- >>>>>>> hoa_dev --}}
+=======
+                    @foreach ($product->galleries as $key => $gallery)
+                        <div class="single-product-slider">
+                            <a class="" href="#pro-large-img-{{ $key + 2 }}"
+                                data-bs-toggle="tab">
+                                <img src="{{Storage::url($gallery->image)}}" alt="Product Image">
+                            </a>
+                        </div>
+                    @endforeach
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
                     <a href="#" class="product-name">Fusce aliquam</a>
                     <div class="list-product-info">
@@ -91,6 +99,10 @@
 {{-- ======= --}}
                          <!-- Tên sản phẩm -->
                          <a href="#" class="product-name">{{ $product->name }}</a>
+=======
+                    <!-- Tên sản phẩm -->
+                    <a href="#" class="product-name">{{ $product->name }}</a>
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="list-product-info">
                         <div class="price-rating">
                             <div class="ratings">
@@ -104,12 +116,16 @@
                                     @endif
                                 @endfor
                                 <a href="#" class="review">{{ $product->sold_quantity }} Review(s)</a>
+<<<<<<< HEAD
 {{-- >>>>>>> hoa_dev --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                                 <a href="#" class="add-review">Add Your Review</a>
                             </div>
                         </div>
                     </div>
                     <div class="avalable">
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
                         <p>Availability:<span> In stock</span></p>
                     </div>
@@ -130,6 +146,8 @@
                         </div>
                     </div>
 {{-- ======= --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                         <p>Availability:
                             @if ($product->quantity > 0)
                                 <span> In stock</span>
@@ -142,8 +160,12 @@
                         <span>{{ number_format($product->price_sale ?? $product->price, 0, ',', '.') }}
                             VNĐ</span>
                     </div>
+<<<<<<< HEAD
                   
 {{-- >>>>>>> hoa_dev --}}
+=======
+
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
@@ -151,20 +173,6 @@
                                     <i class="fa fa-heart"></i>
                                 </a>
                             </li>
-{{-- <<<<<<< HEAD --}}
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-refresh"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-envelope"></i>
-                                </a>
-                            </li>
-{{-- ======= --}}
-                        
-{{-- >>>>>>> hoa_dev --}}
                         </ul>
                     </div>
                     <form action="{{route('cart.add',$product->id)}}" method="post" >
@@ -173,32 +181,22 @@
                         <div class="row g-3 align-items-center my-2">
                             <div class="col-md-6">
                                 <label class="form-label required"> Màu</label>
-{{-- <<<<<<< HEAD --}}
-                                {{-- <select class="form-select">
-                                    <option >-- Chọn Màu --</option>
-                                    <option value="">black +$2.00</option> --}}
-{{-- ======= --}}
                                 <select class="form-select" name="color">
-                                    <option >-- Chọn Màu --</option>
+                                    <option>-- Chọn Màu --</option>
                                     @foreach ($product->colors as $color)
-                                                <option value="{{ $color->id }}" data-color="{{ $color->color }}">{{ ucfirst($color->color) }}</option>
-                                            @endforeach
-{{-- >>>>>>> hoa_dev --}}
+                                        <option value="{{ $color->id }}" data-color="{{ $color->color }}">
+                                            {{ ucfirst($color->color) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label required"> Kích cỡ</label>
-{{-- <<<<<<< HEAD --}}
-                                {{-- <select class="form-select">
-                                    <option>-- Chọn Kích Cỡ --</option>
-                                    <option value="">L +$2.00</option> --}}
-{{-- ======= --}}
                                 <select class="form-select" name="size">
                                     <option>-- Chọn Kích Cỡ --</option>
                                     @foreach ($product->sizes as $size)
-                                                <option value="{{ $size->id }}" data-size="{{ $size->size }}">{{ strtoupper($size->size) }}</option>
-                                            @endforeach
-{{-- >>>>>>> hoa_dev --}}
+                                        <option value="{{ $size->id }}" data-size="{{ $size->size }}">
+                                            {{ strtoupper($size->size) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -210,8 +208,7 @@
                             <div class="input-group">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput" name="quantity"
-                                    value="1">
+                                <input type="text" class="form-control text-center " id="qtyInput" value="1">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="increaseQty()">+</button>
                             </div>
@@ -227,10 +224,13 @@
     </div>
 </div>
 <!-- single product details end -->
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD
 ======= --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const selectColor = document.querySelector(".form-select[name='color']");
         const selectSize = document.querySelector(".form-select[name='size']");
         const qtyInput = document.getElementById("qtyInput");
@@ -278,4 +278,7 @@
         }
     }
 </script>
+<<<<<<< HEAD
 {{-- >>>>>>> hoa_dev --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438

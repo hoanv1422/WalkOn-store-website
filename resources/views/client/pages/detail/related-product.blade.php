@@ -1,4 +1,5 @@
 <!-- related product area start-->
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
 <div class="related-product home2">
     <div class="container">
@@ -155,6 +156,8 @@
                         </div>
                     </div>
 {{-- ======= --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
 @if ($relatedProducts->isNotEmpty())
     <div class="related-product home2">
         <div class="container">
@@ -190,14 +193,21 @@
                             </div>
                         </div>
                     @endforeach
+<<<<<<< HEAD
 {{-- >>>>>>> hoa_dev --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                 </div>
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
 </div>
 {{-- ======= --}}
 @endif
 {{-- >>>>>>> hoa_dev --}}
+=======
+@endif
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
 <!-- related product area end-->

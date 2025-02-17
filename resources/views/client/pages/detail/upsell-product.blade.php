@@ -10,6 +10,7 @@
         </div>
         <div class="row">
             <div class="upsell-slider">
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD --}}
                 <div class="col-md-12">
                     <div class="single-product">
@@ -256,6 +257,8 @@
                             <div class="price-rating">
                                 <span>$170.00</span>
 {{-- ======= --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                 @foreach ($upSellProducts as $upSell)
                 <div class="col-md-12">
                     <div class="single-product">
@@ -274,16 +277,24 @@
                             </div>
                             <div class="price-rating">
                                 <span>{{ number_format($upSell->price, 0, ',', '.') }} VND</span>
+<<<<<<< HEAD
 {{-- >>>>>>> hoa_dev --}}
+=======
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                             </div>
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
 {{-- <<<<<<< HEAD
 ======= --}}
             @endforeach
                
 {{-- >>>>>>> hoa_dev --}}
+=======
+            @endforeach
+               
+>>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
             </div>
         </div>
     </div>
