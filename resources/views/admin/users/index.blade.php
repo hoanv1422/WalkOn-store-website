@@ -33,7 +33,7 @@
 
                             <div class="QA_table mb_30">
                                 <div class="add_button ">
-                                    <a href="{{url('admin/users/create')}}" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary btn-sm mx-1">
+                                    <a href="{{url('/admin/users/create')}}" class="btn btn-primary btn-sm mx-1">
                                         <i class="fas fa-plus me-1"></i> Add new
                                     </a>
                                 </div>
@@ -98,7 +98,7 @@
                                                 <a href="{{ route('admin.user.detail', ['id' => $user->id]) }}">
                                                     <button class="btn btn-light btn-sm mx-1"><i class="fas fa-eye"></i> View</button>
                                                 </a>
-                                                <td />
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

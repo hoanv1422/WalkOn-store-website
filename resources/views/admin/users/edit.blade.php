@@ -29,7 +29,7 @@
                             <div class="mb-3 row">
                                 <label for="inputPassword3" class="form-label col-sm-4 col-form-label">Mật khẩu</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="password" value="{{$user->password}}"
+                                    <input type="password" class="form-control" name="password" value="{{$user->password}}"
                                         placeholder="Password......">
                                 </div>
                             </div>
