@@ -63,11 +63,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-<<<<<<< HEAD
-                                                    <a href="{{ route('detail.index', ['slug' => $product->slug]) }}">
-=======
                                                     <a href="{{route('detail.index', $product->slug)}}">
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                                                         <img src="img/product/1.png" alt="" class="primary-img">
                                                         <img src="img/product/2.png" alt=""
                                                             class="secondary-img">

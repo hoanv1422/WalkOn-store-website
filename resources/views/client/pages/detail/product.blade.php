@@ -4,10 +4,6 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
-<<<<<<< HEAD
-{{-- <<<<<<< HEAD --}}
-=======
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
                         <a href="#"><img class="optima_zoom" src="{{Storage::url($product->image)}}"
                                 data-zoom-image="{{Storage::url($product->image)}}" alt="optima" /></a>
@@ -28,49 +24,6 @@
                             <img src="{{Storage::url($product->image)}}" alt="">
                         </a>
                     </div>
-<<<<<<< HEAD
-                    <div class="single-product-slider">
-                        <a href="#pro-large-img-2" data-bs-toggle="tab">
-                            <img src="img/product/30.png" alt="">
-                        </a>
-                    </div>
-                    <div class="single-product-slider">
-                        <a href="#pro-large-img-3" data-bs-toggle="tab">
-                            <img src="img/product/29.png" alt="">
-                        </a>
-                    </div>
-                    <div class="single-product-slider">
-                        <a href="#pro-large-img-4" data-bs-toggle="tab">
-                            <img src="img/product/31.png" alt="">
-                        </a>
-                    </div>
-                    <div class="single-product-slider">
-                        <a href="#pro-large-img-5" data-bs-toggle="tab">
-                            <img src="img/product/29.png" alt="">
-                        </a>
-                    </div>
-{{-- ======= --}}
-                    @foreach ($product->galleries as $key => $gallery)
-                    <div class="single-pro-main-image tab-pane {{ $key === 0 ? 'active' : '' }}"
-                        id="pro-large-img-{{ $key + 1 }}">
-                        <a href="#">
-                            <img class="optima_zoom" src="{{ asset('storage/app/' . $gallery->image) }}"
-                                data-zoom-image="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
-                        </a>
-                    </div>
-                @endforeach
-                </div>
-                <div class="nav product-page-slider">
-                    @foreach ($product->galleries as $key => $gallery)
-                    <div class="single-product-slider">
-                        <a class="{{ $key === 0 ? 'active' : '' }}" href="#pro-large-img-{{ $key + 1 }}"
-                            data-bs-toggle="tab">
-                            <img src="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
-                        </a>
-                    </div>
-                @endforeach
-{{-- >>>>>>> hoa_dev --}}
-=======
                     @foreach ($product->galleries as $key => $gallery)
                         <div class="single-product-slider">
                             <a class="" href="#pro-large-img-{{ $key + 2 }}"
@@ -79,30 +32,12 @@
                             </a>
                         </div>
                     @endforeach
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
-<<<<<<< HEAD
-{{-- <<<<<<< HEAD --}}
-                    <a href="#" class="product-name">Fusce aliquam</a>
-                    <div class="list-product-info">
-                        <div class="price-rating">
-                            <div class="ratings">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                                <a href="#" class="review">1 Review(s)</a>
-{{-- ======= --}}
-                         <!-- Tên sản phẩm -->
-                         <a href="#" class="product-name">{{ $product->name }}</a>
-=======
                     <!-- Tên sản phẩm -->
                     <a href="#" class="product-name">{{ $product->name }}</a>
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="list-product-info">
                         <div class="price-rating">
                             <div class="ratings">
@@ -116,38 +51,11 @@
                                     @endif
                                 @endfor
                                 <a href="#" class="review">{{ $product->sold_quantity }} Review(s)</a>
-<<<<<<< HEAD
-{{-- >>>>>>> hoa_dev --}}
-=======
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                                 <a href="#" class="add-review">Add Your Review</a>
                             </div>
                         </div>
                     </div>
                     <div class="avalable">
-<<<<<<< HEAD
-{{-- <<<<<<< HEAD --}}
-                        <p>Availability:<span> In stock</span></p>
-                    </div>
-                    <div class="item-price">
-                        <span>$800.00</span>
-                    </div>
-                    <div class="single-product-info">
-                        <p>Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et mattis vulputate,
-                            tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus
-                            et ultrices posuere cubilia Curae; Aenean eleifend laoreet congue. Vivamus adipiscing nisl
-                            ut dolor dignissim semper. Nulla luctus malesuada tincidunt. Class aptent taciti sociosqu ad
-                            litora torquent per conubia nostra, per inceptos himenaeos. Integer enim purus, posuere at
-                            ultricies eu, placerat a felis. Suspendisse aliquet urna pretium eros convallis interdum.
-                            Quisque in arcu id dui vulputate mollis eget non arcu. Aenean et nulla purus. Mauris vel
-                            tellus non nunc mattis lobortis. </p>
-                        <div class="share">
-                            <img src="img/product/share.png" alt="">
-                        </div>
-                    </div>
-{{-- ======= --}}
-=======
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                         <p>Availability:
                             @if ($product->quantity > 0)
                                 <span> In stock</span>
@@ -160,12 +68,6 @@
                         <span>{{ number_format($product->price_sale ?? $product->price, 0, ',', '.') }}
                             VNĐ</span>
                     </div>
-<<<<<<< HEAD
-                  
-{{-- >>>>>>> hoa_dev --}}
-=======
-
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
@@ -224,11 +126,6 @@
     </div>
 </div>
 <!-- single product details end -->
-<<<<<<< HEAD
-{{-- <<<<<<< HEAD
-======= --}}
-=======
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const selectColor = document.querySelector(".form-select[name='color']");
@@ -278,7 +175,3 @@
         }
     }
 </script>
-<<<<<<< HEAD
-{{-- >>>>>>> hoa_dev --}}
-=======
->>>>>>> b2d2cfeb401e6d7aebae83f141f220d83f111438
