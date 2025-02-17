@@ -30,94 +30,79 @@
                                 <!-- Menu_NOtification_Wrap  -->
                                 <div class="Menu_NOtification_Wrap">
                                     <div class="notification_Header">
-                                        <h4>Notifications</h4>
+                                        <h4>Tin nhắn mới</h4>
                                     </div>
                                     <div class="Notification_body">
                                         <!-- single_notify  -->
                                         <div class="single_notify d-flex align-items-center">
                                             <div class="notify_thumb">
 
-                                                <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
+                                                <a href="#"><img src="{{asset('admin_views/img/staf/policeHn.jpg')}}" alt=""></a>
 
                                             </div>
                                             <div class="notify_content">
                                                 <a href="#">
-                                                    <h5>Cool Marketing </h5>
+                                                    <h5>Ca Hanoi </h5>
                                                 </a>
-                                                <p>Lorem ipsum dolor sit amet</p>
+                                                <p>Chào bạn!! tôi là ca hanoi </p>
                                             </div>
                                         </div>
                                         <!-- single_notify  -->
                                         <div class="single_notify d-flex align-items-center">
                                             <div class="notify_thumb">
 
-                                                <a href="#"><img src="{{asset('admin_views/img/staf/4.png')}}" alt=""></a>
+                                                <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
 
                                             </div>
                                             <div class="notify_content">
                                                 <a href="#">
-                                                    <h5>Awesome packages</h5>
+                                                    <h5>Long</h5>
                                                 </a>
-                                                <p>Lorem ipsum dolor sit amet</p>
+                                                <p>Bạn ơi! Tôi bị bế đi r</p>
                                             </div>
                                         </div>
                                         <!-- single_notify  -->
                                         <div class="single_notify d-flex align-items-center">
+                                            <div class="notify_thumb">
+                                                <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
+
+                                            </div>
+                                            <div class="notify_content">
+                                                <a href="#">
+                                                    <h5>Mạnh</h5>
+                                                </a>
+                                                <p>Bạn ơi CỨU !!</p>
+                                            </div>
+                                        </div>
+                                         <!-- single_notify  -->
+                                         <div class="single_notify d-flex align-items-center">
                                             <div class="notify_thumb">
                                                 <a href="#"><img src="{{asset('admin_views/img/staf/3.png')}}" alt=""></a>
 
                                             </div>
                                             <div class="notify_content">
                                                 <a href="#">
-                                                    <h5>what a packages</h5>
+                                                    <h5>Hòa</h5>
                                                 </a>
-                                                <p>Lorem ipsum dolor sit amet</p>
+                                                <p>Công việc đến đâu r ô</p>
                                             </div>
                                         </div>
-                                        <!-- single_notify  -->
-                                        <div class="single_notify d-flex align-items-center">
+                                          <!-- single_notify  -->
+                                          <div class="single_notify d-flex align-items-center">
                                             <div class="notify_thumb">
+                                                <a href="#"><img src="{{asset('admin_views/img/staf/3.png')}}" alt=""></a>
 
-                                                <a href="#"><img src="{{asset('admin_views/img/staf/2.png')}}" alt=""></a>
-
-                                                <div class="notify_content">
-                                                    <a href="#">
-                                                        <h5>Cool Marketing </h5>
-                                                    </a>
-                                                    <p>Lorem ipsum dolor sit amet</p>
-                                                </div>
                                             </div>
-                                            <!-- single_notify  -->
-                                            <div class="single_notify d-flex align-items-center">
-                                                <div class="notify_thumb">
-
-                                                    <a href="#"><img src="{{asset('admin_views/img/staf/4.png')}}" alt=""></a>
-
-                                                </div>
-                                                <div class="notify_content">
-                                                    <a href="#">
-                                                        <h5>Awesome packages</h5>
-                                                    </a>
-                                                    <p>Lorem ipsum dolor sit amet</p>
-                                                </div>
-                                            </div>
-                                            <!-- single_notify  -->
-                                            <div class="single_notify d-flex align-items-center">
-                                                <div class="notify_thumb">
-                                                    <a href="#"><img src="{{asset('admin_views/img/staf/3.png')}}" alt=""></a>
-
-                                                </div>
-                                                <div class="notify_content">
-                                                    <a href="#">
-                                                        <h5>what a packages</h5>
-                                                    </a>
-                                                    <p>Lorem ipsum dolor sit amet</p>
-                                                </div>
+                                            <div class="notify_content">
+                                                <a href="#">
+                                                    <h5>Minh</h5>
+                                                </a>
+                                                <p>Tôi đẩy code lên r lấy nhánh test nhé</p>
                                             </div>
                                         </div>
                                         <div class="nofity_footer">
                                             <div class="submit_button text-center pt_20">
-                                                <a href="#" class="btn_1">See More</a>
+                                                <a href="#" class="btn_1">Xem thêm</a>
                                             </div>
                                         </div>
                                     </div>

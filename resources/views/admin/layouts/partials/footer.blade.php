@@ -25,86 +25,7 @@
         <path d="M7.09939 5.98831L11.772 10.661C12.076 10.965 12.076 11.4564 11.772 11.7603C11.468 12.0643 10.9766 12.0643 10.6726 11.7603L5.99994 7.08762L1.32737 11.7603C1.02329 12.0643 0.532002 12.0643 0.228062 11.7603C-0.0760207 11.4564 -0.0760207 10.965 0.228062 10.661L4.90063 5.98831L0.228062 1.3156C-0.0760207 1.01166 -0.0760207 0.520226 0.228062 0.216286C0.379534 0.0646715 0.578697 -0.0114918 0.777717 -0.0114918C0.976738 -0.0114918 1.17576 0.0646715 1.32737 0.216286L5.99994 4.889L10.6726 0.216286C10.8243 0.0646715 11.0233 -0.0114918 11.2223 -0.0114918C11.4213 -0.0114918 11.6203 0.0646715 11.772 0.216286C12.076 0.520226 12.076 1.01166 11.772 1.3156L7.09939 5.98831Z" fill="white"/>
         </svg>
 
-
         </div>
-        <h3>Chat with us</h3>
-        <div class="Chat_Listed_member">
-            <ul>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <img src="admin_views/img/staf/1.png" alt="">
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <img src="admin_views/img/staf/2.png" alt="">
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <img src="admin_views/img/staf/3.png" alt="">
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <img src="admin_views/img/staf/4.png" alt="">
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <img src="admin_views/img/staf/5.png" alt="">
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="member_thumb">
-                            <div class="more_member_count">
-                                <span>90+</span>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="CHAT_POPUP_BODY">
-        <p class="mesaged_send_date">
-            Sunday, 12 January
-
-            </p>
-
-
-        <div class="CHATING_SENDER">
-            <div class="SMS_thumb">
-                <img src="admin_views/img/staf/1.png" alt="">
-            </div>
-            <div class="SEND_SMS_VIEW">
-                <P>Hi! Welcome .
-                    How can I help you?</P>
-            </div>
-        </div>
-
-        <div class="CHATING_SENDER CHATING_RECEIVEr">
-
-            <div class="SEND_SMS_VIEW">
-                <P>Hello</P>
-            </div>
-            <div class="SMS_thumb">
-                <img src="admin_views/img/staf/1.png" alt="">
-            </div>
-        </div>
-
-
         </div>
         <div class="CHAT_POPUP_BOTTOM">
             <div class="chat_input_box d-flex align-items-center">
@@ -147,41 +68,41 @@
 
 
         </div>
-        <h3>Chat with us</h3>
+        <h3>Bạn bè</h3>
         <div class="Chat_Listed_member">
             <ul>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="admin_views/img/staf/1.png" alt="">
+                            <img src="{{ asset('admin_views/img/staf/1.png') }}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="admin_views/img/staf/2.png" alt="">
+                            <img src="{{ asset('admin_views/img/staf/1.png') }}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="admin_views/img/staf/3.png" alt="">
+                            <img src="{{ asset('admin_views/img/staf/1.png') }}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="admin_views/img/staf/4.png" alt="">
+                            <img src="{{ asset('admin_views/img/staf/1.png') }}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                            <img src="admin_views/img/staf/5.png" alt="">
+                            <img src="{{ asset('admin_views/img/staf/1.png') }}" alt="">
                         </div>
                     </a>
                 </li>
@@ -189,7 +110,7 @@
                     <a href="#">
                         <div class="member_thumb">
                             <div class="more_member_count">
-                                <span>90+</span>
+                                <span>10+</span>
                             </div>
                         </div>
                     </a>
@@ -199,28 +120,25 @@
     </div>
     <div class="CHAT_POPUP_BODY">
         <p class="mesaged_send_date">
-            Sunday, 12 January
-
+            Sunday,16 tháng 2 năm 2025
             </p>
-
-
         <div class="CHATING_SENDER">
             <div class="SMS_thumb">
-                <img src="admin_views/img/staf/1.png" alt="">
+                <img src="{{ asset('admin_views/img/staf/policeHn.jpg') }}" alt="err">
             </div>
             <div class="SEND_SMS_VIEW">
-                <P>Hi! Welcome .
-                    How can I help you?</P>
+                <P>Chào bạn!! tôi là ca hanoi
+                    ,<p style="color: red;"> BẠN ĐÃ BỊ BẮT VÌ TỘI QUÁ ĐEP ZAI</p></P>
             </div>
         </div>
 
         <div class="CHATING_SENDER CHATING_RECEIVEr">
 
             <div class="SEND_SMS_VIEW">
-                <P>Hello</P>
+                <P>Ôi chú ơi!! Đừng bắt cháu :(( </P>
             </div>
             <div class="SMS_thumb">
-                <img src="admin_views/img/staf/1.png" alt="">
+                <img src="{{ asset('admin_views/img/staf/2.png')}}" alt="">
             </div>
         </div>
 
@@ -229,7 +147,7 @@
         <div class="CHAT_POPUP_BOTTOM">
             <div class="chat_input_box d-flex align-items-center">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Write your message" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" placeholder="Viết bình luận...." aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <button class="btn " type="button">
                             <!-- svg      -->
