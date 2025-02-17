@@ -3,7 +3,6 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -185,7 +184,7 @@
                                                     <label for="name-field" class="form-label">
                                                         Tên Danh Mục</label>
                                                     <input type="text" id="name-field" class="form-control"
-                                                        placeholder="Nhập tên" name="name" />
+                                                        placeholder="Enter name" name="name" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
                                                 </div>
                                                 <div>
@@ -314,7 +313,9 @@
 @endsection
 
 @section('script')
+
     <script src="{{ asset('templates/admin/assets/libs/validates/category.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('table.dataTable').each(function() {
