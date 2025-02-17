@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
                     <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
                         <a href="#"><img class="optima_zoom" src="img/product/7.png"
                                 data-zoom-image="img/product/7.png" alt="optima" /></a>
@@ -52,7 +52,7 @@
                             <img src="img/product/29.png" alt="">
                         </a>
                     </div>
-=======
+{{-- ======= --}}
                     @foreach ($product->galleries as $key => $gallery)
                     <div class="single-pro-main-image tab-pane {{ $key === 0 ? 'active' : '' }}"
                         id="pro-large-img-{{ $key + 1 }}">
@@ -72,12 +72,12 @@
                         </a>
                     </div>
                 @endforeach
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
                     <a href="#" class="product-name">Fusce aliquam</a>
                     <div class="list-product-info">
                         <div class="price-rating">
@@ -88,7 +88,7 @@
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star-half-o"></i>
                                 <a href="#" class="review">1 Review(s)</a>
-=======
+{{-- ======= --}}
                          <!-- Tên sản phẩm -->
                          <a href="#" class="product-name">{{ $product->name }}</a>
                     <div class="list-product-info">
@@ -104,13 +104,13 @@
                                     @endif
                                 @endfor
                                 <a href="#" class="review">{{ $product->sold_quantity }} Review(s)</a>
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                                 <a href="#" class="add-review">Add Your Review</a>
                             </div>
                         </div>
                     </div>
                     <div class="avalable">
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
                         <p>Availability:<span> In stock</span></p>
                     </div>
                     <div class="item-price">
@@ -129,7 +129,7 @@
                             <img src="img/product/share.png" alt="">
                         </div>
                     </div>
-=======
+{{-- ======= --}}
                         <p>Availability:
                             @if ($product->quantity > 0)
                                 <span> In stock</span>
@@ -143,7 +143,7 @@
                             VNĐ</span>
                     </div>
                   
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
@@ -151,7 +151,7 @@
                                     <i class="fa fa-heart"></i>
                                 </a>
                             </li>
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
                             <li>
                                 <a href="#">
                                     <i class="fa fa-refresh"></i>
@@ -162,41 +162,43 @@
                                     <i class="fa fa-envelope"></i>
                                 </a>
                             </li>
-=======
+{{-- ======= --}}
                         
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                         </ul>
                     </div>
+                    <form action="{{route('cart.add',$product->id)}}" method="post" >
+                        @csrf
                     <div class="container">
                         <div class="row g-3 align-items-center my-2">
                             <div class="col-md-6">
                                 <label class="form-label required"> Màu</label>
-<<<<<<< HEAD
-                                <select class="form-select">
+{{-- <<<<<<< HEAD --}}
+                                {{-- <select class="form-select">
                                     <option >-- Chọn Màu --</option>
-                                    <option value="">black +$2.00</option>
-=======
+                                    <option value="">black +$2.00</option> --}}
+{{-- ======= --}}
                                 <select class="form-select" name="color">
                                     <option >-- Chọn Màu --</option>
                                     @foreach ($product->colors as $color)
                                                 <option value="{{ $color->id }}" data-color="{{ $color->color }}">{{ ucfirst($color->color) }}</option>
                                             @endforeach
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label required"> Kích cỡ</label>
-<<<<<<< HEAD
-                                <select class="form-select">
+{{-- <<<<<<< HEAD --}}
+                                {{-- <select class="form-select">
                                     <option>-- Chọn Kích Cỡ --</option>
-                                    <option value="">L +$2.00</option>
-=======
+                                    <option value="">L +$2.00</option> --}}
+{{-- ======= --}}
                                 <select class="form-select" name="size">
                                     <option>-- Chọn Kích Cỡ --</option>
                                     @foreach ($product->sizes as $size)
                                                 <option value="{{ $size->id }}" data-size="{{ $size->size }}">{{ strtoupper($size->size) }}</option>
                                             @endforeach
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                                 </select>
                             </div>
                         </div>
@@ -208,24 +210,25 @@
                             <div class="input-group">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput"
+                                <input type="text" class="form-control text-center " id="qtyInput" name="quantity"
                                     value="1">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="increaseQty()">+</button>
                             </div>
                         </div>
                         <div class=" d-flex align-items-end">
-                            <button class="btn btn-primary w-50">Thêm Vào Giỏ Hàng</button>
+                            <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- single product details end -->
-<<<<<<< HEAD
-=======
+{{-- <<<<<<< HEAD
+======= --}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectColor = document.querySelector(".form-select[name='color']");
@@ -275,4 +278,4 @@
         }
     }
 </script>
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}

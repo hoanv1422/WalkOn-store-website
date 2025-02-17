@@ -54,13 +54,16 @@
                                 <div class="row">
                                     {{-- class="product-slider carousel-margin " --}}
                                     @foreach ($products as $product)
+                                    
+
                                         <div class="col-4">
+                                            
                                             <div class="single-product">
                                                 <div class="level-pro-new">
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{ route('detail.index', ['slug' => $product->slug]) }}">
                                                         <img src="img/product/1.png" alt="" class="primary-img">
                                                         <img src="img/product/2.png" alt=""
                                                             class="secondary-img">
@@ -92,9 +95,11 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                        
                                         </div>
+                                   
                                     @endforeach
-
+                                
 
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
 <!-- related product area start-->
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
 <div class="related-product home2">
     <div class="container">
         <div class="row">
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-=======
+{{-- ======= --}}
 @if ($relatedProducts->isNotEmpty())
     <div class="related-product home2">
         <div class="container">
@@ -190,14 +190,14 @@
                             </div>
                         </div>
                     @endforeach
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
 </div>
-=======
+{{-- ======= --}}
 @endif
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
 <!-- related product area end-->

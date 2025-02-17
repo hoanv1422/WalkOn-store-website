@@ -43,8 +43,8 @@ Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('
 
 // Cart
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-
-
+Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::delete('/cart/{cartItemId}', [CartController::class, 'delete'])->name('cart.delete');
 
 // Order 
 Route::get('/order', [OrderController::class, 'index'])->name('order.index');

@@ -21,7 +21,7 @@
                     <div class="tab-content single-product-page">
                         <div role="tabpanel" class="tab-pane fade show active" id="tab1">
                             <div class="single-p-tab-content">
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
                                 <p>Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et mattis vulputate,
                                     tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus
                                     orci luctus et ultrices posuere cubilia Curae; Aenean eleifend laoreet congue.
@@ -31,9 +31,8 @@
                                     Suspendisse aliquet urna pretium eros convallis interdum. Quisque in arcu id dui
                                     vulputate mollis eget non arcu. Aenean et nulla purus. Mauris vel tellus non nunc
                                     mattis lobortis. </p>
-=======
                                 {{ $product->description }}
->>>>>>> hoa_dev
+{{-- >>>>>>> hoa_dev --}}
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab2">
