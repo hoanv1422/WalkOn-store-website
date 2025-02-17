@@ -85,8 +85,8 @@
                                                     onchange="previewImage(event)">
                                             </div>
                                             <div class="avatar-lg">
-                                                <div class="avatar-title bg-light rounded">
-                                                    <img src="" id="product-img" class="avatar-md h-auto" />
+                                                <div class="avatar-title bg-light rounded overflow-hidden">
+                                                    <img src="" id="product-img" class="avatar-md h-auto object-fit-cover"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,8 +140,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="manufacturer-brand-input">Thương
                                                         Hiệu</label>
-                                                    <a href="#" class="float-end text-decoration-underline">Add
-                                                        New</a>
+                                                    <a href="{{route('brands.index')}}" class="float-end text-decoration-underline">Thêm Mới</a>
                                                     <select class="form-select" id="choices-brand-input" name="brand_id">
                                                         @foreach ($brands as $item)
                                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -282,10 +281,10 @@
                                                                             name="product_variant[{{ $index }}][image]">
                                                                     </div>
                                                                     <div class="avatar-sm">
-                                                                        <div class="avatar-title bg-light rounded">
+                                                                        <div class="avatar-title bg-light rounded overflow-hidden">
                                                                             <img src=""
                                                                                 id="imagePreviewVariant_{{ $index }}"
-                                                                                class="avatar-sm h-auto" alt="">
+                                                                                class="avatar-sm h-auto object-fit-cover" alt="" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -387,7 +386,7 @@
                                 <h5 class="card-title mb-0">Danh Mục Sản Phẩm</h5>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted mb-2"> <a href="#"
+                                <p class="text-muted mb-2"> <a href="{{route('categories.index')}}"
                                         class="float-end text-decoration-underline">Thêm Mới </a>Chọn danh mục</p>
                                 <select class="form-select" id="choices-category-input" name="category_id">
                                     @foreach ($categories as $item)

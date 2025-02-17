@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 name="product_variant[${variantIndex}][image]">
                         </div>
                         <div class="avatar-sm">
-                            <div class="avatar-title bg-light rounded">
-                                <img src="" id="imagePreviewVariant_${variantIndex}" class="avatar-sm h-auto" alt="">
+                            <div class="avatar-title bg-light rounded overflow-hidden">
+                                <img src="" id="imagePreviewVariant_${variantIndex}" class="avatar-sm h-auto  object-fit-cover" alt="">
                             </div>
                         </div>
                     </div>
