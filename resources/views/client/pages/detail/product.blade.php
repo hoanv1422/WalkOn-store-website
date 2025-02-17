@@ -4,31 +4,40 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
-                    @foreach ($product->galleries as $key => $gallery)
-                    <div class="single-pro-main-image tab-pane {{ $key === 0 ? 'active' : '' }}"
-                        id="pro-large-img-{{ $key + 1 }}">
-                        <a href="#">
-                            <img class="optima_zoom" src="{{ asset('storage/app/' . $gallery->image) }}"
-                                data-zoom-image="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
-                        </a>
+                    <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
+                        <a href="#"><img class="optima_zoom" src="{{Storage::url($product->image)}}"
+                                data-zoom-image="{{Storage::url($product->image)}}" alt="optima" /></a>
                     </div>
-                @endforeach
+                    @foreach ($product->galleries as $key => $gallery)
+                        <div class="single-pro-main-image tab-pane"
+                            id="pro-large-img-{{ $key + 2 }}">
+                            <a href="#">
+                                <img class="optima_zoom" src="{{Storage::url($gallery->image)}}"
+                                    data-zoom-image="{{Storage::url($gallery->image)}}" alt="Product Image">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="nav product-page-slider">
-                    @foreach ($product->galleries as $key => $gallery)
                     <div class="single-product-slider">
-                        <a class="{{ $key === 0 ? 'active' : '' }}" href="#pro-large-img-{{ $key + 1 }}"
-                            data-bs-toggle="tab">
-                            <img src="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
+                        <a class="active" href="#pro-large-img-1" data-bs-toggle="tab">
+                            <img src="{{Storage::url($product->image)}}" alt="">
                         </a>
                     </div>
-                @endforeach
+                    @foreach ($product->galleries as $key => $gallery)
+                        <div class="single-product-slider">
+                            <a class="" href="#pro-large-img-{{ $key + 2 }}"
+                                data-bs-toggle="tab">
+                                <img src="{{Storage::url($gallery->image)}}" alt="Product Image">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
-                         <!-- Tên sản phẩm -->
-                         <a href="#" class="product-name">{{ $product->name }}</a>
+                    <!-- Tên sản phẩm -->
+                    <a href="#" class="product-name">{{ $product->name }}</a>
                     <div class="list-product-info">
                         <div class="price-rating">
                             <div class="ratings">
@@ -59,7 +68,7 @@
                         <span>{{ number_format($product->price_sale ?? $product->price, 0, ',', '.') }}
                             VNĐ</span>
                     </div>
-                  
+
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
@@ -67,7 +76,7 @@
                                     <i class="fa fa-heart"></i>
                                 </a>
                             </li>
-                        
+
                         </ul>
                     </div>
                     <div class="container">
@@ -75,10 +84,11 @@
                             <div class="col-md-6">
                                 <label class="form-label required"> Màu</label>
                                 <select class="form-select" name="color">
-                                    <option >-- Chọn Màu --</option>
+                                    <option>-- Chọn Màu --</option>
                                     @foreach ($product->colors as $color)
-                                                <option value="{{ $color->id }}" data-color="{{ $color->color }}">{{ ucfirst($color->color) }}</option>
-                                            @endforeach
+                                        <option value="{{ $color->id }}" data-color="{{ $color->color }}">
+                                            {{ ucfirst($color->color) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -86,8 +96,9 @@
                                 <select class="form-select" name="size">
                                     <option>-- Chọn Kích Cỡ --</option>
                                     @foreach ($product->sizes as $size)
-                                                <option value="{{ $size->id }}" data-size="{{ $size->size }}">{{ strtoupper($size->size) }}</option>
-                                            @endforeach
+                                        <option value="{{ $size->id }}" data-size="{{ $size->size }}">
+                                            {{ strtoupper($size->size) }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -99,8 +110,7 @@
                             <div class="input-group">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput"
-                                    value="1">
+                                <input type="text" class="form-control text-center " id="qtyInput" value="1">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="increaseQty()">+</button>
                             </div>
@@ -116,7 +126,7 @@
 </div>
 <!-- single product details end -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const selectColor = document.querySelector(".form-select[name='color']");
         const selectSize = document.querySelector(".form-select[name='size']");
         const qtyInput = document.getElementById("qtyInput");
