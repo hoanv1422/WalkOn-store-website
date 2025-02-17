@@ -36,8 +36,8 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 
 // Detail
-// Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
-Route::get('/detail', [DetailController::class, 'index'])->name('detail.index');
+Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
+// Route::get('/detail', [DetailController::class, 'index'])->name('detail.index');
 
 
 

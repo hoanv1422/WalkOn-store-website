@@ -13,8 +13,10 @@ class DetailController extends Controller
         $product = Product::with('galleries', 'variants', 'colors', 'sizes')->where('slug', $slug)->first();
 
         $relatedProducts = $product->relatedProducts();
+        $upSellProducts = $product->upsellProducts();
         //    dd($product);
-        return view('client.pages.shop.detail', compact('product', 'relatedProducts'));
+        return view('client.pages.detail.index', compact('product','relatedProducts','upSellProducts'
+    ));
     }
 
     public function index() {

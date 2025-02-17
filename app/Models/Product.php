@@ -73,7 +73,16 @@ class Product extends Model
                     ->orWhere('brand_id', $this->brand_id);
             })
             ->inRandomOrder()
-            ->limit(4)
+           
             ->get();
+    }
+    public function upsellProducts()
+    {
+        return Product::where('category_id', $this->category_id)
+        ->where('id', '!=', $this->id)
+        ->orderBy('sold_quantity', 'desc')
+        
+        ->get();
+
     }
 }

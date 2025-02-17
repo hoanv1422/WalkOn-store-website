@@ -4,6 +4,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
+<<<<<<< HEAD
                     <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
                         <a href="#"><img class="optima_zoom" src="img/product/7.png"
                                 data-zoom-image="img/product/7.png" alt="optima" /></a>
@@ -51,10 +52,32 @@
                             <img src="img/product/29.png" alt="">
                         </a>
                     </div>
+=======
+                    @foreach ($product->galleries as $key => $gallery)
+                    <div class="single-pro-main-image tab-pane {{ $key === 0 ? 'active' : '' }}"
+                        id="pro-large-img-{{ $key + 1 }}">
+                        <a href="#">
+                            <img class="optima_zoom" src="{{ asset('storage/app/' . $gallery->image) }}"
+                                data-zoom-image="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
+                        </a>
+                    </div>
+                @endforeach
+                </div>
+                <div class="nav product-page-slider">
+                    @foreach ($product->galleries as $key => $gallery)
+                    <div class="single-product-slider">
+                        <a class="{{ $key === 0 ? 'active' : '' }}" href="#pro-large-img-{{ $key + 1 }}"
+                            data-bs-toggle="tab">
+                            <img src="{{ asset('storage/app/' . $gallery->image) }}" alt="Product Image">
+                        </a>
+                    </div>
+                @endforeach
+>>>>>>> hoa_dev
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
+<<<<<<< HEAD
                     <a href="#" class="product-name">Fusce aliquam</a>
                     <div class="list-product-info">
                         <div class="price-rating">
@@ -65,11 +88,29 @@
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star-half-o"></i>
                                 <a href="#" class="review">1 Review(s)</a>
+=======
+                         <!-- Tên sản phẩm -->
+                         <a href="#" class="product-name">{{ $product->name }}</a>
+                    <div class="list-product-info">
+                        <div class="price-rating">
+                            <div class="ratings">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($product->average_rating))
+                                        <i class="fa fa-star"></i> <!-- Sao đầy -->
+                                    @elseif($i - 0.5 == $product->average_rating)
+                                        <i class="fa fa-star-half-o"></i> <!-- Sao nửa -->
+                                    @else
+                                        <i class="fa fa-star-o"></i>
+                                    @endif
+                                @endfor
+                                <a href="#" class="review">{{ $product->sold_quantity }} Review(s)</a>
+>>>>>>> hoa_dev
                                 <a href="#" class="add-review">Add Your Review</a>
                             </div>
                         </div>
                     </div>
                     <div class="avalable">
+<<<<<<< HEAD
                         <p>Availability:<span> In stock</span></p>
                     </div>
                     <div class="item-price">
@@ -88,6 +129,21 @@
                             <img src="img/product/share.png" alt="">
                         </div>
                     </div>
+=======
+                        <p>Availability:
+                            @if ($product->quantity > 0)
+                                <span> In stock</span>
+                            @else
+                                <span style="color: red;"> Out of stock</span>
+                            @endif
+                        </p>
+                    </div>
+                    <div class="item-price">
+                        <span>{{ number_format($product->price_sale ?? $product->price, 0, ',', '.') }}
+                            VNĐ</span>
+                    </div>
+                  
+>>>>>>> hoa_dev
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
@@ -95,6 +151,7 @@
                                     <i class="fa fa-heart"></i>
                                 </a>
                             </li>
+<<<<<<< HEAD
                             <li>
                                 <a href="#">
                                     <i class="fa fa-refresh"></i>
@@ -105,22 +162,41 @@
                                     <i class="fa fa-envelope"></i>
                                 </a>
                             </li>
+=======
+                        
+>>>>>>> hoa_dev
                         </ul>
                     </div>
                     <div class="container">
                         <div class="row g-3 align-items-center my-2">
                             <div class="col-md-6">
                                 <label class="form-label required"> Màu</label>
+<<<<<<< HEAD
                                 <select class="form-select">
                                     <option >-- Chọn Màu --</option>
                                     <option value="">black +$2.00</option>
+=======
+                                <select class="form-select" name="color">
+                                    <option >-- Chọn Màu --</option>
+                                    @foreach ($product->colors as $color)
+                                                <option value="{{ $color->id }}" data-color="{{ $color->color }}">{{ ucfirst($color->color) }}</option>
+                                            @endforeach
+>>>>>>> hoa_dev
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label required"> Kích cỡ</label>
+<<<<<<< HEAD
                                 <select class="form-select">
                                     <option>-- Chọn Kích Cỡ --</option>
                                     <option value="">L +$2.00</option>
+=======
+                                <select class="form-select" name="size">
+                                    <option>-- Chọn Kích Cỡ --</option>
+                                    @foreach ($product->sizes as $size)
+                                                <option value="{{ $size->id }}" data-size="{{ $size->size }}">{{ strtoupper($size->size) }}</option>
+                                            @endforeach
+>>>>>>> hoa_dev
                                 </select>
                             </div>
                         </div>
@@ -148,3 +224,55 @@
     </div>
 </div>
 <!-- single product details end -->
+<<<<<<< HEAD
+=======
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectColor = document.querySelector(".form-select[name='color']");
+        const selectSize = document.querySelector(".form-select[name='size']");
+        const qtyInput = document.getElementById("qtyInput");
+        const priceBox = document.querySelector(".item-price span");
+
+        let basePrice = {{ $product->price_sale ?? $product->price }};
+        let productVariants = @json($product->variants ?? []);
+
+        function updatePrice() {
+            const selectedColor = selectColor ? selectColor.value : null;
+            const selectedSize = selectSize ? selectSize.value : null;
+            const quantity = parseInt(qtyInput.value) || 1;
+            let extraPrice = basePrice;
+
+            if (productVariants.length > 0) {
+                const variant = productVariants.find(
+                    (v) => v.color_id == selectedColor && v.size_id == selectedSize
+                );
+
+                if (variant) {
+                    extraPrice = variant.price;
+                }
+            }
+
+            const totalPrice = extraPrice * quantity;
+            priceBox.textContent = new Intl.NumberFormat("vi-VN").format(totalPrice) + " VNĐ";
+        }
+
+        if (selectColor) selectColor.addEventListener("change", updatePrice);
+        if (selectSize) selectSize.addEventListener("change", updatePrice);
+        if (qtyInput) qtyInput.addEventListener("input", updatePrice);
+    });
+
+    function increaseQty() {
+        let qtyInput = document.getElementById("qtyInput");
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+        qtyInput.dispatchEvent(new Event("input"));
+    }
+
+    function decreaseQty() {
+        let qtyInput = document.getElementById("qtyInput");
+        if (parseInt(qtyInput.value) > 1) {
+            qtyInput.value = parseInt(qtyInput.value) - 1;
+            qtyInput.dispatchEvent(new Event("input"));
+        }
+    }
+</script>
+>>>>>>> hoa_dev
