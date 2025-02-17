@@ -3,24 +3,6 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">Danh Mục</h4>
-
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Mại Điện Tử</a></li>
-                                <li class="breadcrumb-item active">Danh Mục</li>
-                            </ol>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card" id="customerList">
@@ -157,8 +139,6 @@
                                 </div>
                             </div>
 
-
-
                             <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -168,23 +148,16 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
                                         </div>
-                                        <form action="{{ route('categories.store') }}" method="POST"
+                                        <form action="{{route('categories.store')}}" method="POST" 
                                             class="tablelist-form" autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" id="id-field" />
-
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
-
                                                 <div class="mb-3">
+                                                    <input type="hidden" name="id" id="id-field" />
                                                     <label for="name-field" class="form-label">
                                                         Tên Danh Mục</label>
                                                     <input type="text" id="name-field" class="form-control"
-                                                        placeholder="Enter name" name="name" />
+                                                        placeholder="Nhập tên" name="name" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
                                                 </div>
                                                 <div>
@@ -200,13 +173,12 @@
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <button type="button" class="btn btn-light"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-success" id="add-btn">Thêm
-                                                        Danh Mục</button>
+                                                    <button type="submit" class="btn btn-success"
+                                                        id="add-btn">Thêm</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -310,10 +282,16 @@
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
+
+
 @endsection
 
 @section('script')
 
+    <script>
+        var categories = @json($categorySlug);
+    </script>
+    <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/validates/category.js') }}"></script>
 
     <script>

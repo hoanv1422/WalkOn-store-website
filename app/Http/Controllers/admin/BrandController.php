@@ -23,7 +23,8 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('brands'));
+        $brandSlug = Brand::select('id', 'slug')->get();
+        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug'));
     }
 
     /**
@@ -31,7 +32,7 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
-
+        // dd($request->all());
         $data = $request->except('logo');
         if ($request->hasFile('logo')) {
             $data['logo'] = Storage::put(self::PATH_UPLOAD, $request->file('logo'));

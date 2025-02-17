@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Http\Requests\StoreColorRequest;
 use App\Http\Requests\UpdateColorRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ColorController extends Controller
 {
@@ -16,6 +17,7 @@ class ColorController extends Controller
     public function store(StoreColorRequest $request)
     {
         $data = $request->all();
+        $data['slug'] = Str::slug($data['color']);
 
         try {
             DB::beginTransaction();
@@ -37,6 +39,7 @@ class ColorController extends Controller
     public function update(UpdateColorRequest $request, Color $color)
     {
         $data = $request->all();
+        $data['slug'] = Str::slug($data['color']);
 
         try {
             DB::beginTransaction();

@@ -3,7 +3,6 @@
 @section('content')
     <div class="page-content d-flex">
         <div class="container-fluid">
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -118,8 +117,7 @@
                                                                 title="Edit">
                                                                 <a href="#showModalEditSize" data-bs-toggle="modal"
                                                                     class="text-primary d-inline-block edit-item-btn"
-                                                                    data-id="{{ $item->id }}"
-                                                                    data-type="size"
+                                                                    data-id="{{ $item->id }}" data-type="size"
                                                                     data-size="{{ $item->size }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
@@ -158,13 +156,7 @@
                                             autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" id="id-field" />
-
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
+                                                <input type="hidden" id="id-field" name="id" />
 
                                                 <div class="mb-3">
                                                     <label for="size-field" class="form-label">Tên</label>
@@ -202,12 +194,6 @@
                                             @method('PUT')
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" id="id-field-edit-size" />
-
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" name="id"
-                                                        class="form-control" placeholder="ID" readonly />
-                                                </div>
 
                                                 <div class="mb-3">
                                                     <label for="size-field" class="form-label">Tên</label>
@@ -391,8 +377,7 @@
                                                                 title="Edit">
                                                                 <a href="#showModalEditColor" data-bs-toggle="modal"
                                                                     class="text-primary d-inline-block edit-item-btn"
-                                                                    data-id="{{ $item->id }}"
-                                                                    data-type="color"
+                                                                    data-id="{{ $item->id }}" data-type="color"
                                                                     data-color="{{ $item->color }}">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
@@ -430,13 +415,8 @@
                                             autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" id="id-field" />
+                                                <input type="hidden" name="id" id="id-field" />
 
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
 
                                                 <div class="mb-3">
                                                     <label for="color-field" class="form-label">Tên</label>
@@ -474,12 +454,6 @@
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" id="id-field-edit-color" />
 
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" name="id" readonly />
-                                                </div>
-
                                                 <div class="mb-3">
                                                     <label for="color-field" class="form-label">Tên</label>
                                                     <input type="text" id="color-field-edit" class="form-control"
@@ -491,8 +465,8 @@
                                                 <div class="hstack gap-2 justify-content-end">
                                                     <button type="button" class="btn btn-light"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-success"
-                                                        id="add-btn">Cập Nhật</button>
+                                                    <button type="submit" class="btn btn-success" id="add-btn">Cập
+                                                        Nhật</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -556,7 +530,15 @@
 
 @section('script')
 
-    <script src="{{ asset('templates/admin/assets/libs/validates/attributes.js') }}"></script>
+    <script>
+        var sizes = @json($sizeSlug);
+        var colors = @json($colorSlug);
+    </script>
+
+    <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
+    {{-- <script src="{{ asset('templates/admin/assets/libs/validates/attributes.js') }}"></script> --}}
+    <script src="{{ asset('templates/admin/assets/libs/validates/size.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/validates/color.js') }}"></script>
 
     <script>
         $(document).ready(function() {
