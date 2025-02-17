@@ -75,6 +75,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             Color::query()->create([
                 'color' => $colors[$i],
+                'slug' => Str::slug($colors[$i]),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -85,6 +86,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             Size::query()->create([
                 'size' => $sizes[$i],
+                'slug' => Str::slug($sizes[$i]),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

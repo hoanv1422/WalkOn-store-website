@@ -3,7 +3,6 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -136,7 +135,7 @@
                                                     <td class="status">
                                                         <span
                                                             class="badge {{ $item->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                                            {{ $item->is_active ? 'ACTIVE' : 'INACTIVE' }}
+                                                            {{ $item->is_active ? 'Hoạt Động' : 'Ẩn' }}
                                                         </span>
                                                     </td>
                                                     <td>
@@ -187,13 +186,8 @@
                                             autocomplete="off" enctype="multipart/form-data">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" id="id-field" />
 
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
+                                                <input type="hidden" name="id" id="id-field" />
 
                                                 <div class="text-center">
                                                     <div class="position-relative d-inline-block">
@@ -272,13 +266,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <div class="modal-body">
-                                                <input type="hidden" name="id" id="id-field-edit" />
-
-                                                <div class="mb-3" id="modal-id" style="display: none;">
-                                                    <label for="id-field1" class="form-label">ID</label>
-                                                    <input type="text" id="id-field1" class="form-control"
-                                                        placeholder="ID" readonly />
-                                                </div>
+                                                <input type="hidden" name="id" id="id-field-edit" value=""/>
 
                                                 <div class="text-center">
                                                     <div class="position-relative d-inline-block">
@@ -397,7 +385,12 @@
 
 @section('script')
 
+    <script>
+        var brands = @json($brandSlug);
+    </script>
+
     <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/validates/brand.js') }}"></script>
 
     <script>

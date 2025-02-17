@@ -22,7 +22,8 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //z
+            'name' => 'required|string|max:40',
+            'slug' => 'unique'
         ];
     }
 }

@@ -22,7 +22,8 @@ class StoreBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:40',
+            'slug' => 'unique'
         ];
     }
 }
