@@ -9,8 +9,8 @@
                             <tr>
                                 <th class="cart-item-img"></th>
                                 <th class="cart-product-name">Product Name</th>
-                                <th class="edit"></th>
-                                <th class="move-wishlist">Move to Wishlist</th>
+                                <th class="edit">Size</th>
+                                <th class="move-wishlist">Color</th>
                                 <th class="unit-price">Unit Price</th>
                                 <th class="quantity">Qty</th>
                                 <th class="subtotal">Subtotal</th>
@@ -18,6 +18,9 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
+                            @foreach ($cartItems as $cartItem)
+                                
+                            
                             <tr>
                                 <td class="cart-item-img">
                                     <a href="single-product.html">
@@ -25,89 +28,35 @@
                                     </a>
                                 </td>
                                 <td class="cart-product-name">
-                                    <a href="single-product.html">Cras neque metus</a>
+                                    <a href="single-product.html">{{$cartItem->product_name}}</a>
                                 </td>
                                 <td class="edit">
-                                    <a href="#">Edit</a>
+                                    <a href="#">{{$cartItem->size}}</a>
                                 </td>
                                 <td class="move-wishlist">
-                                    <a href="#">Move</a>
+                                    <a href="#">{{$cartItem->color}}</a>
                                 </td>
                                 <td class="unit-price">
-                                    <span>$174.00</span>
+                                    <span>{{$cartItem->price}}</span>
                                 </td>
                                 <td class="quantity">
-                                    <span>1</span>
+                                    <span>{{$cartItem->quantity}}</span>
                                 </td>
                                 <td class="subtotal">
-                                    <span>$174.00</span>
+                                    <span>
+                                        {{$cartItem->price * $cartItem->quantity}} 
+                                        
+                                    </span>
                                 </td>
                                 <td class="remove-icon">
-                                    <a href="#">
-                                        <img src="img/cart/btn_remove.png" alt="">
-                                    </a>
+                                    <form action="{{ route('cart.delete', $cartItem->cart_item_id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="cart-item-img">
-                                    <a href="single-product.html">
-                                        <img src="img/cart/4.png" alt="">
-                                    </a>
-                                </td>
-                                <td class="cart-product-name">
-                                    <a href="single-product.html">Cras neque metus</a>
-                                </td>
-                                <td class="edit">
-                                    <a href="#">Edit</a>
-                                </td>
-                                <td class="move-wishlist">
-                                    <a href="#">Move</a>
-                                </td>
-                                <td class="unit-price">
-                                    <span>$174.00</span>
-                                </td>
-                                <td class="quantity">
-                                    <span>1</span>
-                                </td>
-                                <td class="subtotal">
-                                    <span>$174.00</span>
-                                </td>
-                                <td class="remove-icon">
-                                    <a href="#">
-                                        <img src="img/cart/btn_remove.png" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="cart-item-img">
-                                    <a href="single-product.html">
-                                        <img src="img/cart/5.png" alt="">
-                                    </a>
-                                </td>
-                                <td class="cart-product-name">
-                                    <a href="single-product.html">Cras neque metus</a>
-                                </td>
-                                <td class="edit">
-                                    <a href="#">Edit</a>
-                                </td>
-                                <td class="move-wishlist">
-                                    <a href="#">Move</a>
-                                </td>
-                                <td class="unit-price">
-                                    <span>$275.00</span>
-                                </td>
-                                <td class="quantity">
-                                    <span>2</span>
-                                </td>
-                                <td class="subtotal">
-                                    <span>$350.00</span>
-                                </td>
-                                <td class="remove-icon">
-                                    <a href="#">
-                                        <img src="img/cart/btn_remove.png" alt="">
-                                    </a>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <div class="shopping-button">
