@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Thêm sản phẩm')
+@section('title', 'Chi Tiết Sản Phẩm')
 @section('style')
     <link href="{{ asset('templates/admin/assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection

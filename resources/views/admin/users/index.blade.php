@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Danh sách người dùng')
+@section('title', 'Người Dùng')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">

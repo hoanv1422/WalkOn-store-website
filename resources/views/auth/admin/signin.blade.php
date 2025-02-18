@@ -1,6 +1,6 @@
 @extends('auth.admin.layouts.app')
 
-@section('title', 'Signin')
+@section('title', 'Đăng Nhập')
 
 @section('content')
     <!-- auth page content -->

@@ -3,7 +3,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="index.html" class="logo logo-dark">
+        <a href="{{route('admin.index')}}" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
             </span>
@@ -12,7 +12,7 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="index.html" class="logo logo-light">
+        <a href="{{route('admin.index')}}" class="logo logo-light">
             <span class="logo-sm">
                 <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
             </span>
@@ -128,6 +128,10 @@
 
                              <li class="nav-item">
                                 <a href="{{route('attributes.index')}}" class="nav-link" data-key="t-attributes"> Thuộc Tính </a>
+                            </li>
+
+                             <li class="nav-item">
+                                <a href="{{route('users.index')}}" class="nav-link" data-key="t-user"> Người Dùng </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button"

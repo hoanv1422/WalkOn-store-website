@@ -17,12 +17,11 @@ class SizeController extends Controller
      */
     public function index()
     {
-        $title = "Thuộc Tính";
         $sizes = Size::all();
         $colors = Color::all();
         $sizeSlug = Size::select('id', 'slug')->get();
         $colorSlug = Color::select('id', 'slug')->get();
-        return view('admin.attributes.index', compact('sizes', 'colors', 'sizeSlug', 'colorSlug', 'title'));
+        return view('admin.attributes.index', compact('sizes', 'colors', 'sizeSlug', 'colorSlug'));
     }
 
     /**

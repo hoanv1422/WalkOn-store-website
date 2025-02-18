@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'trang danh mục category')
+@section('title', 'Thương Hiệu')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">

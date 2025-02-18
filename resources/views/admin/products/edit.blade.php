@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Sửa sản phẩm')
+@section('title', 'Sửa Sản Phẩm')
 @section('style')
     <link href="{{ asset('templates/admin/assets/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
 
