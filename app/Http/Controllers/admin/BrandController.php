@@ -22,9 +22,10 @@ class BrandController extends Controller
 
     public function index()
     {
+        $title = "Thương Hiệu";
         $brands = Brand::all();
         $brandSlug = Brand::select('id', 'slug')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug', 'title'));
     }
 
     /**

@@ -30,11 +30,12 @@ class ProductController extends Controller
     public function index()
     {
         // Giả sử bạn có model Product, lấy tất cả sản phẩm
+        $title = "Sản Phẩm";
         $products = Product::all();
         $products_active = Product::query()->where('is_active', true)->get();
         $products_non_active = Product::query()->where('is_active', false)->get();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('products', 'products_active', 'products_non_active'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('products', 'products_active', 'products_non_active', 'title'));
     }
 
     /**
@@ -42,12 +43,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-
+        $title = "Tạo Sản Phẩm";
         $brands = Brand::query()->where('is_active', true)->get();
         $categories = Category::query()->where('is_active', true)->get();
         $colors = Color::query()->pluck('color', 'id')->all();
         $sizes = Size::query()->pluck('size', 'id')->all();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'categories', 'colors', 'sizes'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'categories', 'colors', 'sizes', 'title'));
     }
 
     /**
@@ -157,9 +158,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-
-
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product'));
+        $title = 'Chi Tiết Sản Phẩm';
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'title'));
     }
 
     /**
@@ -167,13 +167,15 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+
+        $title = 'Sửa Sản Phẩm';
         $brands = Brand::query()->where('is_active', true)->get();
         $categories = Category::query()->where('is_active', true)->get();
         $colors = Color::query()->pluck('color', 'id')->all();
         $sizes = Size::query()->pluck('size', 'id')->all();
         $product_galleries = ProductGallery::query()->where('product_id', $product->id)->get();
         $product_variants = ProductVariant::query()->where('product_id', $product->id)->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'brands', 'categories', 'colors', 'sizes', 'product_galleries', 'product_variants'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'brands', 'categories', 'colors', 'sizes', 'product_galleries', 'product_variants', 'title'));
     }
 
     /**

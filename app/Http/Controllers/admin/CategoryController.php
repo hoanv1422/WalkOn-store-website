@@ -21,9 +21,10 @@ class CategoryController extends Controller
 
     public function index()
     {
+        $title = "Danh Mục";
         $categories = Category::all();
         $categorySlug = Category::select('id', 'slug')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('categories', 'categorySlug'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('categories', 'categorySlug', 'title'));
     }
 
 

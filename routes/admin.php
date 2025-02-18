@@ -41,4 +41,26 @@ Route::prefix('admin')->group(function () {
         Route::put('color/{color}', [ColorController::class, 'update'])->name('colors.update');
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
+
+    Route::get('signin', function() {
+        return view('auth.admin.signin');
+    })->name('signin.index');
+
+    Route::get('signup', function () {
+        return view('auth.admin.signup');
+    })->name('signup.index');
+
+    Route::get('pass-reset', function () {
+        return view('auth.admin.pass-reset');
+    })->name('pass-reset.index');
+
+    Route::get('pass-change', function () {
+        return view('auth.admin.pass-change');
+    })->name('pass-change.index');
+
+    Route::get('pass-confirm', function () {
+        return view('auth.admin.pass-confirm');
+    })->name('pass-confirm.index');
+
+    
 });
