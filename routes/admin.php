@@ -22,10 +22,10 @@ use App\Http\Controllers\Admin\CategoryController;
 |
 */
 
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
-    });
+    })->name('admin.index');
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);

@@ -51,7 +51,16 @@
                                         <li><a href="cart.html">my cart</a></li>
                                         <li><a href="checkout.html">Checkout</a></li>
                                         <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="#">Log in</a></li>
+                                        <li><a href="{{url('/login')}}">Log in</a></li>
+                                        <li><a href="{{url('/register')}}">Register</a></li>
+                                        <li>
+                                            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -230,10 +239,10 @@
                                             <a href="single-product.html">Single Shop</a>
                                         </span>
                                         <span>
-                                            <a href="login.html">Login page</a>
+                                            <a href="{{url('/login')}}">Login page</a>
                                         </span>
                                         <span>
-                                            <a href="register.html">Ragister page</a>
+                                            <a href="{{url('/register')}}">Register page</a>
                                         </span>
                                         <span>
                                             <a href="wishlist.html">Wishlist</a>
@@ -345,8 +354,8 @@
                                         <li><a href="shop-list.html">Shop list</a></li>
                                         <li><a href="single-product.html">Single Shop</a></li>
                                         <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="login.html">login page</a></li>
-                                        <li><a href="register.html">register page</a></li>
+                                        <li><a href="{{url('/login')}}">login page</a></li>
+                                        <li><a href="{{url('/register')}}">register page</a></li>
                                     </ul>
                                 </li>
                             </ul>

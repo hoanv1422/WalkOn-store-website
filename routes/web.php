@@ -35,4 +35,3 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/test', [TestController::class, 'test']);
 Route::post('/test', [TestController::class, 'store'])->name('test');
-

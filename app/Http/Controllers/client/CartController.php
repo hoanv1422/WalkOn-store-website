@@ -20,13 +20,13 @@ class CartController extends Controller
     ->join('products', 'product_variants.product_id', '=', 'products.id')
     ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
     ->join('colors', 'product_variants.color_id', '=', 'colors.id')
-    ->join('carts', 'cart_items.cart_id', '=', 'carts.id') 
-    ->where('carts.user_id', $user) 
+    ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+    ->where('carts.user_id', $user)
     ->select(
-        'products.name as product_name', 
-        'sizes.size', 
-        'colors.color', 
-        'cart_items.price', 
+        'products.name as product_name',
+        'sizes.size',
+        'colors.color',
+        'cart_items.price',
         'cart_items.quantity',
         'products.image as product_image',
         'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
@@ -41,7 +41,7 @@ class CartController extends Controller
             ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
             ->where('carts.user_id', $user)
             ->where('cart_items.product_variant_id', $product->id)
-            ->select('cart_items.*') 
+            ->select('cart_items.*')
             ->first();
         $checkCart = DB::table('carts')->where('carts.user_id',$user)->first();
         if(!isset($checkCart)){
@@ -50,7 +50,7 @@ class CartController extends Controller
             ]);
         }
             if ($cartItem) {
-                $udquan=DB::table('cart_items')->where('id',$cartItem->id)->update(['quantity'=> $cartItem->quantity + ($request->quantity ?? 1)]);}    
+                $udquan=DB::table('cart_items')->where('id',$cartItem->id)->update(['quantity'=> $cartItem->quantity + ($request->quantity ?? 1)]);}
             else{
                 CartItem::create([
                     'cart_id'=>1,
@@ -61,16 +61,16 @@ class CartController extends Controller
                     'price'=> $product->price,
                 ]);
             }
-        
+
         return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
-        
+
     }
     public function delete($cartItemId)
     {
-    $cartItem = DB::table('cart_items')->where('id', $cartItemId)->first();   
-    DB::table('cart_items')->where('id', $cartItemId)->delete();   
+    $cartItem = DB::table('cart_items')->where('id', $cartItemId)->first();
+    DB::table('cart_items')->where('id', $cartItemId)->delete();
     return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
-   
+
 }
 
 }
