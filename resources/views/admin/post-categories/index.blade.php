@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'trang danh mục category')
+@section('title', 'Danh Mục Bài Viết')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -92,7 +92,8 @@
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
-                                            @foreach ($categories as $item)
+                                          
+                                            @foreach ($postCategories as $item)
                                                 <tr>
                                                     <th scope="row">
                                                         <div class="form-check">
@@ -148,7 +149,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
                                         </div>
-                                        <form action="{{route('categories.store')}}" method="POST" 
+                                        <form action="{{ route('post-categories.store') }}" method="POST"
                                             class="tablelist-form" autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
@@ -274,6 +275,7 @@
                     </div>
 
                 </div>
+
                 <!--end col-->
             </div>
             <!--end row-->
@@ -287,32 +289,102 @@
 @endsection
 
 @section('script')
+<script>
+    var postCategories = @json($postCategorySlug);
+</script>
 
     <script>
-        var categories = @json($categorySlug);
-    </script>
-    <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
-    <script src="{{ asset('templates/admin/assets/libs/validates/category.js') }}"></script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Sử dụng biến postCategories được truyền từ Blade
+    const postCategories = window.postCategories || [];
+    console.log("postCategories:", postCategories);
 
-    <script>
-        $(document).ready(function() {
-            $('table.dataTable').each(function() {
-                $(this).DataTable({
-                    "paging": true, // Hiển thị phân trang
-                    "searching": false, // Tắt tìm kiếm
-                    "ordering": true, // Bật sắp xếp
-                    "info": true, // Hiển thị thông tin tổng
-                    "pageLength": 10, // Giới hạn số lượng bản ghi mỗi trang
-                    "lengthChange": false
-                });
-            });
+    const forms = document.querySelectorAll(".tablelist-form");
+
+    // Xử lý validate cho các form (cả tạo mới và cập nhật)
+    forms.forEach((form) => {
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+            // Lấy giá trị input 'name' và 'id' (nếu có) từ form hiện tại
+            const nameInput = form.querySelector("[name='name']");
+            const idField = form.querySelector("[name='id']");
+            const idCategory = idField ? idField.value : "";
+
+            // Tạo slug từ tên danh mục (bạn cần đảm bảo hàm createSlug đã được định nghĩa)
+            const slug = createSlug(nameInput.value);
+
+            // Reset trạng thái lỗi cho form hiện tại
+            form.querySelectorAll(".invalid-feedback").forEach(el => el.style.display = "none");
+            form.querySelectorAll(".form-control").forEach(el => el.classList.remove("is-invalid"));
+
+            // Kiểm tra nếu slug đã tồn tại (ngoại trừ trường hợp cập nhật danh mục hiện tại)
+            if (
+                postCategories.some(
+                    (category) => category.slug === slug && category.id != idCategory
+                )
+            ) {
+                showError(nameInput, "Tên danh mục đã tồn tại.");
+                isValid = false;
+            }
+
+            // Kiểm tra trường name không được rỗng
+            if (nameInput.value.trim() === "") {
+                showError(nameInput, "Vui lòng nhập tên danh mục.");
+                isValid = false;
+            }
+
+            // Kiểm tra độ dài tên không vượt quá 40 ký tự
+            if (nameInput.value.trim().length > 40) {
+                showError(nameInput, "Tên danh mục quá dài.");
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
         });
+    });
 
-        $(document).on('click', '.remove-item-btn', function() {
-            let userId = $(this).data('id'); // Lấy ID người dùng
-            let actionUrl = "/admin/categories/" + userId; // Tạo URL xóa
+    function showError(input, message) {
+        const feedback = input.nextElementSibling;
+        input.classList.add("is-invalid");
+        if (feedback) {
+            feedback.innerText = message;
+            feedback.style.display = "block";
+        }
+    }
 
-            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
+    // Xử lý nút chỉnh sửa (Edit)
+    document.querySelectorAll(".edit-item-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+            const id = this.getAttribute("data-id");
+            const name = this.getAttribute("data-name");
+            const status = this.getAttribute("data-status");
+
+            // Gán giá trị vào modal edit
+            document.getElementById("id-field-edit").value = id;
+            document.getElementById("name-field-edit").value = name;
+            document.getElementById("status-field-edit").value = status || "0";
+
+            // Cập nhật action của form chỉnh sửa với URL chính xác
+            let editForm = document.querySelector(".tablelist-form.edit");
+            if (editForm) {
+                editForm.setAttribute("action", `/admin/post-categories/${id}`);
+            }
         });
+    });
+
+    // Xử lý nút xóa (Delete) sử dụng jQuery
+    $(document).on('click', '.remove-item-btn', function() {
+        let postcategoryId = $(this).data('id');
+        if (!postcategoryId) {
+            console.error("Không tìm thấy ID danh mục cần xóa!");
+            return;
+        }
+        console.log("Deleting post category with ID:", postcategoryId);
+        let actionUrl = `/admin/post-categories/${postcategoryId}`;
+        $('#deleteForm').attr('action', actionUrl);
+    });
+});
+
     </script>
-@endsection

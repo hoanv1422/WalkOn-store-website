@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sizes', function (Blueprint $table) {
+        Schema::create('post_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('size')->comment('Kích cỡ');
+            $table->string('name')->comment('Tên danh mục');
             $table->string('slug')->unique()->comment('URL thân thiện');
+            $table->boolean('is_active')->default(true)->comment('Trạng thái');
+            $table->text('description')->nullable()->comment('Mô tả');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sizes');
+        Schema::dropIfExists('post_categories');
     }
 };

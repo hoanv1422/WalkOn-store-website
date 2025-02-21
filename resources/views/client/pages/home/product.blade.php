@@ -54,20 +54,23 @@
                                 <div class="row">
                                     {{-- class="product-slider carousel-margin " --}}
                                     @foreach ($products as $product)
+                                    
+
                                         <div class="col-4">
+                                            
                                             <div class="single-product">
                                                 <div class="level-pro-new">
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt="" class="primary-img">
                                                         <img src="img/product/2.png" alt=""
                                                             class="secondary-img">
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -81,8 +84,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm vào
+                                                        giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -92,9 +95,11 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                        
                                         </div>
+                                   
                                     @endforeach
-
+                                
 
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -116,7 +121,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -130,9 +135,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -158,7 +162,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -166,7 +170,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -180,9 +184,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -210,7 +213,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -218,7 +221,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -232,9 +235,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -262,7 +264,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -270,7 +272,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -284,9 +286,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -314,7 +315,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -322,7 +323,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -336,9 +337,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -366,7 +366,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -374,7 +374,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -388,9 +388,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -418,7 +417,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="single-product.html">
+                                                    <a href="{{route('detail.index', $product->slug)}}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -426,7 +425,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="single-product.html"
+                                                    <a href="{{route('detail.index', $product->slug)}}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -440,9 +439,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">add
-                                                        to
-                                                        cart</button>
+                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
+                                                        vào giỏ hàng</button>
                                                     <ul class="add-to-link">
                                                         <li><a class="modal-view" data-target="#productModal"
                                                                 data-bs-toggle="modal" href="#"> <i
@@ -453,11 +451,8 @@
                                                 </div>
                                             </div>
 
-
                                         </div>
                                     @endforeach
-
-
                                 </div>
                             </div>
                         </div>

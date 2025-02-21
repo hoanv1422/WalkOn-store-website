@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PostCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+
 
 
 
@@ -41,4 +43,6 @@ Route::prefix('admin')->group(function () {
         Route::put('color/{color}', [ColorController::class, 'update'])->name('colors.update');
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
+    Route::resource('post-categories',PostCategoryController::class)->except(['create', 'edit', 'show']);
+
 });

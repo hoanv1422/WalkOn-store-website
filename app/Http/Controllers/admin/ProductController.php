@@ -55,92 +55,102 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
-
-
         // Data Product
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
+
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         } else {
             $data['image'] = '';
         }
+
         $data['sku'] = 'WO' . $data['brand_id'] . $data['category_id'] . '-' . now()->format('His');
         $data['is_active'] ??= 0;
         $data['slug'] = Str::slug($data['name']) . '-' . $data['sku'];
 
-
-        // Data Biến thể
-        $listProVariants = $request->product_variant  ?: [];
+        // Xử lý Biến thể (Product Variants)
+        $listProVariants = $request->product_variant ?: [];
         $dataProVariants = [];
         $totalQuantity = 0;
+        $variantMap = []; // Mảng dùng để kiểm tra trùng lặp
+
         foreach ($listProVariants as $item) {
-            $dataProVariants[] = [
-                'size_id' => $item['size'],
-                'color_id' => $item['color'],
-                'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
-                'quantity' => $item['quantity'],
-                'price' => $item['price']
-            ];
+            $key = $item['size'] . '-' . $item['color']; // Khóa duy nhất cho mỗi biến thể
+
+            if (isset($variantMap[$key])) {
+                // Nếu đã tồn tại biến thể này, cộng dồn số lượng
+                $dataProVariants[$variantMap[$key]]['quantity'] += $item['quantity'];
+            } else {
+                // Nếu chưa có, tạo mới biến thể
+                $dataProVariants[] = [
+                    'size_id' => $item['size'],
+                    'color_id' => $item['color'],
+                    'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price']
+                ];
+                $variantMap[$key] = array_key_last($dataProVariants); // Lưu vị trí của biến thể này
+            }
+
             $totalQuantity += $item['quantity'];
         }
 
         $data['quantity'] = $totalQuantity;
 
-
-        // Data Thư viện ảnh
+        // Xử lý Thư viện ảnh (Product Galleries)
         $listProGalleries = $request->product_galleries ?: [];
         $dataProGalleries = [];
+
         foreach ($listProGalleries as $item) {
-            if (!empty('image')) {
+            if (!empty($item)) {
                 $dataProGalleries[] = [
                     'image' => Storage::put('product_galleries', $item)
                 ];
             }
         }
 
-
-
         try {
             DB::beginTransaction();
-            // Insert Product 
+
+            // Insert Product
             $product = Product::query()->create($data);
 
             // Insert ProductVariant
-            foreach ($dataProVariants as $item) {
-                $item += ['product_id' => $product->id];
+            foreach ($dataProVariants as &$item) {
+                $item['product_id'] = $product->id;
                 ProductVariant::query()->create($item);
             }
 
             // Insert ProductGallery
-            foreach ($dataProGalleries as $item) {
-                $item += ['product_id' => $product->id];
+            foreach ($dataProGalleries as &$item) {
+                $item['product_id'] = $product->id;
                 ProductGallery::query()->create($item);
             }
 
-            DB::Commit();
+            DB::commit();
             return back()->with('success', 'Thêm sản phẩm thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
-            // DELETE IMAGE in STORAGE
 
-            if (isset($data['image'])) {
+            // Xóa ảnh trong STORAGE khi có lỗi
+            if (!empty($data['image'])) {
                 Storage::delete($data['image']);
             }
             foreach ($dataProVariants as $item) {
-                if (isset($item['image'])) {
+                if (!empty($item['image'])) {
                     Storage::delete($item['image']);
                 }
             }
             foreach ($dataProGalleries as $item) {
-                if (isset($item['image'])) {
+                if (!empty($item['image'])) {
                     Storage::delete($item['image']);
                 }
             }
-            dd($exception);
-            return back()->with('error', 'Có lỗi khi thêm');
+
+            return back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm')->withErrors($exception->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.

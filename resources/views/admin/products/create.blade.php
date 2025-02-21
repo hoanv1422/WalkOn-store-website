@@ -1,4 +1,3 @@
-
 @extends('admin.layouts.app')
 @section('title', 'Thêm sản phẩm')
 @section('style')
@@ -46,8 +45,8 @@
                                 </div>
                                 <div>
                                     <label>Mô Tả Sản Phẩm</label>
-                                    <textarea name="description" id="ckeditor-classic" > 
-                                        
+                                    <textarea name="description" id="ckeditor-classic"> 
+                                        {{ old('description') }}
                                     </textarea>
                                     @error('description')
                                         <span class="invalid-feedback">{{ $message }}</span>
@@ -85,8 +84,9 @@
                                                     onchange="previewImage(event)">
                                             </div>
                                             <div class="avatar-lg">
-                                                <div class="avatar-title bg-light rounded">
-                                                    <img src="" id="product-img" class="avatar-md h-auto" />
+                                                <div class="avatar-title bg-light rounded overflow-hidden">
+                                                    <img src="{{ old('image') ? asset('storage/' . old('image')) : '' }}"
+                                                        id="product-img" class="avatar-md h-auto object-fit-cover" />
                                                 </div>
                                             </div>
                                         </div>
@@ -140,11 +140,12 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="manufacturer-brand-input">Thương
                                                         Hiệu</label>
-                                                    <a href="#" class="float-end text-decoration-underline">Add
-                                                        New</a>
+                                                    <a href="{{ route('brands.index') }}"
+                                                        class="float-end text-decoration-underline">Thêm Mới</a>
                                                     <select class="form-select" id="choices-brand-input" name="brand_id">
                                                         @foreach ($brands as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                            <option value="{{ $item->id }}">{{ $item->name }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -250,11 +251,14 @@
                                             </thead>
                                             <tbody id="variantsContainer">
 
-                                                @php $lastIndex = -1; @endphp
+                                                @php
+                                                    // $lastIndex = -1;
+                                                    $productVariants = old('product_variant', [['size' => '', 'color' => '', 'image' => '', 'quantity' => '', 'price' => '']]);
+                                                    $lastIndex = array_key_last($productVariants);
+                                                @endphp
                                                 <input type="hidden" id="lastIndex" value="{{ $lastIndex }}">
                                                 @if (old('product_variant'))
-                                                    @foreach (old('product_variant', []) as $index => $product_variant)
-                                                        @php $lastIndex = $index; @endphp
+                                                    @foreach ($productVariants as $index => $product_variant)
                                                         <tr class="variant">
                                                             <td class="align-middle">
                                                                 <div class="position-relative d-inline-block">
@@ -282,73 +286,66 @@
                                                                             name="product_variant[{{ $index }}][image]">
                                                                     </div>
                                                                     <div class="avatar-sm">
-                                                                        <div class="avatar-title bg-light rounded">
+                                                                        <div
+                                                                            class="avatar-title bg-light rounded overflow-hidden">
                                                                             <img src=""
                                                                                 id="imagePreviewVariant_{{ $index }}"
-                                                                                class="avatar-sm h-auto" alt="">
+                                                                                class="avatar-sm h-auto object-fit-cover"
+                                                                                alt="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>
-                                                                <select class="form-control"
-                                                                    name="product_variant[{{ $index }}][size]">
+                                                            <td class="align-middle">
+                                                                <select class="form-control @error("product_variant.$index.size") is-invalid @enderror"
+                                                                    name="product_variant[{{ $index }}][size]" >
                                                                     <option value="">Chọn kích cỡ</option>
                                                                     @foreach ($sizes as $size_id => $size)
-                                                                        <option value="{{ $size_id }}">
+                                                                        <option value="{{ $size_id }}" {{ $product_variant['size'] == $size_id ? 'selected' : '' }}>
                                                                             {{ $size }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td>
-                                                                <select class="form-control"
+                                                            <td class="align-middle">
+                                                                <select class="form-control @error("product_variant.$index.color") is-invalid @enderror" 
                                                                     name="product_variant[{{ $index }}][color]">
                                                                     <option value="">Chọn màu</option>
                                                                     @foreach ($colors as $color_id => $color)
-                                                                        <option value="{{ $color_id }}">
+                                                                        <option value="{{ $color_id }}" {{ $product_variant['color'] == $color_id ? 'selected' : '' }}>
                                                                             {{ $color }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
                                                             </td>
 
-                                                            <td>
-                                                                <input class="form-control" type="text"
+                                                            <td class="align-middle">
+                                                                <input class="form-control @error("product_variant.$index.quantity") is-invalid @enderror" type="text"
                                                                     name="product_variant[{{ $index }}][quantity]"
-                                                                    value="" placeholder="Số lượng">
-                                                                @error('')
-                                                                    <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
+                                                                    value="{{$product_variant['quantity']}}" placeholder="Số lượng">
+                                                                
                                                             </td>
-                                                            <td>
-                                                                <div class="input-group has-validation mb-3">
+                                                            <td class="align-middle">
+                                                                <div class="input-group has-validation">
                                                                     <span class="input-group-text"
                                                                         id="product-price-addon">VNĐ</span>
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control @error("product_variant.$index.price") is-invalid @enderror"
                                                                         id="product-price-input" placeholder="Giá"
                                                                         aria-label="Price"
                                                                         aria-describedby="product-price-addon"
                                                                         name="product_variant[{{ $index }}][price]"
-                                                                        value="" oninput="formatCurrency(this)">
-                                                                    <div class="invalid-feedback">Please Enter a product
-                                                                        price.
-                                                                    </div>
+                                                                        value="{{$product_variant['price']}}" oninput="formatCurrency(this)">
                                                                 </div>
-                                                                @error('')
-                                                                    <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
                                                             </td>
-                                                            <td>
+                                                            <td class="align-middle">
                                                                 <div class="btn btn-danger removeVariant">X</div>
                                                             </td>
                                                         </tr>
                                                     @endforeach
                                                 @endif
-
                                             </tbody>
                                         </table>
-                                        <div class="btn btn-info" id="addMoreVariant">Add more variant</div>
+                                        <div class="btn btn-info" id="addMoreVariant">Thêm Biến Thể</div>
                                     </div>
                                     <!-- end tab-pane -->
                                 </div>
@@ -387,7 +384,7 @@
                                 <h5 class="card-title mb-0">Danh Mục Sản Phẩm</h5>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted mb-2"> <a href="#"
+                                <p class="text-muted mb-2"> <a href="{{ route('categories.index') }}"
                                         class="float-end text-decoration-underline">Thêm Mới </a>Chọn danh mục</p>
                                 <select class="form-select" id="choices-category-input" name="category_id">
                                     @foreach ($categories as $item)
@@ -421,7 +418,5 @@
     <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/product-variant/product-variant.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/price-format/price-format.js') }}"></script>
-
-
 
 @endsection

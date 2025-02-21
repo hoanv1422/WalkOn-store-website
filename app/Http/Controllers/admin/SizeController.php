@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 use App\Models\Color;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SizeController extends Controller
 {
@@ -18,7 +19,10 @@ class SizeController extends Controller
     {
         $sizes = Size::all();
         $colors = Color::all();
-        return view('admin.attributes.index', compact('sizes', 'colors'));
+
+        $sizeSlug = Size::select('id', 'slug')->get();
+        $colorSlug = Color::select('id', 'slug')->get();
+        return view('admin.attributes.index', compact('sizes', 'colors', 'sizeSlug', 'colorSlug'));
     }
 
     /**
@@ -27,6 +31,7 @@ class SizeController extends Controller
     public function store(StoreSizeRequest $request)
     {
         $data = $request->all();
+        $data['slug'] = Str::slug($data['size']);
 
         try {
             DB::beginTransaction();
@@ -48,6 +53,7 @@ class SizeController extends Controller
     public function update(UpdateSizeRequest $request, Size $size)
     {
         $data = $request->all();
+        $data['slug'] = Str::slug($data['size']);
 
         try {
             DB::beginTransaction();
