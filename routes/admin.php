@@ -7,9 +7,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-
-
-
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +43,8 @@ Route::prefix('admin')->group(function () {
     Route::get('signin', function() {
         return view('auth.admin.signin');
     })->name('signin.index');
+
+    Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
 
     Route::get('signup', function () {
         return view('auth.admin.signup');

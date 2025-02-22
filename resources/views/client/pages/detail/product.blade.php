@@ -110,7 +110,7 @@
                                 <div class="input-group">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput" value="1">
+                                <input type="text" class="form-control text-center " name="quantity" id="qtyInput" value="1">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="increaseQty()">+</button>
                                 </div>

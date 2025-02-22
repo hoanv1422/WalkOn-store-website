@@ -30,8 +30,8 @@
                                 <p class="text-muted">Đăng nhập để vào WalkOn-Admin.</p>
                             </div>
                             <div class="p-2 mt-4">
-                                <form action="https://themesbrand.com/velzon/html/master/index.html">
-
+                                <form action="{{route('signin.post')}}" method="POST">
+                                    @csrf
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="text" name="mail" class="form-control" id="email"
@@ -44,7 +44,7 @@
                                         </div>
                                         <label class="form-label" for="password-input">Mật Khẩu</label>
                                         <div class="position-relative auth-pass-inputgroup mb-3">
-                                            <input type="password" class="form-control pe-5 password-input"
+                                            <input type="password" name="password" class="form-control pe-5 password-input"
                                                 placeholder="Nhập mật khẩu" id="password-input">
                                             <button
                                                 class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none"
