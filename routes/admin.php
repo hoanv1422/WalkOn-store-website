@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PostCategoryController;
+use App\Http\Controllers\admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -8,10 +9,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-
-
-
-
+use App\Http\Controllers\admin\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,5 +42,7 @@ Route::prefix('admin')->group(function () {
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
     Route::resource('post-categories',PostCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('post-comments',PostCommentController::class)->except(['create', 'edit', 'show']);
+    Route::resource('posts',PostController::class)->except(['create', 'edit', 'show']);
 
 });

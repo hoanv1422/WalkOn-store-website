@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('Tên bài viết');
+            $table->string('title')->comment('Tên bài viết');
             $table->string('slug')->unique()->comment('URL thân thiện');
             $table->text('content')->comment('Nội dung');
             $table->string('thumbnail')->nullable()->comment('Ảnh đại diện');
