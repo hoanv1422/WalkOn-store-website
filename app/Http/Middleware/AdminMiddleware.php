@@ -13,6 +13,7 @@ class AdminMiddleware
         if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
-        return redirect('/')->with('status','Bạn không có quyền vào trang admin');
+        return redirect('/')->with('error', 'Bạn không có quyền truy cập admin');
+        
     }
 }

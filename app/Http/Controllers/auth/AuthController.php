@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+use function Laravel\Prompts\alert;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -53,8 +55,10 @@ class AuthController extends Controller
     // đăng xuất
     public function logout()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
+        }
         Auth::logout();
-
         return redirect()->route('login')->with('status', 'Đã đăng xuất khỏi tài khoản ');
     }
 }
