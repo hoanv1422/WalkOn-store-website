@@ -57,7 +57,7 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 
 
 // wishlist
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('profile.index');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
 
 

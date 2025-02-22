@@ -4,24 +4,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 offset-lg-3 col-md-9 d-none d-md-block">
-                    <div class="site-option">
-                        <ul>
-                            <li class="currency"><a href="#">USD <i class="fa fa-angle-down"></i> </a>
-                                <ul class="sub-site-option">
-                                    <li><a href="#">Eur</a></li>
-                                    <li><a href="#">Usd</a></li>
-                                </ul>
-                            </li>
-                            <li class="language"><a href="#">English <i class="fa fa-angle-down"></i> </a>
-                                <ul class="sub-site-option">
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">English2</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="call-support">
-                        <p>Call support free: <span> (800) 123 456 789</span></p>
+                        <p>Hỗ Trợ Miễn Phí: <span> +8494422302</span></p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 position-relative">
@@ -46,46 +30,64 @@
                                         <i class="fa fa-bars"></i>
                                     </a>
                                     <ul>
-                                        <li><a href="my-account.html">my account</a></li>
-                                        <li><a href="wishlist.html">my wishlist</a></li>
-                                        <li><a href="cart.html">my cart</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="#">Log in</a></li>
+                                        <li><a href="{{ route('profile.index') }}">Tài Khoản</a></li>
+                                        <li><a href="{{ route('wishlist.index') }}">Yêu Thích</a></li>
+                                        <li><a href="{{ route('cart.index') }}">Giỏ Hàng</a></li>
+                                        <li><a href="{{ route('checkout.index') }}">Thanh Toán</a></li>
+                                        <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
+                                        <li><a href="{{ route('login') }}">Đăng Nhập</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="cart-menu">
                             <ul>
-                                <li><a href="#"> <img src="img/icon-cart.png" alt=""> <span>2</span> </a>
+                                <li><a href="#"> <img src="img/icon-cart.png" alt="">
+                                        <span>{{ $cartCount }}</span> </a>
                                     <div class="cart-info">
                                         <ul>
-                                            <li>
-                                                <div class="cart-img">
-                                                    <img src="img/cart/1.png" alt="">
-                                                </div>
-                                                <div class="cart-details">
-                                                    <a href="#">Fusce aliquam</a>
-                                                    <p>1 x $174.00</p>
-                                                </div>
-                                                <div class="btn-edit"></div>
-                                                <div class="btn-remove"></div>
-                                            </li>
-                                            <li>
-                                                <div class="cart-img">
-                                                    <img src="img/cart/2.png" alt="">
-                                                </div>
-                                                <div class="cart-details">
-                                                    <a href="#">Fusce aliquam</a>
-                                                    <p>1 x $777.00</p>
-                                                </div>
-                                                <div class="btn-edit"></div>
-                                                <div class="btn-remove"></div>
-                                            </li>
+                                            @foreach ($cartItems as $item)
+                                                <li>
+                                                    <div class="cart-img">
+                                                        <img src="{{ Storage::url($item->productVariant->product->image) }}"
+                                                            alt="" width="65px">
+                                                    </div>
+                                                    <div class="cart-details">
+                                                        <a href="#"
+                                                            title="{{ $item->productVariant->product->name }}">
+                                                            {{ Str::limit($item->productVariant->product->name, 20, '...') }}
+                                                        </a>
+
+                                                        <p>{{ $item->quantity }} x
+                                                            {{ $item->productVariant->price }} VND</p>
+
+                                                        <p>{{ $item->productVariant->size->size }} x
+                                                            {{ $item->productVariant->color->color }}</p>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <form action="{{ route('cart.delete', $item->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?');"
+                                                            class="ms-auto">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="btn btn-link p-0 border-0 text-danger">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+                                                </li>
+                                            @endforeach
+
+                                            @if ($cartCount > 2)
+                                                <a href="{{ route('cart.index') }}" class="small text-white">Xem
+                                                    thêm</a>
+                                            @endif
                                         </ul>
-                                        <h3>Subtotal: <span> $951.00</span></h3>
-                                        <a href="checkout.html" class="checkout">checkout</a>
+                                        <h3>Tổng: <span>{{ $subTotal }} VND</span></h3>
+                                        <a href="{{ route('cart.index') }}" class="checkout">Go To Cart</a>
                                     </div>
                                 </li>
                             </ul>
@@ -100,8 +102,8 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="logo">
-                        <a href="{{route('home.index')}}">
-                            <img src="{{asset("img/logo.png")}}" alt="">
+                        <a href="{{ route('home.index') }}">
+                            <img src="{{ asset('img/logo.png') }}" alt="">
                         </a>
                     </div>
                 </div>
@@ -109,137 +111,22 @@
                     <div class="mainmenu">
                         <nav>
                             <ul>
-                                <li><a href="index.html">Home</a>
-                                    <div class="sub-menu">
-                                        <span>
-                                            <a href="index.html">Home version 1</a>
-                                        </span>
-                                        <span>
-                                            <a href="index-2.html">Home version 2</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="mega-women"><a href="shop.html">Women</a>
-                                    <div class="mega-menu women">
-                                        <div class="part-1">
-                                            <span>
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Cocktail</a>
-                                                <a href="#">Day</a>
-                                                <a href="#">Evening</a>
-                                                <a href="#">Sports</a>
-                                            </span>
-                                            <span>
-                                                <a href="#">shoes</a>
-                                                <a href="#">Sports</a>
-                                                <a href="#">run</a>
-                                                <a href="#">sandals</a>
-                                                <a href="#">Books</a>
-                                            </span>
-                                            <span>
-                                                <a href="#">Handbags</a>
-                                                <a href="#">Blazers</a>
-                                                <a href="#">table</a>
-                                                <a href="#">coats</a>
-                                                <a href="#">kids</a>
-                                            </span>
-                                            <span>
-                                                <a href="#">Clothing</a>
-                                                <a href="#">T-shirts</a>
-                                                <a href="#">coats</a>
-                                                <a href="#">Jackets</a>
-                                                <a href="#">jeans</a>
-                                            </span>
-                                        </div>
-                                        <div class="part-2">
-                                            <a href="#">
-                                                <img src="img/banner/menu-banner.png" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="mega-men"><a href="shop.html">Men</a>
+                                <li><a href="{{ route('home.index') }}">Trang Chủ</a></li>
+
+                                <li class="mega-men"><a href="{{ route('shop.index') }}">Cửa Hàng</a>
                                     <div class="mega-menu men">
-                                        <span>
-                                            <a href="#">Bags</a>
-                                            <a href="#">Bootees Bags</a>
-                                            <a href="#">Blazers</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Clothing</a>
-                                            <a href="#">coats</a>
-                                            <a href="#">T-shirts</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Lingerie</a>
-                                            <a href="#">Bands</a>
-                                            <a href="#">Furniture</a>
-                                        </span>
+                                        @if ($categories->count() > 0)
+                                            @foreach ($categories as $category)
+                                                <span>
+                                                    <a href="">{{ $category->name }}</a>
+                                                </span>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </li>
-                                <li class="mega-footwear"><a href="shop.html">Footwear</a>
-                                    <div class="mega-menu footwear">
-                                        <span>
-                                            <a href="#">Footwear Man</a>
-                                            <a href="#">gifts</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Footwear Womens</a>
-                                            <a href="#">boots</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="mega-jewellery"><a href="shop.html">Jewellery</a>
-                                    <div class="mega-menu jewellery">
-                                        <span>
-                                            <a href="#">Rings</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li><a href="shop.html">accessories</a></li>
-                                <li><a href="#">Pages</a>
-                                    <div class="sub-menu pages">
-                                        <span>
-                                            <a href="about-us.html">About us</a>
-                                        </span>
-                                        <span>
-                                            <a href="blog.html">Blog</a>
-                                        </span>
-                                        <span>
-                                            <a href="blog-details.html">Blog Details</a>
-                                        </span>
-                                        <span>
-                                            <a href="cart.html">Cart</a>
-                                        </span>
-                                        <span>
-                                            <a href="checkout.html">Checkout</a>
-                                        </span>
-                                        <span>
-                                            <a href="contact.html">Contact</a>
-                                        </span>
-                                        <span>
-                                            <a href="my-account.html">My account</a>
-                                        </span>
-                                        <span>
-                                            <a href="shop.html">Shop</a>
-                                        </span>
-                                        <span>
-                                            <a href="shop-list.html">Shop list</a>
-                                        </span>
-                                        <span>
-                                            <a href="single-product.html">Single Shop</a>
-                                        </span>
-                                        <span>
-                                            <a href="login.html">Login page</a>
-                                        </span>
-                                        <span>
-                                            <a href="register.html">Ragister page</a>
-                                        </span>
-                                        <span>
-                                            <a href="wishlist.html">Wishlist</a>
-                                        </span>
-                                    </div>
-                                </li>
+                                <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
+                                <li><a href="{{ route('about-us.index') }}">Về Chúng Tôi</a></li>
+                                <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
                             </ul>
                         </nav>
                     </div>
