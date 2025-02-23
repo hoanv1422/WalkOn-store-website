@@ -35,7 +35,7 @@ class CartController extends Controller
         return view('client.pages.cart.index', compact('cartItems'));
     }
     public function addToCart(Request $request,$id){
-        $user = 2;
+        $user = 1;
         $product = Product::findOrFail($id);
         $cartItem = DB::table('carts')
             ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
@@ -71,6 +71,29 @@ class CartController extends Controller
     DB::table('cart_items')->where('id', $cartItemId)->delete();   
     return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
    
-}
+    }
+    public function updateCart(Request $request, $cartItemId)
+    {
+    $cartItem = CartItem::findOrFail($cartItemId);
+
+    // Cập nhật số lượng sản phẩm
+    $cartItem->update([
+        'quantity' => $request->quantity
+    ]);
+
+    return redirect()->route('cart.index')->with('success', 'Giỏ hàng đã được cập nhật!');
+    }
+    
+        public function clearCartItems()
+        {
+            $userId = 1; // Giả sử đây là ID của user (có thể dùng Auth::id() nếu có authentication)
+        
+            // Xóa toàn bộ sản phẩm trong giỏ hàng nhưng giữ lại giỏ hàng
+            DB::table('cart_items')->whereIn('cart_id', function ($query) use ($userId) {
+                $query->select('id')->from('carts')->where('user_id', $userId);
+            })->delete();
+            
+            return redirect()->route('cart.index')->with('success', 'Tất cả sản phẩm trong giỏ hàng đã được xóa!');
+        }
 
 }

@@ -110,7 +110,7 @@
                             <div class="input-group">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput" value="1">
+                                <input type="text" class="form-control text-center " id="qtyInput" value="1" name="quantity">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="increaseQty()">+</button>
                             </div>
@@ -163,14 +163,14 @@
 
     function increaseQty() {
         let qtyInput = document.getElementById("qtyInput");
-        qtyInput.value = parseInt(qtyInput.value) + 1;
+        qtyInput.value = parseInt(qtyInput.value) ;
         qtyInput.dispatchEvent(new Event("input"));
     }
 
     function decreaseQty() {
         let qtyInput = document.getElementById("qtyInput");
         if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
+            qtyInput.value = parseInt(qtyInput.value);
             qtyInput.dispatchEvent(new Event("input"));
         }
     }
