@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('order_code')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             // Thông tin người đặt hàng (có thể nullable nếu đã có user_id)

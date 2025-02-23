@@ -79,46 +79,46 @@
                     </div>
                     <form action="{{route('cart.add',$product->id)}}" method="post" >
                         @csrf
-                    <div class="container">
-                        <div class="row g-3 align-items-center my-2">
-                            <div class="col-md-6">
-                                <label class="form-label required"> Màu</label>
-                                <select class="form-select" name="color">
-                                    <option>-- Chọn Màu --</option>
-                                    @foreach ($product->colors as $color)
-                                        <option value="{{ $color->id }}" data-color="{{ $color->color }}">
-                                            {{ ucfirst($color->color) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label required"> Kích cỡ</label>
-                                <select class="form-select" name="size">
-                                    <option>-- Chọn Kích Cỡ --</option>
-                                    @foreach ($product->sizes as $size)
-                                        <option value="{{ $size->id }}" data-size="{{ $size->size }}">
-                                            {{ strtoupper($size->size) }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="container">
+                            <div class="row g-3 align-items-center my-2">
+                                <div class="col-md-6">
+                                    <label class="form-label required"> Màu</label>
+                                    <select class="form-select" name="color">
+                                        <option>-- Chọn Màu --</option>
+                                        @foreach ($product->colors as $color)
+                                            <option value="{{ $color->id }}" data-color="{{ $color->color }}">
+                                                {{ ucfirst($color->color) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required"> Kích cỡ</label>
+                                    <select class="form-select" name="size">
+                                        <option>-- Chọn Kích Cỡ --</option>
+                                        @foreach ($product->sizes as $size)
+                                            <option value="{{ $size->id }}" data-size="{{ $size->size }}">
+                                                {{ strtoupper($size->size) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row g-3 align-items-center mt-3">
-                        <div class="col-md-3">
-                            <label class="form-label"> <strong>Số Lượng</strong> </label>
-                            <div class="input-group">
-                                <button class="btn btn-outline-secondary" type="button"
-                                    onclick="decreaseQty()">-</button>
+                        <div class="row g-3 align-items-center mt-3">
+                            <div class="col-md-3">
+                                <label class="form-label"> <strong>Số Lượng</strong> </label>
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        onclick="decreaseQty()">-</button>
                                 <input type="text" class="form-control text-center " id="qtyInput" value="1">
-                                <button class="btn btn-outline-secondary" type="button"
-                                    onclick="increaseQty()">+</button>
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        onclick="increaseQty()">+</button>
+                                </div>
+                            </div>
+                            <div class=" d-flex align-items-end">
+                                <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
                             </div>
                         </div>
-                        <div class=" d-flex align-items-end">
-                            <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
-                        </div>
-                    </div>
                     </form>
                 </div>
             </div>
@@ -163,14 +163,14 @@
 
     function increaseQty() {
         let qtyInput = document.getElementById("qtyInput");
-        qtyInput.value = parseInt(qtyInput.value) + 1;
+        qtyInput.value = parseInt(qtyInput.value);
         qtyInput.dispatchEvent(new Event("input"));
     }
 
     function decreaseQty() {
         let qtyInput = document.getElementById("qtyInput");
         if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
+            qtyInput.value = parseInt(qtyInput.value);
             qtyInput.dispatchEvent(new Event("input"));
         }
     }
