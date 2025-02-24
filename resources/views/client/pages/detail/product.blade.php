@@ -104,6 +104,7 @@
                             </div>
                         </div>
 
+<<<<<<< HEAD
                     <div class="row g-3 align-items-center mt-3">
                         <div class="col-md-3">
                             <label class="form-label"> <strong>Số Lượng</strong> </label>
@@ -113,6 +114,21 @@
                                 <input type="text" class="form-control text-center " id="qtyInput" value="1" name="quantity">
                                 <button class="btn btn-outline-secondary" type="button"
                                     onclick="increaseQty()">+</button>
+=======
+                        <div class="row g-3 align-items-center mt-3">
+                            <div class="col-md-3">
+                                <label class="form-label"> <strong>Số Lượng</strong> </label>
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        onclick="decreaseQty()">-</button>
+                                <input type="text" class="form-control text-center " name="quantity" id="qtyInput" value="1">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        onclick="increaseQty()">+</button>
+                                </div>
+                            </div>
+                            <div class=" d-flex align-items-end">
+                                <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
+>>>>>>> minh_dev
                             </div>
                         </div>
                     </form>

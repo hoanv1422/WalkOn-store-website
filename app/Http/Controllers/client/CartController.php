@@ -33,7 +33,14 @@ class CartController extends Controller
                 'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
             )
             ->get();
-        return view('client.pages.cart.index', compact('cartItems'));
+
+
+        $totalAmount = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+
+
+        return view('client.pages.cart.index', compact('cartItems', 'totalAmount'));
     }
     public function addToCart(Request $request, $id)
     {

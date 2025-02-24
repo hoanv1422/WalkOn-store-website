@@ -57,4 +57,19 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('status', 'Đã đăng xuất khỏi tài khoản ');
     }
+
+
+    public function signinAdmin(Request $request) {
+        // dd($request->all());
+        if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.index');
+            } else {
+                return 1;
+            }
+        } else {
+            return back()->with('error', 'Sai mật khẩu hoặc tên tài khoản');
+        }
+    }
 }

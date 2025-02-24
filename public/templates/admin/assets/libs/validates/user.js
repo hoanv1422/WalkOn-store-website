@@ -1,16 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
   const forms = document.querySelectorAll(".tablelist-form");
 
+  const users = window.users || [];
+
+  console.log(users);
+  
+
   forms.forEach((form) => {
     form.addEventListener("submit", function (event) {
       let isValid = true;
 
       // Lấy input trong form hiện tại
+      const id = form.querySelector("[name='id']").value;
       const username = form.querySelector("[name='username']");
       const email = form.querySelector("[name='mail']");
       const password = form.querySelector("[name='password']");
       const phone = form.querySelector("[name='phone']");
-      const address = form.querySelector("[name='address']");
       const status = form.querySelector("[name='is_active']");
 
       // Reset lỗi trong form hiện tại
@@ -27,6 +32,11 @@ document.addEventListener("DOMContentLoaded", function () {
         isValid = false;
       }
 
+      if (users.some((user) => user.username === username.value && user.id != id)) {
+          showError(username, "Tên tài khoản đã tồn tại");
+          isValid = false;
+      }
+
       // Kiểm tra email hợp lệ
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (email) {
@@ -37,6 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
           showError(email, "Email không hợp lệ.");
           isValid = false;
         }
+      }
+
+      if (users.some((user) => user.mail === email.value && user.id != id)) {
+          showError(email, "Email đã tồn tại");
+          console.log(1);
+          isValid = false;
       }
 
       // Kiểm tra mật khẩu
@@ -63,12 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
           );
           isValid = false;
         }
-      }
-
-      // Kiểm tra địa chỉ
-      if (address && address.value.trim() === "") {
-        showError(address, "Vui lòng nhập địa chỉ.");
-        isValid = false;
       }
 
       // Kiểm tra trạng thái
@@ -102,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let username = this.getAttribute("data-username");
       let name = this.getAttribute("data-name");
       let email = this.getAttribute("data-email");
+      let role = this.getAttribute("data-role");
       let phone = this.getAttribute("data-phone");
       let address = this.getAttribute("data-address");
       let status = this.getAttribute("data-status");
@@ -112,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("name-field-edit").value = name;
       document.getElementById("mail-field-edit").value = email;
       document.getElementById("phone-field-edit").value = phone;
+      document.getElementById("role-field-edit").value = role;
       document.getElementById("address-field-edit").value = address;
       document.getElementById("status-field-edit").value = status || "0";
 
