@@ -10,6 +10,8 @@
         </div>
         <div class="row">
             <div class="feature-product-slider carousel-margin">
+                @foreach ($products as $product )
+                    
                 <div class="col">
                     <div class="single-product">
                         <div class="level-pro-new">
@@ -22,11 +24,11 @@
                             </a>
                         </div>
                         <div class="product-name">
-                            <a href="single-product.html" title="Fusce aliquam">Fusce aliquam</a>
+                            <a href="single-product.html" title="Fusce aliquam">{{$product->name}}</a>
                         </div>
                         <div class="price-rating">
-                            <span class="old-price">$700.00</span>
-                            <span>$800.00</span>
+                            <span class="old-price" >{{$product->price}}</span>
+                            <span style="color:red">{{$product->price_sale}}</span>
                             <div class="ratings">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -46,7 +48,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                @endforeach
+
+                {{-- <div class="col">
                     <div class="single-product">
                         <div class="level-pro-sale">
                             <span>sale</span>
@@ -360,7 +364,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

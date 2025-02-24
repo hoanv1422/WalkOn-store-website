@@ -40,7 +40,15 @@
                                     <span>{{$cartItem->price}}</span>
                                 </td>
                                 <td class="quantity">
-                                    <span>{{$cartItem->quantity}}</span>
+                                    <form action="{{ route('cart.update', $cartItem->cart_item_id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, -0)">-</button>
+                                            <input type="text" class="form-control text-center qtyInput" id="qtyInput-{{ $cartItem->cart_item_id }}" name="quantity" value="{{ $cartItem->quantity }}">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, +0.5)">+</button>
+                                        </div>
+                                    </form>
                                 </td>
                                 <td class="subtotal">
                                     <span>
@@ -64,8 +72,17 @@
                             <button type="submit">continue shopping</button>
                         </div>
                         <div class="shopping-cart-left">
-                            <button type="submit">Clear Shopping Cart</button>
-                            <button type="submit">Update Shopping Cart</button>
+                            
+                            <div class="shopping-button">
+                                <form action="{{ route('cart.items.clear') }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Xóa tất cả sản phẩm</button>
+                                </form>
+                            </div>
+                            
+                        
+                            
                         </div>
                     </div>
                 </div>
@@ -153,3 +170,44 @@
     </div>
 </div>
 <!-- cart item area end -->
+{{-- <script>
+   
+    function changeQty(cartItemId, change) {
+        let qtyInput = document.getElementById("qtyInput-" + cartItemId);
+        let newQty = parseInt(qtyInput.value) + change;
+        if (newQty > 0) {
+            qtyInput.value = newQty;
+
+            // Tự động submit form
+            qtyInput.form.submit();
+        }
+    }
+</script>
+ --}}
+ <script>
+    function changeQty(cartItemId, change) {
+        let qtyInput = document.getElementById("qtyInput-" + cartItemId);
+        let newQty = parseInt(qtyInput.value) + change;
+
+        if (newQty > 0) {
+            qtyInput.value = newQty;
+
+            // Đợi 500ms sau khi nhập xong rồi mới submit để tránh submit nhiều lần
+            clearTimeout(qtyInput.dataset.timeout);
+            qtyInput.dataset.timeout = setTimeout(() => {
+                qtyInput.form.submit();
+            }, 500);
+        }
+    }
+
+    document.querySelectorAll(".qtyInput").forEach(input => {
+        input.addEventListener("change", function() {
+            clearTimeout(this.dataset.timeout);
+            this.dataset.timeout = setTimeout(() => {
+                this.form.submit();
+            }, 500);
+        });
+    });
+</script>
+
+                             
