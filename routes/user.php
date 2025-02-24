@@ -34,7 +34,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
 
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
-Route::middleware('auth')->group(function () {
+Route::middleware('client')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'delete'])->name('cart.delete');

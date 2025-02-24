@@ -232,8 +232,8 @@
                                         <li><a href="shop-list.html">Shop list</a></li>
                                         <li><a href="single-product.html">Single Shop</a></li>
                                         <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="login.html">login page</a></li>
-                                        <li><a href="register.html">register page</a></li>
+                                        <li><a href="{{url('/login')}}">login page</a></li>
+                                        <li><a href="{{url('/register')}}">register page</a></li>
                                     </ul>
                                 </li>
                             </ul>

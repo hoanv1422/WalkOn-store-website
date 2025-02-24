@@ -53,7 +53,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('signin', function () {
         return view('auth.admin.signin');
-    })->name('signin.index');
+    })->name('admin.login');
 
     Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
 
