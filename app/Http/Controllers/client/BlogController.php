@@ -3,17 +3,156 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
+use App\Models\PostCategories;
+use App\Models\PostComments;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('client.pages.blog.index');
+        // Lấy bài viết với quan hệ category và user, chỉ lấy bài viết published
+        $query = Post::with(['category', 'user'])
+            ->where('status', 'published')
+            ->orderBy('created_at', 'desc');
+
+        // Chỉ lấy bài viết mà danh mục của nó cũng active 
+        $query->whereHas('category', function ($q) {
+            $q->where('is_active', true);
+        });
+
+        // Lọc theo từ khóa tìm kiếm (tiêu đề)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('title', 'LIKE', "%{$search}%");
+        }
+
+        // Lọc theo trạng thái bài viết 
+        if ($request->filled('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Lọc theo ngày (date range)
+        if ($request->filled('date')) {
+            // date range có định dạng "01 Jan, 2025 - 31 Jan, 2025"
+            $dates = explode('-', $request->date);
+            if (count($dates) == 2) {
+                $start = trim($dates[0]);
+                $end   = trim($dates[1]);
+                $startDate = date('Y-m-d 00:00:00', strtotime($start));
+                $endDate   = date('Y-m-d 23:59:59', strtotime($end));
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+        }
+
+        // Lọc theo danh mục bài viết 
+        if ($request->filled('post_category') && $request->post_category != 'all') {
+            $postCategory = $request->post_category;
+            $query->whereHas('category', function ($q) use ($postCategory) {
+                $q->where('slug', $postCategory)
+                    ->where('is_active', true); // Chỉ lấy danh mục active
+            });
+        }
+
+        // Phân trang, ví dụ 6 bài viết mỗi trang
+        $posts = $query->paginate(6);
+
+        // Lấy danh mục chỉ hiển thị các danh mục active,
+        // và đếm bài viết chỉ tính những bài viết published
+        $categories = PostCategories::where('is_active', true)
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
+            }])->get();
+        $totalPosts = Post::where('status', 'published')->count();
+
+        return view('client.pages.blog.index', compact('posts', 'categories', 'totalPosts'));
     }
 
-    public function index2()
+    public function category($slug)
     {
-        return view('client.pages.blog-detail.index');
+        // Lấy danh mục theo slug và active
+        $category = PostCategories::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        // Lọc bài viết theo danh mục 
+        $posts = Post::with(['category', 'user'])
+            ->where('category_id', $category->id)
+            ->where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+
+        $categories = PostCategories::where('is_active', true)
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
+            }])->get();
+        $totalPosts = Post::where('status', 'published')->count();
+
+        return view('client.pages.blog.index', compact('posts', 'categories', 'totalPosts'));
+    }
+
+    public function details(Request $request, $slug)
+    {
+        // Lấy bài viết chi tiết với các quan hệ cần thiết
+        $post = Post::with([
+            'category',
+            'user',
+            // Lọc bình luận gốc: chỉ lấy bình luận có trạng thái published hoặc pending 
+            'comments' => function ($query) {
+                $query->whereIn('status', ['published'])
+                    ->orderBy('created_at', 'asc');
+            },
+            'comments.user',
+            // Lọc bình luận trả lời theo trạng thái
+            'comments.replies' => function ($query) {
+                $query->whereIn('status', ['published'])
+                    ->orderBy('created_at', 'asc');
+            },
+            'comments.replies.user'
+        ])
+            ->where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        // Nếu danh mục của bài viết không active thì không hiển thị (404)
+        if (!$post->category->is_active) {
+            abort(404);
+        }
+
+        $categories = PostCategories::where('is_active', true)
+            ->withCount(['posts' => function ($q) {
+                $q->where('status', 'published');
+            }])->get();
+
+        return view('client.pages.blog-detail.index', compact('post', 'categories'));
+    }
+
+    public function storeComment(Request $request, $slug)
+    {
+        $userId = auth()->check() ? auth()->id() : 1;
+
+        $validatedData = $request->validate([
+            'content'   => 'required|min:3',
+            'parent_id' => 'nullable|exists:post_comments,id'
+        ]);
+
+        $post = Post::where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        $comment = PostComments::create([
+            'post_id'   => $post->id,
+            'user_id'   => $userId,
+            'content'   => $validatedData['content'],
+            'status'    => 'published', // Mặc định là published cho bình luận
+            'parent_id' => $validatedData['parent_id'] ?? null,
+        ]);
+
+        $comment->load('user');
+
+        $html = view('client.pages.blog-detail.comment', compact('comment', 'post'))->render();
+
+        return response()->json(['success' => true, 'html' => $html]);
     }
 }

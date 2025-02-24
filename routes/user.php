@@ -72,8 +72,9 @@ Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.ind
 
 // blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog-detail', [BlogController::class, 'index2'])->name('blog-detail.index');
-
+Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
+Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 
 // contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
