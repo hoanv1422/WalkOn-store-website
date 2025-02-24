@@ -1,47 +1,64 @@
 @extends('client.layouts.app')
 @section('title', 'login')
 @section('content')
-    @include('client.components.breadcrumb')
-    <div class="login-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3 text-center">
-                    <div class="login">
-                        <div class="login-form-container">
-                            @if (session('status'))
-                                <div class="alert alert-success mt-2">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
-                            <div class="login-text">
-                                <h2>Login</h2>
-                                <span>Please login using account detail below.</span>
-                            </div>
-                            <div class="login-form">
-                                <form action="{{ route('login') }}" method="post">
-                                    @csrf
-                                    <input type="text" name="username" placeholder="Username">
-                                    @error('username')
-                                        <span class="alert-alert-danger text-center">{{ $message }}</span>
-                                    @enderror
+@include('client.components.breadcrumb')
+<div class="login-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3 text-center">
+                <div class="login">
+                    <div class="login-form-container">
+                        @if(session('status'))
+                        <div id="custom-alert" class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: none;color:red">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+                                <path d="M7.938 2.016a.13.13 0 0 1 .125 0c.02.01.037.025.052.043l6.857 10.586c.066.102.075.23.025.34a.248.248 0 0 1-.222.136H1.225a.248.248 0 0 1-.222-.136.277.277 0 0 1 .025-.34L7.885 2.06a.146.146 0 0 1 .052-.043ZM8 5a.905.905 0 0 0-.9 1l.35 4.2a.55.55 0 0 0 1.1 0L8.9 6A.905.905 0 0 0 8 5Zm-.9 7.5a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0Z" />
+                            </svg>
+                            <span id="alert-message">Cần phải đăng nhập trước khi vào trang admin </span>
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
-                                    <input type="password" name="password" placeholder="Password">
-                                    @error('password')
-                                        <span class="alert-alert-danger text-center">{{ $message }}</span>
-                                    @enderror
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                let alertBox = document.getElementById("custom-alert");
+                                if (alertBox) {
+                                    alertBox.style.display = "block";
+                                    setTimeout(() => {
+                                        let bsAlert = new bootstrap.Alert(alertBox);
+                                        bsAlert.close();
+                                    }, 2000);
+                                }
+                            });
+                        </script>
+                        @endif
 
-                                    <div class="button-box">
-                                        <div class="login-toggle-btn">
-                                            <input type="checkbox" id="remember">
-                                            <label for="remember">Remember me</label>
-                                            <a href="{{ url('/forgot_password') }}">Forgot Password?</a>
-                                        </div>
-                                        <button type="submit" class="default-btn">Login</button>
+                        <div class="login-text">
+                            <h2>Login</h2>
+                            <span>Please login using account detail below.</span>
+                        </div>
+                        <div class="login-form">
+                            <form action="{{ route('login') }}" method="post">
+                                @csrf
+                                <input type="text" name="username" placeholder="Username">
+                                @error('username')
+                                <span class="alert-alert-danger text-center">{{ $message }}</span>
+                                @enderror
+
+                                <input type="password" name="password" placeholder="Password">
+                                @error('password')
+                                <span class="alert-alert-danger text-center">{{ $message }}</span>
+                                @enderror
+
+                                <div class="button-box">
+                                    <div class="login-toggle-btn">
+                                        <input type="checkbox" id="remember">
+                                        <label for="remember">Remember me</label>
+                                        <a href="{{ url('/forgot_password') }}">Forgot Password?</a>
                                     </div>
-                                </form>
-                                <div class="register-link mt-2">
-                                    <p>Bạn chưa có tài khoản? <a href="{{ url('/register') }}">Đăng ký ngay</a></p>
+                                    <button type="submit" class="default-btn">Login</button>
                                 </div>
+                            </form>
+                            <div class="register-link mt-2">
+                                <p>Bạn chưa có tài khoản? <a href="{{ url('/register') }}">Đăng ký ngay</a></p>
                             </div>
                         </div>
                     </div>
@@ -49,4 +66,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

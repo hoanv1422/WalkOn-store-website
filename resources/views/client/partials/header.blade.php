@@ -115,86 +115,6 @@
 
                                 <li class="mega-men"><a href="{{ route('shop.index') }}">Cửa Hàng</a>
                                     <div class="mega-menu men">
-<<<<<<< HEAD
-                                        <span>
-                                            <a href="#">Bags</a>
-                                            <a href="#">Bootees Bags</a>
-                                            <a href="#">Blazers</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Clothing</a>
-                                            <a href="#">coats</a>
-                                            <a href="#">T-shirts</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Lingerie</a>
-                                            <a href="#">Bands</a>
-                                            <a href="#">Furniture</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="mega-footwear"><a href="shop.html">Footwear</a>
-                                    <div class="mega-menu footwear">
-                                        <span>
-                                            <a href="#">Footwear Man</a>
-                                            <a href="#">gifts</a>
-                                        </span>
-                                        <span>
-                                            <a href="#">Footwear Womens</a>
-                                            <a href="#">boots</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="mega-jewellery"><a href="shop.html">Jewellery</a>
-                                    <div class="mega-menu jewellery">
-                                        <span>
-                                            <a href="#">Rings</a>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li><a href="shop.html">accessories</a></li>
-                                <li><a href="#">Pages</a>
-                                    <div class="sub-menu pages">
-                                        <span>
-                                            <a href="about-us.html">About us</a>
-                                        </span>
-                                        <span>
-                                            <a href="blog.html">Blog</a>
-                                        </span>
-                                        <span>
-                                            <a href="blog-details.html">Blog Details</a>
-                                        </span>
-                                        <span>
-                                            <a href="cart.html">Cart</a>
-                                        </span>
-                                        <span>
-                                            <a href="checkout.html">Checkout</a>
-                                        </span>
-                                        <span>
-                                            <a href="contact.html">Contact</a>
-                                        </span>
-                                        <span>
-                                            <a href="my-account.html">My account</a>
-                                        </span>
-                                        <span>
-                                            <a href="shop.html">Shop</a>
-                                        </span>
-                                        <span>
-                                            <a href="shop-list.html">Shop list</a>
-                                        </span>
-                                        <span>
-                                            <a href="single-product.html">Single Shop</a>
-                                        </span>
-                                        <span>
-                                            <a href="{{url('/login')}}">Login page</a>
-                                        </span>
-                                        <span>
-                                            <a href="{{url('/register')}}">Register page</a>
-                                        </span>
-                                        <span>
-                                            <a href="wishlist.html">Wishlist</a>
-                                        </span>
-=======
                                         @if ($categories->count() > 0)
                                             @foreach ($categories as $category)
                                                 <span>
@@ -202,7 +122,6 @@
                                                 </span>
                                             @endforeach
                                         @endif
->>>>>>> 6e2b10a2e5ab95dc7d6c93ac611c729dd797f643
                                     </div>
                                 </li>
                                 <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
