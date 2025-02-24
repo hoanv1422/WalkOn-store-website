@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'trang sản phẩm')
+@section('title', 'Sản Phẩm')
 @section('style')
     <!-- nouisliderribute css -->
     <link rel="stylesheet" href="{{ asset('templates/admin/assets/libs/nouislider/nouislider.min.css') }}">

@@ -33,7 +33,14 @@ class CartController extends Controller
                 'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
             )
             ->get();
-        return view('client.pages.cart.index', compact('cartItems'));
+
+
+        $totalAmount = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+
+
+        return view('client.pages.cart.index', compact('cartItems', 'totalAmount'));
     }
     public function addToCart(Request $request, $id)
     {
@@ -51,33 +58,6 @@ class CartController extends Controller
                 'user_id' => $user
             ]);
         }
-<<<<<<< HEAD
-            if ($cartItem) {
-                $udquan=DB::table('cart_items')->where('id',$cartItem->id)->update(['quantity'=> $cartItem->quantity + ($request->quantity ?? 1)]);}
-            else{
-                CartItem::create([
-                    'cart_id'=>1,
-                    'size'=>$_POST['size'],
-                    'product_variant_id'=>$id,
-                    'color'=>$_POST['color'],
-                    'quantity'=>$_POST['quantity'],
-                    'price'=> $product->price,
-                ]);
-            }
-
-        return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
-
-    }
-    public function delete($cartItemId)
-    {
-    $cartItem = DB::table('cart_items')->where('id', $cartItemId)->first();
-    DB::table('cart_items')->where('id', $cartItemId)->delete();
-    return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
-
-}
-
-}
-=======
         if ($cartItem) {
             $udquan = DB::table('cart_items')->where('id', $cartItem->id)->update(['quantity' => $cartItem->quantity + ($request->quantity ?? 1)]);
         } else {
@@ -99,5 +79,27 @@ class CartController extends Controller
         DB::table('cart_items')->where('id', $cartItemId)->delete();
         return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
     }
+    public function updateCart(Request $request, $cartItemId)
+    {
+        $cartItem = CartItem::findOrFail($cartItemId);
+
+        // Cập nhật số lượng sản phẩm
+        $cartItem->update([
+            'quantity' => $request->quantity
+        ]);
+
+        return redirect()->route('cart.index')->with('success', 'Giỏ hàng đã được cập nhật!');
+    }
+
+    public function clearCartItems()
+    {
+        $userId = 1; // Giả sử đây là ID của user (có thể dùng Auth::id() nếu có authentication)
+
+        // Xóa toàn bộ sản phẩm trong giỏ hàng nhưng giữ lại giỏ hàng
+        DB::table('cart_items')->whereIn('cart_id', function ($query) use ($userId) {
+            $query->select('id')->from('carts')->where('user_id', $userId);
+        })->delete();
+
+        return redirect()->route('cart.index')->with('success', 'Tất cả sản phẩm trong giỏ hàng đã được xóa!');
+    }
 }
->>>>>>> 6e2b10a2e5ab95dc7d6c93ac611c729dd797f643

@@ -19,7 +19,6 @@ class SizeController extends Controller
     {
         $sizes = Size::all();
         $colors = Color::all();
-
         $sizeSlug = Size::select('id', 'slug')->get();
         $colorSlug = Color::select('id', 'slug')->get();
         return view('admin.attributes.index', compact('sizes', 'colors', 'sizeSlug', 'colorSlug'));

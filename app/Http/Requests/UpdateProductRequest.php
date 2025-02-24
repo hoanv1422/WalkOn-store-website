@@ -29,11 +29,11 @@ class UpdateProductRequest extends FormRequest
             'price_sale' => 'nullable|numeric|min:0|max:9999999999.99|lt:price', // Giá sale phải nhỏ hơn giá gốc
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Chỉ chấp nhận ảnh, tối đa 2MB
             'product_galleries.*' => 'nullable|image|mimes:jpeg,png,jpg', // Mỗi ảnh trong thư viện ảnh
-            // 'product_variant' => 'nullable|array|min:1', // Bắt buộc, phải là mảng, ít nhất 1 biến thể
-            // 'product_variant.*.size' => 'required', // Dung lượng biến thể
-            // 'product_variant.*.color' => 'required', // Màu sắc biến thể
-            // 'product_variant.*.quantity' => 'required|numeric|min:0', // Số lượng biến thể, không âm
-            // 'product_variant.*.price' => 'required|numeric|min:0',
+            'product_variant' => 'nullable|array|min:1', // Bắt buộc, phải là mảng, ít nhất 1 biến thể
+            'product_variant.*.size' => 'required', // Dung lượng biến thể
+            'product_variant.*.color' => 'required', // Màu sắc biến thể
+            'product_variant.*.quantity' => 'required|numeric|min:0', // Số lượng biến thể, không âm
+            'product_variant.*.price' => 'required|numeric|min:0',
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\PostCategoryController;
+use App\Http\Controllers\admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -7,9 +9,8 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-
-
-
+use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +42,30 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::put('color/{color}', [ColorController::class, 'update'])->name('colors.update');
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
     });
+    Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
+    Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
+
+
+    Route::get('signin', function () {
+        return view('auth.admin.signin');
+    })->name('signin.index');
+
+    Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
+
+    Route::get('signup', function () {
+        return view('auth.admin.signup');
+    })->name('signup.index');
+
+    Route::get('pass-reset', function () {
+        return view('auth.admin.pass-reset');
+    })->name('pass-reset.index');
+
+    Route::get('pass-change', function () {
+        return view('auth.admin.pass-change');
+    })->name('pass-change.index');
+
+    Route::get('pass-confirm', function () {
+        return view('auth.admin.pass-confirm');
+    })->name('pass-confirm.index');
 });
