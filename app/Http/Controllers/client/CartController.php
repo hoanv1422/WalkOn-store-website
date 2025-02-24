@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function index()
     {
-        $user = 1;
+        $user = Auth::user();
 
         $cartItems = DB::table('cart_items')
             ->join('product_variants', 'cart_items.product_variant_id', '=', 'product_variants.id')
@@ -44,7 +45,7 @@ class CartController extends Controller
     }
     public function addToCart(Request $request, $id)
     {
-        $user = 1;
+        $user = Auth::user();
         $product = Product::findOrFail($id);
         $cartItem = DB::table('carts')
             ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
@@ -93,7 +94,7 @@ class CartController extends Controller
 
     public function clearCartItems()
     {
-        $userId = 1; // Giả sử đây là ID của user (có thể dùng Auth::id() nếu có authentication)
+        $userId = Auth::user(); // Giả sử đây là ID của user (có thể dùng Auth::id() nếu có authentication)
 
         // Xóa toàn bộ sản phẩm trong giỏ hàng nhưng giữ lại giỏ hàng
         DB::table('cart_items')->whereIn('cart_id', function ($query) use ($userId) {

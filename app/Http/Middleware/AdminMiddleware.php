@@ -10,9 +10,14 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request);
+        if (!Auth::check()) {
+            return redirect()->route('signin.index')->with('status', 'Vui lòng đăng nhập để vào trang quản trị.');
         }
-        return redirect('/')->with('status','Bạn k thể vào dc trang admin');
+
+        if (Auth::user()->role !== 'admin') {
+            return redirect('/')->with('status', 'Bạn không có quyền truy cập trang admin.');
+        }
+
+        return $next($request);
     }
 }
