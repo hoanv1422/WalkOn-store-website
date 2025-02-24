@@ -82,11 +82,11 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <form action="{{route('order.index')}}" method="GET">
-                    @csrf
+                {{-- <form action="{{route('order.index')}}" method="GET"> --}}
+                    {{-- @csrf --}}
 
-                    <input type="hidden" name="productVariants" value="{{ $cartItems }}">
-                    <input type="hidden" name="grandAmount" value="{{ $grandTotal }}">
+                    {{-- <input type="hidden" name="productVariants" value="{{ $cartItems }}"> --}}
+                    {{-- <input type="hidden" name="grandAmount" value="{{ $totalAmount }}"> --}}
 
 
                     <div class="totals p-3 ">
@@ -108,17 +108,18 @@
                                 <h3>Tổng Cộng</h3>
                             </div>
                             <div class="col-12 text-end fw-bold text-primary text-wrap overflow-hidden">
-                                <h3 class="d-inline-block w-100 text-end">{{ number_format($grandTotal) }} VND</h3>
+                                <h3 class="d-inline-block w-100 text-end">{{ number_format($totalAmount) }} VND</h3>
                             </div>
                         </div>
 
 
 
                         <div class="shopping-button text-center mt-3">
-                            <button type="submit" class="w-100">Tiến hành thanh toán</button>
+                            {{-- <button type="submit" class="w-100">Tiến hành thanh toán</button> --}}
+                            <a href="{{route('checkout.index')}}" class="w-100">Tiến hành thanh toán</a>
                         </div>
                     </div>
-                </form>
+                {{-- </form> --}}
             </div>
 
         </div>

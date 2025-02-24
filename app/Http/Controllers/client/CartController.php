@@ -39,12 +39,8 @@ class CartController extends Controller
             return $item->price * $item->quantity;
         });
 
-        $shippingFee = 20000;
 
-        $grandTotal = $totalAmount + $shippingFee;
-
-
-        return view('client.pages.cart.index', compact('cartItems', 'totalAmount', 'grandTotal'));
+        return view('client.pages.cart.index', compact('cartItems', 'totalAmount'));
     }
     public function addToCart(Request $request, $id)
     {

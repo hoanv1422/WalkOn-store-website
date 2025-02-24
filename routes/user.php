@@ -64,6 +64,7 @@ Route::get('/wishlist', [WishlistController::class, 'index'])->name('profile.ind
 
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
 
 // about-us

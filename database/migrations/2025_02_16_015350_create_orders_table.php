@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('receiver_name')->nullable();
             $table->string('receiver_address')->nullable();
             $table->string('receiver_phone')->nullable();
+            $table->string('note')->nullable();
 
             // Thông tin đơn hàng
             $table->string('coupon')->nullable();
