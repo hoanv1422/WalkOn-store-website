@@ -30,7 +30,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('login')->with('status', 'Đăng ký người dùng success');
+        return redirect()->route('login')->with('success', 'Đăng ký người dùng success');
     }
     //đăng nhập
     public function login(Request $request)
@@ -42,10 +42,14 @@ class AuthController extends Controller
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $user = Auth::user();
+            if ($user->is_active == 0) {
+                Auth::logout();
+                return back()->with('status', 'Tài khoản của bạn đã bị khóa ');
+            }
             if ($user->role === 'admin') {
-                return redirect()->route('admin.index');
+                return redirect()->route('admin.index')->with('success', 'Đăng nhập thành công!');
             } else {
-                return redirect('/');
+                return redirect('/')->with('success', 'Đăng nhập thành công!');
             }
         } else {
             return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
@@ -59,11 +63,12 @@ class AuthController extends Controller
             return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
         }
         Auth::logout();
-        return redirect()->route('login')->with('status', 'Đã đăng xuất khỏi tài khoản ');
+        return redirect()->route('login')->with('success', 'Đã đăng xuất khỏi tài khoản ');
     }
 
 
-    public function signinAdmin(Request $request) {
+    public function signinAdmin(Request $request)
+    {
         // dd($request->all());
         if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
             $user = Auth::user();
@@ -76,4 +81,5 @@ class AuthController extends Controller
             return back()->with('error', 'Sai mật khẩu hoặc tên tài khoản');
         }
     }
+
 }

@@ -46,7 +46,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
 
-
+    Route::get('/users/filter', [UserController::class, 'filterUsers'])->name('users.filter');
     Route::get('signin', function () {
         return view('auth.admin.signin');
     })->name('signin.index');
