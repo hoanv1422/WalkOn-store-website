@@ -18,7 +18,10 @@ class ColorController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Str::slug($data['color']);
-
+        $existingColor = Color::where('code', $data['code'])->first();
+        if ($existingColor) {
+            return back()->with('error', 'Mã màu đã tồn tại.');
+        }
         try {
             DB::beginTransaction();
 
@@ -40,6 +43,10 @@ class ColorController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Str::slug($data['color']);
+        $existingColor = Color::where('code', $data['code'])->where('id', '!=', $color->id)->first();
+        if ($existingColor) {
+            return back()->with('error', 'Mã màu đã tồn tại.');
+        }
 
         try {
             DB::beginTransaction();

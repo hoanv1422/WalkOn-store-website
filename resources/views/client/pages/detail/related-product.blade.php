@@ -16,8 +16,8 @@
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="{{ route('detail.index', $related->slug) }}">
-                                        <img src="{{ asset('storage/app/' .$related->image) }}" alt="" class="primary-img">
-                                        <img src="{{ asset('storage/app/' .$related->image) }}" alt="" class="secondary-img">
+                                        <img src="{{ Storage::url($related->image) }}" alt="" class="primary-img">
+                                        <img src="{{ Storage::url($related->image) }}" alt="" class="secondary-img">
                                     </a>
                                 </div>
                                 <div class="product-price">
