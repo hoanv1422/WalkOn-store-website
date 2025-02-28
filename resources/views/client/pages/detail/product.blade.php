@@ -115,11 +115,14 @@
                                     onclick="increaseQty()">+</button>
                             </div>
                         </div>
+                        
+                        
                         <div class=" d-flex align-items-end">
                             <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
                         </div>
                     </div>
                     </form>
+                    
                 </div>
             </div>
         </div>

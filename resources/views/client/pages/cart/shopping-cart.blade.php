@@ -39,17 +39,18 @@
                                 <td class="unit-price">
                                     <span>{{$cartItem->price}}</span>
                                 </td>
-                                <td class="quantity">
-                                    <form action="{{ route('cart.update', $cartItem->cart_item_id) }}" method="POST">
+                                <td class="quantity align-middle">
+                                    <form  action="{{ route('cart.update', $cartItem->cart_item_id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <div class="input-group">
+                                        <div style="" class="input-group">
                                             <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, -0)">-</button>
-                                            <input type="text" class="form-control text-center qtyInput" id="qtyInput-{{ $cartItem->cart_item_id }}" name="quantity" value="{{ $cartItem->quantity }}">
+                                            <input style="width: 0px" type="text" class="form-control form-control-sm text-center qtyInput" id="qtyInput-{{ $cartItem->cart_item_id }}" name="quantity" value="{{ $cartItem->quantity }}">
                                             <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, +0.5)">+</button>
                                         </div>
                                     </form>
                                 </td>
+                                
                                 <td class="subtotal">
                                     <span>
                                         {{$cartItem->price * $cartItem->quantity}} 
@@ -88,6 +89,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="row">
             <div class="col-md-4">
                 <div class="discount-code">
