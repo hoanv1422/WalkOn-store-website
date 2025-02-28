@@ -22,6 +22,7 @@ class Product extends Model
         'sold_quantity',
         'average_rating',
         'category_id',
+        'view_count',
         'brand_id',
         'is_active',
     ];
@@ -29,6 +30,11 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug'; // Laravel sẽ tự động tìm theo 'slug' thay vì 'id'
+    }
 
     public function category()
     {
@@ -49,5 +55,34 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function colors()
+    {
+        return $this->hasManyThrough(Color::class, ProductVariant::class, 'product_id', 'id', 'id', 'color_id')->distinct();
+    }
 
+    public function sizes()
+    {
+        return $this->hasManyThrough(Size::class, ProductVariant::class, 'product_id', 'id', 'id', 'size_id')->distinct();
+    }
+
+    public function relatedProducts()
+    {
+        return Product::where('id', '!=', $this->id)
+            ->where(function ($query) {
+                $query->where('category_id', $this->category_id)
+                    ->orWhere('brand_id', $this->brand_id);
+            })
+            ->inRandomOrder()
+           
+            ->get();
+    }
+    public function upsellProducts()
+    {
+        return Product::where('category_id', $this->category_id)
+        ->where('id', '!=', $this->id)
+        ->orderBy('sold_quantity', 'desc')
+        
+        ->get();
+
+    }
 }

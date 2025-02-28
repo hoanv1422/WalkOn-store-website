@@ -9,9 +9,9 @@ class Authenticate
 {
     public function handle($request, Closure $next)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('status', 'Bạn cần đăng kí,đăng nhập tài khoản trước khi vào admin.');
-        }
-        return $next($request);
+        // if (!Auth::check()) {
+        //     return redirect()->route('login')->with('status', 'Bạn cần đăng kí,đăng nhập tài khoản trước khi vào admin.');
+        // }
+        // return $next($request);
     }
 }

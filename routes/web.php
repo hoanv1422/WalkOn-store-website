@@ -1,10 +1,16 @@
 <?php
 
+<<<<<<< HEAD
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\SizeController;
+=======
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\Auth\AuthController;
+>>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,56 +23,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('client.index');
-})->name('client.index');
+
 
 Route::get('/register', function () {
-    return view('client.auth.register');
+    return view('auth.register');
 });
 Route::get('/login', function () {
-    return view('client.auth.login');
+    return view('auth.login');
 });
 Route::get('/forgot_password', function () {
-    return view('client.auth.forgot_password');
+    return view('auth.forgot_password');
 });
-Route::get('/admin', function () {
-    return view('admin.index');
-});
-Route::get('/admin/categories', function () {
-    return view('admin.categories.index');
-});
-Route::get('/admin/categories/create', function () {
-    return view('admin.categories.create');
-});
-Route::get('/admin/categories/edit', function () {
-    return view('admin.categories.edit');
-});
-Route::get('/admin/products', function () {
-    return view('admin.products.index');
-});
-Route::get('/admin/products/create', function () {
-    return view('admin.products.create');
-});
-Route::get('/admin/products/edit', function () {
-    return view('admin.products.edit');
-});
-
-Route::get('/admin/users/create', function () {
-    return view('admin.users.create');
-});
-Route::get('/admin/users', [UserController::class, 'users'])->name('admin.users');
-Route::delete('/admin/user/{id}/delete', [UserController::class, 'delete_user'])->name('admin.user.delete');
-Route::get('/admin/user/create', [UserController::class, 'create_user'])->name('admin.user.create');
-Route::post('/admin/user/add', [UserController::class, 'add_user'])->name('admin.user.add');
-Route::get('/admin/user/edit/{id}', [UserController::class, 'edit_user'])->name('admin.user.edit');
-Route::put('/admin/user/update', [UserController::class, 'update_user'])->name('admin.user.update');
-
 Route::post('/register', [AuthController::class, 'register'])->name('register');;
 Route::post('/login', [AuthController::class, 'login'])->name('login');;
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+<<<<<<< HEAD
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/admin', function () {
 //         return view('admin.index');
@@ -75,3 +48,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // });
 Route::resource('admin/colors', ColorController::class);
 Route::resource('admin/sizes',SizeController::class);
+=======
+
+Route::get('/test', [TestController::class, 'test']);
+Route::post('/test', [TestController::class, 'store'])->name('test');
+>>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
