@@ -5,15 +5,14 @@
             <div class="col-lg-6">
                 <div class="single-product-img tab-content">
                     <div class="single-pro-main-image tab-pane active" id="pro-large-img-1">
-                        <a href="#"><img class="optima_zoom" src="{{Storage::url($product->image)}}"
-                                data-zoom-image="{{Storage::url($product->image)}}" alt="optima" /></a>
+                        <a href="#"><img class="optima_zoom" src="{{ Storage::url($product->image) }}"
+                                data-zoom-image="{{ Storage::url($product->image) }}" alt="optima" /></a>
                     </div>
                     @foreach ($product->galleries as $key => $gallery)
-                        <div class="single-pro-main-image tab-pane"
-                            id="pro-large-img-{{ $key + 2 }}">
+                        <div class="single-pro-main-image tab-pane" id="pro-large-img-{{ $key + 2 }}">
                             <a href="#">
-                                <img class="optima_zoom" src="{{Storage::url($gallery->image)}}"
-                                    data-zoom-image="{{Storage::url($gallery->image)}}" alt="Product Image">
+                                <img class="optima_zoom" src="{{ Storage::url($gallery->image) }}"
+                                    data-zoom-image="{{ Storage::url($gallery->image) }}" alt="Product Image">
                             </a>
                         </div>
                     @endforeach
@@ -21,14 +20,13 @@
                 <div class="nav product-page-slider">
                     <div class="single-product-slider">
                         <a class="active" href="#pro-large-img-1" data-bs-toggle="tab">
-                            <img src="{{Storage::url($product->image)}}" alt="">
+                            <img src="{{ Storage::url($product->image) }}" alt="">
                         </a>
                     </div>
                     @foreach ($product->galleries as $key => $gallery)
                         <div class="single-product-slider">
-                            <a class="" href="#pro-large-img-{{ $key + 2 }}"
-                                data-bs-toggle="tab">
-                                <img src="{{Storage::url($gallery->image)}}" alt="Product Image">
+                            <a class="" href="#pro-large-img-{{ $key + 2 }}" data-bs-toggle="tab">
+                                <img src="{{ Storage::url($gallery->image) }}" alt="Product Image">
                             </a>
                         </div>
                     @endforeach
@@ -77,7 +75,7 @@
                             </li>
                         </ul>
                     </div>
-                    <form action="{{route('cart.add',$product->id)}}" method="post" >
+                    <form action="{{ route('cart.add', $product->id) }}" method="post">
                         @csrf
                         <div class="container">
                             <div class="row g-3 align-items-center my-2">
@@ -104,31 +102,20 @@
                             </div>
                         </div>
 
-<<<<<<< HEAD
-                    <div class="row g-3 align-items-center mt-3">
-                        <div class="col-md-3">
-                            <label class="form-label"> <strong>Số Lượng</strong> </label>
-                            <div class="input-group">
-                                <button class="btn btn-outline-secondary" type="button"
-                                    onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " id="qtyInput" value="1" name="quantity">
-                                <button class="btn btn-outline-secondary" type="button"
-                                    onclick="increaseQty()">+</button>
-=======
                         <div class="row g-3 align-items-center mt-3">
                             <div class="col-md-3">
                                 <label class="form-label"> <strong>Số Lượng</strong> </label>
                                 <div class="input-group">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center " name="quantity" id="qtyInput" value="1">
+                                    <input type="text" class="form-control text-center " name="quantity"
+                                        id="qtyInput" value="1">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="increaseQty()">+</button>
                                 </div>
                             </div>
                             <div class=" d-flex align-items-end">
                                 <button class="btn btn-primary w-50" type="submit">Thêm Vào Giỏ Hàng</button>
->>>>>>> minh_dev
                             </div>
                         </div>
                     </form>
@@ -175,7 +162,7 @@
 
     function increaseQty() {
         let qtyInput = document.getElementById("qtyInput");
-        qtyInput.value = parseInt(qtyInput.value) ;
+        qtyInput.value = parseInt(qtyInput.value);
         qtyInput.dispatchEvent(new Event("input"));
     }
 
