@@ -54,23 +54,21 @@
                                 <div class="row">
                                     {{-- class="product-slider carousel-margin " --}}
                                     @foreach ($products as $product)
-                                    
-
                                         <div class="col-4">
-                                            
+
                                             <div class="single-product">
                                                 <div class="level-pro-new">
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt="" class="primary-img">
                                                         <img src="img/product/2.png" alt=""
                                                             class="secondary-img">
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -95,11 +93,10 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        
+
                                         </div>
-                                   
                                     @endforeach
-                                
+
 
                                 </div>
                             </div>
@@ -113,7 +110,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -121,7 +118,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -162,7 +159,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -170,7 +167,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -213,7 +210,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -221,7 +218,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -264,7 +261,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -272,7 +269,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -315,7 +312,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -323,7 +320,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -366,7 +363,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -374,7 +371,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
@@ -417,7 +414,7 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="{{route('detail.index', $product->slug)}}">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="img/product/1.png" alt=""
                                                             class="primary-img">
                                                         <img src="img/product/2.png" alt=""
@@ -425,7 +422,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="product-name">
-                                                    <a href="{{route('detail.index', $product->slug)}}"
+                                                    <a href="{{ route('detail.index', $product->slug) }}"
                                                         title="Fusce aliquam">{{ $product->name }}</a>
                                                 </div>
                                                 <div class="price-rating">
