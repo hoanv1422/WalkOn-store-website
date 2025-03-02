@@ -84,9 +84,9 @@
                                                     onchange="previewImage(event)">
                                             </div>
                                             <div class="avatar-lg">
-                                                <div class="avatar-title bg-light rounded">
+                                                <div class="avatar-title bg-light rounded overflow-hidden">
                                                     <img src="{{ Storage::url($product->image) }}" id="product-img"
-                                                        class="avatar-md h-auto" />
+                                                        class="avatar-md h-auto object-fit-cover" />
                                                 </div>
                                             </div>
                                         </div>
@@ -116,8 +116,8 @@
                                                 <div class="border rounded">
                                                     <div class="d-flex p-2">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="avatar-sm bg-light rounded">
-                                                                <img class="img-fluid rounded d-block"
+                                                            <div class="avatar-sm bg-light rounded overflow-hidden">
+                                                                <img class="img-fluid rounded d-block object-fit-cover"
                                                                     src="{{ Storage::url($item->image) }}"
                                                                     alt="Product-Image" />
                                                             </div>

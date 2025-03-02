@@ -33,7 +33,6 @@
                                         <li><a href="{{ route('profile.index') }}">Tài Khoản</a></li>
                                         <li><a href="{{ route('wishlist.index') }}">Yêu Thích</a></li>
                                         <li><a href="{{ route('cart.index') }}">Giỏ Hàng</a></li>
-                                        <li><a href="{{ route('checkout.index') }}">Thanh Toán</a></li>
                                         <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
                                         @auth
                                             <li>

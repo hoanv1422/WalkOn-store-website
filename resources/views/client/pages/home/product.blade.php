@@ -62,14 +62,9 @@
                                                 </div>
                                                 <div class="product-img">
                                                     <a href="{{ route('detail.index', $product->slug) }}">
-<<<<<<< HEAD
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="primary-img">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
-=======
-                                                        <img src="img/product/1.png" alt="" class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
->>>>>>> 56ea7346c1dc550358ea29c29cd25fe2cc734338
                                                             class="secondary-img">
                                                     </a>
                                                 </div>

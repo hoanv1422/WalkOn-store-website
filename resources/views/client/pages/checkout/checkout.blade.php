@@ -10,7 +10,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">Họ và tên</label>
                                 <input type="text" name="receiver_name" class="form-control"
-                                    value="{{ old('receiver_name') }}">
+                                    value="{{ old('receiver_name', Auth::user()->name) }}">
                                 @error('receiver_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -19,7 +19,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">Email</label>
                                 <input type="text" name="receiver_email" class="form-control"
-                                    value="{{ old('receiver_email') }}">
+                                    value="{{ old('receiver_email', Auth::user()->mail) }}">
                                 @error('receiver_email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -28,7 +28,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="text" name="receiver_phone" class="form-control"
-                                    value="{{ old('receiver_phone') }}">
+                                    value="{{ old('receiver_phone', Auth::user()->phone) }}">
                                 @error('receiver_phone')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -36,7 +36,7 @@
 
                             <div class="col-md-12">
                                 <label class="form-label">Địa chỉ</label>
-                                <textarea name="receiver_address" class="form-control">{{ old('receiver_address') }}</textarea>
+                                <textarea name="receiver_address" class="form-control">{{ old('receiver_address', Auth::user()->address) }}</textarea>
                                 @error('receiver_address')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -61,7 +61,7 @@
                                 <thead>
                                     <tr>
                                         <th>Sản Phẩm</th>
-                                        <th>Tổng</th>
+                                        <th >Tổng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,14 +76,23 @@
                                                     {{ $item->productVariant->size->size }}
                                                 </span>
                                             </td>
-                                            <td>{{ $item->price }} VND</td>
+                                            <td>
+                                                @php
+                                                $unitPrice =
+                                                    $item->productVariant->price_sale && $item->productVariant->price_sale < $item->productVariant->price
+                                                        ? $item->productVariant->price_sale
+                                                        : $item->productVariant->price;
+
+                                                $subtotal = $unitPrice * $item->quantity;
+                                            @endphp
+                                            {{ number_format($subtotal, 0, ',', '.') }} VND</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>Tổng Phụ</th>
-                                        <td>{{ $subtotal }} VND</td>
+                                        <th>Tổng</th>
+                                         <td class="fw-bold">{{ number_format($totalAmount, 0, ',', '.') }} VND</td>
                                     </tr>
                                     <tr>
                                         <th>Phí Vận Chuyển</th>
@@ -95,7 +104,8 @@
                                     </tr>
                                     <tr>
                                         <th>Tổng Đơn</th>
-                                        <td><strong>{{ $subtotal }} VND</strong></td>
+                                        <input type="hidden" name="total_price" id="" value="{{$totalAmount}}">
+                                        <td class="text-danger fw-bold fs-5">{{ number_format($totalAmount, 0, ',', '.') }} VND</td>
                                     </tr>
                                 </tfoot>
                             </table>

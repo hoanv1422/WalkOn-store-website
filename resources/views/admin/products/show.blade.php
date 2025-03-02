@@ -33,15 +33,15 @@
                                 <div class="col-xl-4 col-md-8 mx-auto">
                                     <div class="product-img-slider sticky-side-div">
                                         <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
+                                            <div class="swiper-wrapper" style="height: 490px">
+                                                <div class="swiper-slide overflow-hidden">
                                                     <img src="{{ Storage::url($product->image) }}" alt=""
-                                                        class="img-fluid d-block" />
+                                                        class="img-fluid d-block object-fit-cover" />
                                                 </div>
                                                 @foreach ($product->galleries as $item)
-                                                    <div class="swiper-slide">
+                                                    <div class="swiper-slide overflow-hidden">
                                                         <img src="{{ Storage::url($item->image) }}" alt=""
-                                                            class="img-fluid d-block" />
+                                                            class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -50,18 +50,18 @@
                                         </div>
                                         <!-- end swiper thumbnail slide -->
                                         <div class="swiper product-nav-slider mt-2">
-                                            <div class="swiper-wrapper">
+                                            <div class="swiper-wrapper" style="height: 101px">
                                                 <div class="swiper-slide">
-                                                    <div class="nav-slide-item">
+                                                    <div class="nav-slide-item overflow-hidden">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
-                                                            class="img-fluid d-block" />
+                                                            class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 </div>
                                                 @foreach ($product->galleries as $item)
                                                     <div class="swiper-slide">
-                                                        <div class="nav-slide-item">
+                                                        <div class="nav-slide-item overflow-hidden">
                                                             <img src="{{ Storage::url($item->image) }}" alt=""
-                                                                class="img-fluid d-block" />
+                                                                class="img-fluid d-block object-fit-cover" />
                                                         </div>
                                                     </div>
                                                 @endforeach

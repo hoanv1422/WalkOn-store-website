@@ -460,10 +460,10 @@
                                                             <td class="gridjs-td"><span>
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded p-1">
+                                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
                                                                                 <img src="{{ Storage::url($item->image) }}"
                                                                                     alt=""
-                                                                                    class="img-fluid d-block">
+                                                                                    class="img-fluid d-block object-fit-cover">
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">

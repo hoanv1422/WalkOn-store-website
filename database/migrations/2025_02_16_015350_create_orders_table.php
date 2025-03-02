@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('user_address')->nullable();
             $table->string('user_phone')->nullable();
 
-            // Thông tin người nhận hàng
-            $table->boolean('same_as_buyer')->default(true); // Nếu true, người nhận chính là người đặt
             $table->string('receiver_email')->nullable();
             $table->string('receiver_name')->nullable();
             $table->string('receiver_address')->nullable();
