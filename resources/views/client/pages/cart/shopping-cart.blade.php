@@ -7,14 +7,14 @@
                     <table class="table-bordered table table-hover">
                         <thead>
                             <tr>
-                                <th class="cart-item-img"></th>
-                                <th class="cart-product-name">Product Name</th>
-                                <th class="edit">Size</th>
-                                <th class="move-wishlist">Color</th>
-                                <th class="unit-price">Unit Price</th>
-                                <th class="quantity">Qty</th>
-                                <th class="subtotal">Subtotal</th>
-                                <th class="remove-icon"></th>
+                                <th class="cart-item-img" style="text-align: center">Ảnh</th>
+                                <th class="cart-product-name" style="text-align: center">Tên Sản Phẩm</th>
+                                <th class="edit" style="text-align: center">Kích Cỡ</th>
+                                <th class="move-wishlist" style="text-align: center">Màu</th>
+                                <th class="unit-price" style="text-align: center">Giá</th>
+                                <th class="quantity" style="text-align: center">Số Lượng</th>
+                                <th class="subtotal" style="text-align: center">Tổng Giá Sản Phẩm</th>
+                                <th class="remove-icon" style="text-align: center"></th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -160,8 +160,8 @@
             </div>
             <div class="col-md-4">
                 <div class="totals">
-                    <p>subtotal <span>$1,540.00</span> </p>
-                    <h3>Grand Total <span>$1,540.00</span></h3>
+                    <p>Tổng Tiền <span>${{$totalPrice}} </span> </p>
+                    <h3>Thành Tiền <span>${{$totalPrice}} </span></h3>
                     <div class="shopping-button">
                         <button type="submit">proceed to checkout</button>
                     </div>

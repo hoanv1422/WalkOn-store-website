@@ -14,25 +14,25 @@ class CartController extends Controller
     public function index()
     {
         $user = 1;
-
-    $cartItems = DB::table('cart_items')
-    ->join('product_variants', 'cart_items.product_variant_id', '=', 'product_variants.id')
-    ->join('products', 'product_variants.product_id', '=', 'products.id')
-    ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
-    ->join('colors', 'product_variants.color_id', '=', 'colors.id')
-    ->join('carts', 'cart_items.cart_id', '=', 'carts.id') 
-    ->where('carts.user_id', $user) 
-    ->select(
-        'products.name as product_name', 
-        'sizes.size', 
-        'colors.color', 
-        'cart_items.price', 
-        'cart_items.quantity',
-        'products.image as product_image',
-        'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
-    )
-    ->get();
-        return view('client.pages.cart.index', compact('cartItems'));
+        $totalPrice = Product::sum(DB::raw('price * quantity'));
+        $cartItems = DB::table('cart_items')
+        ->join('product_variants', 'cart_items.product_variant_id', '=', 'product_variants.id')
+        ->join('products', 'product_variants.product_id', '=', 'products.id')
+        ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
+        ->join('colors', 'product_variants.color_id', '=', 'colors.id')
+        ->join('carts', 'cart_items.cart_id', '=', 'carts.id') 
+        ->where('carts.user_id', $user) 
+        ->select(
+            'products.name as product_name', 
+            'sizes.size', 
+            'colors.color', 
+            'cart_items.price', 
+            'cart_items.quantity',
+            'products.image as product_image',
+            'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
+        )
+        ->get();
+        return view('client.pages.cart.index', compact('cartItems','totalPrice'));
     }
     
     public function addToCart(Request $request, $id)
@@ -60,8 +60,6 @@ class CartController extends Controller
         'size'     => 'required',
         'color'    => 'required',
         'quantity' => [
-            
-             
             function ($attribute, $value, $fail) use ($productVariant) {
                 if ($value > $productVariant->quantity) {
                     $fail('Số lượng tồn kho không đủ! Chỉ còn ' . $productVariant->quantity . ' sản phẩm.');
@@ -70,9 +68,7 @@ class CartController extends Controller
         ],
     ], [
         'size.required'     => 'Vui lòng chọn kích cỡ.',
-    
         'color.required'    => 'Vui lòng chọn màu sắc.',
-       
     ]);
     // Kiểm tra số lượng tồn kho
     if ($productVariant->quantity < $quantity) {
