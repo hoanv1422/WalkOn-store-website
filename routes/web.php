@@ -3,7 +3,8 @@
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Client\WishlistController;
 
 /*
 |--------------------------------------------------------------------------

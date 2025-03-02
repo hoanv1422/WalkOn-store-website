@@ -69,67 +69,41 @@
                                 <tr>
                                     <th>Image</th>
                                     <th>Product Name</th>
-                                    <th>Model</th>
-                                    <th>Stock</th>
+                                    <th>Sku</th>
+                                    <th>Quantity</th>
                                     <th>Unit Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><a href="#" class="text-center"><img src="img/wishlist/1.png"
-                                                alt=""> </a></td>
-                                    <td>
-                                        <a href="single-product.html">More-Or-Less</a>
-                                    </td>
-                                    <td>Product 14</td>
-                                    <td>In Stock</td>
-                                    <td class="unit-price">$100.00</td>
-                                    <td>
-                                        <div class="wishlist-actions">
-                                            <button type="button" data-bs-toggle="tooltip" title="Add to Cart"> <i
-                                                    class="fa fa-shopping-cart"></i> </button>
-                                            <button type="button" data-bs-toggle="tooltip" title="Remove"> <i
-                                                    class="fa fa-times"></i> </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> <a href="#" class="text-center"><img src="img/wishlist/2.png"
-                                                alt=""> </a> </td>
-                                    <td>
-                                        <a href="single-product.html">Aliquam Consequat</a>
-                                    </td>
-                                    <td>Product 14</td>
-                                    <td>In Stock</td>
-                                    <td class="unit-price">$90.00</td>
-                                    <td>
-                                        <div class="wishlist-actions">
-                                            <button type="button" data-bs-toggle="tooltip" title="Add to Cart"> <i
-                                                    class="fa fa-shopping-cart"></i> </button>
-                                            <button type="button" data-bs-toggle="tooltip" title="Remove"> <i
-                                                    class="fa fa-times"></i> </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#" class="text-center"><img src="img/wishlist/1.png"
-                                                alt=""> </a></td>
-                                    <td>
-                                        <a href="single-product.html">More-Or-Less</a>
-                                    </td>
-                                    <td>Product 14</td>
-                                    <td>In Stock</td>
-                                    <td class="unit-price">$100.00</td>
-                                    <td>
-                                        <div class="wishlist-actions">
-                                            <button type="button" data-bs-toggle="tooltip" title="Add to Cart"> <i
-                                                    class="fa fa-shopping-cart"></i> </button>
-                                            <button type="button" data-bs-toggle="tooltip" title="Remove"> <i
-                                                    class="fa fa-times"></i> </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach ($wishlistItems as $item)
+                                
+                                    <tr>
+                                        <td><a href="#" class="text-center"><img src="{{ asset('img/products/' . $item->product->image) }}" alt=""> </a></td>
+                                        <td>
+                                            <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
+                                        </td>
+                                        <td>{{ $item->product->sku }}</td>
+                                        <td>{{ $item->product->quantity }}</td>
+                                        <td class="unit-price">${{ $item->product->price }}</td>
+                                        <td>
+                                            <div class="wishlist-actions">
+                                                <button type="button" data-bs-toggle="tooltip" title="Add to Cart">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </button>
+                                                <form action="{{ route('wishlist.destroy', $item->id) }}" method="POST">
+                                                 @csrf
+                                                 @method('DELETE')
+                                                <button type="submit" data-bs-toggle="tooltip" title="Remove" onclick="confirm('bạn có chắc xóa không?')">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+
+                                                </form>
+                                               
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

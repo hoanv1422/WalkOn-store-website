@@ -57,7 +57,24 @@ Route::middleware('client')->group(function () {
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 });
 
-// About Us
+
+
+// Profile
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+
+
+// wishlist
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy'); 
+
+
+
+// checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+
+// about-us
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
 
 // Blog
