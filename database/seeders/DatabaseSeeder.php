@@ -122,6 +122,7 @@ class DatabaseSeeder extends Seeder
                 'color_id'   => rand(1, 4), // ID màu sắc
                 'image'      => 'variant' . ($i + 1) . '.jpg', // Ảnh sản phẩm
                 'price'      => rand(100000, 500000), // Giá sản phẩm
+                'price_sale'      => rand(100000, 500000), // Giá sản phẩm
                 'quantity'   => rand(1, 50),
             ]);
         }
@@ -140,6 +141,21 @@ class DatabaseSeeder extends Seeder
             'is_active'         => true,
         ]);
 
+        User::query()->create([
+            'username'          => 'example_admin',
+            'name'              => 'John Doe',
+            'mail'              => 'admin@gmail.com',
+            'password'          => '123456',
+            'avatar'            => 'default-avatar.png',
+            'phone'             => '0123456789',
+            'address'           => '123 Main Street',
+            'email_verified_at' => now(),
+            'role'              => 'admin',
+            'is_active'         => true,
+        ]);
+
+
+
         Cart::query()->create([
             'user_id'          => '1',
         ]);
@@ -149,7 +165,6 @@ class DatabaseSeeder extends Seeder
                 'cart_id'            => 1, // ID giỏ hàng thực tế
                 'product_variant_id' => rand(1, 4), // ID biến thể sản phẩm
                 'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
-                'price'              => 100000, // Giá sản phẩm
             ]);
         }
 
@@ -186,10 +201,6 @@ class DatabaseSeeder extends Seeder
                 'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
             ]);
         }
-
-
-
-
 
         Schema::enableForeignKeyConstraints();
     }

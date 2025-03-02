@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
@@ -85,15 +86,21 @@ class CategoryController extends Controller
         try {
             DB::beginTransaction();
 
-
             $category->delete();
 
             DB::commit();
-            return redirect()->route('categories.index')->with('success', 'Xóa thành công');
+            return redirect()->route('categories.index')->with('success', 'Xóa danh mục thành công!');
+        } catch (QueryException $exception) {
+            DB::rollback();
+
+            if ($exception->getCode() == 23000) {
+                return back()->with('error', 'Không thể xóa danh mục vì có sản phẩm liên quan.');
+            }
+
+            return back()->with('error', 'Có lỗi xảy ra khi xóa danh mục.');
         } catch (\Exception $exception) {
             DB::rollback();
-            dd($exception);
-            return back()->with('error', 'Lỗi');
+            return back()->with('error', 'Có lỗi không xác định: ' . $exception->getMessage());
         }
     }
 }

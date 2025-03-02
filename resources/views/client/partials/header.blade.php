@@ -35,7 +35,21 @@
                                         <li><a href="{{ route('cart.index') }}">Giỏ Hàng</a></li>
                                         <li><a href="{{ route('checkout.index') }}">Thanh Toán</a></li>
                                         <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
-                                        <li><a href="{{ route('login') }}">Đăng Nhập</a></li>
+                                        @auth
+                                            <li>
+                                                <a href="#"
+                                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                    Đăng Xuất
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                    style="display: none;">
+                                                    @csrf
+                                                </form>
+                                            </li>
+                                        @else
+                                            <li><a href="{{ route('login') }}">Đăng Nhập</a></li>
+                                        @endauth
+
                                     </ul>
                                 </li>
                             </ul>
@@ -102,8 +116,8 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="logo">
-                        <a href="{{route('home.index')}}">
-                            <img src="{{asset("img/logo.png")}}" alt="">
+                        <a href="{{ route('home.index') }}">
+                            <img src="{{ asset('img/logo.png') }}" alt="">
                         </a>
                     </div>
                 </div>
@@ -232,8 +246,8 @@
                                         <li><a href="shop-list.html">Shop list</a></li>
                                         <li><a href="single-product.html">Single Shop</a></li>
                                         <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="{{url('/login')}}">login page</a></li>
-                                        <li><a href="{{url('/register')}}">register page</a></li>
+                                        <li><a href="{{ url('/login') }}">login page</a></li>
+                                        <li><a href="{{ url('/register') }}">register page</a></li>
                                     </ul>
                                 </li>
                             </ul>

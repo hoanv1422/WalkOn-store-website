@@ -15,7 +15,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->id;
 
         $cartItems = DB::table('cart_items')
             ->join('product_variants', 'cart_items.product_variant_id', '=', 'product_variants.id')
@@ -28,7 +28,6 @@ class CartController extends Controller
                 'products.name as product_name',
                 'sizes.size',
                 'colors.color',
-                'cart_items.price',
                 'cart_items.quantity',
                 'products.image as product_image',
                 'cart_items.id as cart_item_id' // Thêm trường 'id' vào select
@@ -56,7 +55,7 @@ class CartController extends Controller
         $checkCart = DB::table('carts')->where('carts.user_id', $user)->first();
         if (!isset($checkCart)) {
             $checkCart = Cart::create([
-                'user_id' => $user
+                'user_id' => $user->id
             ]);
         }
         if ($cartItem) {
