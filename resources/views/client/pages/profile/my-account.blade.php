@@ -1,4 +1,3 @@
-<!-- my account area start -->
 <div class="account-area">
     <div class="container">
         <div class="row">
@@ -13,10 +12,10 @@
                         </div>
                         <div class="single-sidebar-content">
                             <ul>
-                                <li><a href="#">Dresses (4)</a></li>
-                                <li><a href="#">shoes (6)</a></li>
-                                <li><a href="#">Handbags (1)</a></li>
-                                <li><a href="#">Clothing (3)</a></li>
+                                @foreach ($categories as $category)
+                                    <li><a href="#">{{ $category->name }}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -26,12 +25,9 @@
                         </div>
                         <div class="single-sidebar-content">
                             <ul>
-                                <li><a href="#">Black (2)</a></li>
-                                <li><a href="#">Blue (2)</a></li>
-                                <li><a href="#">Green (4)</a></li>
-                                <li><a href="#">Grey (2)</a></li>
-                                <li><a href="#">Red (2)</a></li>
-                                <li><a href="#">White (2)</a></li>
+                                @foreach ($colors as $color)
+                                    <li><a href="#">{{ $color->color }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -150,8 +146,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingFour">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-bs-toggle="collapse"
-                                        href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <a class="collapsed" role="button" data-bs-toggle="collapse" href="#collapseFour"
+                                        aria-expanded="false" aria-controls="collapseFour">
                                         <i class="fa fa-user"></i>
                                         My personal information
                                     </a>
@@ -281,4 +277,3 @@
         </div>
     </div>
 </div>
-<!-- my account area end -->
