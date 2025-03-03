@@ -36,11 +36,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required',
+            'mail' => 'required',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+        if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
             $user = Auth::user();
             if ($user->is_active == 0) {
                 Auth::logout();

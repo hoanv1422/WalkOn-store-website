@@ -9,8 +9,8 @@
                     <div class="login">
                         <div class="login-form-container">
                             <div class="login-text">
-                                <h2>Register</h2>
-                                <span>Please Register using account detail bellow.</span>
+                                <h2>Đăng kí tài khoản</h2>
+                                <span>Vui lòng đăng kí bằng thông tin tài khoản của bạn</span>
                             </div>
                             <div class="login-form">
                                 <form action="{{ route('register') }}" method="post">

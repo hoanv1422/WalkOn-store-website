@@ -23,7 +23,7 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 
-Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
+Route::prefix('admin')->middleware( 'admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
@@ -56,6 +56,10 @@ Route::prefix('admin')->group(function () {
     })->name('admin.login');
 
     Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
+
+    Route::get('signin', function () {
+        return view('auth.admin.signin');
+    })->name('signin.index');
 
     Route::get('signup', function () {
         return view('auth.admin.signup');

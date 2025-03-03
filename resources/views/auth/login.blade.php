@@ -60,14 +60,14 @@
                         @endif
 
                         <div class="login-text">
-                            <h2>Login</h2>
-                            <span>Please login using account detail below.</span>
+                            <h2>Đăng nhập tài khoản</h2>
+                            <span>Vui lòng đăng nhập bằng thông tin tài khoản của bạn</span>
                         </div>
                         <div class="login-form">
                             <form action="{{ route('login') }}" method="post">
                                 @csrf
-                                <input type="text" name="username" placeholder="Username">
-                                @error('username')
+                                <input type="email" name="mail" placeholder="Mail">
+                                @error('mail')
                                 <span class="alert-alert-danger text-center">{{ $message }}</span>
                                 @enderror
 
@@ -79,7 +79,7 @@
                                 <div class="button-box">
                                     <div class="login-toggle-btn">
                                         <input type="checkbox" id="remember">
-                                        <label for="remember">Remember me</label>
+                                        <label for="remember">Ghi nhớ</label>
                                         <a href="{{ url('/forgot_password') }}">Forgot Password?</a>
                                     </div>
                                     <button type="submit" class="default-btn">Login</button>
