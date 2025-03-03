@@ -55,40 +55,40 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         // Data Product
+        // dd($request->all());
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
+        
 
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         } else {
-            $data['image'] = '';
+            $data['image'] = $request->old('image');;
         }
 
         $data['sku'] = 'WO' . $data['brand_id'] . $data['category_id'] . '-' . now()->format('His');
         $data['is_active'] ??= 0;
         $data['slug'] = Str::slug($data['name']) . '-' . $data['sku'];
 
-        // Xử lý Biến thể (Product Variants)
         $listProVariants = $request->product_variant ?: [];
         $dataProVariants = [];
         $totalQuantity = 0;
-        $variantMap = []; // Mảng dùng để kiểm tra trùng lặp
+        $variantMap = [];
 
         foreach ($listProVariants as $item) {
-            $key = $item['size'] . '-' . $item['color']; // Khóa duy nhất cho mỗi biến thể
+            $key = $item['size'] . '-' . $item['color'];
 
             if (isset($variantMap[$key])) {
-                // Nếu đã tồn tại biến thể này, cộng dồn số lượng
                 $dataProVariants[$variantMap[$key]]['quantity'] += $item['quantity'];
             } else {
-                // Nếu chưa có, tạo mới biến thể
                 $dataProVariants[] = [
                     'size_id' => $item['size'],
                     'color_id' => $item['color'],
                     'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
                     'quantity' => $item['quantity'],
-                    'price' => $item['price']
+                    'price' => $item['price'],
+                    'price_sale' => $item['price_sale']
                 ];
-                $variantMap[$key] = array_key_last($dataProVariants); // Lưu vị trí của biến thể này
+                $variantMap[$key] = array_key_last($dataProVariants);
             }
 
             $totalQuantity += $item['quantity'];
@@ -96,7 +96,6 @@ class ProductController extends Controller
 
         $data['quantity'] = $totalQuantity;
 
-        // Xử lý Thư viện ảnh (Product Galleries)
         $listProGalleries = $request->product_galleries ?: [];
         $dataProGalleries = [];
 
@@ -111,16 +110,13 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            // Insert Product
             $product = Product::query()->create($data);
 
-            // Insert ProductVariant
             foreach ($dataProVariants as &$item) {
                 $item['product_id'] = $product->id;
                 ProductVariant::query()->create($item);
             }
 
-            // Insert ProductGallery
             foreach ($dataProGalleries as &$item) {
                 $item['product_id'] = $product->id;
                 ProductGallery::query()->create($item);
@@ -131,7 +127,6 @@ class ProductController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
 
-            // Xóa ảnh trong STORAGE khi có lỗi
             if (!empty($data['image'])) {
                 Storage::delete($data['image']);
             }
@@ -146,6 +141,8 @@ class ProductController extends Controller
                 }
             }
 
+            dd($exception);
+
             return back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm')->withErrors($exception->getMessage());
         }
     }
@@ -156,8 +153,27 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product'));
+        // Lấy danh sách kích cỡ duy nhất và tổng số lượng của từng kích cỡ
+        $sizes = $product->variants()
+            ->select('size_id')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->groupBy('size_id')
+            ->with('size')
+            ->get();
+
+        // Lấy danh sách màu sắc duy nhất và tổng số lượng của từng màu sắc
+        $colors = $product->variants()
+            ->select('color_id')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->groupBy('color_id')
+            ->with('color')
+            ->get();
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'sizes', 'colors'));
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -171,7 +187,7 @@ class ProductController extends Controller
         $sizes = Size::query()->pluck('size', 'id')->all();
         $product_galleries = ProductGallery::query()->where('product_id', $product->id)->get();
         $product_variants = ProductVariant::query()->where('product_id', $product->id)->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'brands', 'categories', 'colors', 'sizes', 'product_galleries', 'product_variants'   ));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'brands', 'categories', 'colors', 'sizes', 'product_galleries', 'product_variants'));
     }
 
     /**
@@ -212,7 +228,9 @@ class ProductController extends Controller
                     'color_id' => $item['color'],
                     'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
                     'quantity' => $item['quantity'],
-                    'price' => $item['price']
+                    'price' => $item['price'],
+                    'price_sale' => $item['price_sale']
+
                 ];
             } else {
                 // Nếu đã tồn tại, chỉ cộng dồn số lượng

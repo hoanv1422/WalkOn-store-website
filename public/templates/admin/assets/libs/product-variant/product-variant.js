@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let variantsTable = document.getElementById("variantsContainer");
     let sizes = JSON.parse(variantsTable.dataset.sizes);
     let colors = JSON.parse(variantsTable.dataset.colors);
-    let variantIndex = parseInt(document.getElementById("lastIndex").value) + 1;
+    let variantIndex = parseInt(document.getElementById("lastIndex").value) ;
 
 
     console.log(variantIndex);
@@ -66,6 +66,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         <input type="text" class="form-control" id="product-price-input" placeholder="Giá"
                             aria-label="Price" aria-describedby="product-price-addon"
                             name="product_variant[${variantIndex}][price]" oninput="formatCurrency(this)">
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="product-price-addon">VNĐ</span>
+                        <input type="text" class="form-control" id="product-price-input" placeholder="Giá Khuyến Mãi"
+                            aria-label="Price Sale" aria-describedby="product-price-addon"
+                            name="product_variant[${variantIndex}][price_sale]" oninput="formatCurrency(this)">
                     </div>
                 </td>
                 <td class="align-middle">

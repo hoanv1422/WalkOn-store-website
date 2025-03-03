@@ -62,8 +62,9 @@
                                                 </div>
                                                 <div class="product-img">
                                                     <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt="" class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
+                                                            class="primary-img">
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="secondary-img">
                                                     </a>
                                                 </div>
@@ -108,9 +109,9 @@
                                                 </div>
                                                 <div class="product-img">
                                                     <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="secondary-img">
                                                     </a>
                                                 </div>

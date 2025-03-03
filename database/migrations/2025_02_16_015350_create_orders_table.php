@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_code')->unique();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
 
             // Thông tin người đặt hàng (có thể nullable nếu đã có user_id)
             $table->string('user_email')->nullable();
@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('user_address')->nullable();
             $table->string('user_phone')->nullable();
 
-            // Thông tin người nhận hàng
-            $table->boolean('same_as_buyer')->default(true); // Nếu true, người nhận chính là người đặt
             $table->string('receiver_email')->nullable();
             $table->string('receiver_name')->nullable();
             $table->string('receiver_address')->nullable();

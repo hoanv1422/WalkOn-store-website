@@ -84,9 +84,9 @@
                                                     onchange="previewImage(event)">
                                             </div>
                                             <div class="avatar-lg">
-                                                <div class="avatar-title bg-light rounded">
+                                                <div class="avatar-title bg-light rounded overflow-hidden">
                                                     <img src="{{ Storage::url($product->image) }}" id="product-img"
-                                                        class="avatar-md h-auto" />
+                                                        class="avatar-md h-auto object-fit-cover" />
                                                 </div>
                                             </div>
                                         </div>
@@ -116,8 +116,8 @@
                                                 <div class="border rounded">
                                                     <div class="d-flex p-2">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="avatar-sm bg-light rounded">
-                                                                <img class="img-fluid rounded d-block"
+                                                            <div class="avatar-sm bg-light rounded overflow-hidden">
+                                                                <img class="img-fluid rounded d-block object-fit-cover"
                                                                     src="{{ Storage::url($item->image) }}"
                                                                     alt="Product-Image" />
                                                             </div>
@@ -278,6 +278,7 @@
                                                     <th>Màu Sắc</th>
                                                     <th>Số lượng</th>
                                                     <th>Giá</th>
+                                                    <th>Giá khuyến mãi</th>
                                                     <th>Hoạt Động</th>
                                                 </tr>
                                             </thead>
@@ -382,6 +383,20 @@
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle">
+                                                                <div class="input-group has-validation">
+                                                                    <span class="input-group-text"
+                                                                        id="product-price-addon">VNĐ</span>
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
+                                                                        id="product-price-input" placeholder="Giá"
+                                                                        aria-label="Price"
+                                                                        aria-describedby="product-price-addon"
+                                                                        name="product_variant[{{ $index }}][price_sale]"
+                                                                        value="{{ $product_variant['price_sale'] }}"
+                                                                        oninput="formatCurrency(this)">
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
                                                                 <div class="btn btn-danger removeVariant">X</div>
                                                             </td>
                                                         </tr>
@@ -424,7 +439,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>
+                                                            <td  class="align-middle">
                                                                 <select class="form-control  @error("product_variant.$index.size") is-invalid @enderror"
                                                                     name="product_variant[{{ $index }}][size]">
                                                                     <option value="">Chọn kích cỡ</option>
@@ -436,7 +451,7 @@
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td>
+                                                            <td  class="align-middle">
                                                                 <select class="form-control  @error("product_variant.$index.color") is-invalid @enderror"
                                                                     name="product_variant[{{ $index }}][color]">
                                                                     <option value="">Chọn màu</option>
@@ -448,13 +463,13 @@
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td>
+                                                            <td  class="align-middle">
                                                                 <input class="form-control @error("product_variant.$index.quantity") is-invalid @enderror" type="text"
                                                                     name="product_variant[{{ $index }}][quantity]"
                                                                     value="{{ $item->quantity }}" placeholder="Số lượng">
                                                             </td>
-                                                            <td>
-                                                                <div class="input-group has-validation mb-3">
+                                                            <td  class="align-middle">
+                                                                <div class="input-group has-validation">
                                                                     <span class="input-group-text">VNĐ</span>
                                                                     <input type="text" class="form-control @error("product_variant.$index.price") is-invalid @enderror"
                                                                         id="product-price-input"
@@ -463,7 +478,17 @@
                                                                         oninput="formatCurrency(this)">
                                                                 </div>
                                                             </td>
-                                                            <td>
+                                                            <td  class="align-middle">
+                                                                <div class="input-group has-validation">
+                                                                    <span class="input-group-text">VNĐ</span>
+                                                                    <input type="text" class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
+                                                                        id="product-price-input"
+                                                                        name="product_variant[{{ $index }}][price_sale]"
+                                                                        value="{{ number_format($item->price, 0, ',', '.') }}"
+                                                                        oninput="formatCurrency(this)">
+                                                                </div>
+                                                            </td>
+                                                            <td  class="align-middle">
                                                                 <div class="btn btn-danger removeVariant"
                                                                     data-id="{{ $item->id }}">X</div>
                                                             </td>

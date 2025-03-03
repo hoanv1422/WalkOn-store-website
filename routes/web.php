@@ -3,7 +3,8 @@
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Client\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,22 +17,20 @@ use App\Http\Controllers\ProductController;
 |
 */
 
+// Nhóm các route liên quan đến authentication
+Route::controller(AuthController::class)->group(function () {
+    Route::view('/register', 'auth.register');
+    Route::view('/login', 'auth.login')->name('login.form');
+    Route::view('/forgot_password', 'auth.forgot_password');
 
+    Route::post('/register', 'register')->name('register');
+    Route::post('/login', 'login')->name('login');
 
-Route::get('/register', function () {
-    return view('auth.register');
+    Route::post('/logout', 'logout')->name('logout')->middleware('client');
 });
-Route::get('/login', function () {
-    return view('auth.login');
+
+// Test routes
+Route::controller(TestController::class)->group(function () {
+    Route::get('/test', 'test');
+    Route::post('/test', 'store')->name('test.store');
 });
-Route::get('/forgot_password', function () {
-    return view('auth.forgot_password');
-});
-Route::post('/register', [AuthController::class, 'register'])->name('register');;
-Route::post('/login', [AuthController::class, 'login'])->name('login');;
-
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-Route::get('/test', [TestController::class, 'test']);
-Route::post('/test', [TestController::class, 'store'])->name('test');
