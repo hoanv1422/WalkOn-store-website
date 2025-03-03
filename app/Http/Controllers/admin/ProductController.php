@@ -155,8 +155,13 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function show(Product $product)
+
     {
+        
+    
+        
         return view(self::PATH_VIEW . __FUNCTION__, compact('product'));
+        
     }
 
     /**

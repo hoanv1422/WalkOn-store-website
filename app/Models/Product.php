@@ -85,4 +85,8 @@ class Product extends Model
         ->get();
 
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

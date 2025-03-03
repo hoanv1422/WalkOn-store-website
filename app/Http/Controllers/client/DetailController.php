@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class DetailController extends Controller
 {
     public function productDetail(string $slug)
     {
-        $product = Product::with('galleries', 'variants', 'colors', 'sizes')->where('slug', $slug)->first();
+        $product = Product::with('galleries', 'variants', 'colors', 'sizes','comments')->where('slug', $slug)->first();
 
         $relatedProducts = $product->relatedProducts();
         $upSellProducts = $product->upsellProducts();
         //    dd($product);
-        return view('client.pages.detail.index', compact('product','relatedProducts','upSellProducts'
+        return view('client.pages.detail.index', compact('product','relatedProducts','upSellProducts',
     ));
     }
 
@@ -23,4 +24,5 @@ class DetailController extends Controller
         return view('client.pages.detail.index');
 
     }
+    
 }

@@ -8,6 +8,7 @@
     @include('client.pages.detail.product-tab')
     @include('client.pages.detail.upsell-product')
     @include('client.pages.detail.related-product')
+    @include('client.pages.detail.comments')
 @endsection
 
 @section('script')

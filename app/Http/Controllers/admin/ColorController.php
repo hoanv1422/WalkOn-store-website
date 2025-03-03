@@ -1,10 +1,6 @@
 <?php
 
-<<<<<<< HEAD
-namespace App\Http\Controllers\admin;
-=======
 namespace App\Http\Controllers\Admin;
->>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
 
 use App\Http\Controllers\Controller;
 use App\Models\Color;
@@ -18,7 +14,6 @@ class ColorController extends Controller
 {
     const PATH_VIEW = 'admin.colors.';
     /**
-<<<<<<< HEAD
      * Display a listing of the resource.
      */
     public function index()
@@ -36,14 +31,11 @@ class ColorController extends Controller
     }
 
     /**
-=======
->>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
      * Store a newly created resource in storage.
      */
     public function store(StoreColorRequest $request)
     {
         $data = $request->all();
-<<<<<<< HEAD
         Color::query()->create($data);
         return redirect()->route('colors.index');
 
@@ -63,22 +55,6 @@ class ColorController extends Controller
     public function edit(Color $color)
     {
         return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
-=======
-        $data['slug'] = Str::slug($data['color']);
-
-        try {
-            DB::beginTransaction();
-
-            Color::query()->create($data);
-
-            DB::Commit();
-            return redirect()->route('attributes.index')->with('success', 'Thêm màu sắc thành công');
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            dd($exception);
-            return back()->with('error', 'Có lỗi khi thêm');
-        }
->>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
     }
 
     /**
@@ -86,11 +62,6 @@ class ColorController extends Controller
      */
     public function update(UpdateColorRequest $request, Color $color)
     {
-<<<<<<< HEAD
-        $data=$request->all();
-        $color->update($data);
-        return redirect()->route('colors.index');
-=======
         $data = $request->all();
         $data['slug'] = Str::slug($data['color']);
 
@@ -106,7 +77,6 @@ class ColorController extends Controller
             dd($exception);
             return back()->with('error', 'Có lỗi khi thêm');
         }
->>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
     }
 
     /**
@@ -114,10 +84,6 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-<<<<<<< HEAD
-        $color->delete();
-        return redirect()->route('colors.index')->with('success','xoa thanh cong');
-=======
         try {
             DB::beginTransaction();
             $color->delete();
@@ -128,6 +94,5 @@ class ColorController extends Controller
             dd($exception);
             return back()->with('error', 'Lỗi');
         }
->>>>>>> 1db1b85ac8b749011ceabd9b4c37487b9726576f
     }
 }

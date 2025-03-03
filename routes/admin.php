@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCommentController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,7 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 
-Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
+Route::prefix('admin')->middleware( 'admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
@@ -72,4 +74,17 @@ Route::prefix('admin')->group(function () {
     Route::get('pass-confirm', function () {
         return view('auth.admin.pass-confirm');
     })->name('pass-confirm.index');
+
+    
 });
+
+
+   
+
+
+Route::prefix('admin')->middleware(['admin'])->group(function () {
+    Route::resource('comments', AdminCommentController::class)->only(['index', 'destroy']);
+});
+
+
+// Route::get('/detail/{id}', [ProductController::class, 'show'])->name('client.pages.detail.comments');

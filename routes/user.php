@@ -11,6 +11,8 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\WishlistController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Client\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +58,10 @@ Route::middleware('client')->group(function () {
 
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
+    // Comment
+    Route::post('/comments/{commentId}/store', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comments/{commentId}/reply', [CommentController::class, 'reply'])->name('comments.reply');
+    Route::delete('/comments/{commentId}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 // About Us
@@ -68,3 +74,4 @@ Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.detai
 
 // Contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+
