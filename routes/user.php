@@ -32,8 +32,8 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 // Detail
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
-// Profile
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+// // Profile
+// Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
 Route::middleware('client')->group(function () {
@@ -46,9 +46,10 @@ Route::middleware('client')->group(function () {
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
 
-    // // Profile
-    // Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    // update thong tin khách hàng
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
@@ -68,7 +69,7 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 
 // wishlist
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy'); 
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
 
 

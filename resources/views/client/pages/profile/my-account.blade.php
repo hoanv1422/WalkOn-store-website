@@ -1,4 +1,25 @@
 <div class="account-area">
+    <!-- Hiển thị thông báo thành công -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            <!-- Hiển thị thông báo thành công -->
+            {{ session('success') }}
+            <!-- Kiểm tra và hiển thị các trường đã được cập nhật -->
+            @if (session('updatedFields'))
+                <ul>
+                    @foreach (session('updatedFields') as $field)
+                        <li>{{ $field }} đã được cập nhật.</li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    @endif
+    <!-- Hiển thị thông báo lỗi -->
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
@@ -223,47 +244,68 @@
                                 <div class="panel-body">
                                     <div class="col-md-12">
                                         <div class="delivery-details">
-                                            <form action="#" method="POST">
+                                            <!-- Form để cập nhật thông tin người dùng -->
+                                            <form action="{{ route('profile.update') }}" method="POST">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="list-style">
                                                     <div class="account-title">
                                                         <h4>Hãy chắc chắn cập nhật thông tin cá nhân của bạn nếu nó đã
                                                             thay đổi.</h4>
                                                     </div>
+                                                    <!-- Trường nhập tên đăng nhập (readonly) -->
                                                     <div class="form-group">
                                                         <label for="username">Tên đăng nhập <em>*</em></label>
                                                         <input type="text" class="form-control" id="username"
-                                                            placeholder="Tên đăng nhập" value="{{ $user->username }}"
-                                                            readonly>
+                                                            name="username" placeholder="Tên đăng nhập"
+                                                            value="{{ $user->username }}" readonly>
                                                     </div>
+                                                    <!-- Trường nhập tên người dùng -->
                                                     <div class="form-group">
                                                         <label for="name">Tên người dùng <em>*</em></label>
                                                         <input type="text" class="form-control" id="name"
-                                                            placeholder="Tên người dùng" value="{{ $user->name }}">
+                                                            name="name" placeholder="Tên người dùng"
+                                                            value="{{ $user->name }}">
                                                     </div>
+                                                    <!-- Trường nhập email (readonly) -->
                                                     <div class="form-group">
                                                         <label for="email">Email <em>*</em></label>
                                                         <input type="email" class="form-control" id="email"
-                                                            placeholder="Email" value="{{ $user->mail }}" readonly>
+                                                            name="email" placeholder="Email"
+                                                            value="{{ $user->mail }}" readonly>
                                                     </div>
+                                                    <!-- Trường nhập số điện thoại -->
                                                     <div class="form-group">
                                                         <label for="phone">Số điện thoại <em>*</em></label>
                                                         <input type="text" class="form-control" id="phone"
-                                                            placeholder="Số điện thoại" value="{{ $user->phone }}">
+                                                            name="phone" placeholder="Số điện thoại"
+                                                            value="{{ $user->phone }}">
                                                     </div>
+                                                    <!-- Trường nhập địa chỉ -->
                                                     <div class="form-group">
                                                         <label for="address">Địa chỉ <em>*</em></label>
                                                         <input type="text" class="form-control" id="address"
-                                                            placeholder="Địa chỉ" value="{{ $user->address }}">
+                                                            name="address" placeholder="Địa chỉ"
+                                                            value="{{ $user->address }}">
                                                     </div>
-                                                    {{-- <div class="form-group">
-                                                        <label for="role">Vai trò <em>*</em></label>
-                                                        <input type="text" class="form-control" id="role"
-                                                            placeholder="Vai trò" value="{{ $user->role }}"
-                                                            readonly>
-                                                    </div> --}}
+                                                    {{-- <!-- Trường nhập mật khẩu mới -->
                                                     <div class="form-group">
-                                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                                        <label for="password">Mật khẩu mới</label>
+                                                        <input type="password" class="form-control" id="password"
+                                                            name="password" placeholder="Mật khẩu mới">
+                                                    </div>
+                                                    <!-- Trường xác nhận mật khẩu mới -->
+                                                    <div class="form-group">
+                                                        <label for="password_confirmation">Xác nhận mật khẩu
+                                                            mới</label>
+                                                        <input type="password" class="form-control"
+                                                            id="password_confirmation" name="password_confirmation"
+                                                            placeholder="Xác nhận mật khẩu mới">
+                                                    </div> --}}
+                                                    <!-- Nút lưu thông tin -->
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Cập
+                                                            nhật</button>
                                                     </div>
                                                 </div>
                                             </form>

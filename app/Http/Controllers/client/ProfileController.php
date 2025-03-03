@@ -31,34 +31,51 @@ class ProfileController extends Controller
         return view('client.pages.profile.index', compact('user', 'categories', 'colors'));
     }
 
-    // public function update(Request $request)
-    // {
-    //     $user = Auth::user();
+    // Phương thức để cập nhật thông tin người dùng
+    public function update(Request $request)
+    {
+        // Lấy thông tin người dùng hiện tại
+        $user = Auth::user();
 
-    //     // Xác thực dữ liệu đầu vào
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'phone' => 'nullable|string|max:15',
-    //         'address' => 'nullable|string|max:255',
-    //         'password' => 'nullable|string|min:8|confirmed',
-    //     ]);
+        // Kiểm tra xem $user có phải là instance của model User không
+        if (!$user) {
+            return redirect()->back()->with('error', 'Người dùng không tồn tại.');
+        }
 
-    //     // Cập nhật thông tin người dùng
-    //     $user->name = $request->input('name');
-    //     $user->phone = $request->input('phone');
-    //     $user->address = $request->input('address');
+        // Xác thực dữ liệu đầu vào
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
 
-    //     // Cập nhật mật khẩu nếu có
-    //     if ($request->filled('password')) {
-    //         $user->password = Hash::make($request->input('password'));
-    //     }
+        // Cập nhật thông tin người dùng
+        $updatedFields = [];
+        if ($user->name !== $request->input('name')) {
+            $user->name = $request->input('name');
+            $updatedFields[] = 'Tên người dùng';
+        }
+        if ($user->phone !== $request->input('phone')) {
+            $user->phone = $request->input('phone');
+            $updatedFields[] = 'Số điện thoại';
+        }
+        if ($user->address !== $request->input('address')) {
+            $user->address = $request->input('address');
+            $updatedFields[] = 'Địa chỉ';
+        }
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+            $updatedFields[] = 'Mật khẩu';
+        }
 
-    //     // Lưu thông tin người dùng
-    //     try {
-    //         $user->save();
-    //         return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.');
-    //     } catch (\Exception $e) {
-    //         return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');
-    //     }
-    // }
+        // Lưu thông tin người dùng
+        try {
+            $user->save();
+            return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.')->with('updatedFields', $updatedFields);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');
+        }
+    }
+    //
 }
