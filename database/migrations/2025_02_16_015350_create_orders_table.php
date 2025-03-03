@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_code')->unique();
-            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
 
-            // Thông tin người đặt hàng (có thể nullable nếu đã có user_id)
+            // Thông tin người đặt hàng
             $table->string('user_email')->nullable();
             $table->string('user_name')->nullable();
             $table->string('user_address')->nullable();
             $table->string('user_phone')->nullable();
+
+            // sử  lỗi
+            $table->boolean('same_as_buyer')->default(0);
 
             $table->string('receiver_email')->nullable();
             $table->string('receiver_name')->nullable();
