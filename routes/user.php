@@ -32,6 +32,8 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 // Detail
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
+// Profile
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
 Route::middleware('client')->group(function () {
@@ -44,8 +46,8 @@ Route::middleware('client')->group(function () {
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
 
-    // Profile
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    // // Profile
+    // Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');

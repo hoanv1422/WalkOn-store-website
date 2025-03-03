@@ -93,11 +93,8 @@
                                                     </ul>
                                                 </div>
                                             </div>
-
                                         </div>
                                     @endforeach
-
-
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="tab2">
