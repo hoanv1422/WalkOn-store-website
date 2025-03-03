@@ -132,9 +132,11 @@
                                                     <span>new</span>
                                                 </div>
                                                 <div class="product-img">
-                                                    <a href="">
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="primary-img">
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
+                                                            class="secondary-img">
                                                         <img src="img/product/25.png" alt="">
                                                     </a>
                                                 </div>
@@ -164,7 +166,6 @@
                                                     <div class="price-rating">
                                                         <span>{{ number_format($product->price, 0, ',', '.') }}
                                                             VND</span>
-
                                                         <div class="ratings">
                                                             @for ($i = 0; $i < 5; $i++)
                                                                 @if ($i < $product->average_rating)
@@ -187,11 +188,11 @@
                                         <div class="single-list-product row">
                                             <div class="col-md-4">
                                                 <div class="list-product-img">
-                                                    <a href="{{ url('single-product/' . $product->id) }}">
-                                                        {{-- <img src="{{ asset('storage/app/' . $product->image) }}"
-                                                            alt="{{ $product->name }}"> --}}
+                                                    <a href="{{ route('detail.index', $product->slug) }}">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="primary-img">
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
+                                                            class="secondary-img">
                                                         <img src="img/product/25.png" alt="">
                                                     </a>
                                                 </div>
