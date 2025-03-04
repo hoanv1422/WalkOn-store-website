@@ -1,4 +1,25 @@
 <div class="account-area">
+    <!-- Hiển thị thông báo thành công -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            <!-- Hiển thị thông báo thành công -->
+            {{ session('success') }}
+            <!-- Kiểm tra và hiển thị các trường đã được cập nhật -->
+            @if (session('updatedFields'))
+                <ul>
+                    @foreach (session('updatedFields') as $field)
+                        <li>{{ $field }} đã được cập nhật.</li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    @endif
+    <!-- Hiển thị thông báo lỗi -->
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
@@ -207,6 +228,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--Hiển thị thông tin người dùng-->
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingFour">
                                 <h4 class="panel-title">
@@ -222,79 +244,68 @@
                                 <div class="panel-body">
                                     <div class="col-md-12">
                                         <div class="delivery-details">
-                                            <form action="#">
+                                            <!-- Form để cập nhật thông tin người dùng -->
+                                            <form action="{{ route('profile.update') }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
                                                 <div class="list-style">
                                                     <div class="account-title">
                                                         <h4>Hãy chắc chắn cập nhật thông tin cá nhân của bạn nếu nó đã
                                                             thay đổi.</h4>
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Tên <em>*</em> </label>
-                                                        <input type="text" placeholder="Tên">
+                                                    <!-- Trường nhập tên đăng nhập (readonly) -->
+                                                    <div class="form-group">
+                                                        <label for="username">Tên đăng nhập <em>*</em></label>
+                                                        <input type="text" class="form-control" id="username"
+                                                            name="username" placeholder="Tên đăng nhập"
+                                                            value="{{ $user->username }}" readonly>
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Họ <em>*</em> </label>
-                                                        <input type="text" placeholder="Họ">
+                                                    <!-- Trường nhập tên người dùng -->
+                                                    <div class="form-group">
+                                                        <label for="name">Tên người dùng <em>*</em></label>
+                                                        <input type="text" class="form-control" id="name"
+                                                            name="name" placeholder="Tên người dùng"
+                                                            value="{{ $user->name }}">
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Công ty </label>
-                                                        <input type="text" placeholder="Công ty">
+                                                    <!-- Trường nhập email (readonly) -->
+                                                    <div class="form-group">
+                                                        <label for="email">Email <em>*</em></label>
+                                                        <input type="email" class="form-control" id="email"
+                                                            name="email" placeholder="Email"
+                                                            value="{{ $user->mail }}" readonly>
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Địa chỉ 1 <em>*</em> </label>
-                                                        <input type="text" placeholder="Địa chỉ 1">
+                                                    <!-- Trường nhập số điện thoại -->
+                                                    <div class="form-group">
+                                                        <label for="phone">Số điện thoại <em>*</em></label>
+                                                        <input type="text" class="form-control" id="phone"
+                                                            name="phone" placeholder="Số điện thoại"
+                                                            value="{{ $user->phone }}">
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Địa chỉ 2 </label>
-                                                        <input type="text" placeholder="Địa chỉ 2">
+                                                    <!-- Trường nhập địa chỉ -->
+                                                    <div class="form-group">
+                                                        <label for="address">Địa chỉ <em>*</em></label>
+                                                        <input type="text" class="form-control" id="address"
+                                                            name="address" placeholder="Địa chỉ"
+                                                            value="{{ $user->address }}">
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Thành phố <em>*</em> </label>
-                                                        <input type="text" placeholder="Thành phố">
+                                                    {{-- <!-- Trường nhập mật khẩu mới -->
+                                                    <div class="form-group">
+                                                        <label for="password">Mật khẩu mới</label>
+                                                        <input type="password" class="form-control" id="password"
+                                                            name="password" placeholder="Mật khẩu mới">
                                                     </div>
-                                                    <div class="form-name">
-                                                        <label>Mã bưu điện <em>*</em> </label>
-                                                        <input type="text" placeholder="Mã bưu điện">
-                                                    </div>
-                                                    <div class="form-name">
-                                                        <label>Quốc gia <em>*</em> </label>
-                                                        <select>
-                                                            <option value="1">---Vui lòng chọn---</option>
-                                                            <option value="1">Afghanistan</option>
-                                                            <option value="1">Algeria</option>
-                                                            <option value="1">American Samoa</option>
-                                                            <option value="1">Australia</option>
-                                                            <option value="1">Bangladesh</option>
-                                                            <option value="1">Belgium</option>
-                                                            <option value="1">Bosnia and Herzegovina</option>
-                                                            <option value="1">Chile</option>
-                                                            <option value="1">China</option>
-                                                            <option value="1">Egypt</option>
-                                                            <option value="1">Finland</option>
-                                                            <option value="1">France</option>
-                                                            <option value="1">United State</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-name">
-                                                        <label>Bang </label>
-                                                        <select>
-                                                            <option value="1">---Vui lòng chọn---</option>
-                                                            <option value="1">Arizona</option>
-                                                            <option value="1">Armed Forces Africa</option>
-                                                            <option value="1">California</option>
-                                                            <option value="1">Florida</option>
-                                                            <option value="1">Indiana</option>
-                                                            <option value="1">Marshall Islands</option>
-                                                            <option value="1">Minnesota</option>
-                                                            <option value="1">New Mexico</option>
-                                                            <option value="1">Utah</option>
-                                                            <option value="1">Virgin Islands</option>
-                                                            <option value="1">West Virginia</option>
-                                                            <option value="1">Wyoming</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="save-button">
-                                                        <button>lưu</button>
+                                                    <!-- Trường xác nhận mật khẩu mới -->
+                                                    <div class="form-group">
+                                                        <label for="password_confirmation">Xác nhận mật khẩu
+                                                            mới</label>
+                                                        <input type="password" class="form-control"
+                                                            id="password_confirmation" name="password_confirmation"
+                                                            placeholder="Xác nhận mật khẩu mới">
+                                                    </div> --}}
+                                                    <!-- Nút lưu thông tin -->
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Cập
+                                                            nhật</button>
                                                     </div>
                                                 </div>
                                             </form>

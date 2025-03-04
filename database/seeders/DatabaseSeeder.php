@@ -175,7 +175,6 @@ class DatabaseSeeder extends Seeder
             'user_name' => 'Nguyễn Văn A',
             'user_address' => '123 Đường ABC, TP.HCM',
             'user_phone' => '0123456789',
-            'same_as_buyer' => true,
             'receiver_email' => 'receiver@example.com',
             'receiver_name' => 'Trần Văn B',
             'receiver_address' => '456 Đường XYZ, Hà Nội',

@@ -22,9 +22,6 @@ return new class extends Migration
             $table->string('user_address')->nullable();
             $table->string('user_phone')->nullable();
 
-            // sử  lỗi
-            $table->boolean('same_as_buyer')->default(0);
-
             $table->string('receiver_email')->nullable();
             $table->string('receiver_name')->nullable();
             $table->string('receiver_address')->nullable();
@@ -33,7 +30,7 @@ return new class extends Migration
 
             // Thông tin đơn hàng
             $table->string('coupon')->nullable();
-            $table->enum('order_status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
+            $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
             $table->decimal('total_price', 15, 2);
