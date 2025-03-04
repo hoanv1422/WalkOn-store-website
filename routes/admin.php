@@ -23,7 +23,7 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 
-Route::prefix('admin')->middleware( 'admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');

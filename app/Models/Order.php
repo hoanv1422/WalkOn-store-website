@@ -12,11 +12,11 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'order_code',
         'user_email',
         'user_name',
         'user_address',
         'user_phone',
-        'same_as_buyer',
         'receiver_email',
         'receiver_name',
         'receiver_address',
@@ -34,5 +34,10 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

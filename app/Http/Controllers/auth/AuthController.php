@@ -40,17 +40,8 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
-            $user = Auth::user();
-            if ($user->is_active == 0) {
-                Auth::logout();
-                return back()->with('status', 'Tài khoản của bạn đã bị khóa ');
-            }
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.index')->with('success', 'Đăng nhập thành công!');
-            } else {
-                return redirect('/')->with('success', 'Đăng nhập thành công!');
-            }
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+            return redirect('/');
         } else {
             return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
         }
@@ -69,7 +60,6 @@ class AuthController extends Controller
 
     public function signinAdmin(Request $request)
     {
-        // dd($request->all());
         if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
             $user = Auth::user();
             if ($user->role === 'admin') {

@@ -10,8 +10,3 @@
     @include('client.pages.detail.related-product')
 @endsection
 
-@section('script')
-    <script>
-        
-    </script>
-@endsection

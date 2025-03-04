@@ -19,53 +19,6 @@
                         </thead>
                         <tbody class="text-center">
                             @foreach ($cartItems as $cartItem)
-<<<<<<< HEAD
-                                
-                            
-                            <tr>
-                                <td class="cart-item-img">
-                                    <a href="single-product.html">
-                                        <img src="img/cart/3.png" alt="">
-                                    </a>
-                                </td>
-                                <td class="cart-product-name">
-                                    <a href="single-product.html">{{$cartItem->product_name}}</a>
-                                </td>
-                                <td class="edit">
-                                    <a href="#">{{$cartItem->size}}</a>
-                                </td>
-                                <td class="move-wishlist">
-                                    <a href="#">{{$cartItem->color}}</a>
-                                </td>
-                                <td class="unit-price">
-                                    <span>{{$cartItem->price}}</span>
-                                </td>
-                                <td class="quantity">
-                                    <form action="{{ route('cart.update', $cartItem->cart_item_id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="input-group">
-                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, -0)">-</button>
-                                            <input type="text" class="form-control text-center qtyInput" id="qtyInput-{{ $cartItem->cart_item_id }}" name="quantity" value="{{ $cartItem->quantity }}">
-                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty({{ $cartItem->cart_item_id }}, +0.5)">+</button>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td class="subtotal">
-                                    <span>
-                                        {{$cartItem->price * $cartItem->quantity}} 
-                                        
-                                    </span>
-                                </td>
-                                <td class="remove-icon">
-                                    <form action="{{ route('cart.delete', $cartItem->cart_item_id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
-                                    </form>
-                                </td>
-                            </tr>
-=======
                                 <tr>
                                     <td class="cart-item-img">
                                         <a href="single-product.html">
@@ -82,18 +35,50 @@
                                         <a href="#">{{ $cartItem->color }}</a>
                                     </td>
                                     <td class="unit-price">
-                                        <span>{{ $cartItem->price }}</span>
+                                        @if ($cartItem->price_sale && $cartItem->price_sale < $cartItem->price)
+                                            <span
+                                                class="text-muted text-decoration-line-through small">{{ number_format($cartItem->price, 0, ',', '.') }}
+                                                VND</span>
+                                            <span
+                                                class="text-danger fw-bold">{{ number_format($cartItem->price_sale, 0, ',', '.') }}VND</span>
+                                        @else
+                                            <span>{{ number_format($cartItem->price, 0, ',', '.') }} VND</span>
+                                        @endif
                                     </td>
-                                    <td class="quantity">
-                                        <span>{{ $cartItem->quantity }}</span>
-                                    </td>
-                                    <td class="subtotal">
-                                        <span>
-                                            {{ $cartItem->price * $cartItem->quantity }}
 
+                                    <td class="quantity align-middle">
+                                        <form action="{{ route('cart.update', $cartItem->cart_item_id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div style="" class="input-group">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="changeQty({{ $cartItem->cart_item_id }}, -0)">-</button>
+                                                <input style="width: 0px" type="text"
+                                                    class="form-control form-control-sm text-center qtyInput"
+                                                    id="qtyInput-{{ $cartItem->cart_item_id }}" name="quantity"
+                                                    value="{{ $cartItem->quantity }}">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="changeQty({{ $cartItem->cart_item_id }}, +0.5)">+</button>
+                                            </div>
+                                        </form>
+                                    </td>
+
+                                    <td class="subtotal">
+                                        <span class="text-danger fw-bold">
+                                            @php
+                                                $unitPrice =
+                                                    $cartItem->price_sale && $cartItem->price_sale < $cartItem->price
+                                                        ? $cartItem->price_sale
+                                                        : $cartItem->price;
+
+                                                $subtotal = $unitPrice * $cartItem->quantity;
+                                            @endphp
+                                            {{ number_format($subtotal, 0, ',', '.') }} VND
                                         </span>
                                     </td>
-                                    <td class="remove-icon">
+
+                                    <td class="remove-icon align-middle">
                                         <form action="{{ route('cart.delete', $cartItem->cart_item_id) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
@@ -102,7 +87,6 @@
                                         </form>
                                     </td>
                                 </tr>
->>>>>>> minh_dev
                             @endforeach
                         </tbody>
                     </table>
@@ -111,7 +95,7 @@
                             <button type="submit">continue shopping</button>
                         </div>
                         <div class="shopping-cart-left">
-                            
+
                             <div class="shopping-button">
                                 <form action="{{ route('cart.items.clear') }}" method="POST" style="display:inline;">
                                     @csrf
@@ -119,15 +103,13 @@
                                     <button type="submit" class="btn btn-danger">Xóa tất cả sản phẩm</button>
                                 </form>
                             </div>
-                            
-                        
-                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row d-flex justify-content-end">
+
+        <div class="row">
             <div class="col-md-4">
                 <div class="discount-code">
                     <h3>Mã Giảm Giá</h3>
@@ -139,12 +121,10 @@
                 </div>
             </div>
             <div class="col-md-4">
-                {{-- <form action="{{route('order.index')}}" method="GET"> --}}
-                    {{-- @csrf --}}
+                <form action="{{ route('order.index') }}" method="GET">
+                    @csrf
 
-                    {{-- <input type="hidden" name="productVariants" value="{{ $cartItems }}"> --}}
-                    {{-- <input type="hidden" name="grandAmount" value="{{ $totalAmount }}"> --}}
-
+                    <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
 
                     <div class="totals p-3 ">
                         <div class="row">
@@ -172,11 +152,11 @@
 
 
                         <div class="shopping-button text-center mt-3">
-                            {{-- <button type="submit" class="w-100">Tiến hành thanh toán</button> --}}
-                            <a href="{{route('checkout.index')}}" class="w-100">Tiến hành thanh toán</a>
+                            <button type="submit" class="w-100">Tiến hành thanh toán</button>
+                            {{-- <a href="{{ route('checkout.index') }}" class="w-100">Tiến hành thanh toán</a> --}}
                         </div>
                     </div>
-                {{-- </form> --}}
+                </form>
             </div>
 
         </div>
@@ -197,7 +177,7 @@
     }
 </script>
  --}}
- <script>
+<script>
     function changeQty(cartItemId, change) {
         let qtyInput = document.getElementById("qtyInput-" + cartItemId);
         let newQty = parseInt(qtyInput.value) + change;
@@ -222,5 +202,3 @@
         });
     });
 </script>
-
-                             

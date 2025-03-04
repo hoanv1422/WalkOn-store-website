@@ -21,7 +21,7 @@
                     <div class="tab-content single-product-page">
                         <div role="tabpanel" class="tab-pane fade show active" id="tab1">
                             <div class="single-p-tab-content">
-                                {{ $product->description }}
+                                {!! $product->description !!}
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab2">

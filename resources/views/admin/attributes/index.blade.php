@@ -424,6 +424,16 @@
                                                         placeholder="Nhập tên" name="color" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
                                                 </div>
+                                                <div class="mb-3">
+                                                    <label for="color-field" class="form-label">Mã màu</label>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="color" id="code-field-create" class="form-control form-control-color me-2" name="code" />
+                                                        <span id="color-preview-create" class="border p-2 rounded"
+                                                            style="width: 50px; height: 30px; display: inline-block;"></span>
+                                                    </div>
+                                                    <div class="invalid-feedback">Please enter a customer code.</div>
+                                                </div>
+
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="hstack gap-2 justify-content-end">
@@ -459,6 +469,12 @@
                                                     <input type="text" id="color-field-edit" class="form-control"
                                                         placeholder="Nhập tên" name="color" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="color-field" class="form-label">Mã màu</label>
+                                                    <input type="color" id="code-field-edit" class="form-control "
+                                                        placeholder="Nhập tên" name="code" />
+                                                    <div class="invalid-feedback">Please enter a customer code.</div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">

@@ -33,15 +33,15 @@
                                 <div class="col-xl-4 col-md-8 mx-auto">
                                     <div class="product-img-slider sticky-side-div">
                                         <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
+                                            <div class="swiper-wrapper" style="height: 490px">
+                                                <div class="swiper-slide overflow-hidden">
                                                     <img src="{{ Storage::url($product->image) }}" alt=""
-                                                        class="img-fluid d-block" />
+                                                        class="img-fluid d-block object-fit-cover" />
                                                 </div>
                                                 @foreach ($product->galleries as $item)
-                                                    <div class="swiper-slide">
+                                                    <div class="swiper-slide overflow-hidden">
                                                         <img src="{{ Storage::url($item->image) }}" alt=""
-                                                            class="img-fluid d-block" />
+                                                            class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -50,18 +50,18 @@
                                         </div>
                                         <!-- end swiper thumbnail slide -->
                                         <div class="swiper product-nav-slider mt-2">
-                                            <div class="swiper-wrapper">
+                                            <div class="swiper-wrapper" style="height: 101px">
                                                 <div class="swiper-slide">
-                                                    <div class="nav-slide-item">
-                                                        <img src="{{ Storage::url($product->image) }}"
-                                                            alt="" class="img-fluid d-block" />
+                                                    <div class="nav-slide-item overflow-hidden">
+                                                        <img src="{{ Storage::url($product->image) }}" alt=""
+                                                            class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 </div>
                                                 @foreach ($product->galleries as $item)
                                                     <div class="swiper-slide">
-                                                        <div class="nav-slide-item">
-                                                            <img src="{{ Storage::url($item->image) }}"
-                                                                alt="" class="img-fluid d-block" />
+                                                        <div class="nav-slide-item overflow-hidden">
+                                                            <img src="{{ Storage::url($item->image) }}" alt=""
+                                                                class="img-fluid d-block object-fit-cover" />
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -186,21 +186,22 @@
                                         </div>
 
                                         <div class="row">
+                                            <!-- Chọn Kích Cỡ -->
                                             <div class="col-xl-6">
                                                 <div class="mt-4">
                                                     <h5 class="fs-14">Kích Cỡ :</h5>
                                                     <div class="d-flex flex-wrap gap-2">
-                                                        @foreach ($product->variants as $item)
+                                                        @foreach ($sizes as $size)
                                                             <div data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                 data-bs-placement="top"
-                                                                title="{{ $item->quantity > 0 ? 'Còn ' . $item->quantity . ' sản phẩm' : 'Hết hàng' }}">
+                                                                title="{{ $size->total_quantity > 0 ? 'Còn ' . $size->total_quantity . ' sản phẩm' : 'Hết hàng' }}">
                                                                 <input type="radio" class="btn-check"
                                                                     name="productsize-radio"
                                                                     id="productsize-radio{{ $loop->index }}"
-                                                                    @if ($item->quantity == 0) disabled @endif>
+                                                                    @if ($size->total_quantity == 0) disabled @endif>
                                                                 <label
                                                                     class="btn btn-soft-primary avatar-xs rounded-circle p-3 d-flex justify-content-center align-items-center"
-                                                                    for="productsize-radio{{ $loop->index }}">{{ $item->size->size }}</label>
+                                                                    for="productsize-radio{{ $loop->index }}">{{ $size->size->size }}</label>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -208,21 +209,22 @@
                                             </div>
                                             <!-- end col -->
 
+                                            <!-- Chọn Màu -->
                                             <div class="col-xl-6">
-                                                <div class=" mt-4">
+                                                <div class="mt-4">
                                                     <h5 class="fs-14">Màu :</h5>
                                                     <div class="d-flex flex-wrap gap-2">
-                                                        @foreach ($product->variants as $item)
+                                                        @foreach ($colors as $color)
                                                             <div data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                 data-bs-placement="top"
-                                                                title="{{ $item->quantity > 0 ? 'Còn ' . $item->quantity . ' sản phẩm' : 'Hết hàng' }}">
+                                                                title="{{ $color->total_quantity > 0 ? 'Còn ' . $color->total_quantity . ' sản phẩm' : 'Hết hàng' }}">
                                                                 <input type="radio" class="btn-check"
                                                                     name="productcolor-radio"
                                                                     id="productcolor-radio{{ $loop->index }}"
-                                                                    @if ($item->quantity == 0) disabled @endif>
+                                                                    @if ($color->total_quantity == 0) disabled @endif>
                                                                 <label
-                                                                    class="btn btn-soft-primary  p-2 d-flex justify-content-center align-items-center"
-                                                                    for="productcolor-radio{{ $loop->index }}">{{ $item->color->color }}</label>
+                                                                    class="btn btn-soft-primary p-2 d-flex justify-content-center align-items-center"
+                                                                    for="productcolor-radio{{ $loop->index }}">{{ $color->color->color }}</label>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -230,6 +232,8 @@
                                             </div>
                                             <!-- end col -->
                                         </div>
+
+
                                         <!-- end row -->
 
                                         <div class="mt-4 text-muted">

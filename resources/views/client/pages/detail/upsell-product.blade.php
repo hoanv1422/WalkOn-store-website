@@ -15,8 +15,8 @@
                     <div class="single-product">
                         <div class="product-img">
                             <a href="{{ route('detail.index', $upSell->slug) }}">
-                                <img src="{{ asset('storage/app/' .$upSell->image) }}" alt="" class="primary-img">
-                                <img src="{{ asset('storage/app/' .$upSell->image) }}" alt="" class="secondary-img">
+                                <img src="{{ Storage::url($upSell->image) }}" alt="" class="primary-img">
+                                <img src="{{ Storage::url($upSell->image) }}" alt="" class="secondary-img">
                             </a>
                         </div>
                         <div class="product-price">
