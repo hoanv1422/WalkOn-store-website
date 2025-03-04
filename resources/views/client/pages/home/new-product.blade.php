@@ -4,13 +4,13 @@
          <div class="row">
              <div class="col-md-12">
                  <div class="section-heading">
-                     <h2>NEW PRODUCTS</h2>
+                     <h2>SẢN PHẨM HOT NHẤT</h2>
                  </div>
              </div>
          </div>
          <div class="row">
              <div class="new-product-slider carousel-margin">
-                @foreach ($products as $product )
+                @foreach ($products_average_rating as $product_average_rating )
                     
                 <div class="col">
                     <div class="single-product">
@@ -18,27 +18,24 @@
                             <span>new</span>
                         </div>
                         <div class="product-img">
-                            <a href="single-product.html">
+                            <a href="{{route('detail.index', $product_average_rating->slug)}}">
                                 <img src="img/product/1.png" alt="" class="primary-img">
                                 <img src="img/product/2.png" alt="" class="secondary-img">
                             </a>
                         </div>
                         <div class="product-name">
-                            <a href="single-product.html" title="Fusce aliquam">{{$product->name}}</a>
+                            <a href="{{route('detail.index', $product_average_rating->slug)}}" title="Fusce aliquam">{{$product_average_rating->name}}</a>
                         </div>
                         <div class="price-rating">
-                            <span class="old-price" >{{$product->price}}</span>
-                            <span style="color:red">{{$product->price_sale}}</span>
+                            <span class="old-price" style="color:red">{{$product_average_rating->price}}</span>
+                            <span >{{$product_average_rating->price_sale}}</span>
                             <div class="ratings">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
+                                <span>{{$product_average_rating->average_rating}}</span> <i class="fa fa-star"></i>
+                                
                             </div>
                         </div>
                         <div class="actions">
-                            <button type="submit" class="cart-btn" title="Add to cart">add to cart</button>
+                            <button type="submit" class="cart-btn" title="Add to cart">thêm vào giỏ hàng</button>
                             <ul class="add-to-link">
                                 <li><a class="modal-view" data-target="#productModal" data-bs-toggle="modal"
                                         href="#"> <i class="fa fa-search"></i></a></li>
