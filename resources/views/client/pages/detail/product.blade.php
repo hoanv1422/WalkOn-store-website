@@ -1,21 +1,24 @@
 <!-- single product details start -->
 <div class="single-product-details">
     <div class="container">
+
         <div class="row">
             <!-- Cột hình ảnh sản phẩm -->
             <div class="col-lg-6">
-                <div class="single-product-img tab-content" >
-                    <div class="single-pro-main-image tab-pane active overflow-hidden" style="height: 555px"  id="pro-large-img-1">
+                <div class="single-product-img tab-content">
+                    <div class="single-pro-main-image tab-pane active overflow-hidden" style="height: 555px"
+                        id="pro-large-img-1">
                         <a href="#">
                             <img class="optima_zoom object-fit-cover" src="{{ Storage::url($product->image) }}"
-                                 data-zoom-image="{{ Storage::url($product->image) }}" alt="optima" />
+                                data-zoom-image="{{ Storage::url($product->image) }}" alt="optima" />
                         </a>
                     </div>
                     @foreach ($product->galleries as $key => $gallery)
-                        <div class="single-pro-main-image tab-pane overflow-hidden" style="height: 555px" id="pro-large-img-{{ $key + 2 }}">
+                        <div class="single-pro-main-image tab-pane overflow-hidden" style="height: 555px"
+                            id="pro-large-img-{{ $key + 2 }}">
                             <a href="#">
                                 <img class="optima_zoom object-fit-cover" src="{{ Storage::url($gallery->image) }}"
-                                     data-zoom-image="{{ Storage::url($gallery->image) }}" alt="Product Image">
+                                    data-zoom-image="{{ Storage::url($gallery->image) }}" alt="Product Image">
                             </a>
                         </div>
                     @endforeach
@@ -27,9 +30,10 @@
                         </a>
                     </div>
                     @foreach ($product->galleries as $key => $gallery)
-                        <div class="single-product-slider  overflow-hidden" style="height: 150px; width:150px" >
+                        <div class="single-product-slider  overflow-hidden" style="height: 150px; width:150px">
                             <a href="#pro-large-img-{{ $key + 2 }}" data-bs-toggle="tab">
-                                <img src="{{ Storage::url($gallery->image) }}" alt="Product Image" class=" object-fit-cover">
+                                <img src="{{ Storage::url($gallery->image) }}" alt="Product Image"
+                                    class=" object-fit-cover">
                             </a>
                         </div>
                     @endforeach
@@ -81,7 +85,7 @@
                             </li>
                         </ul>
                     </div>
-            
+
                     <!-- Form thêm sản phẩm vào giỏ -->
                     <form action="{{ route('cart.add', $product->id) }}" method="post">
                         @csrf
@@ -107,7 +111,7 @@
                                     </div>
                                     <input type="hidden" name="color" id="selectedColor">
                                 </div>
-            
+
                                 <!-- Chọn Kích Cỡ  -->
                                 <div class="col-md-6">
                                     <label class="form-label required"> Kích cỡ</label>
@@ -126,7 +130,7 @@
                         <p class="mt-2">
                             <strong>Số lượng tồn kho:</strong> <span id="variantStock">Chọn biến thể</span>
                         </p>
-            
+
                         <!-- Chọn số lượng và nút thêm vào giỏ hàng -->
                         <div class="row g-3 align-items-center mt-3">
                             <div class="col-md-3">
@@ -135,7 +139,7 @@
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="decreaseQty()">-</button>
                                     <input type="text" class="form-control text-center" id="qtyInput"
-                                        value="1" name="quantity" >
+                                        value="1" name="quantity">
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="increaseQty()">+</button>
                                 </div>
@@ -145,10 +149,10 @@
                             </div>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -372,7 +376,7 @@
             maxQty = Number(maxQty);
         }
         if (currentQty < maxQty) {
-            qtyInput.value = currentQty ;
+            qtyInput.value = currentQty;
             qtyInput.dispatchEvent(new Event("input"));
         }
     }
@@ -382,7 +386,7 @@
         const qtyInput = document.getElementById("qtyInput");
         let currentQty = Number(qtyInput.value) || 1;
         if (currentQty > 1) {
-            qtyInput.value = currentQty ;
+            qtyInput.value = currentQty;
             qtyInput.dispatchEvent(new Event("input"));
         }
     }

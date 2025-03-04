@@ -12,7 +12,10 @@ class ShopController extends Controller
 {
     public function index()
     {
-        $products = Product::with('galleries', 'variants', 'colors', 'sizes')->take(10)->get();
+        $products = Product::with('galleries', 'variants', 'colors', 'sizes')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
         $categories = Category::all();
         $colors = Color::all();
         return view('client.pages.shop.index', compact('products', 'categories', 'colors'));
@@ -21,7 +24,10 @@ class ShopController extends Controller
     // Lọc Sản phần theo danh mục
     public function filterByCategory($categoryId)
     {
-        $products = Product::with('galleries', 'variants', 'colors', 'sizes')->where('category_id', $categoryId)->get();
+        $products = Product::with('galleries', 'variants', 'colors', 'sizes')
+            ->where('category_id', $categoryId)
+            ->orderBy('created_at', 'desc')
+            ->get();
         $categories = Category::all();
         $colors = Color::all();
         return view('client.pages.shop.index', compact('products', 'categories', 'colors'));
