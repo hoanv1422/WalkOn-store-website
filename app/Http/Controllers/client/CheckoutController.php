@@ -38,6 +38,15 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng trống.');
             }
 
+            DB::beginTransaction();
+
+            // Kiểm tra số lượng tồn kho
+            foreach ($cartItems as $item) {
+                if ($item->quantity > $item->productVariant->quantity) {
+                    throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
+                }
+            }
+
             $order = Order::create([
                 'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
                 'user_id' => $user->id,
@@ -71,16 +80,18 @@ class CheckoutController extends Controller
                     'variant_color_name' => $item->productVariant->color->color,
                     'quantity' => $item->quantity,
                 ];
+                $item->productVariant->decrement('quantity', $item->quantity);
             }
             OrderItem::insert($orderItems);
             CartItem::where('cart_id', $cart->id)->delete();
 
             if ($request->payment_method === 'VNPAY') {
+                DB::commit(); 
                 $vnpayUrl = $this->vnpay_payment($order->total_price, $order->order_code);
                 return redirect()->away($vnpayUrl);
-            } elseif ($request->payment_method === 'COD') {
-                return redirect()->route('cart.index')->with('success', 'Đơn hàng COD của bạn đã được đặt thành công.');
             }
+
+            DB::commit();
             return redirect()->route('cart.index')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -174,6 +185,7 @@ class CheckoutController extends Controller
         }
 
         if ($vnp_ResponseCode != '00') {
+
             return redirect('/order')->with('error', 'Thanh toán thất bại, mã lỗi: ' . $vnp_ResponseCode);
         }
 
