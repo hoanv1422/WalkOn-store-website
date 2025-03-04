@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $categories = Category::all();
         $colors = Color::all();
 
-        return view('client.pages.profile.my-account', compact('user', 'orders', 'categories', 'colors'));
+        return view('client.pages.profile.index', compact('user', 'orders', 'categories', 'colors'));
     }
 
     public function show()
