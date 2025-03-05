@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 
@@ -32,6 +33,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
+    //kho hàng
+    Route::resource('inventory', InventoryController::class)->only(['index']);
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
