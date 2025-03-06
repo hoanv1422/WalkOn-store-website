@@ -65,7 +65,7 @@
                         <div class="price-rating">
                             <!-- Giá gốc -->
                             <span class="old-price" id="variantOriginalPrice"
-                                style="display: none; color:red; text-decoration: line-through;">
+                                style="display: none; color:rgb(0, 0, 0); text-decoration: line-through;">
                                 {{ number_format($product->price, 0, ',', '.') }} VND
                             </span>
                             <!-- Giá hiện tại -->
