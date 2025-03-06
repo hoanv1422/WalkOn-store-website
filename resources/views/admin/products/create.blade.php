@@ -1,0 +1,477 @@
+@extends('admin.layouts.app')
+@section('title', 'Tạo Sản Phẩm')
+@section('style')
+    {{-- <link href="{{ asset('templates/admin/assets/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" /> --}}
+
+@endsection
+@section('content')
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                        <h4 class="mb-sm-0">Thêm Mới Sản Phẩm</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Mại Điện Tự</a></li>
+                                <li class="breadcrumb-item active">Thêm Mới Sản Phẩm</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <form action="{{ route('products.store') }}" method="POST" onsubmit="removeCurrencyFormat()"
+                class="needs-validation" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label" for="product-title-input">Tiêu Đề Sản Phẩm</label>
+                                    <input type="text"
+                                        class="form-control @error('name') is-invalid @elseif(old('name')) is-valid @enderror"
+                                        id="product-title-input" value="{{ old('name') }}" name="name"
+                                        placeholder="Nhập tiêu đề sản phẩm">
+                                    @error('name')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label>Mô Tả Sản Phẩm</label>
+                                    <textarea name="description" id="ckeditor-classic"> 
+                                        {{ old('description') }}
+                                    </textarea>
+                                    @error('description')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Thư Viện Ảnh</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <h5 class="fs-14 mb-1">Ảnh Sản Phẩm</h5>
+                                    <p class="text-muted">Ảnh chính.</p>
+                                    @error('image')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                    <div class="text-center">
+                                        <div class="position-relative d-inline-block">
+                                            <div class="position-absolute top-100 start-100 translate-middle">
+                                                <label for="product-image-input" class="mb-0" data-bs-toggle="tooltip"
+                                                    data-bs-placement="right" title="Select Image">
+                                                    <div class="avatar-xs">
+                                                        <div
+                                                            class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                            <i class="ri-image-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                                <input class="form-control d-none" id="product-image-input" name="image"
+                                                    type="file" accept="image/png, image/gif, image/jpeg" value=""
+                                                    onchange="previewImage(event)" value="{{old('image')}}">
+                                            </div>
+                                            <div class="avatar-lg">
+                                                <div class="avatar-title bg-light rounded overflow-hidden">
+                                                    <img src="{{ old('image') ? asset('storage/' . old('image')) : '' }}"
+                                                        id="product-img" class="avatar-md h-auto object-fit-cover" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="fs-14 mb-1">Thư Viện</h5>
+                                    <p class="text-muted">Nhập thư viện ảnh.</p>
+                                    @error('product_galleries')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+
+                                    <div class="border border-2 border-muted p-4 text-center rounded">
+                                        <div>
+                                            <div class="mb-3">
+                                                <input type="file" id="fileInput" multiple class="form-control d-none"
+                                                    name="product_galleries[]" />
+                                                <a class="btn btn-primary mt-3"
+                                                    onclick="document.getElementById('fileInput').click()">Chọn Ảnh(Có thể
+                                                    chọn nhiều)</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                        {{-- @foreach (session('uploaded_images.product_galleries', []) as $index => $galleryImage)
+                                        <li class="mt-2" id="dropzone-preview-list">
+                                            <!-- This is used as the file preview template -->
+                                            <div class="border rounded">
+                                                <div class="d-flex p-2">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar-sm bg-light rounded">
+                                                            <img data-dz-thumbnail class="img-fluid rounded d-block"
+                                                                src="{{ Storage::url($galleryImage) }}" alt="Product-Image" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="pt-1">
+                                                            <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                            <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-shrink-0 ms-3">
+                                                        <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endforeach --}}
+                                    </ul>
+                                    <!-- end dropzon-preview -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info"
+                                            role="tab">
+                                            Thông Tin Chung
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- end card header -->
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="manufacturer-brand-input">Thương
+                                                        Hiệu</label>
+                                                    <a href="{{ route('brands.index') }}"
+                                                        class="float-end text-decoration-underline">Thêm Mới</a>
+                                                    <select class="form-select" id="choices-brand-input" name="brand_id">
+                                                        @foreach ($brands as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-price-input">Giá nhập</label>
+                                                    <div class="input-group has-validation mb-3">
+                                                        <span class="input-group-text" id="product-price-addon">VNĐ</span>
+                                                        <input type="text"
+                                                            class="form-control @error('price_income') is-invalid @elseif(old('price_income')) is-valid @enderror"
+                                                            id="product-price-input" placeholder="" aria-label="Price"
+                                                            aria-describedby="product-price-addon" name="price_income"
+                                                            value="{{ old('price_income') }}"
+                                                            oninput="formatCurrency(this)">
+                                                        @error('price_income')
+                                                            <span class="invalid-feedback">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-price-input">Giá bán</label>
+                                                    <div class="input-group has-validation mb-3">
+                                                        <span class="input-group-text" id="product-price-addon">VNĐ</span>
+                                                        <input type="text"
+                                                            class="form-control @error('price') is-invalid @elseif(old('price')) is-valid @enderror"
+                                                            id="product-price-input" placeholder="" aria-label="Price"
+                                                            aria-describedby="product-price-addon" name="price"
+                                                            value="{{ old('price') }}" oninput="formatCurrency(this)">
+                                                        @error('price')
+                                                            <span class="invalid-feedback">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-price-input">Giá khuyến
+                                                        mãi</label>
+                                                    <div class="input-group has-validation mb-3">
+                                                        <span class="input-group-text" id="product-price-addon">VNĐ</span>
+                                                        <input type="text"
+                                                            class="form-control @error('price_sale') is-invalid @elseif(old('price_sale')) is-valid @enderror"
+                                                            id="product-price-input" placeholder="" aria-label="Price"
+                                                            aria-describedby="product-price-addon" name="price_sale"
+                                                            value="{{ old('price_sale') }}"
+                                                            oninput="formatCurrency(this)">
+                                                        @error('price_sale')
+                                                            <span class="invalid-feedback">{{ $message }}</span>
+                                                        @enderror
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                        </div>
+                                        <!-- end row -->
+                                    </div>
+                                    <!-- end tab-pane -->
+                                </div>
+                                <!-- end tab content -->
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info"
+                                            role="tab">
+                                            Biến Thể
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- end card header -->
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
+                                        <!--Nhập biến thể ở đây-->
+                                        <table class="table" id="variantsContainer"
+                                            data-sizes='@json($sizes)'
+                                            data-colors='@json($colors)'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Ảnh</th>
+                                                    <th>Kích Cỡ</th>
+                                                    <th>Màu Sắc</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Giá khuyến mãi</th>
+                                                    <th>Hoạt Động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="variantsContainer">
+
+                                                @php
+                                                    $productVariants = old('product_variant', [
+                                                        [
+                                                            'size' => '',
+                                                            'color' => '',
+                                                            'image' => '',
+                                                            'quantity' => '',
+                                                            'price' => '',
+                                                        ],
+                                                    ]);
+                                                    $lastIndex = array_key_last($productVariants);
+                                                @endphp
+                                                <input type="hidden" id="lastIndex" value="{{ $lastIndex }}">
+                                                @if (old('product_variant'))
+                                                    @foreach ($productVariants as $index => $product_variant)
+                                                        <tr class="variant">
+                                                            <td class="align-middle">
+                                                                <div class="position-relative d-inline-block">
+                                                                    <div
+                                                                        class="position-absolute top-100 start-100 translate-middle">
+                                                                        <label
+                                                                            for="imagePreviewVariantInput_{{ $index }}"
+                                                                            class="mb-0" data-bs-toggle="tooltip"
+                                                                            data-bs-placement="right"
+                                                                            aria-label="Select Image"
+                                                                            data-bs-original-title="Select Image">
+                                                                            <div class="avatar-xs">
+                                                                                <div
+                                                                                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                                    <i
+                                                                                        class="mdi mdi-image text-muted fs-16 p-1"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </label>
+                                                                        <input class="form-control d-none"
+                                                                            id="imagePreviewVariantInput_{{ $index }}"
+                                                                            type="file"
+                                                                            accept="image/png, image/gif, image/jpeg"
+                                                                            onchange="previewImageVariant(event, {{ $index }})"
+                                                                            name="product_variant[{{ $index }}][image]">
+                                                                    </div>
+                                                                    <div class="avatar-sm">
+                                                                        <div
+                                                                            class="avatar-title bg-light rounded overflow-hidden">
+                                                                            <img src=""
+                                                                                id="imagePreviewVariant_{{ $index }}"
+                                                                                class="avatar-sm h-auto object-fit-cover"
+                                                                                alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <select
+                                                                    class="form-control @error("product_variant.$index.size") is-invalid @enderror"
+                                                                    name="product_variant[{{ $index }}][size]">
+                                                                    <option value="">Chọn kích cỡ</option>
+                                                                    @foreach ($sizes as $size_id => $size)
+                                                                        <option value="{{ $size_id }}"
+                                                                            {{ $product_variant['size'] == $size_id ? 'selected' : '' }}>
+                                                                            {{ $size }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <select
+                                                                    class="form-control @error("product_variant.$index.color") is-invalid @enderror"
+                                                                    name="product_variant[{{ $index }}][color]">
+                                                                    <option value="">Chọn màu</option>
+                                                                    @foreach ($colors as $color_id => $color)
+                                                                        <option value="{{ $color_id }}"
+                                                                            {{ $product_variant['color'] == $color_id ? 'selected' : '' }}>
+                                                                            {{ $color }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+
+                                                            <td class="align-middle">
+                                                                <input
+                                                                    class="form-control @error("product_variant.$index.quantity") is-invalid @enderror"
+                                                                    type="text"
+                                                                    name="product_variant[{{ $index }}][quantity]"
+                                                                    value="{{ $product_variant['quantity'] }}"
+                                                                    placeholder="Số lượng">
+
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="input-group has-validation">
+                                                                    <span class="input-group-text"
+                                                                        id="product-price-addon">VNĐ</span>
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price") is-invalid @enderror"
+                                                                        id="product-price-input" placeholder="Giá"
+                                                                        aria-label="Price"
+                                                                        aria-describedby="product-price-addon"
+                                                                        name="product_variant[{{ $index }}][price]"
+                                                                        value="{{ $product_variant['price'] }}"
+                                                                        oninput="formatCurrency(this)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td class="align-middle">
+                                                                <div class="input-group has-validation">
+                                                                    <span class="input-group-text"
+                                                                        id="product-price-addon">VNĐ</span>
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
+                                                                        id="product-price-input" placeholder="Giá"
+                                                                        aria-label="Price Sale"
+                                                                        aria-describedby="product-price-addon"
+                                                                        name="product_variant[{{ $index }}][price_sale]"
+                                                                        value="{{ $product_variant['price_sale'] }}"
+                                                                        oninput="formatCurrency(this)">
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="btn btn-danger removeVariant">X</div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                        <div class="btn btn-info" id="addMoreVariant">Thêm Biến Thể</div>
+                                    </div>
+                                    <!-- end tab-pane -->
+                                </div>
+                                <!-- end tab content -->
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                        <div class="text-end mb-3">
+                            <button type="submit" class="btn btn-success w-sm">Thêm Mới</button>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Xuất Bản</h5>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <label for="choices-publish-visibility-input" class="form-label">Trạng Thái</label>
+                                    <select class="form-select" id="choices-publish-visibility-input" data-choices
+                                        data-choices-search-false name="is_active">
+                                        <option value="1" selected>Công Khai</option>
+                                        <option value="0">Ẩn</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Danh Mục Sản Phẩm</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-2"> <a href="{{ route('categories.index') }}"
+                                        class="float-end text-decoration-underline">Thêm Mới </a>Chọn danh mục</p>
+                                <select class="form-select" id="choices-category-input" name="category_id">
+                                    @foreach ($categories as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+
+            </form>
+
+        </div>
+        <!-- container-fluid -->
+    </div>
+
+@endsection
+
+@section('script')
+
+
+    <script src="{{ asset('templates/admin/assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}">
+    </script>
+    {{-- <script src="{{ asset('templates/admin/assets/libs/dropzone/dropzone-min.js') }}"></script> --}}
+    <script src="{{ asset('templates/admin/assets/js/pages/ecommerce-product-create.init.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/product-variant/product-variant.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/price-format/price-format.js') }}"></script>
+
+@endsection
