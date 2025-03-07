@@ -74,7 +74,6 @@ class ProfileController extends Controller
         try {
             $user->save();
             // dd(get_class($user));
-
             return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.')->with('updatedFields', $updatedFields);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');

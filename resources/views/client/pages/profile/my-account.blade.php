@@ -92,9 +92,6 @@
                                                     <p class="text-muted text-center">Bạn chưa đặt đơn hàng nào.</p>
                                                 @else
                                                     <div class="card shadow-lg border-0">
-                                                        {{-- <div class="card-header bg-primary text-white">
-                                                            <h5 class="mb-0 text-center">Lịch Sử Mua Hàng</h5>
-                                                        </div> --}}
                                                         <div class="card-body bg-white">
                                                             <div class="table-responsive">
                                                                 <table
@@ -121,9 +118,9 @@
                                                                                 <td>
                                                                                     <span
                                                                                         class="badge
-                                                            @if ($order->order_status == 'Đã giao') bg-success
-                                                            @elseif($order->order_status == 'Đang xử lý') bg-warning text-dark
-                                                            @else bg-secondary @endif">
+                                                                                    @if ($order->order_status == 'Đã giao') bg-success
+                                                                                    @elseif($order->order_status == 'Đang xử lý') bg-warning text-dark
+                                                                                    @else bg-secondary @endif">
                                                                                         {{ $order->order_status }}
                                                                                     </span>
                                                                                 </td>

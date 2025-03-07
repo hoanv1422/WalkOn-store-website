@@ -32,6 +32,7 @@
             </div>
             <!-- end page title -->
 
+            <!-- Lọc sản phẩm -->
             <div class="row">
                 <div class="col-xl-3 col-lg-4">
                     <div class="card">
