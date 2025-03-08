@@ -76,35 +76,55 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($wishlistItems as $item)
-                                
+                                @forelse ($wishlistItems as $item)
                                     <tr>
-                                        <td><a href="#" class="text-center"><img src="{{ asset('img/products/' . $item->product->image) }}" alt=""> </a></td>
+                                        <!-- Hình ảnh sản phẩm -->
                                         <td>
-                                            <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
+                                            <a href="{{ route('detail.index', $item->product->slug ?? '#') }}" class="text-center">
+                                                <img src="{{ asset('img/products/' . ($item->product->image ?? 'default.jpg')) }}" alt="" width="70">
+                                            </a>
                                         </td>
-                                        <td>{{ $item->product->sku }}</td>
-                                        <td>{{ $item->product->quantity }}</td>
-                                        <td class="unit-price">${{ $item->product->price }}</td>
+                            
+                                        <!-- Tên sản phẩm -->
+                                        <td>
+                                            @if($item->product)
+                                                <a href="{{ route('detail.index', $item->product->slug) }}">{{ $item->product->name }}</a>
+                                            @else
+                                                <span class="text-danger">Sản phẩm không tồn tại</span>
+                                            @endif
+                                        </td>
+                            
+                                        <!-- SKU -->
+                                        <td>{{ $item->product->sku ?? 'N/A' }}</td>
+                            
+                                        <!-- Số lượng còn trong kho -->
+                                        <td>{{ $item->product->quantity ?? 0 }}</td>
+                            
+                                        <!-- Giá -->
+                                        <td class="unit-price">${{ number_format($item->product->price ?? 0, 2) }}</td>
+                            
+                                        <!-- Hành động -->
                                         <td>
                                             <div class="wishlist-actions">
-                                                <button type="button" data-bs-toggle="tooltip" title="Add to Cart">
-                                                    <i class="fa fa-shopping-cart"></i>
-                                                </button>
-                                                <form action="{{ route('wishlist.destroy', $item->id) }}" method="POST">
-                                                 @csrf
-                                                 @method('DELETE')
-                                                <button type="submit" data-bs-toggle="tooltip" title="Remove" onclick="confirm('bạn có chắc xóa không?')">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-
+                                                <!-- Form xóa wishlist -->
+                                                <form action="{{ route('wishlist.destroy', $item->id) }}" method="POST"
+                                                      onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi Wishlist?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" data-bs-toggle="tooltip" title="Remove">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
                                                 </form>
-                                               
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Chưa có sản phẩm nào trong danh sách yêu thích.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
+                            
                         </table>
                     </div>
                     <button type="submit" value="Continue" class="check-button">Continue</button>

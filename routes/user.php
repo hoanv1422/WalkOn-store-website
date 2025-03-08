@@ -29,6 +29,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 // Shop
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/filter', [ShopController::class, 'filter'])->name('shop.filter');
 
 // Detail
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
@@ -52,6 +53,9 @@ Route::middleware('client')->group(function () {
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
@@ -67,9 +71,6 @@ Route::middleware('client')->group(function () {
 
 
 
-// wishlist
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
 
 

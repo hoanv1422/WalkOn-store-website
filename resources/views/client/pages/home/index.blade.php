@@ -6,4 +6,5 @@
     @foreach (['slider', 'banner', 'product', 'features-product', 'another-banner', 'new-product', 'testimonial', 'blog', 'newsletter'] as $section)
         @include("client.pages.home.$section")
     @endforeach
+    
 @endsection

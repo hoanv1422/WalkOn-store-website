@@ -1,4 +1,4 @@
-<!-- related product area start-->
+php <!-- related product area start-->
 @if ($relatedProducts->isNotEmpty())
     <div class="related-product home2">
         <div class="container">

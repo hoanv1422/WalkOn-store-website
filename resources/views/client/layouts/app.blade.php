@@ -65,7 +65,7 @@
         ============================================ -->
     <script src={{asset("templates/client/js/vendor/modernizr-2.8.3.min.js")}}></script>
 
-    @yield('style')
+    @yield('css')
 </head>
 
 <body>
@@ -197,8 +197,41 @@
     <!-- main JS
         ============================================ -->
     <script src={{asset("templates/client/js/main.js")}}></script>
+    
 
     @yield('script')
+   
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.wishlist-action').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn chặn load lại trang
+
+                let productId = this.getAttribute('data-id');
+
+                fetch('/wishlist/toggle', {
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect; // Chuyển hướng đến trang wishlist
+                    } else {
+                        alert(data.message); // Hiển thị thông báo khi thêm thành công
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+            });
+        });
+    });
+</script>
+
+
 </body>
 
 <!-- Mirrored from htmldemo.net/james/james/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 18 Jan 2025 15:49:49 GMT -->

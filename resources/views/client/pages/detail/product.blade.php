@@ -75,10 +75,11 @@
                     <div class="action">
                         <ul class="add-to-links">
                             <li>
-                                <a href="#">
-                                    <i class="fa fa-heart"></i>
+                                <a href="#" class="wishlist-action" data-id="{{ $product->id }}">
+                                    <i class="fa fa-heart-o"></i> 
                                 </a>
                             </li>
+                            
                         </ul>
                     </div>
             
