@@ -63,10 +63,6 @@ Route::middleware('client')->group(function () {
 });
 
 
-
-
-
-
 // wishlist
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');

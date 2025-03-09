@@ -4,9 +4,15 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\WishlistController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +35,34 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
 
     Route::post('/logout', 'logout')->name('logout')->middleware('client');
+
+    Route::get('/forgot-password', function () {
+        return view('auth.forgot_password');
+    })->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+    //  gửi thông tin mail rồi mới có thông báo là đổi mật khẩu từ email là ok
+    Route::get('/password-confirmation', function () {
+        return view('auth.confirmation_password');
+    })->name('confirmation.password')->middleware('password.reset.check');
+
+    // phần xác thực email
+   Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail'])->name('verification.send');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        Log::info('Email verification request', ['id' => $request->route('id'), 'hash' => $request->route('hash')]);
+        $request->fulfill();
+        return redirect()->route('verified.email')->with('message', 'Email đã được xác thực thành công!');
+    })->middleware('signed')->name('verification.verify');
+
+    Route::get('/verified-email', function () {
+        return view('auth.verified_email');
+    })->name('verified.email')->middleware('verified');
+    Route::get('/email/verify', function () {
+        return view('auth.verified-email');
+    })->name('verification.notice');
 });
 
 // Test routes
