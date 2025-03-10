@@ -14,8 +14,7 @@ class ShopController extends Controller
     {
         $products = Product::with('galleries', 'variants', 'colors', 'sizes')
             ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
+            ->paginate(9); // Hiển thị 9 sản phẩm mỗi trang
         $categories = Category::all();
         $colors = Color::all();
         return view('client.pages.shop.index', compact('products', 'categories', 'colors'));
@@ -27,7 +26,7 @@ class ShopController extends Controller
         $products = Product::with('galleries', 'variants', 'colors', 'sizes')
             ->where('category_id', $categoryId)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(9); // Hiển thị 9 sản phẩm mỗi trang
         $categories = Category::all();
         $colors = Color::all();
         return view('client.pages.shop.index', compact('products', 'categories', 'colors'));

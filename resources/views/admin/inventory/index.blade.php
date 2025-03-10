@@ -32,7 +32,6 @@
             </div>
             <!-- end page title -->
 
-            <!-- Lọc sản phẩm -->
             <div class="row">
                 <div class="col-xl-3 col-lg-4">
                     <div class="card">
@@ -58,75 +57,19 @@
                                 <div>
                                     <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
                                     <ul class="list-unstyled mb-0 filter-list">
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Grocery</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Fashion</h5>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <span class="badge bg-light text-muted">5</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Watches</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Electronics</h5>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <span class="badge bg-light text-muted">5</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Furniture</h5>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <span class="badge bg-light text-muted">6</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Automotive Accessories</h5>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Appliances</h5>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <span class="badge bg-light text-muted">7</span>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#" class="d-flex py-1 align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-13 mb-0 listname">Kids</h5>
-                                                </div>
-                                            </a>
-                                        </li>
+                                        @foreach ($products as $product)
+                                            <li>
+                                                <a href="#" class="d-flex py-1 align-items-center">
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="fs-13 mb-0 listname">{{ $product->name }}</h5>
+                                                    </div>
+                                                    <div class="flex-shrink-0 ms-2">
+                                                        <span
+                                                            class="badge bg-light text-muted">{{ $product->variants->count() }}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>

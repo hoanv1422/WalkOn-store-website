@@ -238,14 +238,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="toolbar-bottom">
-                            <ul>
-                                <li><span>Pages:</span></li>
-                                <li class="current"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#"> <img src="img/product/pager_arrow_right.gif" alt="">
-                                    </a></li>
-                            </ul>
+                            {{ $products->links() }}
                         </div>
                     </div>
                 </div>
