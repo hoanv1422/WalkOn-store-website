@@ -2,74 +2,58 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Comment;
-use App\Models\Product;
-use App\Models\User;
-use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    // public function index()
-    // {
-    //     Comment::all();
-        
-    // }
-    public function store(Request $request, $productId)
+
+    // Hiển thị trang bình luận của sản phẩm
+    public function show($productId)
     {
-        $request->validate([
-            'content' => 'required|string|max:1000',
-            'rating' => 'required|integer|between:1,5',  // Đảm bảo rating từ 1 đến 5
-        ]);
+        $comments = Comment::where('product_id', $productId)->with('user')->latest()->get();
+        $user = Auth::user();
 
-        $product = Product::findOrFail($productId);
-        $user = User::findOrFail(Auth::id());
 
-        Comment::create([
-            'content' => $request->content,
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'rating' => $request->rating,
-            'parent_id' => null,  // Bình luận gốc không có parent_id
-        ]);
-        return redirect()->route('detail.index', $product->slug)->with('success', 'bình luận đã được gửi!');
+        return view('client.pages.detail.comments', compact('comments', 'productId', 'hasPurchased', 'user'));
     }
 
-    public function reply(Request $request, $commentId)
+    // Xử lý thêm bình luận
+    public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
-            'content' => 'required|string|max:1000',
+            'product_id' => 'required|exists:products,id',
+            'content' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
         ]);
-
-        $parentComment = Comment::findOrFail($commentId);
-        $product = $parentComment->product;
-        $user = User::findOrFail(Auth::id());
-
-        Comment::create([
-            'content' => $request->content,
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'parent_id' => $parentComment->id,  // Đây là bình luận trả lời
-            'rating' => null,  // Không cần rating cho bình luận trả lời
-        ]);
-
-        return redirect()->route('detail.index', $product->slug)->with('success', 'Trả lời đã được gửi!');
-    }
-
-    public function destroy($commentId)
-    {
-        $comment = Comment::findOrFail($commentId);
-
-        // Kiểm tra xem người dùng có quyền xóa bình luận này không
-        if ($comment->user_id !== Auth::id()) {
-            return redirect()->back()->with('error', 'Bạn không có quyền xóa bình luận này.');
+ 
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->back()->with('error', 'Bạn cần đăng nhập để bình luận.');
         }
 
-        $comment->delete();
+        // Kiểm tra xem người dùng đã mua hàng chưa
+        // $hasPurchased = Order::where('user_id', $user->id)
+        //     ->whereHas('orders', function ($query) use ($request) {
+        //         $query->where('product_variant_id', $request->product_variant_id);
+        //     })
+        //     ->exists();
 
-        return redirect()->back()->with('success', 'Bình luận đã được xóa.');
+
+
+        // Lưu bình luận vào database
+        Comment::create([
+            'user_id' => $user->id,
+            'product_id' => $request->product_id,
+            'content' => $request->content,
+            'parent_id' =>null,
+            'rating'=>$request->rating,
+        ]);
+
+        return redirect()->back()->with('success', 'Bình luận của bạn đã được gửi.');
     }
 }
-

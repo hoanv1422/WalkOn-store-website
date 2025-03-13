@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete(); 
             $table->decimal('amount', 20, 2); 
             $table->string('payment_method');
-            $table->string('transaction_code')->nullable();
             $table->string('status')->default('pending'); 
             $table->timestamps();
         });

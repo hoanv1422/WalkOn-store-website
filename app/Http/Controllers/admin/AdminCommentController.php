@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\CommentHidden;
 use Illuminate\Http\Request;
 
 class AdminCommentController extends Controller
@@ -64,8 +65,30 @@ class AdminCommentController extends Controller
      */
     public function destroy(string $id)
     {
+
+    }
+    public function hide($id)
+    {
         $comment = Comment::findOrFail($id);
-        $comment->delete();
-        return redirect()->back()->with('success', 'Xóa bình luận thành công!');
+
+        // Kiểm tra xem bình luận đã bị ẩn chưa
+        if (!CommentHidden::where('comment_id', $id)->exists()) {
+            // Tạo một bản ghi trong bảng comment_hidden để đánh dấu bình luận bị ẩn
+            CommentHidden::create([
+                'comment_id' => $id,
+                'hidden_at' => now(),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Bình luận đã được ẩn.');
+    }
+
+    // Xem các bình luận đã ẩn
+    public function hiddenComments()
+    {
+        $hiddenCommentIds = CommentHidden::pluck('comment_id')->toArray();
+        $comments = Comment::whereIn('id', $hiddenCommentIds)->get();
+
+        return view('admin.comments.hidden', compact('comments'));
     }
 }

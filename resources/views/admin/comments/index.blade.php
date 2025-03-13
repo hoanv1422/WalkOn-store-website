@@ -36,14 +36,14 @@
                     <td>{{ $comment->rating }}</td>
                     <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
                     <td>
-                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
-                        </form>
+                          
+                            <form action="{{ route('comments.hide', $comment->id) }}" method="POST">
+                                @csrf
+                                <button class="btn btn-warning" onclick="return confirm('Bạn có chắc chắn muốn ẩn bình luận này?')">Ẩn</button>
+                            </form>
                     </td>
                 </tr>
-                @foreach($comment->replies as $reply)
+                {{-- @foreach($comment->replies as $reply)
                     <tr>
                         <td>↳ {{ $reply->id }}</td>
                         <td>{{ $reply->user->name }}</td>
@@ -59,7 +59,7 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @endforeach --}}
             @endforeach
         </tbody>
     </table>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -110,19 +111,29 @@ class BrandController extends Controller
         try {
             DB::beginTransaction();
 
-
-            $brand->delete();
+            if ($brand->products()->count() > 0) {
+                return back()->with('error', 'Không thể xóa thương hiệu vì có sản phẩm liên quan.');
+            }
 
             if ($brand->logo) {
                 Storage::delete($brand->logo);
             }
 
+            $brand->delete();
+
             DB::commit();
-            return redirect()->route('brands.index')->with('success', 'Xóa thành công');
+            return redirect()->route('brands.index')->with('success', 'Xóa thương hiệu thành công!');
+        } catch (QueryException $exception) {
+            DB::rollback();
+
+            if ($exception->getCode() == 23000) {
+                return back()->with('error', 'Không thể xóa thương hiệu vì có sản phẩm liên quan.');
+            }
+
+            return back()->with('error', 'Có lỗi xảy ra khi xóa thương hiệu.');
         } catch (\Exception $exception) {
             DB::rollback();
-            dd($exception);
-            return back()->with('error', 'Lỗi');
+            return back()->with('error', 'Có lỗi không xác định: ' . $exception->getMessage());
         }
     }
 }

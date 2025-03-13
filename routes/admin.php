@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('admin')->middleware( 'admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
@@ -83,7 +83,10 @@ Route::prefix('admin')->group(function () {
 
 
 Route::prefix('admin')->middleware(['admin'])->group(function () {
-    Route::resource('comments', AdminCommentController::class)->only(['index', 'destroy']);
+    
+    Route::resource('comments', AdminCommentController::class);
+    Route::post('comments/{comment}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
+    Route::get('comments/hidden', [AdminCommentController::class, 'hiddenComments'])->name('comments.hidden');
 });
 
 

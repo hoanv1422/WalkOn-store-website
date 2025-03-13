@@ -34,6 +34,8 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 // Detail
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
+// // Profile
+
 
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
 Route::middleware('client')->group(function () {
@@ -48,23 +50,36 @@ Route::middleware('client')->group(function () {
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-
+    // update thong tin khách hàng
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
-    // Checkout
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
-
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
-    // Comment
-    Route::post('/comments/{commentId}/store', [CommentController::class, 'store'])->name('comments.store');
-    Route::post('/comments/{commentId}/reply', [CommentController::class, 'reply'])->name('comments.reply');
-    Route::delete('/comments/{commentId}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Checkout
+    Route::post('/checkout/cod', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/vnpay', [CheckoutController::class, 'store'],)->name('checkout.vnpay');
+    Route::get('vnpay_return', [CheckoutController::class, 'vnpay_return'],)->name('vnpay.return');
 });
 
-// About Us
+
+
+
+
+
+// wishlist
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+
+
+// checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+
+// about-us
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
 
 // Blog
@@ -74,4 +89,12 @@ Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.detai
 
 // Contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+
+//commment
+
+// Tuyến đường hiển thị trang bình luận của sản phẩm
+Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
+
+// Tuyến đường xử lý thêm bình luận
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 

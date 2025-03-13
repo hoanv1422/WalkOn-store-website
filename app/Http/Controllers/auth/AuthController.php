@@ -41,12 +41,7 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-            $user = Auth::user();
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.index');
-            } else {
-                return redirect('/');
-            }
+            return redirect('/');
         } else {
             return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
         }
@@ -63,8 +58,8 @@ class AuthController extends Controller
     }
 
 
-    public function signinAdmin(Request $request) {
-        // dd($request->all());
+    public function signinAdmin(Request $request)
+    {
         if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
             $user = Auth::user();
             if ($user->role === 'admin') {

@@ -22,7 +22,7 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     /**
@@ -30,7 +30,7 @@ class Comment extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withDefault();
     }
 
     /**
@@ -38,7 +38,7 @@ class Comment extends Model
      */
     public function parent()
     {
-        return $this->belongsTo(Comment::class, 'parent_id');
+        return $this->belongsTo(Comment::class, 'parent_id')->withDefault();
     }
 
     /**

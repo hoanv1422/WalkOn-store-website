@@ -11,8 +11,3 @@
     @include('client.pages.detail.comments')
 @endsection
 
-@section('script')
-    <script>
-        
-    </script>
-@endsection

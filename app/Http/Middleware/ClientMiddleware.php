@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+namespace App\Http\Middleware;
+
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,13 +14,22 @@ class ClientMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && (Auth::user()->role === 'client' || Auth::user()->role === 'admin')) {
+        if (!Auth::check()) {
+            return redirect('/login')->with('error', 'Bạn cần đăng nhập để truy cập.');
+        }
+
+        $user = Auth::user();
+        if ($user->role === 'user' || $user->role === 'admin') {
             return $next($request);
         }
-        return redirect('/login'); 
+
+        // Nếu đã đăng nhập nhưng không có quyền, trả về lỗi 403
+        return abort(403, 'Bạn không có quyền truy cập trang này.');
     }
 }
