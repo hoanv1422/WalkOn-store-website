@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 
@@ -48,6 +49,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
+    Route::resource('orders', OrderController::class);
 });
 
 Route::prefix('admin')->group(function () {
