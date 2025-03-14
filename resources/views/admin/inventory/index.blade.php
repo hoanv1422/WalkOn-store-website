@@ -33,240 +33,120 @@
                                     <h5 class="fs-16">Lọc</h5>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <a href="{{ route('inventory.index') }}" class="text-decoration-underline"
-                                        id="clearall">Xóa</a>
+                                    <!-- Xóa tất cả bộ lọc (chỉ hiển thị khi có ít nhất một bộ lọc) -->
+                                    @if (request()->hasAny(['search', 'min_price', 'max_price', 'category']))
+                                        <a href="{{ route('inventory.index') }}" class="btn btn-danger" id="clearall">
+                                            <i class="bi bi-x-circle"></i> Xóa tất cả
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
 
                         <div class="accordion accordion-flush filter-accordion">
                             <div class="card-body border-bottom">
-                                <!--Lọc sản phẩm theo tên sản phẩm -->
+                                <!-- Lọc sản phẩm theo tên -->
                                 <div>
                                     <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
                                     <form action="{{ route('inventory.index') }}" method="GET">
+                                        <input type="hidden" name="min_price" value="{{ request()->min_price }}">
+                                        <input type="hidden" name="max_price" value="{{ request()->max_price }}">
+                                        <input type="hidden" name="category" value="{{ request()->category }}">
+
                                         <input type="text" name="search" class="form-control"
                                             placeholder="Tìm kiếm sản phẩm..." value="{{ request()->search }}">
                                         <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
+
+                                        <!-- Xóa bộ lọc tìm kiếm -->
+                                        @if (request()->has('search') && request()->search != '')
+                                            <a href="{{ route('inventory.index', request()->except('search')) }}"
+                                                class="btn btn-danger mt-2">
+                                                <i class="bi bi-x-circle"></i> Xóa
+                                            </a>
+                                        @endif
                                     </form>
-                                    <ul class="list-unstyled mb-0 filter-list mt-3">
-                                        @foreach ($products as $product)
-                                            <li>
-                                                <a href="{{ route('inventory.index', ['search' => $product->name]) }}"
-                                                    class="d-flex py-1 align-items-center">
-                                                    <div class="flex-grow-1">
-                                                        <h5 class="fs-13 mb-0 listname">{{ $product->name }}</h5>
-                                                    </div>
-                                                    <div class="flex-shrink-0 ms-2">
-                                                        <span
-                                                            class="badge bg-light text-muted">{{ $product->variants->count() }}</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
                                 </div>
                             </div>
+
                             <div class="card-body border-bottom">
-                                <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Price</p>
-
-                                <div id="product-price-range"></div>
-                                <div class="formCost d-flex gap-2 align-items-center mt-3">
-                                    <input class="form-control form-control-sm" type="text" id="minCost"
-                                        value="0" /> <span class="fw-semibold text-muted">to</span> <input
-                                        class="form-control form-control-sm" type="text" id="maxCost" value="1000" />
-                                </div>
+                                <!-- Lọc sản phẩm theo giá -->
+                                <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Giá</p>
+                                <form action="{{ route('inventory.index') }}" method="GET">
+                                    <input type="hidden" name="search" value="{{ request()->search }}">
+                                    <input type="hidden" name="category" value="{{ request()->category }}">
+                                    <div class="input-group">
+                                        <input class="form-control form-control-sm" type="number" name="min_price"
+                                            id="minCost" value="{{ request()->min_price ?? '' }}"
+                                            placeholder="Giá thấp nhất" min="0">
+                                        <span class="input-group-text">đến</span>
+                                        <input class="form-control form-control-sm" type="number" name="max_price"
+                                            id="maxCost" value="{{ request()->max_price ?? '' }}"
+                                            placeholder="Giá cao nhất" min="0">
+                                    </div>
+                                    <div class="d-flex gap-2 mt-3">
+                                        <button type="submit" class="btn btn-primary">Lọc</button>
+                                        <!-- Xóa bộ lọc giá -->
+                                        @if (
+                                            (request()->has('min_price') && request()->min_price != '') ||
+                                                (request()->has('max_price') && request()->max_price != ''))
+                                            <a href="{{ route('inventory.index', request()->except(['min_price', 'max_price'])) }}"
+                                                class="btn btn-danger">
+                                                <i class="bi bi-x-circle"></i> Xóa
+                                            </a>
+                                        @endif
+                                    </div>
+                                </form>
                             </div>
 
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingBrands">
+                                <!-- Lọc sản phẩm theo danh mục -->
+                                <h2 class="accordion-header" id="flush-headingCategories">
                                     <button class="accordion-button bg-transparent shadow-none" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands"
-                                        aria-expanded="true" aria-controls="flush-collapseBrands">
-                                        <span class="text-muted text-uppercase fs-12 fw-medium">Brands</span> <span
-                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseCategories"
+                                        aria-expanded="true" aria-controls="flush-collapseCategories">
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Danh mục</span>
                                     </button>
                                 </h2>
 
-                                <div id="flush-collapseBrands" class="accordion-collapse collapse show"
-                                    aria-labelledby="flush-headingBrands">
+                                <div id="flush-collapseCategories" class="accordion-collapse collapse show"
+                                    aria-labelledby="flush-headingCategories">
                                     <div class="accordion-body text-body pt-0">
-                                        <div class="search-box search-box-sm">
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="searchBrandsList" placeholder="Search Brands...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
                                         <div class="d-flex flex-column gap-2 mt-3 filter-check">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Boat"
-                                                    id="productBrandRadio5" checked>
-                                                <label class="form-check-label" for="productBrandRadio5">Boat</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="OnePlus"
-                                                    id="productBrandRadio4">
-                                                <label class="form-check-label" for="productBrandRadio4">OnePlus</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Realme"
-                                                    id="productBrandRadio3">
-                                                <label class="form-check-label" for="productBrandRadio3">Realme</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Sony"
-                                                    id="productBrandRadio2">
-                                                <label class="form-check-label" for="productBrandRadio2">Sony</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="JBL"
-                                                    id="productBrandRadio1" checked>
-                                                <label class="form-check-label" for="productBrandRadio1">JBL</label>
-                                            </div>
+                                            <form action="{{ route('inventory.index') }}" method="GET">
+                                                <input type="hidden" name="search" value="{{ request()->search }}">
+                                                <input type="hidden" name="min_price"
+                                                    value="{{ request()->min_price }}">
+                                                <input type="hidden" name="max_price"
+                                                    value="{{ request()->max_price }}">
 
-                                            <div>
-                                                <button type="button"
-                                                    class="btn btn-link text-decoration-none text-uppercase fw-medium p-0">1,235
-                                                    More</button>
-                                            </div>
+                                                @foreach ($categories as $category)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="category"
+                                                            value="{{ $category->id }}" id="category{{ $category->id }}"
+                                                            {{ request()->category == $category->id ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="category{{ $category->id }}">{{ $category->name }}</label>
+                                                    </div>
+                                                @endforeach
+
+                                                <button type="submit" class="btn btn-primary mt-2">Lọc</button>
+
+                                                <!-- Xóa bộ lọc danh mục -->
+                                                @if (!empty(request()->category))
+                                                    <a href="{{ route('inventory.index', request()->except('category')) }}"
+                                                        class="btn btn-danger mt-2">
+                                                        <i class="bi bi-x-circle"></i> Xóa
+                                                    </a>
+                                                @endif
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- end accordion-item -->
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingDiscount">
-                                    <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount"
-                                        aria-expanded="true" aria-controls="flush-collapseDiscount">
-                                        <span class="text-muted text-uppercase fs-12 fw-medium">Discount</span> <span
-                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                    </button>
-                                </h2>
-                                <div id="flush-collapseDiscount" class="accordion-collapse collapse"
-                                    aria-labelledby="flush-headingDiscount">
-                                    <div class="accordion-body text-body pt-1">
-                                        <div class="d-flex flex-column gap-2 filter-check">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="50% or more"
-                                                    id="productdiscountRadio6">
-                                                <label class="form-check-label" for="productdiscountRadio6">50% or
-                                                    more</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="40% or more"
-                                                    id="productdiscountRadio5">
-                                                <label class="form-check-label" for="productdiscountRadio5">40% or
-                                                    more</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="30% or more"
-                                                    id="productdiscountRadio4">
-                                                <label class="form-check-label" for="productdiscountRadio4">
-                                                    30% or more
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="20% or more"
-                                                    id="productdiscountRadio3" checked>
-                                                <label class="form-check-label" for="productdiscountRadio3">
-                                                    20% or more
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="10% or more"
-                                                    id="productdiscountRadio2">
-                                                <label class="form-check-label" for="productdiscountRadio2">
-                                                    10% or more
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Less than 10%"
-                                                    id="productdiscountRadio1">
-                                                <label class="form-check-label" for="productdiscountRadio1">
-                                                    Less than 10%
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end accordion-item -->
-
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingRating">
-                                    <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseRating"
-                                        aria-expanded="false" aria-controls="flush-collapseRating">
-                                        <span class="text-muted text-uppercase fs-12 fw-medium">Rating</span> <span
-                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                                    </button>
-                                </h2>
-
-                                <div id="flush-collapseRating" class="accordion-collapse collapse"
-                                    aria-labelledby="flush-headingRating">
-                                    <div class="accordion-body text-body">
-                                        <div class="d-flex flex-column gap-2 filter-check">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="4 & Above Star"
-                                                    id="productratingRadio4" checked>
-                                                <label class="form-check-label" for="productratingRadio4">
-                                                    <span class="text-muted">
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </span> 4 & Above
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="3 & Above Star"
-                                                    id="productratingRadio3">
-                                                <label class="form-check-label" for="productratingRadio3">
-                                                    <span class="text-muted">
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </span> 3 & Above
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="2 & Above Star"
-                                                    id="productratingRadio2">
-                                                <label class="form-check-label" for="productratingRadio2">
-                                                    <span class="text-muted">
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </span> 2 & Above
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="1 Star"
-                                                    id="productratingRadio1">
-                                                <label class="form-check-label" for="productratingRadio1">
-                                                    <span class="text-muted">
-                                                        <i class="mdi mdi-star text-warning"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                        <i class="mdi mdi-star"></i>
-                                                    </span> 1
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end card-body -->
                         </div>
-                        <!-- end accordion -->
                     </div>
+
+
                     <!-- end card -->
                 </div>
                 <!-- end col -->
