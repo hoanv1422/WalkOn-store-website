@@ -30,7 +30,7 @@
                         <div class="card-header">
                             <div class="d-flex mb-3">
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-16">Lọc</h5>
+                                    <h5 class="fs-16">Lọc sản phảm </h5>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <!-- Xóa tất cả bộ lọc (chỉ hiển thị khi có ít nhất một bộ lọc) -->
@@ -201,11 +201,11 @@
                                                             style="width: 150px;">
                                                             <div class="gridjs-th-content">Ngày thêm</div>
                                                         </th>
-                                                        <th data-column-id="action"
+                                                        {{-- <th data-column-id="action"
                                                             class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
                                                             style="width: 80px;">
                                                             <div class="gridjs-th-content">Hành động</div>
-                                                        </th>
+                                                        </th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody class="gridjs-tbody">
@@ -252,7 +252,7 @@
                                                                 <td class="gridjs-td">
                                                                     <span>{{ $product->created_at->format('d/m/Y') }}</span>
                                                                 </td>
-                                                                <td class="gridjs-td"><span>
+                                                                {{-- <td class="gridjs-td"><span>
                                                                         <div class="dropdown"><button
                                                                                 class="btn btn-soft-secondary btn-sm dropdown"
                                                                                 type="button" data-bs-toggle="dropdown"
@@ -279,7 +279,8 @@
                                                                                         Xóa</a></li>
                                                                             </ul>
                                                                         </div>
-                                                                    </span></td>
+                                                                    </span>
+                                                                </td> --}}
                                                             </tr>
                                                         @endforeach
                                                     @endforeach
