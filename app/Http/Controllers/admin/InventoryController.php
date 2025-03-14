@@ -17,7 +17,7 @@ class InventoryController extends Controller
     {
         $query = Product::with(['variants.size', 'variants.color', 'category']);
 
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search != '') {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
