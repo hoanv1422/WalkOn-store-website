@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-title">
-                    <h2>upsell products</h2>
+                    <h2> đề xuất Sản phẩm </h2>
                 </div>
             </div>
         </div>

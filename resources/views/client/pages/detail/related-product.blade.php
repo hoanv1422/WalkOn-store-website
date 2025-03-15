@@ -5,7 +5,7 @@ php <!-- related product area start-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="product-title">
-                        <h2>Related Products</h2>
+                        <h2>Sản phẩm liên quan</h2>
                     </div>
                 </div>
             </div>
