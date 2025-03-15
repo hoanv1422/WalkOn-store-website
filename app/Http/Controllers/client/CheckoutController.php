@@ -91,7 +91,7 @@ class CheckoutController extends Controller
                 ];
                 $item->productVariant->decrement('quantity', $item->quantity);
             }
-            OrderItem::create($orderItems);
+            OrderItem::insert($orderItems);
             CartItem::where('cart_id', $cart->id)->delete();
 
             if ($request->payment_method === 'VNPAY') {
