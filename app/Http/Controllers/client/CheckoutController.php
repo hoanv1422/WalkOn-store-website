@@ -88,10 +88,12 @@ class CheckoutController extends Controller
                     'variant_size_name' => $item->productVariant->size->size,
                     'variant_color_name' => $item->productVariant->color->color,
                     'quantity' => $item->quantity,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
                 $item->productVariant->decrement('quantity', $item->quantity);
             }
-            OrderItem::create($orderItems);
+            OrderItem::insert($orderItems);
             CartItem::where('cart_id', $cart->id)->delete();
 
             if ($request->payment_method === 'VNPAY') {
@@ -105,6 +107,7 @@ class CheckoutController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi đặt đơn hàng: ' . $e->getMessage());
         }
     }
