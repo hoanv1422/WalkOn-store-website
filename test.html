@@ -3,58 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Tạo Slug</title>
-    <script>
-        function removeVietnameseTones(str) {
-            var map = {
-                'à': 'a', 'á': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
-                'ă': 'a', 'ằ': 'a', 'ắ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
-                'â': 'a', 'ầ': 'a', 'ấ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
-                'è': 'e', 'é': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e',
-                'ê': 'e', 'ề': 'e', 'ế': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e',
-                'ì': 'i', 'í': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i',
-                'ò': 'o', 'ó': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o',
-                'ô': 'o', 'ồ': 'o', 'ố': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
-                'ơ': 'o', 'ờ': 'o', 'ớ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
-                'ù': 'u', 'ú': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
-                'ư': 'u', 'ừ': 'u', 'ứ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
-                'ỳ': 'y', 'ý': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y',
-                'đ': 'd'
-            };
-
-            return str.replace(/[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]/g, function(match) {
-                return map[match];
-            });
+    <title>Test Chọn Sản Phẩm & Tính Tổng Giá</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-
-        function createSlug(str) {
-            str = removeVietnameseTones(str);  // Loại bỏ dấu tiếng Việt
-            return str
-                .toLowerCase() // Chuyển thành chữ thường
-                .trim() // Loại bỏ khoảng trắng thừa đầu và cuối
-                .replace(/[^\w\s-]/g, '') // Xóa ký tự đặc biệt
-                .replace(/[\s_-]+/g, '-') // Thay thế khoảng trắng hoặc dấu gạch dưới bằng dấu gạch ngang
-                .replace(/^-+|-+$/g, ''); // Loại bỏ dấu gạch ngang thừa ở đầu và cuối
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
         }
-
-        function testSlug() {
-            const inputText = document.getElementById('inputText').value;
-            const slug = createSlug(inputText);
-            document.getElementById('slugResult').innerText = slug;
+        th {
+            background-color: #f4f4f4;
         }
-    </script>
+        input[type="text"] {
+            width: 150px;
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <h2>Test Tạo Slug</h2>
-        <label for="inputText">Nhập tên danh mục:</label>
-        <input type="text" id="inputText" placeholder="Nhập tên danh mục" />
-        <button onclick="testSlug()">Tạo Slug</button>
-    </div>
 
-    <div>
-        <h3>Slug Kết Quả:</h3>
-        <p id="slugResult" style="font-weight: bold;"></p>
-    </div>
+    <h2>Giỏ hàng</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll"></th>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="checkbox" class="cartItemCheckbox" value="1" data-price="100000" data-quantity="2"></td>
+                <td>Sản phẩm A</td>
+                <td>100,000 VND</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" class="cartItemCheckbox" value="2" data-price="200000" data-quantity="1"></td>
+                <td>Sản phẩm B</td>
+                <td>200,000 VND</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" class="cartItemCheckbox" value="3" data-price="150000" data-quantity="3"></td>
+                <td>Sản phẩm C</td>
+                <td>150,000 VND</td>
+                <td>3</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Tổng tiền: <input type="text" id="totalPrice" name="totalPrice" value="0 VND" readonly></h3>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectAll = document.getElementById("selectAll");
+            const checkboxes = document.querySelectorAll(".cartItemCheckbox");
+            const totalPriceInput = document.getElementById("totalPrice");
+
+            function updateTotalPrice() {
+                let totalPrice = 0;
+
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        totalPrice += parseFloat(checkbox.dataset.price) * parseInt(checkbox.dataset.quantity);
+                    }
+                });
+
+                totalPriceInput.value = new Intl.NumberFormat('vi-VN').format(totalPrice) + " VND";
+            }
+
+            selectAll.addEventListener("change", function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = selectAll.checked;
+                });
+                updateTotalPrice();
+            });
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateTotalPrice);
+            });
+        });
+    </script>
+
 </body>
 </html>

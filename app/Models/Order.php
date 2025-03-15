@@ -21,11 +21,18 @@ class Order extends Model
         'receiver_name',
         'receiver_address',
         'receiver_phone',
+        'coupon_id',
         'coupon',
+        'total_price',
+        'discount_amount',
+        'shipping_fee',
+        'final_price',
         'order_status',
         'payment_status',
         'payment_method',
-        'total_price',
+        'payment_date',
+        'delivered_at',
+        'tracking_code',
     ];
 
     /**

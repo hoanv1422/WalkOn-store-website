@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('order_code')->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
 
-            // Thông tin người đặt hàng
             $table->string('user_email')->nullable();
             $table->string('user_name')->nullable();
             $table->string('user_address')->nullable();
@@ -27,13 +26,21 @@ return new class extends Migration
             $table->string('receiver_address')->nullable();
             $table->string('receiver_phone')->nullable();
             $table->string('note')->nullable();
-
-            // Thông tin đơn hàng
+            $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
             $table->string('coupon')->nullable();
+            $table->decimal('total_price', 15, 2);            
+            $table->decimal('discount_amount', 15, 2)->default(0);
+            $table->decimal('shipping_fee', 15, 2)->default(0);
+            $table->decimal('final_price', 15, 2);
+
             $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
-            $table->decimal('total_price', 15, 2);
+            
+            $table->timestamp('payment_date')->nullable();
+            $table->timestamp('delivered_at')->nullable();
+            $table->string('tracking_code')->nullable();
+            
             $table->timestamps();
         });
     }
