@@ -74,30 +74,41 @@
                                 <form action="{{ route('inventory.index') }}" method="GET">
                                     <input type="hidden" name="search" value="{{ request()->search }}">
                                     <input type="hidden" name="category" value="{{ request()->category }}">
-                                    <div class="input-group">
-                                        <input class="form-control form-control-sm" type="number" name="min_price"
-                                            id="minCost" value="{{ request()->min_price ?? '' }}"
-                                            placeholder="Giá thấp nhất" min="0">
-                                        <span class="input-group-text">đến</span>
-                                        <input class="form-control form-control-sm" type="number" name="max_price"
-                                            id="maxCost" value="{{ request()->max_price ?? '' }}"
-                                            placeholder="Giá cao nhất" min="0">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="position-relative w-50">
+                                            <input class="form-control form-control-sm text-end pe-4 border rounded"
+                                                type="number" name="min_price" id="minCost"
+                                                value="{{ request()->min_price ?? '' }}" placeholder="Giá thấp nhất"
+                                                min="0">
+                                            <span
+                                                class="position-absolute top-50 translate-middle-y end-0 me-2 text-muted">đ</span>
+                                        </div>
+                                        <span class="mx-2 text-muted fw-bold">~</span>
+                                        <div class="position-relative w-50">
+                                            <input class="form-control form-control-sm text-end pe-4 border rounded"
+                                                type="number" name="max_price" id="maxCost"
+                                                value="{{ request()->max_price ?? '' }}" placeholder="Giá cao nhất"
+                                                min="0">
+                                            <span
+                                                class="position-absolute top-50 translate-middle-y end-0 me-2 text-muted">đ</span>
+                                        </div>
                                     </div>
+
                                     <div class="d-flex gap-2 mt-3">
-                                        <button type="submit" class="btn btn-primary">Lọc</button>
+                                        <button type="submit" class="btn btn-primary px-3">Lọc</button>
                                         <!-- Xóa bộ lọc giá -->
                                         @if (
                                             (request()->has('min_price') && request()->min_price != '') ||
                                                 (request()->has('max_price') && request()->max_price != ''))
                                             <a href="{{ route('inventory.index', request()->except(['min_price', 'max_price'])) }}"
-                                                class="btn btn-danger">
+                                                class="btn btn-danger px-3">
                                                 <i class="bi bi-x-circle"></i> Xóa
                                             </a>
                                         @endif
                                     </div>
                                 </form>
                             </div>
-
                             <div class="accordion-item">
                                 <!-- Lọc sản phẩm theo danh mục -->
                                 <h2 class="accordion-header" id="flush-headingCategories">

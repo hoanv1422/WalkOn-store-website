@@ -18,20 +18,29 @@ class InventoryController extends Controller
     {
         $query = Product::with(['variants', 'category']);
 
-        // Tìm kiếm sản phẩm theo tên
+        // Tìm kiếm theo tên sản phẩm
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Lọc theo danh mục dựa trên kết quả tìm kiếm
+        // Lọc theo danh mục
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
         }
 
-        // Lọc theo khoảng giá dựa trên kết quả tìm kiếm và danh mục
-        if ($request->filled('min_price') && $request->filled('max_price')) {
+        // Lọc theo giá (hỗ trợ nhập một giá trị hoặc cả hai)
+        if ($request->filled('min_price') || $request->filled('max_price')) {
             $query->whereHas('variants', function ($q) use ($request) {
-                $q->whereBetween('price', [(float) $request->min_price, (float) $request->max_price]);
+                if ($request->filled('min_price') && $request->filled('max_price')) {
+                    // Nếu nhập cả hai giá trị
+                    $q->whereBetween('price', [(float) $request->min_price, (float) $request->max_price]);
+                } elseif ($request->filled('min_price')) {
+                    // Nếu chỉ nhập giá thấp nhất
+                    $q->where('price', '>=', (float) $request->min_price);
+                } elseif ($request->filled('max_price')) {
+                    // Nếu chỉ nhập giá cao nhất
+                    $q->where('price', '<=', (float) $request->max_price);
+                }
             });
         }
 
