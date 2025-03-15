@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
             $table->string('image')->nullable()->comment('Hình ảnh sản phẩm');
             $table->decimal('price', 15, 2)->comment('Giá biến thể');
+            $table->decimal('price_sale', 15, 2)->nullable()->comment('Giá giảm');
             $table->integer('quantity')->default(0)->comment('Số lượng tồn kho cho biến thể');
             $table->timestamps();
         });

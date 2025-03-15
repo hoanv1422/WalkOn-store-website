@@ -13,7 +13,6 @@ class CartItem extends Model
         'cart_id',
         'product_variant_id',
         'quantity',
-        'price',
     ];
 
     /**

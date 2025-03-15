@@ -21,9 +21,11 @@ class UserController extends Controller
      */
     public function index()
     {
+
+        $title = "Người Dùng";
         $users = User::all();
-        // dd($users);
-        return view(self::PATH_VIEW . __FUNCTION__, compact('users'));
+        $validateUser = User::select('id', 'mail', 'username')->get();
+        return view(self::PATH_VIEW . __FUNCTION__, compact('users','validateUser', 'title'));
     }
 
     /**
@@ -39,7 +41,6 @@ class UserController extends Controller
             $data['avatar'] = '';
         }
         $data['is_active'] ??= 0;
-        $data['role'] = 'user';
 
 
         try {

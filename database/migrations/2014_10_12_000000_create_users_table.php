@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->unique()->comment('Tên đăng nhập');
             $table->string('password')->comment('Mật khẩu');
             $table->string('name')->comment('Tên người dùng');
-            $table->string('mail')->unique()->nullable()->comment('Email');
+            $table->string('mail')->unique()->comment('Email');
             $table->string('avatar')->nullable()->comment('Ảnh đại diện');
             $table->string('phone')->nullable()->comment('Số điện thoại');
             $table->text('address')->nullable()->comment('Địa chỉ');

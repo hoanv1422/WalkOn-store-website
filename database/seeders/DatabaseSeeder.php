@@ -115,13 +115,14 @@ class DatabaseSeeder extends Seeder
 
         // Product Variant
         for ($i = 0; $i < 5; $i++) {
-            ProductVariant::create([
-                'product_id' => rand(1, 5),
-                'size_id' => rand(1, 4),
-                'color_id' => rand(1, 4),
-                'image' => 'variant' . ($i + 1) . '.jpg',
-                'price' => rand(100000, 500000),
-                'quantity' => rand(1, 50),
+            ProductVariant::query()->create([
+                'product_id' => rand(1, 5), // ID sản phẩm thực tế
+                'size_id'    => rand(1, 4), // ID kích thước
+                'color_id'   => rand(1, 4), // ID màu sắc
+                'image'      => 'variant' . ($i + 1) . '.jpg', // Ảnh sản phẩm
+                'price'      => rand(100000, 500000), // Giá sản phẩm
+                'price_sale'      => rand(100000, 500000), // Giá sản phẩm
+                'quantity'   => rand(1, 50),
             ]);
         }
 
@@ -139,18 +140,31 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Cart
-        Cart::create([
-            'user_id' => 1,
+        User::query()->create([
+            'username'          => 'example_admin',
+            'name'              => 'John Doe',
+            'mail'              => 'admin@gmail.com',
+            'password'          => '123456',
+            'avatar'            => 'default-avatar.png',
+            'phone'             => '0123456789',
+            'address'           => '123 Main Street',
+            'email_verified_at' => now(),
+            'role'              => 'admin',
+            'is_active'         => true,
+        ]);
+
+
+
+        Cart::query()->create([
+            'user_id'          => '1',
         ]);
 
         // Cart Items
         for ($i = 0; $i < 3; $i++) {
-            CartItem::create([
-                'cart_id' => 1,
-                'product_variant_id' => rand(1, 4),
-                'quantity' => rand(1, 5),
-                'price' => 100000,
+            CartItem::query()->create([
+                'cart_id'            => 1, // ID giỏ hàng thực tế
+                'product_variant_id' => rand(1, 4), // ID biến thể sản phẩm
+                'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
             ]);
         }
 
@@ -161,7 +175,6 @@ class DatabaseSeeder extends Seeder
             'user_name' => 'Nguyễn Văn A',
             'user_address' => '123 Đường ABC, TP.HCM',
             'user_phone' => '0123456789',
-            'same_as_buyer' => true,
             'receiver_email' => 'receiver@example.com',
             'receiver_name' => 'Trần Văn B',
             'receiver_address' => '456 Đường XYZ, Hà Nội',

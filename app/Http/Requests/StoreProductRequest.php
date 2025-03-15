@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+
 
 class StoreProductRequest extends FormRequest
 {
@@ -13,6 +16,9 @@ class StoreProductRequest extends FormRequest
     {
         return true;
     }
+
+
+   
 
     /**
      * Get the validation rules that apply to the request.
@@ -31,9 +37,10 @@ class StoreProductRequest extends FormRequest
             'product_galleries.*' => 'nullable|image|mimes:jpeg,png,jpg', // Mỗi ảnh trong thư viện ảnh
             'product_variant' => 'nullable|array|min:1', // Bắt buộc, phải là mảng, ít nhất 1 biến thể
             'product_variant.*.size' => 'required', // Dung lượng biến thể
-            'product_variant.*.color' => 'required', // Màu sắc biến thể
-            'product_variant.*.quantity' => 'required|numeric|min:0', // Số lượng biến thể, không âm
+            'product_variant.*.color' => 'required', 
+            'product_variant.*.quantity' => 'required|numeric|min:0', 
             'product_variant.*.price' => 'required|numeric|min:0',
+            'product_variant.*.price_sale' => 'nullable|numeric|min:0|lt:product_variant.*.price',
         ];
     }
 
@@ -82,6 +89,8 @@ class StoreProductRequest extends FormRequest
             'product_variant.*.price.required' => 'Giá của biến thể không được để trống.',
             'product_variant.*.price.numeric' => 'Giá của biến thể phải là số.',
             'product_variant.*.price.min' => 'Giá của biến thể phải lớn hơn hoặc bằng 0.',
+            'product_variant.*.price_sale.min' => 'Giá của biến thể phải lớn hơn hoặc bằng 0.',
+            'product_variant.*.price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá bán.',
         ];
     }
 

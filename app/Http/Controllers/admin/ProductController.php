@@ -42,7 +42,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-
         $brands = Brand::query()->where('is_active', true)->get();
         $categories = Category::query()->where('is_active', true)->get();
         $colors = Color::query()->pluck('color', 'id')->all();
@@ -56,40 +55,40 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         // Data Product
+        // dd($request->all());
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
+        
 
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
         } else {
-            $data['image'] = '';
+            $data['image'] = $request->old('image');;
         }
 
         $data['sku'] = 'WO' . $data['brand_id'] . $data['category_id'] . '-' . now()->format('His');
         $data['is_active'] ??= 0;
         $data['slug'] = Str::slug($data['name']) . '-' . $data['sku'];
 
-        // Xử lý Biến thể (Product Variants)
         $listProVariants = $request->product_variant ?: [];
         $dataProVariants = [];
         $totalQuantity = 0;
-        $variantMap = []; // Mảng dùng để kiểm tra trùng lặp
+        $variantMap = [];
 
         foreach ($listProVariants as $item) {
-            $key = $item['size'] . '-' . $item['color']; // Khóa duy nhất cho mỗi biến thể
+            $key = $item['size'] . '-' . $item['color'];
 
             if (isset($variantMap[$key])) {
-                // Nếu đã tồn tại biến thể này, cộng dồn số lượng
                 $dataProVariants[$variantMap[$key]]['quantity'] += $item['quantity'];
             } else {
-                // Nếu chưa có, tạo mới biến thể
                 $dataProVariants[] = [
                     'size_id' => $item['size'],
                     'color_id' => $item['color'],
                     'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
                     'quantity' => $item['quantity'],
-                    'price' => $item['price']
+                    'price' => $item['price'],
+                    'price_sale' => $item['price_sale']
                 ];
-                $variantMap[$key] = array_key_last($dataProVariants); // Lưu vị trí của biến thể này
+                $variantMap[$key] = array_key_last($dataProVariants);
             }
 
             $totalQuantity += $item['quantity'];
@@ -97,7 +96,6 @@ class ProductController extends Controller
 
         $data['quantity'] = $totalQuantity;
 
-        // Xử lý Thư viện ảnh (Product Galleries)
         $listProGalleries = $request->product_galleries ?: [];
         $dataProGalleries = [];
 
@@ -112,16 +110,13 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            // Insert Product
             $product = Product::query()->create($data);
 
-            // Insert ProductVariant
             foreach ($dataProVariants as &$item) {
                 $item['product_id'] = $product->id;
                 ProductVariant::query()->create($item);
             }
 
-            // Insert ProductGallery
             foreach ($dataProGalleries as &$item) {
                 $item['product_id'] = $product->id;
                 ProductGallery::query()->create($item);
@@ -132,7 +127,6 @@ class ProductController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
 
-            // Xóa ảnh trong STORAGE khi có lỗi
             if (!empty($data['image'])) {
                 Storage::delete($data['image']);
             }
@@ -147,6 +141,8 @@ class ProductController extends Controller
                 }
             }
 
+            dd($exception);
+
             return back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm')->withErrors($exception->getMessage());
         }
     }
@@ -157,10 +153,27 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        // Lấy danh sách kích cỡ duy nhất và tổng số lượng của từng kích cỡ
+        $sizes = $product->variants()
+            ->select('size_id')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->groupBy('size_id')
+            ->with('size')
+            ->get();
 
-        
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product')); 
+        // Lấy danh sách màu sắc duy nhất và tổng số lượng của từng màu sắc
+        $colors = $product->variants()
+            ->select('color_id')
+            ->selectRaw('SUM(quantity) as total_quantity')
+            ->groupBy('color_id')
+            ->with('color')
+            ->get();
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'sizes', 'colors'));
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -182,7 +195,6 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         // dd($request->all());
-        
         // Data Product
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
         if ($request->hasFile('image')) {
@@ -193,28 +205,44 @@ class ProductController extends Controller
         } else {
             $data['image'] = $product->image;
         }
-        // $data['sku'] = 'WO' . $data['brand_id'] . $data['category_id'] . '-' . $product->created_at->format('His');
         $data['is_active'] ??= 0;
         $data['slug'] = Str::slug($data['name']) . '-' . $product->sku;
-
+        $data['quantity'] = 1;
 
         // Data Biến thể
-        $listProVariants = $request->product_variant  ?: [];
+        $listProVariants = $request->product_variant ?: [];
         $dataProVariants = [];
         $totalQuantity = 0;
+        $groupedVariants = [];
+
         foreach ($listProVariants as $item) {
-            $dataProVariants[] = [
-                'id' => $item['id'],
-                'size_id' => $item['size'],
-                'color_id' => $item['color'] ,
-                'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
-                'quantity' => $item['quantity'],
-                'price' => $item['price']
-            ];
+            $key = $item['size'] . '-' . $item['color']; // Tạo key duy nhất dựa trên size và color
+
+            if (!isset($groupedVariants[$key])) {
+                // Nếu chưa tồn tại, thêm vào danh sách với giá trị mặc định
+                $groupedVariants[$key] = [
+                    'id' => $item['id'] ?? null,
+                    'size_id' => $item['size'],
+                    'color_id' => $item['color'],
+                    'image' => !empty($item['image']) ? Storage::put('product_variant', $item['image']) : null,
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'price_sale' => $item['price_sale']
+
+                ];
+            } else {
+                // Nếu đã tồn tại, chỉ cộng dồn số lượng
+                $groupedVariants[$key]['quantity'] += $item['quantity'];
+            }
+
+            // Tăng tổng số lượng
             $totalQuantity += $item['quantity'];
         }
 
+        // Chuyển kết quả về dạng mảng mong muốn
+        $dataProVariants = array_values($groupedVariants);
         $data['quantity'] = $totalQuantity;
+
 
         // Data Thư viện ảnh
         $listProGalleries = $request->product_galleries ?: [];
@@ -239,11 +267,11 @@ class ProductController extends Controller
                 foreach ($deletedVariants as $id) {
                     $variant = ProductVariant::find($id);
                     if ($variant) {
-                       
+
                         if (!empty($variant->image) && Storage::exists($variant->image)) {
                             Storage::delete($variant->image);
                         }
-                        $variant->delete(); 
+                        $variant->delete();
                     }
                 }
             }
@@ -319,15 +347,13 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
-            // $product->hinhAnhproduct()->delete();
+            $product->galleries()->delete();
 
             // DELETE ORDER
 
-            // $product->productVariants()->delete();
+            $product->variants()->delete();
 
             $product->delete();
-
-            // $products = product::orderBy('id')->get();
 
             // DELETE IMAGE in Storage
             if ($product->image) {

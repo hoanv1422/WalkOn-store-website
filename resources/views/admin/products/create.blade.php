@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Thêm sản phẩm')
+@section('title', 'Tạo Sản Phẩm')
 @section('style')
     {{-- <link href="{{ asset('templates/admin/assets/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" /> --}}
 
@@ -80,8 +80,8 @@
                                                     </div>
                                                 </label>
                                                 <input class="form-control d-none" id="product-image-input" name="image"
-                                                    type="file" accept="image/png, image/gif, image/jpeg"
-                                                    onchange="previewImage(event)">
+                                                    type="file" accept="image/png, image/gif, image/jpeg" value=""
+                                                    onchange="previewImage(event)" value="{{old('image')}}">
                                             </div>
                                             <div class="avatar-lg">
                                                 <div class="avatar-title bg-light rounded overflow-hidden">
@@ -112,7 +112,31 @@
                                     </div>
 
                                     <ul class="list-unstyled mb-0" id="dropzone-preview">
-
+                                        {{-- @foreach (session('uploaded_images.product_galleries', []) as $index => $galleryImage)
+                                        <li class="mt-2" id="dropzone-preview-list">
+                                            <!-- This is used as the file preview template -->
+                                            <div class="border rounded">
+                                                <div class="d-flex p-2">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar-sm bg-light rounded">
+                                                            <img data-dz-thumbnail class="img-fluid rounded d-block"
+                                                                src="{{ Storage::url($galleryImage) }}" alt="Product-Image" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="pt-1">
+                                                            <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                            <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-shrink-0 ms-3">
+                                                        <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endforeach --}}
                                     </ul>
                                     <!-- end dropzon-preview -->
                                 </div>
@@ -172,7 +196,10 @@
                                         <!-- end row -->
 
                                         <div class="row">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 96e385d48da46bf74945da01bb8455bfab64fb5f
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="product-price-input">Giá bán</label>
@@ -246,14 +273,22 @@
                                                     <th>Màu Sắc</th>
                                                     <th>Số lượng</th>
                                                     <th>Giá</th>
+                                                    <th>Giá khuyến mãi</th>
                                                     <th>Hoạt Động</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="variantsContainer">
 
                                                 @php
-                                                    // $lastIndex = -1;
-                                                    $productVariants = old('product_variant', [['size' => '', 'color' => '', 'image' => '', 'quantity' => '', 'price' => '']]);
+                                                    $productVariants = old('product_variant', [
+                                                        [
+                                                            'size' => '',
+                                                            'color' => '',
+                                                            'image' => '',
+                                                            'quantity' => '',
+                                                            'price' => '',
+                                                        ],
+                                                    ]);
                                                     $lastIndex = array_key_last($productVariants);
                                                 @endphp
                                                 <input type="hidden" id="lastIndex" value="{{ $lastIndex }}">
@@ -297,22 +332,26 @@
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <select class="form-control @error("product_variant.$index.size") is-invalid @enderror"
-                                                                    name="product_variant[{{ $index }}][size]" >
+                                                                <select
+                                                                    class="form-control @error("product_variant.$index.size") is-invalid @enderror"
+                                                                    name="product_variant[{{ $index }}][size]">
                                                                     <option value="">Chọn kích cỡ</option>
                                                                     @foreach ($sizes as $size_id => $size)
-                                                                        <option value="{{ $size_id }}" {{ $product_variant['size'] == $size_id ? 'selected' : '' }}>
+                                                                        <option value="{{ $size_id }}"
+                                                                            {{ $product_variant['size'] == $size_id ? 'selected' : '' }}>
                                                                             {{ $size }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <select class="form-control @error("product_variant.$index.color") is-invalid @enderror" 
+                                                                <select
+                                                                    class="form-control @error("product_variant.$index.color") is-invalid @enderror"
                                                                     name="product_variant[{{ $index }}][color]">
                                                                     <option value="">Chọn màu</option>
                                                                     @foreach ($colors as $color_id => $color)
-                                                                        <option value="{{ $color_id }}" {{ $product_variant['color'] == $color_id ? 'selected' : '' }}>
+                                                                        <option value="{{ $color_id }}"
+                                                                            {{ $product_variant['color'] == $color_id ? 'selected' : '' }}>
                                                                             {{ $color }}
                                                                         </option>
                                                                     @endforeach
@@ -320,21 +359,41 @@
                                                             </td>
 
                                                             <td class="align-middle">
-                                                                <input class="form-control @error("product_variant.$index.quantity") is-invalid @enderror" type="text"
+                                                                <input
+                                                                    class="form-control @error("product_variant.$index.quantity") is-invalid @enderror"
+                                                                    type="text"
                                                                     name="product_variant[{{ $index }}][quantity]"
-                                                                    value="{{$product_variant['quantity']}}" placeholder="Số lượng">
-                                                                
+                                                                    value="{{ $product_variant['quantity'] }}"
+                                                                    placeholder="Số lượng">
+
                                                             </td>
                                                             <td class="align-middle">
                                                                 <div class="input-group has-validation">
                                                                     <span class="input-group-text"
                                                                         id="product-price-addon">VNĐ</span>
-                                                                    <input type="text" class="form-control @error("product_variant.$index.price") is-invalid @enderror"
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price") is-invalid @enderror"
                                                                         id="product-price-input" placeholder="Giá"
                                                                         aria-label="Price"
                                                                         aria-describedby="product-price-addon"
                                                                         name="product_variant[{{ $index }}][price]"
-                                                                        value="{{$product_variant['price']}}" oninput="formatCurrency(this)">
+                                                                        value="{{ $product_variant['price'] }}"
+                                                                        oninput="formatCurrency(this)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td class="align-middle">
+                                                                <div class="input-group has-validation">
+                                                                    <span class="input-group-text"
+                                                                        id="product-price-addon">VNĐ</span>
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
+                                                                        id="product-price-input" placeholder="Giá"
+                                                                        aria-label="Price Sale"
+                                                                        aria-describedby="product-price-addon"
+                                                                        name="product_variant[{{ $index }}][price_sale]"
+                                                                        value="{{ $product_variant['price_sale'] }}"
+                                                                        oninput="formatCurrency(this)">
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle">

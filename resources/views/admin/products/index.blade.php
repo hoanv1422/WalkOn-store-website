@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'trang sản phẩm')
+@section('title', 'Sản Phẩm')
 @section('style')
     <!-- nouisliderribute css -->
     <link rel="stylesheet" href="{{ asset('templates/admin/assets/libs/nouislider/nouislider.min.css') }}">
@@ -11,7 +11,6 @@
 @section('content')
 
     <div class="page-content">
-        
         <div class="container-fluid">
 
             <!-- start page title -->
@@ -340,8 +339,9 @@
                                 <div class="row g-4">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <a href="{{route('products.create')}}" class="btn btn-success"
-                                                id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm Sản Phẩm</a>
+                                            <a href="{{ route('products.create') }}" class="btn btn-success"
+                                                id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm Sản
+                                                Phẩm</a>
                                         </div>
                                     </div>
                                     <div class="col-sm">
@@ -399,7 +399,7 @@
                             <div class="card-body">
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane active" id="productnav-all" role="tabpanel">
-                                        <div id="table-product-list-all" class="table-card gridjs-border-none"
+                                        <div id="table-product-list-all" class="table-card gridjs-border-none table-responsive"
                                             width="100%">
                                             <table id="products-all" class="dataTable">
                                                 <thead class="gridjs-thead">
@@ -459,10 +459,10 @@
                                                             <td class="gridjs-td"><span>
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded p-1">
-                                                                                <img src="{{Storage::url($item->image)}}"
+                                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
+                                                                                <img src="{{ Storage::url($item->image) }}"
                                                                                     alt=""
-                                                                                    class="img-fluid d-block">
+                                                                                    class="img-fluid d-block object-fit-cover">
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">
@@ -499,17 +499,18 @@
                                                                                 class="ri-more-fill"></i></button>
                                                                         <ul class="dropdown-menu dropdown-menu-end">
                                                                             <li><a class="dropdown-item"
-                                                                                    href="{{route('products.show', $item)}}"><i
+                                                                                    href="{{ route('products.show', $item) }}"><i
                                                                                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                                                     Xem</a></li>
                                                                             <li><a class="dropdown-item edit-list"
                                                                                     data-edit-id="1"
-                                                                                    href="{{route('products.edit', $item)}}"><i
+                                                                                    href="{{ route('products.edit', $item) }}"><i
                                                                                         class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                                                     Sửa</a></li>
                                                                             <li class="dropdown-divider"></li>
                                                                             <li><a class="dropdown-item remove-list"
-                                                                                    href="#" data-id="{{ $item->id }}"
+                                                                                    href="#"
+                                                                                    data-id="{{ $item->id }}"
                                                                                     data-bs-toggle="modal"
                                                                                     data-action="{{ route('products.destroy', $item) }}"
                                                                                     data-bs-target="#removeItemModal"><i
@@ -625,18 +626,17 @@
                                                                             aria-expanded="false"><i
                                                                                 class="ri-more-fill"></i></button>
                                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item"
-                                                                                    href=""><i
+                                                                            <li><a class="dropdown-item" href=""><i
                                                                                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                                                     Xem</a></li>
                                                                             <li><a class="dropdown-item edit-list"
-                                                                                    data-edit-id="1"
-                                                                                    href=""><i
+                                                                                    data-edit-id="1" href=""><i
                                                                                         class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                                                     Sửa</a></li>
                                                                             <li class="dropdown-divider"></li>
                                                                             <li><a class="dropdown-item remove-list"
-                                                                                    href="#" data-id="{{ $item->id }}"
+                                                                                    href="#"
+                                                                                    data-id="{{ $item->id }}"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#removeItemModal"><i
                                                                                         class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
@@ -751,18 +751,17 @@
                                                                             aria-expanded="false"><i
                                                                                 class="ri-more-fill"></i></button>
                                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item"
-                                                                                    href=""><i
+                                                                            <li><a class="dropdown-item" href=""><i
                                                                                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                                                     Xem</a></li>
                                                                             <li><a class="dropdown-item edit-list"
-                                                                                    data-edit-id="1"
-                                                                                    href=""><i
+                                                                                    data-edit-id="1" href=""><i
                                                                                         class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                                                     Sửa</a></li>
                                                                             <li class="dropdown-divider"></li>
                                                                             <li><a class="dropdown-item remove-list"
-                                                                                    href="#" data-id="{{ $item->id }}"
+                                                                                    href="#"
+                                                                                    data-id="{{ $item->id }}"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#removeItemModal"><i
                                                                                         class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
@@ -795,16 +794,18 @@
     </div>
     <!-- End Page-content -->
 
-     <!-- removeItemModal -->
+    <!-- removeItemModal -->
     <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="btn-close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mt-2 text-center">
-                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                            colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
                         <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                             <h4>Bạn có chắc không ?</h4>
                             <p class="text-muted mx-4 mb-0">Bạn có chắc muốn xóa sản phẩm này không?</p>
@@ -813,10 +814,10 @@
                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                         <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Đóng</button>
                         <form id="deleteForm" method="POST" action="">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn w-sm btn-danger " id="delete-product">Xóa!</button>
-                            </form>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn w-sm btn-danger " id="delete-product">Xóa!</button>
+                        </form>
                     </div>
                 </div>
 

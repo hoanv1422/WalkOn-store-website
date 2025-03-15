@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Danh sách người dùng')
+@section('title', 'Người Dùng')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">Customers</h4>
+                        <h4 class="mb-sm-0">Người Dùng</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
-                                <li class="breadcrumb-item active">Customers</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                                <li class="breadcrumb-item active">Người Dùng</li>
                             </ol>
                         </div>
 
@@ -30,7 +30,7 @@
                             <div class="row g-4 align-items-center">
                                 <div class="col-sm">
                                     <div>
-                                        <h5 class="card-title mb-0">Customer List</h5>
+                                        <h5 class="card-title mb-0">Danh Sách Người Dùng</h5>
                                     </div>
                                 </div>
                                 <div class="col-sm-auto">
@@ -105,12 +105,13 @@
                                                     </div>
                                                 </th>
                                                 <th class="sort" data-sort="avatar" style="width: 50px;">Ảnh</th>
-                                                <th class="sort" data-sort="username">Tên Người Dùng</th>
-                                                <th class="sort" data-sort="name">Tên Tài Khoản</th>
+                                                <th class="sort" data-sort="username">Tên Tài Khoản</th>
+                                                <th class="sort" data-sort="name">Tên Người Dùng</th>
                                                 <th class="sort" data-sort="email">Email</th>
-                                                <th class="sort" data-sort="phone">Số Điện Thoại</th>
+                                                <th class="sort" data-sort="phone">Số Điện Thoại</th>r
                                                 <th class="sort" data-sort="date">Ngày Tạo</th>
                                                 <th class="sort" data-sort="authentic">Xác thực</th>
+                                                <th class="sort" data-sort="role">Chức Vụ</th>
                                                 <th class="sort" data-sort="status">Trạng Thái</th>
                                                 <th class="sort" data-sort="action">Hành Động</th>
                                             </tr>
@@ -136,12 +137,13 @@
                                                     <td class="name">{{ $user->name }}</td>
                                                     <td class="email">{{ $user->mail }}</td>
                                                     <td class="phone">{{ $user->phone }}</td>
-                                                    <td class="date">{{ $user->created_at->format('d M, Y') }}</td>
+                                                    <td class="date">{{ $user->created_at->format('d/m/Y') }}</td>
                                                     <td class="authentic"></td>
+                                                    <td class="role">{{ ucfirst($user->role) }}</td>
                                                     <td class="status">
                                                         <span
                                                             class="badge {{ $user->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                                            {{ $user->is_active ? 'ACTIVE' : 'BLOCK' }}
+                                                            {{ $user->is_active ? 'HOẠT ĐỘNG' : 'KHÓA' }}
                                                         </span>
                                                     </td>
                                                     <td>
@@ -154,6 +156,7 @@
                                                                     data-username="{{ $user->username }}"
                                                                     data-name="{{ $user->name }}"
                                                                     data-email="{{ $user->mail }}"
+                                                                    data-role="{{ $user->role }}"
                                                                     data-phone="{{ $user->phone }}"
                                                                     data-password="{{ $user->password }}"
                                                                     data-address="{{ $user->address }}"
@@ -180,7 +183,7 @@
                             </div>
 
 
-
+                            <!-- Modal -->
                             <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-xl modal-dialog-centered">
                                     <div class="modal-content">
@@ -193,7 +196,7 @@
                                             autocomplete="off" enctype="multipart/form-data">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" id="id-field" />
+                                                <input type="hidden" name="id" id="id-field" />
 
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -231,7 +234,7 @@
                                                                 Khoản</label>
                                                             <input type="text" id="customername-field"
                                                                 class="form-control" placeholder="Nhập tên tài khoản"
-                                                                name="username" required />
+                                                                name="username" />
                                                             <div class="invalid-feedback">Vui lòng nhập tên tài khoản.
                                                             </div>
                                                         </div>
@@ -239,16 +242,27 @@
                                                         <div class="mb-3">
                                                             <label for="email-field" class="form-label">Email</label>
                                                             <input type="text" id="email-field" class="form-control"
-                                                                placeholder="Nhập email" name="mail" required />
+                                                                placeholder="Nhập email" name="mail" />
                                                             <div class="invalid-feedback">Vui lòng nhập email.</div>
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="passwword-field" class="form-label">Mật
+                                                            <label for="password-field" class="form-label">Mật
                                                                 Khẩu</label>
                                                             <input type="text" id="password-field"
                                                                 class="form-control" placeholder="Nhập mật khẩu"
-                                                                name="password" required />
+                                                                name="password" />
+                                                            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="role-field" class="form-label">Chức Vụ</label>
+                                                            <select class="form-control" name="role"
+                                                                id="role-field">
+                                                                <option value="user">User</option>
+                                                                <option value="admin">Admin</option>
+                                                                <option value="shipper">Shipper</option>
+                                                            </select>
                                                             <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                                         </div>
 
@@ -269,16 +283,14 @@
                                                             <label for="phone-field" class="form-label">Số Điện
                                                                 Thoại</label>
                                                             <input type="text" id="phone-field" class="form-control"
-                                                                placeholder="Nhập Số Điện Thoại" name="phone"
-                                                                required />
+                                                                placeholder="Nhập Số Điện Thoại" name="phone" />
                                                             <div class="invalid-feedback">Vui lòng nhập số điện thoại.
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="address-field" class="form-label">Địa chỉ</label>
-                                                            <textarea type="text" id="address-field" class="form-control" placeholder="Nhập địa chỉ" name="address"
-                                                                required> </textarea>
+                                                            <textarea type="text" id="address-field" class="form-control" placeholder="Nhập địa chỉ" name="address"> </textarea>
                                                             <div class="invalid-feedback">Vui lòng nhập địa chỉ.
                                                             </div>
                                                         </div>
@@ -288,7 +300,7 @@
                                                             <label for="status-field" class="form-label">Trạng
                                                                 Thái</label>
                                                             <select class="form-control" name="is_active"
-                                                                id="status-field" required>
+                                                                id="status-field">
                                                                 <option value="1">Hoạt động</option>
                                                                 <option value="0">Khoá</option>
                                                             </select>
@@ -308,8 +320,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -361,7 +371,7 @@
                                                                 Khoản</label>
                                                             <input type="text" id="username-field-edit"
                                                                 class="form-control" placeholder="Nhập tên tài khoản"
-                                                                name="username" required />
+                                                                name="username" />
                                                             <div class="invalid-feedback">Vui lòng nhập tên tài khoản.
                                                             </div>
                                                         </div>
@@ -370,8 +380,19 @@
                                                             <label for="mail-field-edit" class="form-label">Email</label>
                                                             <input type="text" id="mail-field-edit"
                                                                 class="form-control" placeholder="Nhập email"
-                                                                name="mail" required />
+                                                                name="mail" />
                                                             <div class="invalid-feedback">Vui lòng nhập email.</div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="role-field-edit" class="form-label">Chức Vụ</label>
+                                                            <select class="form-control" name="role"
+                                                                id="role-field-edit">
+                                                                <option value="user">User</option>
+                                                                <option value="admin">Admin</option>
+                                                                <option value="shipper">Shipper</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                                         </div>
 
                                                     </div>
@@ -392,7 +413,7 @@
                                                                 Thoại</label>
                                                             <input type="text" id="phone-field-edit"
                                                                 class="form-control" placeholder="Nhập Số Điện Thoại"
-                                                                name="phone" required />
+                                                                name="phone" />
                                                             <div class="invalid-feedback">Vui lòng nhập số điện thoại.
                                                             </div>
                                                         </div>
@@ -400,8 +421,7 @@
                                                         <div class="mb-3">
                                                             <label for="address-field-edit" class="form-label">Địa
                                                                 chỉ</label>
-                                                            <textarea type="text" id="address-field-edit" class="form-control" placeholder="Nhập địa chỉ" name="address"
-                                                                required> </textarea>
+                                                            <textarea type="text" id="address-field-edit" class="form-control" placeholder="Nhập địa chỉ" name="address"> </textarea>
                                                             <div class="invalid-feedback">Vui lòng nhập địa chỉ.
                                                             </div>
                                                         </div>
@@ -411,7 +431,7 @@
                                                             <label for="status-field-edit" class="form-label">Trạng
                                                                 Thái</label>
                                                             <select class="form-control" name="is_active"
-                                                                id="status-field-edit" required>
+                                                                id="status-field-edit">
                                                                 <option value="1">Hoạt động</option>
                                                                 <option value="0">Khoá</option>
                                                             </select>
@@ -433,7 +453,6 @@
                                 </div>
                             </div>
 
-                            <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog  modal-dialog-centered">
                                     <div class="modal-content">
@@ -482,6 +501,10 @@
 @endsection
 
 @section('script')
+
+    <script>
+        var users = @json($validateUser);
+    </script>
     <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/validates/user.js') }}"></script>
     <script>
