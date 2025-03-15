@@ -4,7 +4,7 @@ php <!-- related product area start-->
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="section-heading">
+                    <div class="product-title">
                         <h2>Sản phẩm liên quan</h2>
                     </div>
                 </div>

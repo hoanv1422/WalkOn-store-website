@@ -3,8 +3,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Sản phẩm bán chạy</h2>
+                <div class="product-title">
+                    <h2> đề xuất Sản phẩm </h2>
                 </div>
             </div>
         </div>
