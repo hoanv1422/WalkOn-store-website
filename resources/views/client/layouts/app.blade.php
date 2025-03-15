@@ -65,7 +65,7 @@
         ============================================ -->
     <script src={{asset("templates/client/js/vendor/modernizr-2.8.3.min.js")}}></script>
 
-    @yield('css')
+    @yield('style')
 </head>
 
 <body>

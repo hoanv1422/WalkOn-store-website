@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 
@@ -37,7 +38,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('coupons', CouponController::class);
 
     //kho hàng
-    Route::resource('inventory', InventoryController::class)->only(['index']);
+    Route::resource('inventories', InventoryController::class)->only(['index']);
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
@@ -54,6 +55,31 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
+    Route::resource('orders', OrderController::class);
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('signin', function () {
+        return view('auth.admin.signin');
+    })->name('admin.login');
+
+    Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
+
+    Route::get('signup', function () {
+        return view('auth.admin.signup');
+    })->name('signup.index');
+
+    Route::get('pass-reset', function () {
+        return view('auth.admin.pass-reset');
+    })->name('pass-reset.index');
+
+    Route::get('pass-change', function () {
+        return view('auth.admin.pass-change');
+    })->name('pass-change.index');
+
+    Route::get('pass-confirm', function () {
+        return view('auth.admin.pass-confirm');
+    })->name('pass-confirm.index');
 });
 
 Route::prefix('admin')->group(function () {

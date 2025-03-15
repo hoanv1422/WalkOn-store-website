@@ -115,7 +115,6 @@ class CartController extends Controller
         DB::table('cart_items')->where('id', $cartItemId)->delete();
         return redirect()->route('cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
     }
-
     public function updateCart(Request $request, $cartItemId)
     {
         $cartItem = CartItem::findOrFail($cartItemId);

@@ -35,7 +35,7 @@
                                 <div class="flex-shrink-0">
                                     <!-- Xóa tất cả bộ lọc (chỉ hiển thị khi có ít nhất một bộ lọc) -->
                                     @if (request()->hasAny(['search', 'min_price', 'max_price', 'category']))
-                                        <a href="{{ route('inventory.index') }}" class="btn btn-danger" id="clearall">
+                                        <a href="{{ route('inventories.index') }}" class="btn btn-danger" id="clearall">
                                             <i class="bi bi-x-circle"></i> Xóa tất cả
                                         </a>
                                     @endif
@@ -48,7 +48,7 @@
                                 <!-- Lọc sản phẩm theo tên -->
                                 <div>
                                     <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
-                                    <form action="{{ route('inventory.index') }}" method="GET">
+                                    <form action="{{ route('inventories.index') }}" method="GET">
                                         <input type="hidden" name="min_price" value="{{ request()->min_price }}">
                                         <input type="hidden" name="max_price" value="{{ request()->max_price }}">
                                         <input type="hidden" name="category" value="{{ request()->category }}">
@@ -59,7 +59,7 @@
 
                                         <!-- Xóa bộ lọc tìm kiếm -->
                                         @if (request()->has('search') && request()->search != '')
-                                            <a href="{{ route('inventory.index', request()->except('search')) }}"
+                                            <a href="{{ route('inventories.index', request()->except('search')) }}"
                                                 class="btn btn-danger mt-2">
                                                 <i class="bi bi-x-circle"></i> Xóa
                                             </a>
@@ -71,7 +71,7 @@
                             <div class="card-body border-bottom">
                                 <!-- Lọc sản phẩm theo giá -->
                                 <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Giá</p>
-                                <form action="{{ route('inventory.index') }}" method="GET">
+                                <form action="{{ route('inventories.index') }}" method="GET">
                                     <input type="hidden" name="search" value="{{ request()->search }}">
                                     <input type="hidden" name="category" value="{{ request()->category }}">
                                     <div class="input-group">
@@ -89,7 +89,7 @@
                                         @if (
                                             (request()->has('min_price') && request()->min_price != '') ||
                                                 (request()->has('max_price') && request()->max_price != ''))
-                                            <a href="{{ route('inventory.index', request()->except(['min_price', 'max_price'])) }}"
+                                            <a href="{{ route('inventories.index', request()->except(['min_price', 'max_price'])) }}"
                                                 class="btn btn-danger">
                                                 <i class="bi bi-x-circle"></i> Xóa
                                             </a>
@@ -112,7 +112,7 @@
                                     aria-labelledby="flush-headingCategories">
                                     <div class="accordion-body text-body pt-0">
                                         <div class="d-flex flex-column gap-2 mt-3 filter-check">
-                                            <form action="{{ route('inventory.index') }}" method="GET">
+                                            <form action="{{ route('inventories.index') }}" method="GET">
                                                 <input type="hidden" name="search" value="{{ request()->search }}">
                                                 <input type="hidden" name="min_price"
                                                     value="{{ request()->min_price }}">
@@ -133,7 +133,7 @@
 
                                                 <!-- Xóa bộ lọc danh mục -->
                                                 @if (!empty(request()->category))
-                                                    <a href="{{ route('inventory.index', request()->except('category')) }}"
+                                                    <a href="{{ route('inventories.index', request()->except('category')) }}"
                                                         class="btn btn-danger mt-2">
                                                         <i class="bi bi-x-circle"></i> Xóa
                                                     </a>
