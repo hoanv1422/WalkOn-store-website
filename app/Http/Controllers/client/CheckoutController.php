@@ -63,16 +63,16 @@ class CheckoutController extends Controller
                 'receiver_phone' => $request->receiver_phone,
                 'receiver_address' => $request->receiver_address,
                 'note' => $request->note,
-                'coupon_id'=> $coupon_id,
+                'coupon_id' => $coupon_id,
                 'coupon' => $request->couponCode,
                 'total_price' => $request->total_price,
                 'discount_amount' => $request->discount_amount,
                 'shipping_fee' => $request->shipping_fee,
                 'final_price' => $request->final_price,
-                'order_status' => 'pending', 
+                'order_status' => 'pending',
                 'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
                 'payment_method' => $request->payment_method,
-                
+
             ]);
 
             $orderItems = [];
@@ -91,11 +91,11 @@ class CheckoutController extends Controller
                 ];
                 $item->productVariant->decrement('quantity', $item->quantity);
             }
-            OrderItem::insert($orderItems);
+            OrderItem::create($orderItems);
             CartItem::where('cart_id', $cart->id)->delete();
 
             if ($request->payment_method === 'VNPAY') {
-                DB::commit(); 
+                DB::commit();
                 $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
                 return redirect()->away($vnpayUrl);
             }
