@@ -49,7 +49,6 @@ Route::middleware('client')->group(function () {
 
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     // update thong tin khách hàng

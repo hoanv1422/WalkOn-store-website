@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)->with('orderItems')->get();
+        $orders = Order::where('user_id', $user->id)->with('orderItems')->orderBy('created_at', 'desc')->get();
         $categories = Category::all();
         $colors = Color::all();
 
@@ -72,6 +73,7 @@ class ProfileController extends Controller
         // Lưu thông tin người dùng
         try {
             $user->save();
+            // dd(get_class($user));
             return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.')->with('updatedFields', $updatedFields);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');
