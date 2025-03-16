@@ -40,7 +40,12 @@
                             <ul class="add-to-link">
                                 <li><a class="modal-view" data-target="#productModal" data-bs-toggle="modal"
                                         href="#"> <i class="fa fa-search"></i></a></li>
-                                <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
+                                        <li>
+                                            <a href="#" class="wishlist-action" data-id="{{ $product->id }}">
+                                                <i class="fa fa-heart-o"></i> <!-- Giữ nguyên icon, không đổi màu -->
+                                            </a>
+                                        </li>
+                                        
                                 <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
                             </ul>
                         </div>

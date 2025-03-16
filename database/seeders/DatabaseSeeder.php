@@ -168,40 +168,40 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Order
-        Order::create([
-            'user_id' => 1,
-            'user_email' => 'buyer@example.com',
-            'user_name' => 'Nguyễn Văn A',
-            'user_address' => '123 Đường ABC, TP.HCM',
-            'user_phone' => '0123456789',
-            'receiver_email' => 'receiver@example.com',
-            'receiver_name' => 'Trần Văn B',
-            'receiver_address' => '456 Đường XYZ, Hà Nội',
-            'receiver_phone' => '0987654321',
-            'coupon' => 'DISCOUNT10',
-            'order_status' => 'pending',
-            'payment_status' => 'unpaid',
-            'payment_method' => 'cod',
-            'order_code' => Str::uuid(),
-            'total_price' => 500000,
-        ]);
+        // // Order
+        // Order::create([
+        //     'user_id' => 1,
+        //     'user_email' => 'buyer@example.com',
+        //     'user_name' => 'Nguyễn Văn A',
+        //     'user_address' => '123 Đường ABC, TP.HCM',
+        //     'user_phone' => '0123456789',
+        //     'receiver_email' => 'receiver@example.com',
+        //     'receiver_name' => 'Trần Văn B',
+        //     'receiver_address' => '456 Đường XYZ, Hà Nội',
+        //     'receiver_phone' => '0987654321',
+        //     'coupon' => 'DISCOUNT10',
+        //     'order_status' => 'pending',
+        //     'payment_status' => 'unpaid',
+        //     'payment_method' => 'cod',
+        //     'order_code' => Str::uuid(),
+        //     'total_price' => 500000,
+        // ]);
 
-        // Order Items
-        for ($i = 0; $i < 3; $i++) {
-            OrderItem::create([
-                'order_id' => 1,
-                'product_variant_id' => rand(1, 4),
-                'product_name' => 'Sản phẩm ' . ($i + 1),
-                'product_sku' => 'SKU' . ($i + 1),
-                'product_image' => 'product' . ($i + 1) . '.jpg',
-                'product_price' => 100000,
-                'product_price_sale' => 90000,
-                'variant_size_name' => 'M',
-                'variant_color_name' => 'Đỏ',
-                'quantity' => rand(1, 5),
-            ]);
-        }
+        // // Order Items
+        // for ($i = 0; $i < 3; $i++) {
+        //     OrderItem::create([
+        //         'order_id' => 1,
+        //         'product_variant_id' => rand(1, 4),
+        //         'product_name' => 'Sản phẩm ' . ($i + 1),
+        //         'product_sku' => 'SKU' . ($i + 1),
+        //         'product_image' => 'product' . ($i + 1) . '.jpg',
+        //         'product_price' => 100000,
+        //         'product_price_sale' => 90000,
+        //         'variant_size_name' => 'M',
+        //         'variant_color_name' => 'Đỏ',
+        //         'quantity' => rand(1, 5),
+        //     ]);
+        // }
 
         Schema::enableForeignKeyConstraints();
     }

@@ -1,23 +1,34 @@
 <div class="account-area">
-    <!-- Hiển thị thông báo thành công -->
-    @if (session('success'))
-        <div class="alert alert-success">
-            <!-- Hiển thị thông báo thành công -->
-            {{ session('success') }}
-            <!-- Kiểm tra và hiển thị các trường đã được cập nhật -->
-            @if (session('updatedFields'))
-                <ul>
-                    @foreach (session('updatedFields') as $field)
-                        <li>{{ $field }} đã được cập nhật.</li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
-    @endif
-    <!-- Hiển thị thông báo lỗi -->
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
+    <!-- Hiển thị thông báo -->
+    @if (session('success') || session('error'))
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                            <i class="fa fa-check-circle me-2"></i>
+                            <strong>Thành công!</strong> {{ session('success') }}
+                            @if (session('updatedFields'))
+                                <ul class="mt-2 mb-0">
+                                    @foreach (session('updatedFields') as $field)
+                                        <li><i class="fa fa-check"></i> {{ $field }} đã được cập nhật.</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                            <i class="fa fa-exclamation-circle me-2"></i>
+                            <strong>Lỗi!</strong> {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
     @endif
     <div class="container">
@@ -67,7 +78,7 @@
                                     </a>
                                 </h4>
                             </div>
-                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                            <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel"
                                 aria-labelledby="headingOne" data-bs-parent="#accordion">
                                 <div class="panel-body">
                                     <div class="row">
@@ -77,68 +88,111 @@
                                                 </h4>
                                             </div>
                                             <div class="order-history">
-                                                <!-- Kiểm tra đơn hàng trống -->
                                                 @if ($orders->isEmpty())
-                                                    <p>Bạn chưa đặt đơn hàng nào.</p>
+                                                    <p class="text-muted text-center">Bạn chưa đặt đơn hàng nào.</p>
                                                 @else
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Mã đơn hàng</th>
-                                                                <th>Ngày đặt</th>
-                                                                <th>Tổng giá</th>
-                                                                <th>Trạng thái</th>
-                                                                <th>Chi tiết</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($orders as $order)
-                                                                <tr>
-                                                                    <td>{{ $order->order_code }}</td>
-                                                                    <td>{{ $order->created_at->format('d/m/Y') }}</td>
-                                                                    <td>{{ number_format($order->total_price) }} VND
-                                                                    </td>
-                                                                    <td>{{ $order->order_status }}</td>
-                                                                    <td>
-                                                                        <!-- Nút để hiển thị chi tiết đơn hàng -->
-                                                                        <button class="btn btn-primary"
-                                                                            data-toggle="collapse"
-                                                                            data-target="#order-{{ $order->id }}">
-                                                                            Xem Chi tiết
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                                <!-- Chi tiết đơn hàng -->
-                                                                <tr id="order-{{ $order->id }}" class="collapse">
-                                                                    <td colspan="5">
-                                                                        <table class="table">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Tên sản phẩm</th>
-                                                                                    <th>SKU</th>
-                                                                                    <th>Giá</th>
-                                                                                    <th>Số lượng</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @foreach ($order->orderItems as $item)
-                                                                                    <tr>
-                                                                                        <td>{{ $item->product_name }}
-                                                                                        </td>
-                                                                                        <td>{{ $item->product_sku }}
-                                                                                        </td>
-                                                                                        <td>{{ number_format($item->product_price) }}
-                                                                                            VND</td>
-                                                                                        <td>{{ $item->quantity }}</td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
+                                                    <div class="card shadow-lg border-0">
+                                                        <div class="card-body bg-white">
+                                                            <div class="table-responsive">
+                                                                <table
+                                                                    class="table table-bordered align-middle text-center">
+                                                                    <thead class="table-light">
+                                                                        <tr class="fw-bold">
+                                                                            <th class="bg-white">Mã đơn hàng</th>
+                                                                            <th class="bg-white">Ngày đặt</th>
+                                                                            <th class="bg-white">Tổng giá</th>
+                                                                            <th class="bg-white">Trạng thái</th>
+                                                                            <th class="bg-white">Chi tiết</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($orders as $order)
+                                                                            <tr>
+                                                                                <td>{{ $order->order_code }}</td>
+                                                                                <td>{{ $order->created_at->format('d/m/Y') }}
+                                                                                </td>
+                                                                                <td class="fw-bold text-danger">
+                                                                                    {{ number_format($order->total_price) }}
+                                                                                    VND
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span
+                                                                                        class="badge
+                                                                                    @if ($order->order_status == 'Đã giao') bg-success
+                                                                                    @elseif($order->order_status == 'Đang xử lý') bg-warning text-dark
+                                                                                    @else bg-secondary @endif">
+                                                                                        {{ $order->order_status }}
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button
+                                                                                        class="btn btn-outline-primary btn-sm"
+                                                                                        data-bs-toggle="collapse"
+                                                                                        data-bs-target="#order-{{ $order->id }}">
+                                                                                        <i class="fa fa-eye"></i> Xem
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <!-- Chi tiết đơn hàng -->
+                                                                            <tr id="order-{{ $order->id }}"
+                                                                                class="collapse">
+                                                                                <td colspan="5">
+                                                                                    <div
+                                                                                        class="card card-body border-light bg-white">
+                                                                                        <h6
+                                                                                            class="text-muted text-center">
+                                                                                            Chi tiết đơn hàng</h6>
+                                                                                        <table
+                                                                                            class="table table-bordered table-sm">
+                                                                                            <thead class="table-light">
+                                                                                                <tr class="fw-bold">
+                                                                                                    <th
+                                                                                                        class="bg-white">
+                                                                                                        Ảnh sản phẩm
+                                                                                                    </th>
+                                                                                                    <th
+                                                                                                        class="bg-white">
+                                                                                                        Tên sản phẩm
+                                                                                                    </th>
+                                                                                                    <th
+                                                                                                        class="bg-white">
+                                                                                                        Mã Sản phẩm</th>
+                                                                                                    <th
+                                                                                                        class="bg-white">
+                                                                                                        Giá</th>
+                                                                                                    <th
+                                                                                                        class="bg-white">
+                                                                                                        Số lượng</th>
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+                                                                                                @foreach ($order->orderItems as $item)
+                                                                                                    <tr>
+                                                                                                        <td><img src="{{ Storage::url($item->product_image) }}"
+                                                                                                                alt="{{ $item->product_name }}"
+                                                                                                                style="width: 50px; height: 50px;">
+                                                                                                        </td>
+                                                                                                        <td>{{ $item->product_name }}
+                                                                                                        </td>
+                                                                                                        <td>{{ $item->product_sku }}
+                                                                                                        </td>
+                                                                                                        <td>{{ number_format($item->product_price) }}
+                                                                                                            VND</td>
+                                                                                                        <td>{{ $item->quantity }}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endforeach
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -176,8 +230,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingThree">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-bs-toggle="collapse" href="#collapseThree"
-                                        aria-expanded="false" aria-controls="collapseThree">
+                                    <a class="collapsed" role="button" data-bs-toggle="collapse"
+                                        href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                         <i class="fa fa-building-o"></i>
                                         Địa chỉ của tôi
                                     </a>
@@ -234,8 +288,7 @@
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-bs-toggle="collapse"
                                         href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                        <i class="fa fa-user"></i>
-                                        Thông tin cá nhân của tôi
+                                        <i class="fa fa-user"></i> Thông tin cá nhân của tôi
                                     </a>
                                 </h4>
                             </div>
@@ -245,70 +298,75 @@
                                     <div class="col-md-12">
                                         <div class="delivery-details">
                                             <!-- Form để cập nhật thông tin người dùng -->
-                                            <form action="{{ route('profile.update') }}" method="POST">
+                                            <form action="{{ route('profile.update') }}" method="POST"
+                                                class="container mt-4">
                                                 @csrf
                                                 @method('PUT')
-                                                <div class="list-style">
-                                                    <div class="account-title">
-                                                        <h4>Hãy chắc chắn cập nhật thông tin cá nhân của bạn nếu nó đã
-                                                            thay đổi.</h4>
-                                                    </div>
-                                                    <!-- Trường nhập tên đăng nhập (readonly) -->
-                                                    <div class="form-group">
-                                                        <label for="username">Tên đăng nhập <em>*</em></label>
-                                                        <input type="text" class="form-control" id="username"
-                                                            name="username" placeholder="Tên đăng nhập"
-                                                            value="{{ $user->username }}" readonly>
-                                                    </div>
-                                                    <!-- Trường nhập tên người dùng -->
-                                                    <div class="form-group">
-                                                        <label for="name">Tên người dùng <em>*</em></label>
-                                                        <input type="text" class="form-control" id="name"
-                                                            name="name" placeholder="Tên người dùng"
-                                                            value="{{ $user->name }}">
-                                                    </div>
-                                                    <!-- Trường nhập email (readonly) -->
-                                                    <div class="form-group">
-                                                        <label for="email">Email <em>*</em></label>
-                                                        <input type="email" class="form-control" id="email"
-                                                            name="email" placeholder="Email"
-                                                            value="{{ $user->mail }}" readonly>
-                                                    </div>
-                                                    <!-- Trường nhập số điện thoại -->
-                                                    <div class="form-group">
-                                                        <label for="phone">Số điện thoại <em>*</em></label>
-                                                        <input type="text" class="form-control" id="phone"
-                                                            name="phone" placeholder="Số điện thoại"
-                                                            value="{{ $user->phone }}">
-                                                    </div>
-                                                    <!-- Trường nhập địa chỉ -->
-                                                    <div class="form-group">
-                                                        <label for="address">Địa chỉ <em>*</em></label>
-                                                        <input type="text" class="form-control" id="address"
-                                                            name="address" placeholder="Địa chỉ"
-                                                            value="{{ $user->address }}">
-                                                    </div>
-                                                    {{-- <!-- Trường nhập mật khẩu mới -->
-                                                    <div class="form-group">
-                                                        <label for="password">Mật khẩu mới</label>
-                                                        <input type="password" class="form-control" id="password"
-                                                            name="password" placeholder="Mật khẩu mới">
-                                                    </div>
-                                                    <!-- Trường xác nhận mật khẩu mới -->
-                                                    <div class="form-group">
-                                                        <label for="password_confirmation">Xác nhận mật khẩu
-                                                            mới</label>
-                                                        <input type="password" class="form-control"
-                                                            id="password_confirmation" name="password_confirmation"
-                                                            placeholder="Xác nhận mật khẩu mới">
-                                                    </div> --}}
-                                                    <!-- Nút lưu thông tin -->
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-primary">Cập
-                                                            nhật</button>
+
+                                                <div class="card shadow-lg">
+                                                    <div class="card-body">
+                                                        <p class="text-muted">Hãy chắc chắn cập nhật thông tin cá nhân
+                                                            của bạn nếu nó đã thay đổi.</p>
+                                                        <div class="row">
+                                                            <!-- Tên đăng nhập (readonly) -->
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="username" class="form-label">Tên đăng
+                                                                        nhập <em>*</em></label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="username" name="username"
+                                                                        value="{{ $user->username }}" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Email (readonly) -->
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="email" class="form-label">Email
+                                                                        <em>*</em></label>
+                                                                    <input type="email" class="form-control"
+                                                                        id="email" name="email"
+                                                                        value="{{ $user->mail }}" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!-- Tên người dùng -->
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="name" class="form-label">Tên người
+                                                                        dùng <em>*</em></label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="name" name="name"
+                                                                        value="{{ $user->name }}">
+                                                                </div>
+                                                            </div>
+                                                            <!-- Số điện thoại -->
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="phone" class="form-label">Số điện
+                                                                        thoại <em>*</em></label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="phone" name="phone"
+                                                                        value="{{ $user->phone }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Địa chỉ -->
+                                                        <div class="mb-3">
+                                                            <label for="address" class="form-label">Địa chỉ
+                                                                <em>*</em></label>
+                                                            <input type="text" class="form-control" id="address"
+                                                                name="address" value="{{ $user->address }}">
+                                                        </div>
+                                                        <!-- Nút lưu thông tin -->
+                                                        <div class="text-end">
+                                                            <button type="submit" class="btn btn-primary px-4">Cập
+                                                                nhật</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -345,7 +403,9 @@
                     </div>
                     <div class="account-button">
                         <div class="back-btn"> <a href="#">Quay lại tài khoản của bạn</a> </div>
-                        <div class="home"> <a href="index.html"> trang chủ</a> </div>
+                        <div class="home">
+                            <a href="{{ route('home.index') }}">Trang chủ</a>
+                        </div>
                     </div>
                 </div>
             </div>
