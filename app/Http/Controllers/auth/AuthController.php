@@ -49,20 +49,32 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/');
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect('/admin');
+            } elseif ($user->role === 'shipper') {
+                return redirect('/shipper');
+            } else {
+                return redirect('/');
+            }
         } else {
             return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
         }
     }
+
     // đăng xuất
-    public function logout()
+    public function logout(Request $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
         }
         Auth::logout();
-        return redirect()->route('login')->with('success', 'Đã đăng xuất khỏi tài khoản ');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
+
     public function signinAdmin(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -133,10 +145,12 @@ class AuthController extends Controller
         if (!$request->user()) {
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xác thực email.');
         }
+
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->route('verified.email')->with('message', 'Email đã được xác thực trước đó.');
         }
         $request->user()->sendEmailVerificationNotification();
-        return redirect()->back()->with('message', 'Email xác thực đã được gửi!');
+        session(['email_verification_sent' => true]);
+        return redirect()->route('email.sent')->with('message', 'Email xác thực đã được gửi!');
     }
 }

@@ -49,11 +49,11 @@ Route::controller(AuthController::class)->group(function () {
     })->name('confirmation.password')->middleware('password.reset.check');
 
     // phần xác thực email
-   Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail'])->name('verification.send');
+    Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail'])->name('verification.send');
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        Log::info('Email verification request', ['id' => $request->route('id'), 'hash' => $request->route('hash')]);
         $request->fulfill();
+        session()->forget('email_verification_sent');
         return redirect()->route('verified.email')->with('message', 'Email đã được xác thực thành công!');
     })->middleware('signed')->name('verification.verify');
 
@@ -63,6 +63,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.verified-email');
     })->name('verification.notice');
+
+    Route::get('/email-sent', function () {
+        return view('auth.email_sent');
+    })->name('email.sent')->middleware('email.sent');
 });
 
 // Test routes
@@ -70,3 +74,4 @@ Route::controller(TestController::class)->group(function () {
     Route::get('/test', 'test');
     Route::post('/test', 'store')->name('test.store');
 });
+require base_path('routes/shipper.php');

@@ -124,10 +124,10 @@
                                             </td>
                                             <td class="username">{{ $user->username }}</td>
                                             <td class="name">{{ $user->name }}</td>
-                                            <td class="email">{{ $user->mail }}</td>
+                                            <td class="email">{{ $user->email }}</td>
                                             <td class="phone">{{ $user->phone }}</td>
                                             <td class="date">{{ $user->created_at->format('d/m/Y') }}</td>
-                                            <td class="authentic"></td>
+                                            <td class="authentic">{{$user->email_verified_at}}</td>
                                             <td class="role">{{ ucfirst($user->role) }}</td>
                                             <td class="status">
                                                 <span
@@ -144,7 +144,7 @@
                                                             data-avatar="{{ Storage::url($user->avatar) }}"
                                                             data-username="{{ $user->username }}"
                                                             data-name="{{ $user->name }}"
-                                                            data-email="{{ $user->mail }}"
+                                                            data-email="{{ $user->email }}"
                                                             data-role="{{ $user->role }}"
                                                             data-phone="{{ $user->phone }}"
                                                             data-password="{{ $user->password }}"
@@ -230,7 +230,7 @@
                                                     <div class="mb-3">
                                                         <label for="email-field" class="form-label">Email</label>
                                                         <input type="text" id="email-field" class="form-control"
-                                                            placeholder="Nhập email" name="mail" />
+                                                            placeholder="Nhập email" name="email" />
                                                         <div class="invalid-feedback">Vui lòng nhập email.</div>
                                                     </div>
 
@@ -368,7 +368,7 @@
                                                         <label for="mail-field-edit" class="form-label">Email</label>
                                                         <input type="text" id="mail-field-edit"
                                                             class="form-control" placeholder="Nhập email"
-                                                            name="mail" />
+                                                            name="email" />
                                                         <div class="invalid-feedback">Vui lòng nhập email.</div>
                                                     </div>
 

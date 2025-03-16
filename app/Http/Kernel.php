@@ -70,8 +70,9 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
+        'shipper' => \App\Http\Middleware\ShipperMiddleware::class,
         'password.reset.check' => \App\Http\Middleware\CheckPasswordResetRequest::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-
+        'email.sent' => \App\Http\Middleware\CheckEmailVerificationSent::class,
     ];
 }
