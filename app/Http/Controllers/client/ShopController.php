@@ -7,17 +7,19 @@ use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Size;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        $products = Product::with('galleries', 'variants', 'colors', 'sizes','brand')->paginate(12);
+        $products = Product::with('galleries', 'variants', 'colors', 'sizes','brand')->paginate(9);
         $categories = Category::all();
         $colors = Color::all();
         $brand = Brand::all();
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand'));
+        $sizes = Size::all();
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','sizes'));
     }
 
     // Lọc Sản phần theo danh mục
@@ -29,7 +31,12 @@ class ShopController extends Controller
          if ($request->has('category')) {
             $query->whereIn('category_id', (array) $request->category);
         }
-
+         // Lọc theo màu sắc (Color)
+         if ($request->has('size')) {
+             $query->whereHas('sizes', function ($q) use ($request) {
+             $q->whereIn('sizes.id', (array) $request->size);
+          });
+        }
         // Lọc theo màu sắc (Color)
         if ($request->has('color')) {
             $query->whereHas('colors', function ($q) use ($request) {
@@ -51,11 +58,11 @@ class ShopController extends Controller
         }
 
         // Lấy dữ liệu sau khi lọc (hoặc tất cả nếu không chọn bộ lọc)
-        $products = $query->paginate(12);
+        $products = $query->paginate(9);
         $categories = Category::all();
         $colors = Color::all();
         $brand = Brand::all();
-
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand'));
+        $sizes = Size::all();
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','sizes'));
     }
 }
