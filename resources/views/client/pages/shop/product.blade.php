@@ -7,74 +7,85 @@
                     <div class="sidebar-title">
                         <h2>Shopping Options</h2>
                     </div>
-                    {{-- Category  --}}
-                    <div class="single-sidebar">
-                        <div class="single-sidebar-title">
-                            <h3>Category</h3>
-                        </div>
-                        <div class="single-sidebar-content">
-                            <ul>
-                                @foreach ($categories as $category)
-                                    <li><a href="#">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    {{-- Color --}}
-                    <div class="single-sidebar">
-                        <div class="single-sidebar-title">
-                            <h3>Color</h3>
-                        </div>
-                        <div class="single-sidebar-content">
-                            <ul>
-                                @foreach ($colors as $color)
-                                    <li><a href="#">{{ $color->color }}</a></li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    {{-- Brand --}}
-                    <div class="single-sidebar">
-                        <div class="single-sidebar-title">
-                            <h3>Manufacturer</h3>
-                        </div>
-                        <div class="single-sidebar-content">
-                            <ul>
-                                <li><a href="#">Calvin Klein (2)</a></li>
-                                <li><a href="#">Diesel (2)</a></li>
-                                <li><a href="#">option value (1)</a></li>
-                                <li><a href="#">Polo (2)</a></li>
-                                <li><a href="#">store view (4)</a></li>
-                                <li><a href="#">Tommy Hilfiger (2)</a></li>
-                                <li><a href="#">will be used (1)</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="single-sidebar price">
-                        <div class="single-sidebar-title">
-                            <h3>Price</h3>
-                        </div>
-                        <div class="single-sidebar-content">
-                            <div class="price-range">
-                                <div class="price-filter">
-                                    <div id="slider-range"></div>
-                                    <div class="price-slider-amount">
-                                        <input type="text" id="amount" name="price"
-                                            placeholder="Add Your Price" />
-                                    </div>
-                                </div>
-                                <button type="submit"> <span>search</span> </button>
+
+                    {{-- Form lọc sản phẩm --}}
+                    <form action="{{ route('shop.filter') }}" method="GET">
+                        {{-- Category --}}
+                        <div class="single-sidebar">
+                            <div class="single-sidebar-title">
+                                <h3>Category</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <ul>
+                                    @foreach ($categories as $category)
+                                        <li>
+                                            <input type="checkbox" name="category[]" value="{{ $category->id }}"
+                                                {{ request()->has('category') && in_array($category->id, (array) request()->category) ? 'checked' : '' }}>
+                                            {{ $category->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
-                    </div>
+
+                        {{-- Color --}}
+                        <div class="single-sidebar">
+                            <div class="single-sidebar-title">
+                                <h3>Color</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <ul>
+                                    @foreach ($colors as $color)
+                                        <li>
+                                            <input type="checkbox" name="color[]" value="{{ $color->id }}"
+                                                {{ request()->has('color') && in_array($color->id, (array) request()->color) ? 'checked' : '' }}>
+                                            {{ $color->color }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        {{-- Brand --}}
+                        <div class="single-sidebar">
+                            <div class="single-sidebar-title">
+                                <h3>Manufacturer</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <ul>
+                                    @foreach ($brand as $brand)
+                                        <li>
+                                            <input type="checkbox" name="brand[]" value="{{ $brand->id }}"
+                                                {{ request()->has('brand') && in_array($brand->id, (array) request()->brand) ? 'checked' : '' }}>
+                                            {{ $brand->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        {{-- Price --}}
+                        <div class="single-sidebar price">
+                            <div class="single-sidebar-title">
+                                <h3>Price</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <input type="number" name="min_price" placeholder="Min Price"
+                                    value="{{ request('min_price') }}">
+                                <input type="number" name="max_price" placeholder="Max Price"
+                                    value="{{ request('max_price') }}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">Search</button>
+                    </form>
+
                     <div class="banner-left">
-                        <a href="#">
-                            <img src="img/product/banner_left.jpg" alt="">
-                        </a>
+                        <a href="#"><img src="img/product/banner_left.jpg" alt=""></a>
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-9">
                 <div class="product-bar">
                     <ul class="nav product-navigation justify-content-center" role="tablist">
@@ -245,5 +256,4 @@
             </div>
         </div>
     </div>
-</div>
-<!-- product main items area end -->
+    <!-- product main items area end -->

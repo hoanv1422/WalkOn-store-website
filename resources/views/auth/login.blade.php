@@ -8,7 +8,7 @@
             <div class="col-lg-6 offset-lg-3 text-center">
                 <div class="login">
                     <div class="login-form-container">
-                        @if(session('status'))
+                        {{-- @if(session('status'))
                         <div id="custom-alert" class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: none;color:red">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
                                 <path d="M7.938 2.016a.13.13 0 0 1 .125 0c.02.01.037.025.052.043l6.857 10.586c.066.102.075.23.025.34a.248.248 0 0 1-.222.136H1.225a.248.248 0 0 1-.222-.136.277.277 0 0 1 .025-.34L7.885 2.06a.146.146 0 0 1 .052-.043ZM8 5a.905.905 0 0 0-.9 1l.35 4.2a.55.55 0 0 0 1.1 0L8.9 6A.905.905 0 0 0 8 5Zm-.9 7.5a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0Z" />
@@ -29,7 +29,7 @@
                                 }
                             });
                         </script>
-                        @endif
+                        @endif --}}
 
                         <div class="login-text">
                             <h2>Login</h2>

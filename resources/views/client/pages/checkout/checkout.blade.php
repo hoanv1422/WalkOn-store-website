@@ -1,8 +1,8 @@
 <div class="checkout-area pb-5">
     <div class="container">
-        <form action="{{ route('checkout.store') }}" method="POST">
+        <form id="checkout-form" action="{{route('checkout.store')}}" method="POST" autocomplete="off">
+            @csrf
             <div class="row">
-                @csrf
                 <div class="col-lg-6 col-12">
                     <div class="mb-4">
                         <h3>Chi Tiết Thanh Toán</h3>
@@ -61,7 +61,7 @@
                                 <thead>
                                     <tr>
                                         <th>Sản Phẩm</th>
-                                        <th >Tổng</th>
+                                        <th>Tổng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,54 +77,54 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                @php
-                                                $unitPrice =
-                                                    $item->productVariant->price_sale && $item->productVariant->price_sale < $item->productVariant->price
-                                                        ? $item->productVariant->price_sale
-                                                        : $item->productVariant->price;
-
-                                                $subtotal = $unitPrice * $item->quantity;
-                                            @endphp
-                                            {{ number_format($subtotal, 0, ',', '.') }} VND</td>
+                                                {{ number_format($item->formatted_price, 0, ',', '.') }} VND
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Tổng</th>
-                                         <td class="fw-bold">{{ number_format($totalAmount, 0, ',', '.') }} VND</td>
+                                        <td class="fw-bold">{{ number_format($totalPrice, 0, ',', '.') }} VND</td>
+                                        <input type="hidden" name="total_price" id=""
+                                            value="{{ $totalPrice }}">
                                     </tr>
                                     <tr>
                                         <th>Phí Vận Chuyển</th>
-                                        <td>0 VND</td>
+                                        <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
+                                        <input type="hidden" name="shipping_fee" id=""
+                                            value="{{ $shippingFee }}">
                                     </tr>
                                     <tr>
-                                        <th>Voucher</th>
-                                        <td>0 VND</td>
+                                        <th>Giảm Giá</th>
+                                        <td>- {{ number_format($discountAmount, 0, ',', '.') }} VND</td>
+                                        <input type="hidden" name="discount_amount" id=""
+                                            value="{{ $discountAmount }}">
                                     </tr>
                                     <tr>
                                         <th>Tổng Đơn</th>
-                                        <input type="hidden" name="total_price" id="" value="{{$totalAmount}}">
-                                        <td class="text-danger fw-bold fs-5">{{ number_format($totalAmount, 0, ',', '.') }} VND</td>
+                                        <input type="hidden" name="final_price" id=""
+                                            value="{{ $finalPrice }}">
+                                        <td class="text-danger fw-bold fs-5">
+                                            {{ number_format($finalPrice, 0, ',', '.') }} VND</td>
                                     </tr>
                                 </tfoot>
                             </table>
 
                             <div id="payment-method">
                                 <div class="payment-option">
-                                    <input type="radio" id="bank-transfer" name="payment_method" value="COD"
-                                        checked>
-                                    <label for="bank-transfer">COD</label>
+                                    <input type="radio" id="cod" name="payment_method" value="COD" checked>
+                                    <label for="cod">COD</label>
                                 </div>
 
                                 <div class="payment-option">
-                                    <input type="radio" id="cheque" name="payment_method" value="VNPAY">
-                                    <label for="cheque">VN PAY</label>
+                                    <input type="radio" id="vnpay" name="payment_method" value="VNPAY" autocomplete="off">
+                                    <label for="vnpay">VN PAY</label>
                                 </div>
                             </div>
-
+                            <input type="hidden" value="{{ $couponCode }}" name="couponCode">
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-primary w-100">Đặt Hàng</button>
+                                <button type="submit" class="btn btn-primary w-100" id="pay-now">Đặt Hàng</button>
                             </div>
                         </div>
                     </div>
@@ -133,3 +133,11 @@
         </form>
     </div>
 </div>
+
+<script>
+    console.log('Page loaded');
+    form.addEventListener('submit', function() {
+        console.log('Form submitted');
+    });
+</script>
+

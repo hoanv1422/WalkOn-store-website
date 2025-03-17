@@ -3,21 +3,21 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="{{route('admin.index')}}" class="logo logo-dark">
+        <a href="{{ route('admin.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
+                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('templates/admin/assets/images/logo-dark.png')}}" alt="" height="17">
+                <img src="{{ asset('templates/admin/assets/images/logo-dark.png') }}" alt="" height="17">
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="{{route('admin.index')}}" class="logo logo-light">
+        <a href="{{ route('admin.index') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
+                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('templates/admin/assets/images/logo-light.png')}}" alt="" height="17">
+                <img src="{{ asset('templates/admin/assets/images/logo-light.png') }}" alt="" height="17">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -30,7 +30,8 @@
         <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <span class="d-flex align-items-center gap-2">
-                <img class="rounded header-profile-user" src="{{asset('templates/admin/assets/images/users/avatar-1.jpg')}}" alt="Header Avatar">
+                <img class="rounded header-profile-user"
+                    src="{{ asset('templates/admin/assets/images/users/avatar-1.jpg') }}" alt="Header Avatar">
                 <span class="text-start">
                     <span class="d-block fw-medium sidebar-user-name-text">Anna Adame</span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text"><i
@@ -119,19 +120,23 @@
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('categories.index')}}" class="nav-link" data-key="t-category"> Danh Mục </a>
+                                <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-category">
+                                    Danh Mục </a>
                             </li>
 
-                             <li class="nav-item">
-                                <a href="{{route('brands.index')}}" class="nav-link" data-key="t-brand"> Thương Hiệu </a>
+                            <li class="nav-item">
+                                <a href="{{ route('brands.index') }}" class="nav-link" data-key="t-brand"> Thương
+                                    Hiệu </a>
                             </li>
 
-                             <li class="nav-item">
-                                <a href="{{route('attributes.index')}}" class="nav-link" data-key="t-attributes"> Thuộc Tính </a>
+                            <li class="nav-item">
+                                <a href="{{ route('attributes.index') }}" class="nav-link" data-key="t-attributes">
+                                    Thuộc Tính </a>
                             </li>
 
-                             <li class="nav-item">
-                                <a href="{{route('users.index')}}" class="nav-link" data-key="t-user"> Người Dùng </a>
+                            <li class="nav-item">
+                                <a href="{{ route('users.index') }}" class="nav-link" data-key="t-user"> Người Dùng
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button"
@@ -175,41 +180,27 @@
                                 <div class="collapse menu-dropdown" id="sidebarEcommerce">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{route('products.index')}}" class="nav-link"
+                                            <a href="{{ route('products.index') }}" class="nav-link"
                                                 data-key="t-products"> Danh Sách Sản Phẩm </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{route('products.create')}}" class="nav-link"
+                                            <a href="{{ route('products.create') }}" class="nav-link"
                                                 data-key="t-product-create"> Tạo Sản Phẩm </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
-                                    Projects
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarProjects">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="apps-projects-list.html" class="nav-link" data-key="t-list">
-                                                List
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-projects-overview.html" class="nav-link"
-                                                data-key="t-overview"> Overview </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-projects-create.html" class="nav-link"
-                                                data-key="t-create-project"> Create Project </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="{{ route('coupons.index') }}" class="nav-link"> <span data-key="t-to-do">Mã
+                                        Giảm Giá</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="apps-todo.html" class="nav-link"> <span data-key="t-to-do">To Do</span></a>
+                                <a href="{{ route('inventory.index') }}" class="nav-link"> <span
+                                        data-key="t-to-do">Kho Hàng</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('orders.index') }}" class="nav-link"> <span data-key="t-to-do">Đơn
+                                        Hàng</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse" role="button"
@@ -755,13 +746,11 @@
                                 <a href="advance-ui-tour.html" class="nav-link" data-key="t-tour">Tour</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-swiper.html" class="nav-link"
-                                    data-key="t-swiper-slider">Swiper
+                                <a href="advance-ui-swiper.html" class="nav-link" data-key="t-swiper-slider">Swiper
                                     Slider</a>
                             </li>
                             <li class="nav-item">
-                                <a href="advance-ui-ratings.html" class="nav-link"
-                                    data-key="t-ratings">Ratings</a>
+                                <a href="advance-ui-ratings.html" class="nav-link" data-key="t-ratings">Ratings</a>
                             </li>
                             <li class="nav-item">
                                 <a href="advance-ui-highlight.html" class="nav-link"
@@ -891,8 +880,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-column.html" class="nav-link"
-                                                data-key="t-column">
+                                            <a href="charts-apex-column.html" class="nav-link" data-key="t-column">
                                                 Column </a>
                                         </li>
                                         <li class="nav-item">
@@ -926,28 +914,23 @@
                                                 data-key="t-candlstick"> Candlstick </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-boxplot.html" class="nav-link"
-                                                data-key="t-boxplot">
+                                            <a href="charts-apex-boxplot.html" class="nav-link" data-key="t-boxplot">
                                                 Boxplot </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-bubble.html" class="nav-link"
-                                                data-key="t-bubble">
+                                            <a href="charts-apex-bubble.html" class="nav-link" data-key="t-bubble">
                                                 Bubble </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-scatter.html" class="nav-link"
-                                                data-key="t-scatter">
+                                            <a href="charts-apex-scatter.html" class="nav-link" data-key="t-scatter">
                                                 Scatter </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-heatmap.html" class="nav-link"
-                                                data-key="t-heatmap">
+                                            <a href="charts-apex-heatmap.html" class="nav-link" data-key="t-heatmap">
                                                 Heatmap </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="charts-apex-treemap.html" class="nav-link"
-                                                data-key="t-treemap">
+                                            <a href="charts-apex-treemap.html" class="nav-link" data-key="t-treemap">
                                                 Treemap </a>
                                         </li>
                                         <li class="nav-item">
