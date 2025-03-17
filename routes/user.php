@@ -69,6 +69,14 @@ Route::middleware('client')->group(function () {
     Route::get('vnpay_return', [CheckoutController::class, 'vnpay_return'],)->name('vnpay.return');
 });
 
+
+// wishlist
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+
+
+// checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');

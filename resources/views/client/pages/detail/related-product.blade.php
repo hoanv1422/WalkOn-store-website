@@ -1,4 +1,3 @@
-php <!-- related product area start-->
 @if ($relatedProducts->isNotEmpty())
     <div class="features-product-area">
         <div class="container">
@@ -73,9 +72,5 @@ php <!-- related product area start-->
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 96e385d48da46bf74945da01bb8455bfab64fb5f
 @endif
 <!-- related product area end-->

@@ -65,6 +65,10 @@ Route::prefix('admin')->group(function () {
 
     Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
 
+    Route::get('signin', function () {
+        return view('auth.admin.signin');
+    })->name('signin.index');
+
     Route::get('signup', function () {
         return view('auth.admin.signup');
     })->name('signup.index');

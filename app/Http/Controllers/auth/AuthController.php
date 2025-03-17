@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ResetPasswordMail;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use function Laravel\Prompts\alert;
 
 class AuthController extends Controller
@@ -18,35 +26,34 @@ class AuthController extends Controller
             'username' => 'required|string|unique:users,username|max:255',
             'password' => 'required|string|min:6',
             'name' => 'required|string|max:255',
-            'mail' => 'nullable|email|unique:users,mail|max:255',
+            'email' => 'nullable|email|unique:users,email|max:255',
         ]);
 
         $user = User::create([
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'name' => $request->name,
-            'mail' => $request->mail,
+            'email' => $request->email,
             'role' => 'user'
         ]);
 
         Auth::login($user);
-        return redirect()->route('login')->with('status', 'Đăng ký người dùng success');
+        return redirect()->route('login')->with('success', 'Đăng ký người dùng success');
     }
     //đăng nhập
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect('/');
         } else {
             return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
         }
     }
-
     // đăng xuất
     public function logout()
     {
@@ -54,13 +61,11 @@ class AuthController extends Controller
             return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
         }
         Auth::logout();
-        return redirect()->route('login')->with('status', 'Đã đăng xuất khỏi tài khoản ');
+        return redirect()->route('login')->with('success', 'Đã đăng xuất khỏi tài khoản ');
     }
-
-
     public function signinAdmin(Request $request)
     {
-        if (Auth::attempt(['mail' => $request->mail, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             if ($user->role === 'admin') {
                 return redirect()->route('admin.index');
@@ -70,5 +75,68 @@ class AuthController extends Controller
         } else {
             return back()->with('error', 'Sai mật khẩu hoặc tên tài khoản');
         }
+    }
+
+
+    public function sendResetLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()->withErrors(['email' => 'Không tìm thấy tài khoản.']);
+        }
+
+        Password::sendResetLink($request->only('email'));
+
+        session(['password_reset_requested' => true]);
+        Log::info('Session password_reset_requested: ', ['session' => session()->all()]);
+
+        return redirect()->route('confirmation.password');
+    }
+
+    public function showResetForm($token)
+    {
+        return view('auth.reset_password', ['token' => $token]);
+    }
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+        $tokenData = DB::table('password_reset_tokens')->where('email', $request->email)
+            ->where('created_at', '>=', now()->subMinutes(60))->first();
+
+        if (!$tokenData || !Hash::check($request->token, $tokenData->token)) {
+            return back()->withErrors(['token' => 'Token không hợp lệ hoặc đã hết hạn.']);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()->withErrors(['email' => 'Không tìm thấy tài khoản tương ứng.']);
+        }
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Mật khẩu đã được cập nhật');
+    }
+
+    // xác thực email
+    public function sendVerificationEmail(Request $request): RedirectResponse
+    {
+        if (!$request->user()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xác thực email.');
+        }
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('verified.email')->with('message', 'Email đã được xác thực trước đó.');
+        }
+        $request->user()->sendEmailVerificationNotification();
+        return redirect()->back()->with('message', 'Email xác thực đã được gửi!');
     }
 }
