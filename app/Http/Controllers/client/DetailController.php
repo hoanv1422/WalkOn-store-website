@@ -22,7 +22,14 @@ class DetailController extends Controller
         ->whereNotIn('id', CommentHidden::pluck('comment_id')->toArray())  // Lọc các bình luận đã bị ẩn
         ->latest()
         ->get();
-    
+
+     $averageRating = Comment::where('product_id', $product->id)
+        ->whereNotIn('id', function ($query) {
+        $query->select('comment_id')
+              ->from('comment_hidden');
+    })
+    ->avg('rating');
+
         $relatedProducts = $product->relatedProducts();
         $upSellProducts = $product->upsellProducts();
 
@@ -35,6 +42,13 @@ class DetailController extends Controller
                 })
                 ->exists();
         }
+        $existingComment = Comment::where('user_id', $user->id)
+        ->where('product_id', $request->product_id)
+        ->first();
+
+    if ($existingComment) {
+        return redirect()->back()->with('error', 'Bạn chỉ có thể bình luận một lần cho mỗi sản phẩm.');
+    }
 
         $productVariants = $product->variants->map(function ($variant) {
             return [
@@ -46,7 +60,7 @@ class DetailController extends Controller
             ];
         });
 
-        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased'));
+        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased','existingComment','averageRating'));
     }
 
     public function index()

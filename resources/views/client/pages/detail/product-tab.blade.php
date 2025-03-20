@@ -29,7 +29,8 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="product-review">
-                                            <p> <a href="#"> plaza</a> <span>Review by</span> plaza </p>
+                                            @include('client.pages.detail.comments')
+                                            {{-- <p> <a href="#"> plaza</a> <span>Review by</span> plaza </p>
                                             <div class="product-rating-info">
                                                 <p>value</p>
                                                 <div class="ratings">
@@ -140,8 +141,8 @@
                                                     </li>
                                                 </ul>
                                                 <button type="submit"> submit review</button>
-                                            </form>
-                                        </div>
+                                            </form>--}}
+                                        {{-- </div> --}}
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminCommentController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\admin\PostCommentController;
+use App\Models\CommentHidden;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\CommentHiddenController;
 use Illuminate\Http\Request;
 
 /*
@@ -84,9 +86,12 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('admin')->middleware(['admin'])->group(function () {
     
-    Route::resource('comments', AdminCommentController::class);
+    Route::resource('admincomments', AdminCommentController::class);
     Route::post('comments/{comment}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
     Route::get('comments/hidden', [AdminCommentController::class, 'hiddenComments'])->name('comments.hidden');
+});
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('commentshidden', CommentHiddenController::class);
 });
 
 

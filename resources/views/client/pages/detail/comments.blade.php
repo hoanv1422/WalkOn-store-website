@@ -20,9 +20,14 @@
         @if(session('error'))
             <div class="p-3 mb-4 bg-red-200 text-red-700 rounded">{{ session('error') }}</div>
         @endif
+
+        <div>
+            <p>Đánh giá trung bình: {{ $averageRating }}</p>
+        </div>
     
         <!-- Danh sách bình luận -->
         <div class="space-y-4">
+            <p>Đánh giá trung bình: {{ $averageRating }}</p>
             @isset($comments)
             @foreach ($comments as $comment)
                 <div class="p-3 border rounded-lg bg-gray-100">
@@ -78,6 +83,7 @@
 
     <!-- Danh sách bình luận -->
     <div class="space-y-4">
+        <p>Đánh giá trung bình: {{ $averageRating }}</p>
         @isset($comments)
         @foreach ($comments as $comment)
             <div class="p-3 border rounded-lg bg-gray-100">
@@ -102,6 +108,7 @@
     @isset($user) 
         @if ($user) 
             @if ($hasPurchased)  
+            @if ($existingComment)
                 <div class="mt-4">
                     <form method="POST" action="{{ route('comments.store') }}">
                         @csrf
@@ -117,7 +124,11 @@
                         <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg">Gửi bình luận</button>
                     </form>
                 </div>
+            @else
+                <p class="text-red-500 mt-4">Bạn đã bình luận sản phẩm này rồi.</p>
+            @endif
             @else 
+
                 <p class="text-red-500 mt-4">Bạn cần mua sản phẩm để có thể bình luận.</p>
             @endif
         @else 

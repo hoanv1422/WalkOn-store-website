@@ -37,7 +37,7 @@ Route::controller(TestController::class)->group(function () {
 });
 
 // Tuyến đường hiển thị trang bình luận của sản phẩm
-Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
+// Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
 
 // Tuyến đường xử lý thêm bình luận
-Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+// Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
