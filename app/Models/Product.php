@@ -85,4 +85,5 @@ class Product extends Model
         ->get();
 
     }
+    
 }

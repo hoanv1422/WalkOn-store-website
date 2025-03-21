@@ -52,7 +52,7 @@ Route::middleware('client')->group(function () {
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-
+    Route::post('wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 

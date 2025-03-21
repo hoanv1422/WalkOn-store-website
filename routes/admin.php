@@ -50,6 +50,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
     Route::resource('orders', OrderController::class);
+    
 });
 
 Route::prefix('admin')->group(function () {
