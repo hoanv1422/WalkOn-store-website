@@ -72,7 +72,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Đăng xuất khỏi tài khoản rồi');
     }
 
     public function signinAdmin(Request $request)

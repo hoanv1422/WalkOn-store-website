@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email')->unique()->comment('Email');
             $table->string('avatar')->nullable()->comment('Ảnh đại diện');
             $table->string('phone')->nullable()->comment('Số điện thoại');
-            $table->text('address')->nullable()->comment('Địa chỉ');
             $table->timestamp('email_verified_at')->nullable()->comment('Thời gian xác nhận email');
             $table->string('role')->comment('Vai trò');
             $table->boolean('is_active')->default(true)->comment('Trạng thái');

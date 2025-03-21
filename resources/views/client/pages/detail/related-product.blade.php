@@ -1,10 +1,9 @@
-php <!-- related product area start-->
 @if ($relatedProducts->isNotEmpty())
     <div class="features-product-area">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="section-heading">
+                    <div class="product-title">
                         <h2>Sản phẩm liên quan</h2>
                     </div>
                 </div>
@@ -73,9 +72,5 @@ php <!-- related product area start-->
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 96e385d48da46bf74945da01bb8455bfab64fb5f
 @endif
 <!-- related product area end-->
