@@ -175,7 +175,11 @@
                                                             {{ $product->name }}</a>
                                                     </div>
                                                     <div class="price-rating">
-                                                        <span>{{ number_format($product->price, 0, ',', '.') }}
+                                                        <span
+                                                            class="old-price">{{ number_format($product->price, 0, ',', '.') }}
+                                                            VND</span>
+                                                        <span class="text-danger">
+                                                            {{ number_format($product->price_sale, 0, ',', '.') }}
                                                             VND</span>
                                                         <div class="ratings">
                                                             @for ($i = 0; $i < 5; $i++)
@@ -185,6 +189,10 @@
                                                                     <i class="fa fa-star-half-o"></i>
                                                                 @endif
                                                             @endfor
+                                                            {{-- <a href="#"
+                                                                class="review">{{ $product->reviews_count }}
+                                                                Review(s)</a>
+                                                            <a href="#" class="add-review">Add Your Review</a> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -234,10 +242,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="list-product-details">
-                                                        <p>{{ $product->description }}
-                                                            <a href="{{ url('single-product/' . $product->id) }}">Learn
-                                                                More</a>
+                                                        <p>
+                                                            {{ $product->description }}
+
                                                         </p>
+                                                        <a href="{{ url('single-product/' . $product->id) }}">Learn
+                                                            More</a>
                                                     </div>
                                                 </div>
                                             </div>

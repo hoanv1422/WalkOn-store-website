@@ -10,48 +10,83 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    // Trang thông tin cá nhân
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)->with('orderItems')->orderBy('created_at', 'desc')->get();
         $categories = Category::all();
         $colors = Color::all();
-
-        return view('client.pages.profile.index', compact('user', 'orders', 'categories', 'colors'));
-    }
-
-    public function show()
-    {
-        $user = Auth::user();
-        $categories = Category::all();
-        $colors = Color::all();
-
         return view('client.pages.profile.index', compact('user', 'categories', 'colors'));
     }
 
-    // Phương thức để cập nhật thông tin người dùng
+    // Trang lịch sử đơn hàng
+    public function orders()
+    {
+        $user = Auth::user();
+        $orders = Order::where('user_id', $user->id)
+            ->with([
+                'orderItems' => function ($query) {
+                    $query->select(
+                        'id',
+                        'order_id',
+                        'product_name',
+                        'product_sku',
+                        'product_image',
+                        'product_price',
+                        'product_price_sale',
+                        'variant_size_name',
+                        'variant_color_name',
+                        'quantity'
+                    );
+                }
+            ])
+            ->select(
+                'id',
+                'order_code',
+                'user_id',
+                'user_name',
+                'user_address',
+                'user_phone',
+                'receiver_name',
+                'receiver_address',
+                'receiver_phone',
+                'note',
+                'coupon',
+                'order_status',
+                'payment_status',
+                'payment_method',
+                'total_price',
+                'created_at'
+            )
+            ->orderBy('created_at', 'desc')
+            ->paginate(5); // Phân trang, mỗi trang 5 đơn hàng
+        $categories = Category::all();
+        $colors = Color::all();
+
+        return view('client.pages.profile.orders', compact('user', 'orders', 'categories', 'colors'));
+    }
+
+    // Cập nhật thông tin cá nhân
     public function update(Request $request)
     {
-        // Lấy thông tin người dùng hiện tại
         $user = Auth::user();
 
-        // Kiểm tra xem $user có phải là instance của model User không
         if (!$user) {
-            return redirect()->back()->with('error', 'Người dùng không tồn tại.');
+            return response()->json(['error' => 'Người dùng không tồn tại.'], 404);
         }
 
-        // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8|confirmed',
+            'avatar' => 'nullable|image|max:2048',
         ]);
 
-        // Cập nhật thông tin người dùng
         $updatedFields = [];
         if ($user->name !== $request->input('name')) {
             $user->name = $request->input('name');
@@ -70,14 +105,66 @@ class ProfileController extends Controller
             $updatedFields[] = 'Mật khẩu';
         }
 
-        // Lưu thông tin người dùng
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && $user->avatar !== 'default-avatar.png' && Storage::exists($user->avatar)) {
+                Storage::delete($user->avatar);
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+            $updatedFields[] = 'Ảnh đại diện';
+        }
+
         try {
             $user->save();
-            // dd(get_class($user));
-            return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.')->with('updatedFields', $updatedFields);
+            return response()->json([
+                'success' => 'Thông tin cá nhân đã được cập nhật.',
+                'user' => [
+                    'name' => $user->name,
+                    'phone' => $user->phone,
+                    'address' => $user->address,
+                    'avatar' => $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png'),
+                ],
+                'updatedFields' => $updatedFields
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');
+            return response()->json([
+                'error' => 'Có lỗi xảy ra khi cập nhật thông tin: ' . $e->getMessage()
+            ], 500);
         }
     }
-    //
+
+    // Hủy đơn hàng
+    public function cancelOrder(Request $request, $orderId)
+    {
+        $user = Auth::user();
+        $order = Order::where('id', $orderId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        // Kiểm tra trạng thái đơn hàng
+        if (!in_array($order->order_status, ['pending', 'processing'])) {
+            return response()->json(['error' => 'Không thể hủy đơn hàng ở trạng thái này.'], 403);
+        }
+
+        try {
+            // Cập nhật trạng thái đơn hàng thành 'cancelled'
+            $order->order_status = 'cancelled';
+            $order->save();
+
+            // Cập nhật lại số lượng tồn kho trong product_variants
+            foreach ($order->orderItems as $item) {
+                if ($item->product_variant_id) {
+                    $variant = \App\Models\ProductVariant::find($item->product_variant_id);
+                    if ($variant) {
+                        $variant->quantity += $item->quantity;
+                        $variant->save();
+                    }
+                }
+            }
+
+            return response()->json(['success' => 'Đơn hàng đã được hủy thành công.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
+        }
+    }
 }
