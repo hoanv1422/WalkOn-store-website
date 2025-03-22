@@ -6,6 +6,7 @@
     @include('client.components.breadcrumb')
     @include('client.pages.profile.my-account')
 
+@section('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lấy các phần tử cần thao tác

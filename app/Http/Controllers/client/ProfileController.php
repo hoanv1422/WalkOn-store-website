@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -63,7 +64,7 @@ class ProfileController extends Controller
                 'created_at'
             )
             ->orderBy('created_at', 'desc')
-            ->paginate(5); // Phân trang, mỗi trang 5 đơn hàng
+            ->paginate(15);
         $categories = Category::all();
         $colors = Color::all();
 
@@ -133,37 +134,44 @@ class ProfileController extends Controller
         }
     }
 
-    // Hủy đơn hàng
+    // Hủy đơn hàng (đã tối ưu)
     public function cancelOrder(Request $request, $orderId)
     {
-        $user = Auth::user();
         $order = Order::where('id', $orderId)
-            ->where('user_id', $user->id)
-            ->firstOrFail();
+            ->where('user_id', Auth::id())
+            ->first();
 
-        // Kiểm tra trạng thái đơn hàng
+        if (!$order) {
+            return response()->json(['error' => 'Đơn hàng không tồn tại hoặc không thuộc về bạn.'], 404);
+        }
+
         if (!in_array($order->order_status, ['pending', 'processing'])) {
             return response()->json(['error' => 'Không thể hủy đơn hàng ở trạng thái này.'], 403);
         }
 
+        $request->validate(['cancel_reason' => 'required|string|max:255']);
+
         try {
-            // Cập nhật trạng thái đơn hàng thành 'cancelled'
+            DB::beginTransaction();
+
             $order->order_status = 'cancelled';
+            $order->note = $request->input('cancel_reason');
             $order->save();
 
-            // Cập nhật lại số lượng tồn kho trong product_variants
             foreach ($order->orderItems as $item) {
                 if ($item->product_variant_id) {
                     $variant = \App\Models\ProductVariant::find($item->product_variant_id);
                     if ($variant) {
-                        $variant->quantity += $item->quantity;
-                        $variant->save();
+                        $variant->increment('quantity', $item->quantity);
+                        $variant->product->increment('quantity', $item->quantity);
                     }
                 }
             }
 
-            return response()->json(['success' => 'Đơn hàng đã được hủy thành công.']);
+            DB::commit();
+            return response()->json(['success' => "Đơn hàng #{$order->order_code} đã được hủy."]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
         }
     }

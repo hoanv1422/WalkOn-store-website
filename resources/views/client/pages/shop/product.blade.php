@@ -148,7 +148,7 @@
                                                             class="primary-img">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="secondary-img">
-                                                        <img src="img/product/25.png" alt="">
+                                                        {{-- <img src="img/product/25.png" alt=""> --}}
                                                     </a>
                                                 </div>
                                                 <div class="actions">
@@ -212,7 +212,7 @@
                                                             class="primary-img">
                                                         <img src="{{ Storage::url($product->image) }}" alt=""
                                                             class="secondary-img">
-                                                        <img src="img/product/25.png" alt="">
+                                                        {{-- <img src="img/product/25.png" alt=""> --}}
                                                     </a>
                                                 </div>
                                             </div>

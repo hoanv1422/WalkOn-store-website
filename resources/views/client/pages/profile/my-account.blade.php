@@ -46,10 +46,12 @@
                 <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
                     <div class="card-body p-0">
                         <div class="text-center p-4 bg-light">
-                            <img id="sidebar-avatar"
-                                src="{{ $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png') }}"
-                                alt="Avatar" class="rounded-circle img-fluid avatar-img">
-                            <h5 id="sidebar-name" class="fw-bold mb-1">{{ $user->name }}</h5>
+                            <div class="sidebar-avatar-container">
+                                <img id="sidebar-avatar"
+                                    src="{{ $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png') }}"
+                                    alt="Avatar" class="rounded-circle img-fluid">
+                            </div>
+                            <h5 id="sidebar-name" class="fw-bold mb-1 mt-3">{{ $user->name }}</h5>
                             <p class="text-muted small mb-0">{{ $user->mail }}</p>
                         </div>
                         <div class="list-group list-group-flush">
@@ -154,7 +156,7 @@
                                         <div class="avatar-container mb-3">
                                             <img id="avatar-preview"
                                                 src="{{ $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png') }}"
-                                                alt="Avatar" class="avatar-img rounded-circle">
+                                                alt="Avatar">
                                         </div>
 
                                         <div class="d-grid">
@@ -245,21 +247,60 @@
         border-left: 3px solid #333333;
     }
 
+    /* Completely revised avatar styles */
     .avatar-container {
         position: relative;
-        display: inline-block;
-        padding: 5px;
-        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        height: 160px;
+        margin: 0 auto;
         border-radius: 50%;
+        background-color: #f5f5f5;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border: 5px solid #fff;
     }
 
-    .avatar-img {
-        width: 150px;
-        height: 150px;
+    .avatar-container img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Sidebar avatar container */
+    .sidebar-avatar-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background-color: #f5f5f5;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
         border: 3px solid #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Add spacing between avatar containers */
+    .avatar-container+.avatar-container,
+    .sidebar-avatar-container+.sidebar-avatar-container {
+        margin-top: 20px;
+    }
+
+    /* Increase spacing between form fields */
+    .mb-4.row {
+        margin-bottom: 2rem !important;
     }
 
     .btn-primary {
@@ -319,9 +360,14 @@
             padding-bottom: 0;
         }
 
-        .avatar-img {
-            width: 120px;
-            height: 120px;
+        .avatar-container {
+            width: 130px;
+            height: 130px;
+        }
+
+        .sidebar-avatar-container {
+            width: 80px;
+            height: 80px;
         }
 
         .card-body {
@@ -329,3 +375,37 @@
         }
     }
 </style>
+
+<!-- JavaScript để xử lý xem trước ảnh -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatarInput = document.getElementById('avatar');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const sidebarAvatar = document.getElementById('sidebar-avatar');
+        const sidebarName = document.getElementById('sidebar-name');
+        const nameInput = document.getElementById('name');
+
+        // Xử lý xem trước ảnh khi chọn file
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                        sidebarAvatar.src = e.target.result;
+                    };
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+
+        // Cập nhật tên trong sidebar khi thay đổi
+        if (nameInput && sidebarName) {
+            nameInput.addEventListener('input', function() {
+                sidebarName.textContent = this.value;
+            });
+        }
+    });
+</script>

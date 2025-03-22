@@ -123,8 +123,7 @@
                                                     @case('delivered') border-start border-success border-4 @break
                                                     @case('cancelled') border-start border-danger border-4 @break
                                                     @case('returned') border-start border-dark border-4 @break
-                                                @endswitch
-                                            ">
+                                                @endswitch">
                                                 <!-- Tiêu đề đơn hàng -->
                                                 <div
                                                     class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4 border-bottom border-light">
@@ -146,8 +145,7 @@
                                                                 @case('delivered') bg-success bg-opacity-75 @break
                                                                 @case('cancelled') bg-danger bg-opacity-75 @break
                                                                 @case('returned') bg-dark bg-opacity-75 @break
-                                                            @endswitch
-                                                            me-2">
+                                                            @endswitch me-2">
                                                             @switch($order->order_status)
                                                                 @case('pending')
                                                                     Đang chờ xử lý
@@ -230,7 +228,7 @@
                                                         <!-- Hình ảnh sản phẩm -->
                                                         <div class="col-md-7 mb-3 mb-md-0">
                                                             <div class="d-flex flex-wrap">
-                                                                @foreach ($order->orderItems->take(3) as $index => $item)
+                                                                @foreach ($order->orderItems->take(3) as $item)
                                                                     <div class="position-relative me-3 mb-2">
                                                                         <div class="rounded-3 overflow-hidden border shadow-sm product-thumbnail"
                                                                             style="width: 55px; height: 55px;">
@@ -475,7 +473,7 @@
                                                                     data-bs-target="#order-details-{{ $order->id }}">
                                                                     <i class="fa fa-chevron-up me-1"></i> Đóng
                                                                 </button>
-                                                                @if ($order->order_status == 'pending' || $order->order_status == 'processing')
+                                                                @if (in_array($order->order_status, ['pending', 'processing']))
                                                                     <button type="button"
                                                                         class="btn btn-outline-danger btn-sm px-3 py-2 ms-2 shadow-sm rounded-pill cancel-order-btn"
                                                                         data-order-id="{{ $order->id }}"
@@ -731,6 +729,7 @@
     </style>
 
     <!-- JavaScript cho filter, search và hủy đơn -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Biến và elements
@@ -829,23 +828,42 @@
                 });
             });
 
-            // Xử lý sự kiện submit form hủy đơn
+            // Xử lý sự kiện submit form hủy đơn với SweetAlert2
             cancelForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 // Kiểm tra lý do hủy
                 if (!cancelReason.value.trim()) {
-                    alert('Vui lòng nhập lý do hủy đơn hàng.');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Thiếu thông tin',
+                        text: 'Vui lòng nhập lý do hủy đơn hàng!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    });
                     return;
                 }
 
                 const formData = new FormData(this);
                 formData.append('cancel_reason', cancelReason.value);
 
+                // Kiểm tra sự tồn tại của CSRF token
+                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfTokenElement) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống',
+                        text: 'Không tìm thấy CSRF token. Vui lòng tải lại trang và thử lại.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+
                 fetch(this.action, {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'X-CSRF-TOKEN': csrfTokenElement.content,
                             'Accept': 'application/json',
                         },
                         body: formData
@@ -853,15 +871,33 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.success);
-                            location.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: data.success,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#28a745'
+                            }).then(() => {
+                                location.reload(); // Tải lại trang sau khi hủy thành công
+                            });
                         } else {
-                            alert(data.error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: data.error,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#d33'
+                            });
                         }
                     })
                     .catch(error => {
-                        console.error('Lỗi:', error);
-                        alert('Có lỗi xảy ra khi hủy đơn hàng: ' + error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống',
+                            text: 'Có lỗi xảy ra khi hủy đơn hàng: ' + error.message,
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#d33'
+                        });
                     });
             });
 
