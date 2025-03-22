@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                                 <h5 class="fw-bold mb-1 text-dark">{{ $user->name }}</h5>
-                                <p class="text-muted small mb-0">{{ $user->mail }}</p>
+                                <p class="text-muted small mb-0">{{ $user->email }}</p>
                             </div>
                             <!-- Menu điều hướng -->
                             <div class="list-group list-group-flush">
@@ -80,16 +80,31 @@
                                 <!-- Bộ lọc và tìm kiếm -->
                                 <div class="row mb-4 g-3">
                                     <div class="col-md-4">
-                                        <select class="form-select border rounded-pill py-2 px-3 shadow-sm"
-                                            id="orderStatusFilter">
-                                            <option value="">Tất cả trạng thái</option>
-                                            <option value="pending">Đang chờ xử lý</option>
-                                            <option value="processing">Đang xử lý</option>
-                                            <option value="shipped">Đang giao hàng</option>
-                                            <option value="delivered">Đã giao hàng</option>
-                                            <option value="cancelled">Đã hủy bỏ</option>
-                                            <option value="returned">Đã trả hàng</option>
-                                        </select>
+                                        <form id="statusFilterForm" method="GET" action="{{ route('profile.orders') }}">
+                                            <select class="form-select border rounded-pill py-2 px-3 shadow-sm"
+                                                name="status" onchange="this.form.submit()">
+                                                <option value="" {{ request('status') === '' ? 'selected' : '' }}>Tất
+                                                    cả trạng thái</option>
+                                                <option value="pending"
+                                                    {{ request('status') === 'pending' ? 'selected' : '' }}>Đang chờ xử lý
+                                                </option>
+                                                <option value="processing"
+                                                    {{ request('status') === 'processing' ? 'selected' : '' }}>Đang xử lý
+                                                </option>
+                                                <option value="shipped"
+                                                    {{ request('status') === 'shipped' ? 'selected' : '' }}>Đang giao hàng
+                                                </option>
+                                                <option value="delivered"
+                                                    {{ request('status') === 'delivered' ? 'selected' : '' }}>Đã giao hàng
+                                                </option>
+                                                <option value="cancelled"
+                                                    {{ request('status') === 'cancelled' ? 'selected' : '' }}>Đã hủy bỏ
+                                                </option>
+                                                <option value="returned"
+                                                    {{ request('status') === 'returned' ? 'selected' : '' }}>Đã trả hàng
+                                                </option>
+                                            </select>
+                                        </form>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-group shadow-sm rounded-pill overflow-hidden">
@@ -728,12 +743,11 @@
         }
     </style>
 
-    <!-- JavaScript cho filter, search và hủy đơn -->
+    <!-- JavaScript tối ưu -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Biến và elements
-            const statusFilter = document.getElementById('orderStatusFilter');
             const searchInput = document.getElementById('orderSearch');
             const orderItems = document.querySelectorAll('.order-item');
             const noOrdersFound = document.getElementById('no-orders-found');
@@ -746,34 +760,24 @@
             const modalOrderItemsBody = document.getElementById('modal-order-items');
             const cancelReason = document.getElementById('cancel-reason');
 
-            // Hàm lọc đơn hàng
-            function filterOrders() {
-                const status = statusFilter ? statusFilter.value.toLowerCase() : '';
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            // Hàm tìm kiếm đơn hàng theo mã
+            function searchOrders() {
+                const searchTerm = searchInput.value.toLowerCase();
                 let visibleCount = 0;
 
                 orderItems.forEach(item => {
-                    const orderStatus = item.querySelector('.badge').textContent.toLowerCase();
                     const orderCode = item.querySelector('.badge.bg-dark').textContent.toLowerCase();
-                    const statusMatch = status === '' || orderStatus.includes(status);
                     const searchMatch = searchTerm === '' || orderCode.includes(searchTerm);
 
-                    if (statusMatch && searchMatch) {
-                        item.style.display = '';
-                        visibleCount++;
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    item.style.display = searchMatch ? '' : 'none';
+                    if (searchMatch) visibleCount++;
                 });
 
-                if (noOrdersFound) {
-                    noOrdersFound.classList.toggle('d-none', visibleCount > 0);
-                }
+                noOrdersFound.classList.toggle('d-none', visibleCount > 0);
             }
 
-            // Sự kiện lọc và tìm kiếm
-            if (statusFilter) statusFilter.addEventListener('change', filterOrders);
-            if (searchInput) searchInput.addEventListener('input', filterOrders);
+            // Sự kiện tìm kiếm
+            searchInput.addEventListener('input', searchOrders);
 
             // Sự kiện thay đổi icon khi mở/đóng chi tiết
             toggleButtons.forEach(button => {
@@ -798,15 +802,11 @@
                     const orderTotal = this.getAttribute('data-order-total');
                     const orderItems = JSON.parse(this.getAttribute('data-order-items'));
 
-                    // Cập nhật thông tin trong modal
                     modalOrderCode.textContent = orderCode;
                     modalOrderDate.textContent = orderDate;
                     modalOrderTotal.textContent = orderTotal;
 
-                    // Xóa nội dung cũ trong bảng sản phẩm
                     modalOrderItemsBody.innerHTML = '';
-
-                    // Thêm sản phẩm vào bảng
                     orderItems.forEach(item => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -820,19 +820,15 @@
                         modalOrderItemsBody.appendChild(row);
                     });
 
-                    // Reset lý do hủy
                     cancelReason.value = '';
-
-                    // Cập nhật action của form
                     cancelForm.action = `/profile/orders/${orderId}/cancel`;
                 });
             });
 
-            // Xử lý sự kiện submit form hủy đơn với SweetAlert2
+            // Xử lý submit form hủy đơn
             cancelForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                // Kiểm tra lý do hủy
                 if (!cancelReason.value.trim()) {
                     Swal.fire({
                         icon: 'warning',
@@ -847,7 +843,6 @@
                 const formData = new FormData(this);
                 formData.append('cancel_reason', cancelReason.value);
 
-                // Kiểm tra sự tồn tại của CSRF token
                 const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
                 if (!csrfTokenElement) {
                     Swal.fire({
@@ -878,7 +873,7 @@
                                 confirmButtonText: 'OK',
                                 confirmButtonColor: '#28a745'
                             }).then(() => {
-                                location.reload(); // Tải lại trang sau khi hủy thành công
+                                location.reload();
                             });
                         } else {
                             Swal.fire({

@@ -25,46 +25,20 @@ class ProfileController extends Controller
     }
 
     // Trang lịch sử đơn hàng
-    public function orders()
+    public function orders(Request $request)
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)
-            ->with([
-                'orderItems' => function ($query) {
-                    $query->select(
-                        'id',
-                        'order_id',
-                        'product_name',
-                        'product_sku',
-                        'product_image',
-                        'product_price',
-                        'product_price_sale',
-                        'variant_size_name',
-                        'variant_color_name',
-                        'quantity'
-                    );
-                }
-            ])
-            ->select(
-                'id',
-                'order_code',
-                'user_id',
-                'user_name',
-                'user_address',
-                'user_phone',
-                'receiver_name',
-                'receiver_address',
-                'receiver_phone',
-                'note',
-                'coupon',
-                'order_status',
-                'payment_status',
-                'payment_method',
-                'total_price',
-                'created_at'
-            )
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = Order::where('user_id', $user->id)
+            ->with(['orderItems' => fn($q) => $q->select('id', 'order_id', 'product_name', 'product_sku', 'product_image', 'product_price', 'product_price_sale', 'variant_size_name', 'variant_color_name', 'quantity')])
+            ->select('id', 'order_code', 'user_id', 'user_name', 'user_address', 'user_phone', 'receiver_name', 'receiver_address', 'receiver_phone', 'note', 'coupon', 'order_status', 'payment_status', 'payment_method', 'total_price', 'created_at')
+            ->orderBy('created_at', 'desc');
+
+        // Lọc theo trạng thái nếu có trong request
+        if ($status = $request->query('status')) {
+            $query->where('order_status', $status);
+        }
+
+        $orders = $query->paginate(15)->appends(['status' => $status]); // Giữ tham số status khi phân trang
         $categories = Category::all();
         $colors = Color::all();
 
@@ -134,7 +108,7 @@ class ProfileController extends Controller
         }
     }
 
-    // Hủy đơn hàng (đã tối ưu)
+    // Hủy đơn hàng
     public function cancelOrder(Request $request, $orderId)
     {
         $order = Order::where('id', $orderId)
