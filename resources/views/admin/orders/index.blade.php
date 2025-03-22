@@ -276,7 +276,7 @@
             modal.find('#payment-field').val(paymentMethod);
             modal.find('#delivered-status').val(orderStatus);
 
-            modal.find('form').attr('action', '/admin/orders/' + id);
+            modal.find('form').attr('action', '/admin/orders/' + orderCode);
         });
 
         $('#updateOrderModal form').on('submit', function(e) {
