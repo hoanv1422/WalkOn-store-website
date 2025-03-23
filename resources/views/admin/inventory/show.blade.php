@@ -86,11 +86,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <a href="{{ route('products.edit', $variant->product) }}"
-                                                    class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Sửa sản phẩm"><i class="ri-pencil-fill align-bottom"></i></a>
-                                            </div>
                                         </div>
 
                                         <div class="row mt-4">

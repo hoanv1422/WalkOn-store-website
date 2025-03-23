@@ -119,8 +119,8 @@ class ProfileController extends Controller
             return response()->json(['error' => 'Đơn hàng không tồn tại hoặc không thuộc về bạn.'], 404);
         }
 
-        if (!in_array($order->order_status, ['pending', 'processing'])) {
-            return response()->json(['error' => 'Không thể hủy đơn hàng ở trạng thái này.'], 403);
+        if ($order->order_status !== 'pending') {
+            return response()->json(['error' => 'Chỉ có thể hủy đơn hàng khi đang ở trạng thái chờ xử lý.'], 403);
         }
 
         $request->validate(['cancel_reason' => 'required|string|max:255']);

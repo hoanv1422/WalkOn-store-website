@@ -3,27 +3,11 @@
 @section('style')
     <!-- nouisliderribute css -->
     <link rel="stylesheet" href="{{ asset('templates/admin/assets/libs/nouislider/nouislider.min.css') }}">
-
 @endsection
-@section('content')
 
+@section('content')
     <div class="page-content">
         <div class="container-fluid">
-            <!-- Hiển thị thông báo -->
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            <!-- Kết thúc hiển thị thông báo -->
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -126,7 +110,7 @@
                                 </h2>
                                 <div id="flush-collapseCategories" class="accordion-collapse collapse show"
                                     aria-labelledby="flush-headingCategories">
-                                    <div class="accordion-body text постій pt-0">
+                                    <div class="accordion-body text pt-0">
                                         <div class="d-flex flex-column gap-2 mt-3 filter-check">
                                             <form action="{{ route('inventory.index') }}" method="GET">
                                                 <input type="hidden" name="search" value="{{ request()->search }}">
@@ -270,11 +254,15 @@
                                                                                         href="{{ route('inventory.show', $variant->id) }}"><i
                                                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                                                         Xem</a></li>
-                                                                                <li><a class="dropdown-item edit-list"
-                                                                                        data-edit-id="{{ $variant->id }}"
-                                                                                        href="{{ route('products.edit', $product) }}"><i
+                                                                                <!-- Nút cập nhật số lượng -->
+                                                                                <li><a class="dropdown-item update-list"
+                                                                                        href="#"
+                                                                                        data-id="{{ $variant->id }}"
+                                                                                        data-quantity="{{ $variant->quantity }}"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#updateQuantityModal"><i
                                                                                             class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                                                        Sửa</a></li>
+                                                                                        Cập nhật số lượng</a></li>
                                                                                 <li class="dropdown-divider"></li>
                                                                                 <li><a class="dropdown-item remove-list"
                                                                                         href="#"
@@ -332,6 +320,34 @@
             </div>
         </div>
     </div>
+
+    <!-- updateQuantityModal -->
+    <!-- Lưu ý: Modal này dùng để cập nhật số lượng biến thể -->
+    <div id="updateQuantityModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cập nhật số lượng biến thể</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm" method="POST" action="">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Số lượng mới</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" min="0"
+                                required>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn w-sm btn-primary">Cập nhật</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -353,9 +369,23 @@
             });
         });
 
+        // Xử lý sự kiện xóa biến thể
         $(document).on('click', '.dropdown-item.remove-list', function() {
             var actionUrl = $(this).data('action');
             $('#deleteForm').attr('action', actionUrl);
+        });
+
+        // Xử lý sự kiện cập nhật số lượng
+        // Lưu ý: Đảm bảo ID và quantity được truyền chính xác từ data attributes
+        $(document).on('click', '.dropdown-item.update-list', function() {
+            var actionUrl = '{{ route('inventory.update', ':id') }}'.replace(':id', $(this).data('id'));
+            var currentQuantity = $(this).data('quantity');
+
+            // Cập nhật action của form
+            $('#updateForm').attr('action', actionUrl);
+
+            // Điền số lượng hiện tại vào input
+            $('#quantity').val(currentQuantity);
         });
     </script>
 @endsection

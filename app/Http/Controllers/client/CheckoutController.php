@@ -25,6 +25,7 @@ class CheckoutController extends Controller
         // dd($request->all());
         try {
             $user = Auth::user();
+
             if (!$user) {
                 return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
             }
@@ -50,7 +51,6 @@ class CheckoutController extends Controller
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
-
             $order = Order::create([
                 'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
                 'user_id' => $user->id,
@@ -72,8 +72,8 @@ class CheckoutController extends Controller
                 'order_status' => 'pending',
                 'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
                 'payment_method' => $request->payment_method,
-
             ]);
+            // dd($order);
 
             $orderItems = [];
             foreach ($cartItems as $item) {
@@ -164,7 +164,7 @@ class CheckoutController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         header('Location: ' . $vnp_Url);

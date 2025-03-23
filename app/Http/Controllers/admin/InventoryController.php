@@ -12,9 +12,7 @@ class InventoryController extends Controller
 {
     const PATH_VIEW = 'admin.inventory.';
 
-    /**
-     * Display a listing of the inventory.
-     */
+
     public function index(Request $request)
     {
         $query = Product::with(['variants', 'category']);
@@ -45,12 +43,6 @@ class InventoryController extends Controller
         return view(self::PATH_VIEW . 'index', compact('products', 'categories'));
     }
 
-    /**
-     * Display the specified product variant in inventory.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
     public function show($id)
     {
         // Lấy biến thể cùng với sản phẩm liên quan
@@ -59,12 +51,46 @@ class InventoryController extends Controller
         return view(self::PATH_VIEW . 'show', compact('variant'));
     }
 
-    /**
-     * Remove the specified product variant from inventory.
-     *
-     * @param  int  $inventory
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
+    public function update(Request $request, $id)
+    {
+        try {
+            // Validate dữ liệu đầu vào
+            $request->validate([
+                'quantity' => 'required|integer|min:0', // Số lượng phải là số nguyên không âm
+            ]);
+
+            // Tìm biến thể sản phẩm
+            $variant = ProductVariant::findOrFail($id);
+            $product = $variant->product;
+
+            // Lấy số lượng cũ của biến thể để tính toán sự thay đổi
+            $oldQuantity = $variant->quantity;
+
+            // Cập nhật số lượng mới cho biến thể
+            $variant->quantity = $request->quantity;
+            $variant->save();
+
+            // Tính toán sự thay đổi số lượng
+            $quantityDifference = $variant->quantity - $oldQuantity;
+
+            // Cập nhật số lượng tổng của sản phẩm
+            $product->quantity = $product->quantity + $quantityDifference;
+
+            // Đảm bảo số lượng sản phẩm không âm
+            if ($product->quantity < 0) {
+                $product->quantity = 0; // Nếu âm, đặt lại về 0
+            }
+            $product->save();
+
+            return redirect()->route('inventory.index')->with('success', 'Cập nhật số lượng biến thể thành công!');
+        } catch (\Exception $e) {
+            // Xử lý lỗi (ví dụ: biến thể không tồn tại hoặc lỗi database)
+            return redirect()->route('inventory.index')->with('error', 'Cập nhật số lượng thất bại: ' . $e->getMessage());
+        }
+    }
+
+
     public function destroy($inventory)
     {
         try {

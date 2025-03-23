@@ -14,14 +14,14 @@
                             <!-- Thông tin người dùng -->
                             <div class="text-center p-4 bg-white">
                                 <div class="position-relative d-inline-block mb-3">
-                                    <div class="rounded-circle p-1 bg-light border border-primary-subtle">
+                                    <div class="rounded-circle p-3891 bg-light border border-primary-subtle">
                                         <img src="{{ $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png') }}"
                                             alt="Avatar" class="rounded-circle img-fluid shadow-sm"
-                                            style="width: 90px; height: 90px; object-fit: cover;">
+                                            style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
                                 <h5 class="fw-bold mb-1 text-dark">{{ $user->name }}</h5>
-                                <p class="text-muted small mb-0">{{ $user->email }}</p>
+                                <p class="text-muted small mb-0">{{ $user->mail }}</p>
                             </div>
                             <!-- Menu điều hướng -->
                             <div class="list-group list-group-flush">
@@ -488,7 +488,7 @@
                                                                     data-bs-target="#order-details-{{ $order->id }}">
                                                                     <i class="fa fa-chevron-up me-1"></i> Đóng
                                                                 </button>
-                                                                @if (in_array($order->order_status, ['pending', 'processing']))
+                                                                @if ($order->order_status === 'pending')
                                                                     <button type="button"
                                                                         class="btn btn-outline-danger btn-sm px-3 py-2 ms-2 shadow-sm rounded-pill cancel-order-btn"
                                                                         data-order-id="{{ $order->id }}"
@@ -514,10 +514,6 @@
                                                                         <i class="fa fa-times me-1"></i> Hủy đơn hàng
                                                                     </button>
                                                                 @endif
-                                                                <button type="button"
-                                                                    class="btn btn-primary btn-sm px-3 py-2 ms-2 shadow-sm rounded-pill">
-                                                                    <i class="fa fa-print me-1"></i> In hóa đơn
-                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
