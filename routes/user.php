@@ -98,3 +98,8 @@ Route::get('/products/{productId}/comments', [CommentController::class, 'show'])
 // Tuyến đường xử lý thêm bình luận
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
+
+
+Route::get('/product/{slug}', [DetailController::class, 'productDetail'])->name('product.detail');
+
+
