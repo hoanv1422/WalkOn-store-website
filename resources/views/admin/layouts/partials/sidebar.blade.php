@@ -3,21 +3,21 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="{{route('admin.index')}}" class="logo logo-dark">
+        <a href="{{ route('admin.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
+                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('templates/admin/assets/images/logo-dark.png')}}" alt="" height="17">
+                <img src="{{ asset('templates/admin/assets/images/logo-dark.png') }}" alt="" height="17">
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="{{route('admin.index')}}" class="logo logo-light">
+        <a href="{{ route('admin.index') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
+                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('templates/admin/assets/images/logo-light.png')}}" alt="" height="17">
+                <img src="{{ asset('templates/admin/assets/images/logo-light.png') }}" alt="" height="17">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -30,7 +30,8 @@
         <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <span class="d-flex align-items-center gap-2">
-                <img class="rounded header-profile-user" src="{{asset('templates/admin/assets/images/users/avatar-1.jpg')}}" alt="Header Avatar">
+                <img class="rounded header-profile-user"
+                    src="{{ asset('templates/admin/assets/images/users/avatar-1.jpg') }}" alt="Header Avatar">
                 <span class="text-start">
                     <span class="d-block fw-medium sidebar-user-name-text">Anna Adame</span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text"><i
@@ -134,7 +135,7 @@
                     <a href="{{route('coupons.index')}}" class="nav-link" data-key="t-coupons">Mã Giảm Giá</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('inventories.index')}}" class="nav-link" data-key="t-inventories">Kho Hàng</a>
+                    <a href="{{route('inventory.index')}}" class="nav-link" data-key="t-inventories">Kho Hàng</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{route('orders.index')}}" class="nav-link" data-key="t-orders">Đơn Hàng</a>

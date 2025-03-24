@@ -59,7 +59,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id')->distinct();
     }
-    
+
     public function sizes()
     {
         return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id')->distinct();
@@ -73,16 +73,15 @@ class Product extends Model
                     ->orWhere('brand_id', $this->brand_id);
             })
             ->inRandomOrder()
-           
+
             ->get();
     }
     public function upsellProducts()
     {
         return Product::where('category_id', $this->category_id)
-        ->where('id', '!=', $this->id)
-        ->orderBy('sold_quantity', 'desc')
-        
-        ->get();
+            ->where('id', '!=', $this->id)
+            ->orderBy('sold_quantity', 'desc')
 
+            ->get();
     }
 }

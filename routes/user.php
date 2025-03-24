@@ -50,9 +50,15 @@ Route::middleware('client')->group(function () {
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     // Profile
+    // Trang thông tin cá nhân
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // Trang lịch sử đơn hàng
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     // update thong tin khách hàng
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // Hủy đơn hàng
+    Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\ProfileController::class, 'cancelOrder'])->name('profile.orders.cancel');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');

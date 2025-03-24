@@ -8,6 +8,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title> Home || James </title>
     <meta name="description" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Đảm bảo dòng này có mặt -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- favicon
@@ -24,46 +25,46 @@
 
     <!-- Bootstrap CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/bootstrap.min.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/bootstrap.min.css') }}>
     <!-- Bootstrap CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/font-awesome.min.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/font-awesome.min.css') }}>
     <!-- owl.carousel CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/owl.carousel.css")}}>
-    <link rel="stylesheet" href={{asset("templates/client/css/owl.theme.css")}}>
-    <link rel="stylesheet" href={{asset("templates/client/css/owl.transitions.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/owl.carousel.css') }}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/owl.theme.css') }}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/owl.transitions.css') }}>
     <!-- jquery-ui CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/jquery-ui.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/jquery-ui.css') }}>
     <!-- meanmenu CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/meanmenu.min.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/meanmenu.min.css') }}>
     <!-- nivoslider CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/lib/css/nivo-slider.css")}}>
-    <link rel="stylesheet" href={{asset("templates/client/lib/css/preview.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/lib/css/nivo-slider.css') }}>
+    <link rel="stylesheet" href={{ asset('templates/client/lib/css/preview.css') }}>
     <!-- animate CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/animate.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/animate.css') }}>
     <!-- magic CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/magic.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/magic.css') }}>
     <!-- normalize CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/normalize.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/normalize.css') }}>
     <!-- main CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/main.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/main.css') }}>
     <!-- style CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/style.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/style.css') }}>
     <!-- responsive CSS
         ============================================ -->
-    <link rel="stylesheet" href={{asset("templates/client/css/responsive.css")}}>
+    <link rel="stylesheet" href={{ asset('templates/client/css/responsive.css') }}>
     <!-- modernizr JS
         ============================================ -->
-    <script src={{asset("templates/client/js/vendor/modernizr-2.8.3.min.js")}}></script>
+    <script src={{ asset('templates/client/js/vendor/modernizr-2.8.3.min.js') }}></script>
 
     @yield('style')
 </head>
@@ -90,7 +91,8 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <div class="modal-product">
@@ -103,7 +105,8 @@
                             <div class="product-info">
                                 <h1>Diam quis cursus</h1>
                                 <div class="price-box">
-                                    <p class="price"><span class="special-price"><span class="amount">$132.00</span></span></p>
+                                    <p class="price"><span class="special-price"><span
+                                                class="amount">$132.00</span></span></p>
                                 </div>
                                 <a href="shop.html" class="see-all">See all features</a>
                                 <div class="quick-add-to-cart">
@@ -115,7 +118,10 @@
                                     </form>
                                 </div>
                                 <div class="quick-desc">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec
+                                        est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare
+                                        lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus
+                                        eu, suscipit id nulla.</p>
                                 </div>
                                 <div class="share-post">
                                     <div class="share-title">
@@ -165,71 +171,74 @@
     @endif --}}
     <!-- jquery
         ============================================ -->
-    <script src={{asset("templates/client/js/vendor/jquery-1.12.4.min.js")}}></script>
+    <script src={{ asset('templates/client/js/vendor/jquery-1.12.4.min.js') }}></script>
     <!-- bootstrap JS
         ============================================ -->
-    <script src={{asset("templates/client/js/bootstrap.min.js")}}></script>
+    <script src={{ asset('templates/client/js/bootstrap.min.js') }}></script>
     <!-- wow JS
         ============================================ -->
-    <script src={{asset("templates/client/js/wow.min.js")}}></script>
+    <script src={{ asset('templates/client/js/wow.min.js') }}></script>
     <!-- price-slider JS
         ============================================ -->
-    <script src={{asset("templates/client/js/jquery-price-slider.js")}}></script>
+    <script src={{ asset('templates/client/js/jquery-price-slider.js') }}></script>
     <!-- nivoslider JS
         ============================================ -->
-    <script src={{asset("templates/client/lib/js/jquery.nivo.slider.js")}}></script>
-    <script src={{asset("templates/client/lib/home.js")}}></script>
+    <script src={{ asset('templates/client/lib/js/jquery.nivo.slider.js') }}></script>
+    <script src={{ asset('templates/client/lib/home.js') }}></script>
     <!-- meanmenu JS
         ============================================ -->
-    <script src={{asset("templates/client/js/jquery.meanmenu.js")}}></script>
+    <script src={{ asset('templates/client/js/jquery.meanmenu.js') }}></script>
     <!-- owl.carousel JS
         ============================================ -->
-    <script src={{asset("templates/client/js/owl.carousel.min.js")}}></script>
+    <script src={{ asset('templates/client/js/owl.carousel.min.js') }}></script>
     <!-- elevatezoom JS
         ============================================ -->
-    <script src={{asset("templates/client/js/jquery.elevatezoom.js")}}></script>
+    <script src={{ asset('templates/client/js/jquery.elevatezoom.js') }}></script>
     <!-- scrollUp JS
         ============================================ -->
-    <script src={{asset("templates/client/js/jquery.scrollUp.min.js")}}></script>
+    <script src={{ asset('templates/client/js/jquery.scrollUp.min.js') }}></script>
     <!-- plugins JS
         ============================================ -->
-    <script src={{asset("templates/client/js/plugins.js")}}></script>
+    <script src={{ asset('templates/client/js/plugins.js') }}></script>
     <!-- main JS
         ============================================ -->
-    <script src={{asset("templates/client/js/main.js")}}></script>
-    
+    <script src={{ asset('templates/client/js/main.js') }}></script>
+
 
     @yield('script')
-   
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.wishlist-action').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault(); // Ngăn chặn load lại trang
 
-                let productId = this.getAttribute('data-id');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.wishlist-action').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault(); // Ngăn chặn load lại trang
 
-                fetch('/wishlist/toggle', {
-                    method: 'POST',
-                    headers: { 
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.redirect) {
-                        window.location.href = data.redirect; // Chuyển hướng đến trang wishlist
-                    } else {
-                        alert(data.message); // Hiển thị thông báo khi thêm thành công
-                    }
-                })
-                .catch(error => console.error('Lỗi:', error));
+                    let productId = this.getAttribute('data-id');
+
+                    fetch('/wishlist/toggle', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: productId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.redirect) {
+                                window.location.href = data
+                                .redirect; // Chuyển hướng đến trang wishlist
+                            } else {
+                                alert(data.message); // Hiển thị thông báo khi thêm thành công
+                            }
+                        })
+                        .catch(error => console.error('Lỗi:', error));
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
 </body>
