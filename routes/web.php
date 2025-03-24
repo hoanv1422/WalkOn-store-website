@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\WishlistController;
+use App\Http\Middleware\EnsureEmailIsVerified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 
@@ -67,6 +68,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/email-sent', function () {
         return view('auth.email_sent');
     })->name('email.sent')->middleware('email.sent');
+
+    Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('home.index');
+    });
 });
 
 // Test routes

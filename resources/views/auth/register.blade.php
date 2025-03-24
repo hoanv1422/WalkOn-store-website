@@ -21,7 +21,7 @@
                                 @enderror
 
                                 <div class="password-wrapper">
-                                    <input type="password" id="password" name="password" placeholder="Mật khẩu mới" required>
+                                    <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
                                     <span class="toggle-password" onclick="togglePassword('password')">
                                         <i class="fa fa-eye" style="margin-bottom:25px"></i>
                                     </span>

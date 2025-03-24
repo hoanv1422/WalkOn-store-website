@@ -9,7 +9,7 @@
                 <div class="login">
                     <div class="login-form-container">
                         <div class="login-text">
-                            <h2>Email xác thực đã được gửi  ✅✅</h2>
+                            <h2>Email xác thực đã được gửi đi</h2>
                             <span>Kiểm tra email của bạn để xác thực tài khoản ✉ </span>
                         </div>
                     </div>

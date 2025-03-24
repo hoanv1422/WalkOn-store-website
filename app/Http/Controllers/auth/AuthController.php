@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,16 +51,16 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            if ($user->role === 'admin') {
-                return redirect('/admin');
-            } elseif ($user->role === 'shipper') {
-                return redirect('/shipper');
-            } else {
-                return redirect('/');
+            if (!$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice')->with('status', 'Bạn cần xác thực email trước khi sử dụng hệ thống.');
             }
-        } else {
-            return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
+            return match ($user->role) {
+                'admin' => redirect('/admin'),
+                'shipper' => redirect('/shipper'),
+                default => redirect('/'),
+            };
         }
+        return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
     }
 
     // đăng xuất
