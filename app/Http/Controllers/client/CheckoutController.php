@@ -23,6 +23,7 @@ class CheckoutController extends Controller
     {
 
         // dd($request->all());
+
         try {
             $user = Auth::user();
 
@@ -42,7 +43,7 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng trống.');
             }
 
-            $coupon_id = Coupon::query()->where("code", $request->couponCode)->pluck("id")->first();
+            $coupon_id = Coupon::query()->where("code", $request->couponCodeForOrder)->pluck("id")->first();
 
             DB::beginTransaction();
 
@@ -51,6 +52,8 @@ class CheckoutController extends Controller
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
+
+
             $order = Order::create([
                 'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
                 'user_id' => $user->id,
@@ -64,11 +67,11 @@ class CheckoutController extends Controller
                 'receiver_address' => $request->receiver_address,
                 'note' => $request->note,
                 'coupon_id' => $coupon_id,
-                'coupon' => $request->couponCode,
-                'total_price' => $request->total_price,
-                'discount_amount' => $request->discount_amount,
-                'shipping_fee' => $request->shipping_fee,
-                'final_price' => $request->final_price,
+                'coupon' => $request->couponCodeForOrder,
+                'total_price' => $request->totalPrice,
+                'discount_amount' => $request->discountAmount,
+                'shipping_fee' => $request->shippingFee,
+                'final_price' => $request->finalPrice,
                 'order_status' => 'pending',
                 'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
                 'payment_method' => $request->payment_method,
@@ -88,6 +91,8 @@ class CheckoutController extends Controller
                     'variant_size_name' => $item->productVariant->size->size,
                     'variant_color_name' => $item->productVariant->color->color,
                     'quantity' => $item->quantity,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
                 $item->productVariant->decrement('quantity', $item->quantity);
             }
@@ -105,6 +110,7 @@ class CheckoutController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi đặt đơn hàng: ' . $e->getMessage());
         }
     }

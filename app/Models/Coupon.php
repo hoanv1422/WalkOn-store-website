@@ -18,6 +18,7 @@ class Coupon extends Model
         'max_uses_per_user',
         'discount_type',
         'discount_value',
+        'maximum_discount_amount',
         'minimum_order_value',
         'max_shipping_discount',
         'is_active',
@@ -50,4 +51,23 @@ class Coupon extends Model
     {
         return $this->belongsToMany(Brand::class, 'coupon_brands')->withTimestamps();
     }
+
+    public static function getDiscountTypeLabels()
+    {
+        return [
+            'percentage' => 'Giảm giá theo phần trăm',
+            'fixed' => 'Giảm giá cố định',
+            'free_shipping' => 'Miễn phí vận chuyển',
+        ];
+    }
+
+    /**
+     * Accessor để hiển thị discount_type bằng tiếng Việt
+     */
+    public function getDiscountTypeTextAttribute()
+    {
+        return self::getDiscountTypeLabels()[$this->discount_type] ?? $this->discount_type;
+    }
 }
+
+

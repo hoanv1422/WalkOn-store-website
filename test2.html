@@ -1,0 +1,226 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Hàm định dạng tiền VND
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 }).format(amount) + ' VND';
+        }
+
+        // Khai báo biến toàn cục
+        let selectedAddressElement = null;
+        const defaultLat = 21.0285; // Tọa độ mặc định (Hà Nội)
+        const defaultLon = 105.8542;
+        let originalTotalPrice = parseInt($('#totalPrice').val()) || 0;
+        let originalShippingFee = 0; // Ban đầu là 0, sẽ được tính từ khoảng cách
+
+        // Hàm chọn địa chỉ
+        function selectAddress(element) {
+            document.querySelectorAll('.address-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedAddressElement = element;
+        }
+
+        // Hàm xác nhận địa chỉ
+        async function confirmAddress() {
+            if (selectedAddressElement) {
+                const addressText = selectedAddressElement.getAttribute('data-address');
+                const addressName = selectedAddressElement.querySelector('strong').textContent;
+                const lat = selectedAddressElement.getAttribute('data-lat');
+                const lon = selectedAddressElement.getAttribute('data-lon');
+
+                document.getElementById('current-address').innerHTML =
+                    `<strong>${addressName}</strong><br><span>${addressText}</span>`;
+                document.getElementById('selected-address').value = addressText;
+                const latitude = document.getElementById('selected-lat').value = lat || '';
+                const longitude = document.getElementById('selected-lon').value = lon || '';
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
+                modal.hide();
+
+                if (latitude && longitude) {
+                    await calculateDistance(latitude, longitude);
+                    updatePrices(); // Cập nhật giá sau khi tính khoảng cách
+                } else {
+                    document.getElementById('distance-display').innerHTML =
+                        'Không có thông tin khoảng cách (thiếu tọa độ)';
+                    originalShippingFee = 0;
+                    updatePrices();
+                }
+            } else {
+                alert('Vui lòng chọn một địa chỉ!');
+            }
+        }
+
+        // Hàm ẩn modal địa chỉ
+        function hideAddressModal() {
+            const addressModal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
+            addressModal.hide();
+        }
+
+        // Hàm thêm địa chỉ mới
+        function saveNewAddress() {
+            const name = document.getElementById('newAddressName').value.trim();
+            const detail = document.getElementById('newAddressDetail').value.trim();
+
+            if (!name || !detail) {
+                alert('Vui lòng nhập đầy đủ thông tin địa chỉ!');
+                return;
+            }
+
+            const newAddress = document.createElement('div');
+            newAddress.className = 'address-item';
+            newAddress.setAttribute('data-address', detail);
+            newAddress.innerHTML = `<strong>${name}</strong><br><span>${detail}</span>`;
+            newAddress.onclick = function() {
+                selectAddress(this);
+            };
+            document.getElementById('addressList').appendChild(newAddress);
+
+            document.getElementById('newAddressName').value = '';
+            document.getElementById('newAddressDetail').value = '';
+            const addModal = bootstrap.Modal.getInstance(document.getElementById('addAddressModal'));
+            addModal.hide();
+
+            setTimeout(() => {
+                const addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
+                addressModal.show();
+                selectAddress(newAddress);
+            }, 300);
+        }
+
+        // Hàm tính khoảng cách
+        async function calculateDistance(lat2, lon2) {
+            const apiKey = '8c5e66d0-53b9-4218-af36-3223f27769ec'; // Kiểm tra key này
+            const url =
+                `https://graphhopper.com/api/1/route?point=${defaultLat},${defaultLon}&point=${lat2},${lon2}&vehicle=car&locale=vi&key=${apiKey}`;
+            const distanceDisplay = document.getElementById('distance-display');
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.paths && data.paths.length > 0) {
+                    const distance = parseFloat((data.paths[0].distance / 1000).toFixed(2));
+                    distanceDisplay.innerHTML = `Khoảng cách từ Hà Nội: ${distance} km`;
+                    originalShippingFee = calculateShippingFee(distance); // Cập nhật phí vận chuyển
+                    $('#shippingFee').val(originalShippingFee);
+                    $('#displayShippingFee').text(formatVND(originalShippingFee));
+                } else {
+                    distanceDisplay.innerHTML = 'Không thể tính khoảng cách!';
+                    originalShippingFee = 0;
+                    $('#shippingFee').val(0);
+                    $('#displayShippingFee').text(formatVND(0));
+                }
+            } catch (error) {
+                distanceDisplay.innerHTML = 'Lỗi khi tính khoảng cách!';
+                originalShippingFee = 0;
+                $('#shippingFee').val(0);
+                $('#displayShippingFee').text(formatVND(0));
+                console.error(error);
+            }
+        }
+
+        // Hàm tính phí vận chuyển dựa trên khoảng cách
+        function calculateShippingFee(distance) {
+            if (distance <= 10) {
+                return distance * 3000;
+            } else if (distance <= 50) {
+                return (10 * 3000) + ((distance - 10) * 5000);
+            } else {
+                return (10 * 3000) + (40 * 5000) + ((distance - 50) * 7000);
+            }
+        }
+
+        // Hàm cập nhật giá
+        function updatePrices() {
+            let discount = parseInt($('#discountAmount').val()) || 0;
+            let shippingFee = originalShippingFee;
+            let finalPrice = originalTotalPrice + shippingFee - discount;
+
+            $('#displayTotalPrice').text(formatVND(originalTotalPrice));
+            $('#displayShippingFee').text(formatVND(shippingFee));
+            $('#shippingFee').val(shippingFee);
+            $('#displayDiscount').text('-' + formatVND(discount));
+            $('#displayFinalPrice').text(formatVND(finalPrice));
+            $('#finalPrice').val(finalPrice);
+            $('#totalPriceForCoupon').val(originalTotalPrice);
+        }
+
+        // Khởi tạo giá ban đầu
+        $('#displayTotalPrice').text(formatVND(originalTotalPrice));
+        $('#displayShippingFee').text(formatVND(originalShippingFee));
+        $('#displayFinalPrice').text(formatVND(originalTotalPrice + originalShippingFee));
+        $('#finalPrice').val(originalTotalPrice + originalShippingFee);
+        $('#totalPriceForCoupon').val(originalTotalPrice);
+
+        // Tính khoảng cách ban đầu
+        const initialLat = $('#selected-lat').val();
+        const initialLon = $('#selected-lon').val();
+        if (initialLat && initialLon) {
+            calculateDistance(initialLat, initialLon).then(() => updatePrices());
+        }
+
+        // Sự kiện submit mã giảm giá
+        $('#couponForm').on('submit', function(event) {
+            event.preventDefault();
+            let formData = $(this).serialize();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('#couponMessage').html('<p class="text-success">' + response.message + '</p>');
+
+                    let discount = response.discount || 0;
+                    let shippingDiscount = response.shipping_discount || 0;
+                    let finalPrice = response.finalPrice || 0;
+
+                    $('#displayDiscount').text('-' + formatVND(discount + shippingDiscount));
+                    $('#discountAmount').val(discount + shippingDiscount);
+                    let newShippingFee = originalShippingFee - shippingDiscount;
+                    $('#displayShippingFee').text(formatVND(newShippingFee));
+                    $('#shippingFee').val(newShippingFee);
+                    $('#displayFinalPrice').text(formatVND(finalPrice));
+                    $('#finalPrice').val(finalPrice);
+
+                    let couponCode = $('#couponCodeInput').val();
+                    $('#couponCodeForOrder').val(couponCode);
+                    $('#couponCodeInput').prop('disabled', true);
+                },
+                error: function(xhr) {
+                    let errorMessage = xhr.responseJSON?.message || 'Đã xảy ra lỗi!';
+                    $('#couponMessage').html('<p class="text-danger">' + errorMessage + '</p>');
+                    $('#couponCodeInput').prop('disabled', false);
+                }
+            });
+        });
+
+        // Sự kiện xóa mã giảm giá
+        $('#clearCoupon').on('click', function(event) {
+            event.preventDefault();
+            $('#couponCodeInput').val('');
+            $('#couponMessage').html('');
+            $('#couponCodeForOrder').val('');
+            $('#displayDiscount').text('-0 VND');
+            $('#discountAmount').val(0);
+            updatePrices(); // Sử dụng originalShippingFee đã tính từ khoảng cách
+            $('#couponCodeInput').prop('disabled', false);
+        });
+
+        // Sự kiện modal
+        document.getElementById('addAddressModal').addEventListener('hidden.bs.modal', () => {
+            document.getElementById('newAddressName').value = '';
+            document.getElementById('newAddressDetail').value = '';
+        });
+
+        document.getElementById('addressModal').addEventListener('show.bs.modal', () => {
+            const firstAddress = document.querySelector('.address-item');
+            if (firstAddress && !selectedAddressElement) {
+                selectAddress(firstAddress);
+            }
+        });
+    });
+</script>

@@ -200,33 +200,6 @@ upsell-slider
  cart-plus-minus-button active
 ------------------------------ */
 
-    $(document).ready(function () {
-        // Xử lý khi bấm nút + hoặc -
-        $(".input-group").on("click", "button", function () {
-            var $button = $(this);
-            var $input = $button.siblings("input"); // Lấy input gần nhất trong cùng nhóm
-            var oldValue = parseInt($input.val());
-
-            if ($button.text() === "+") {
-                var newVal = oldValue + 1;
-            } else {
-                newVal = oldValue > 1 ? oldValue - 1 : 1; // Không cho phép nhỏ hơn 1
-            }
-
-            $input.val(newVal);
-        });
-
-        // Xử lý khi người dùng nhập số trực tiếp
-        $(".input-group input").on("blur", function () {
-            var $input = $(this);
-            var value = parseInt($input.val());
-
-            if (isNaN(value) || value < 1) {
-                $input.val(1); // Nếu nhập sai, reset về 1
-            }
-        });
-    });
-
     /*--------------------------
  scrollUp
 ---------------------------- */

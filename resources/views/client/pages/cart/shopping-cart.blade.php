@@ -109,56 +109,18 @@
 
         <div class="row justify-content-end">
             <div class="col-md-4">
-                <form id="couponForm" action="{{ route('coupon.apply') }}" method="POST">
-                    @csrf
-                    <div class="discount-code">
-                        <h3>Mã Giảm Giá</h3>
-                        <p>Nhập mã phiếu giảm giá của bạn nếu bạn có.</p>
-                        <input type="text" name="couponCode" id="couponCodeInput" value="" >
-                        <a href="#" class="btn btn-outline-secondary" id="clearCoupon">Xóa</a>
-                        <div id="couponMessage"></div>
-                        <input type="hidden" name="totalPrice" id="totalPriceForCoupon" value="">
-                        <input type="hidden" value="" name="cartItemsForCoupon" id="cartItemsForCoupon">
-                        <div class="shopping-button">
-                            <button type="submit">Áp Dụng Mã</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
                 <form action="{{ route('order.index') }}" method="GET">
                     @csrf
                     <input type="hidden" value="" name="cartItems" id="cartItems">
-                    <input type="hidden" name="couponCodeForOrder" id="couponCodeForOrder" value="">
                     <div class="totals p-3 ">
-                        <div class="row">
-                            <p class="col-6 text-start">Tổng Phụ</p>
-                            <p id="displayTotalPrice" class="col-6 text-end fw-bold">0 VND</p>
-                            <input type="hidden" id="totalPrice" name="totalPrice" value="">
-
-                        </div>
-                        <div class="row">
-                            <p class="col-6 text-start">Phí Vận Chuyển</p>
-                            <p class="col-6 text-end fw-bold">20,000 VND</p>
-                            <input type="hidden" name="shippingFee" id="shippingFee" value="20000">
-
-                        </div>
-                        <div class="row">
-                            <p class="col-6 text-start">Giảm Giá</p>
-                            <p class="col-6 text-end fw-bold" id="displayDiscount">-0 VND</p>
-                            <input type="hidden" name="discountAmount" id="discountAmount" value="0">
-
-                        </div>
                         <hr>
                         <div class="row">
                             <div class="col-12 text-start">
                                 <h3>Tổng Cộng</h3>
                             </div>
                             <div class="col-12 text-end fw-bold text-primary text-wrap overflow-hidden">
-                                <h3 id="displayFinalPrice" class="d-inline-block w-100 text-end">
-                                    {{ number_format(0) }} VND</h3>
-                                <input type="hidden" name="finalPrice" id="finalPrice" value="">
-
+                                <h3 class="d-inline-block w-100 text-end" id="displayTotalPrice">
+                                     VND</h3>
                             </div>
                         </div>
                         <div class="shopping-button text-center mt-3">
@@ -167,7 +129,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>

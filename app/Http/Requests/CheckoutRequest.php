@@ -14,13 +14,13 @@ class CheckoutRequest extends FormRequest
     public function rules()
     {
         return [
-            'receiver_name' => 'required|string|max:255',
-            'receiver_email' => 'required|email|max:255',
-            'receiver_phone' => ['required', 'regex:/^0[0-9]{9,10}$/'],
-            'receiver_address' => 'required|string|max:500',
-            'note' => 'nullable|string|max:1000',
-            'payment_method' => 'required|in:COD,VNPAY,Momo,PayPal',
-            'total_price' => 'required|numeric|min:0',
+            // 'receiver_name' => 'required|string|max:255',
+            // 'receiver_email' => 'required|email|max:255',
+            // 'receiver_phone' => ['required', 'regex:/^0[0-9]{9,10}$/'],
+            // 'receiver_address' => 'required|string|max:500',
+            // 'note' => 'nullable|string|max:1000',
+            // 'payment_method' => 'required|in:COD,VNPAY,Momo,PayPal',
+            // 'total_price' => 'required|numeric|min:0',
         ];
     }
 
