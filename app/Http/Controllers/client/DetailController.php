@@ -13,13 +13,13 @@ class DetailController extends Controller
     {
         $product = Product::with([
             'galleries',
-            'variants' => function($query) {
+            'variants' => function ($query) {
                 $query->with(['color', 'size']);
             },
             'colors',
             'sizes'
         ])->where('slug', $slug)->firstOrFail();
-    
+
         // Chuẩn bị dữ liệu biến thể
         $productVariants = $product->variants->map(function ($variant) use ($product) {
             return [
@@ -31,19 +31,23 @@ class DetailController extends Controller
                 'image' => $variant->image ? Storage::url($variant->image) : Storage::url($product->image)
             ];
         });
-    
+        $wishlistProductIds = [];
+        if (auth()->check()) {
+            $wishlistProductIds = auth()->user()->wishlist()->pluck('product_id')->toArray();
+        }
+
         return view('client.pages.detail.index', [
             'product' => $product,
             'relatedProducts' => $product->relatedProducts(),
             'upSellProducts' => $product->upsellProducts(),
-            'product_variants' => $productVariants 
+            'product_variants' => $productVariants,
+            'wishlistProductIds' => $wishlistProductIds
         ]);
-       
     }
-    
-    
-    public function index() {
-        return view('client.pages.detail.index');
 
+
+    public function index()
+    {
+        return view('client.pages.detail.index');
     }
 }

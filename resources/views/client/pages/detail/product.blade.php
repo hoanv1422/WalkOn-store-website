@@ -98,6 +98,29 @@
                                     @endif
                                 @endfor
                                 <a href="#" class="review">{{ $product->sold_quantity }} đánh giá</a>
+
+                            </div>
+                            <div class="action">
+                                <ul class="add-to-links">
+                                    <li>
+                                        <a href="javascript:void(0);" class="wishlist-btn"
+                                            data-product-id="{{ $product->id }}"
+                                            title="{{ in_array($product->id, $wishlistProductIds) ? 'Đã thêm vào danh sách yêu thích' : 'Thêm vào danh sách yêu thích' }}">
+                                            <i
+                                                class="fa fa-heart {{ in_array($product->id, $wishlistProductIds) ? 'text-danger' : '' }}"></i>
+                                        </a>
+                                    </li>
+                                    {{-- <li>
+                                        <a href="#">
+                                            <i class="fa fa-refresh"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-envelope"></i>
+                                        </a>
+                                    </li> --}}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -188,7 +211,9 @@
 <!-- Chi tiết sản phẩm kết thúc -->
 
 <!-- Script xử lý -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         /* === DOM Elements === */
@@ -296,18 +321,18 @@
 
         // Cập nhật hiển thị tổng giá theo số lượng đã chọn
         const updateTotalPrice = () => {
-            if (!state.currentVariant) {
-                totalPriceDisplay.textContent = 'Vui lòng chọn đủ thông tin';
-                totalPriceDisplay.style.color = '#dc3545';
-                return;
+            let price;
+            if (state.currentVariant) {
+                price = state.currentVariant['price_sale'] ?
+                    parseFloat(state.currentVariant['price_sale']) :
+                    parseFloat(state.currentVariant['price']);
+            } else {
+                price = productData.baseSalePrice < productData.basePrice ?
+                    productData.baseSalePrice : productData.basePrice;
             }
-            const price = state.currentVariant['price_sale'] ?
-                parseFloat(state.currentVariant['price_sale']) :
-                parseFloat(state.currentVariant['price']);
             totalPriceDisplay.textContent = `Tổng tiền: ${formatPrice(price * state.quantity)}`;
             totalPriceDisplay.style.color = '#28a745';
         };
-
         // Cập nhật thuộc tính max của ô số lượng dựa trên tồn kho của biến thể (hoặc tổng số sản phẩm nếu chưa chọn biến thể)
         const updateMaxQuantity = () => {
             const max = state.currentVariant && parseInt(state.currentVariant['quantity']) > 0 ?
@@ -417,22 +442,30 @@
 
         // Xử lý tăng số lượng
         window.increaseQty = () => {
+            // console.log('increaseQty'); // Kiểm tra xem hàm có được gọi
             let current = parseInt(qtyInput.value) || 1;
             const max = parseInt(qtyInput.getAttribute('max')) || productData.totalStock;
-            current = Math.min(current, max - 1);
-            qtyInput.value = current;
+            // console.log(max);
+            // Tăng lên 1, nhưng không vượt quá max
+            current = Math.min(current + 1, max);
+            // console.log(current);
+            qtyInput.value = current - 1;
             state.quantity = current;
+            // console.log(qtyInput.value);
             updateTotalPrice();
         };
 
         // Xử lý giảm số lượng
         window.decreaseQty = () => {
+            console.log('decreaseQty'); // Kiểm tra xem hàm có được gọi
             let current = parseInt(qtyInput.value) || 1;
-            current = Math.max(current, 1);
-            qtyInput.value = current;
+            // Giảm 1, nhưng không nhỏ hơn 1
+            current = Math.max(current - 1, 1);
+            qtyInput.value = current + 1;
             state.quantity = current;
             updateTotalPrice();
         };
+
 
         // Xử lý khi nhập trực tiếp vào ô số lượng
         qtyInput.addEventListener('input', (e) => {
@@ -474,6 +507,84 @@
                 }, 500);
             });
         }, 3000);
+    });
+    // xử lí wishlist
+    $(document).ready(function() {
+        $('.wishlist-btn').on('click', function(e) {
+            e.preventDefault();
+            let $btn = $(this);
+            let productId = $btn.data('product-id');
+            let $icon = $btn.find('i.fa-heart');
+
+            // Nếu sản phẩm đã có trong wishlist => Xoá
+            if ($icon.hasClass('text-danger')) {
+                $.ajax({
+                    url: "{{ route('wishlist.store') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId,
+                        action: 'remove'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Bỏ màu đỏ
+                            $icon.removeClass('text-danger');
+                            // Trả về màu nền mặc định
+                            $btn.css("background-color", "");
+                            // Icon trái tim trở về màu mặc định
+                            $icon.css("color", "");
+                            $btn.attr('title', 'Thêm vào danh sách yêu thích');
+                            showToast(response.message ||
+                                'Đã xoá sản phẩm khỏi danh sách yêu thích thành công!');
+                        } else {
+                            showToast(response.message ||
+                                'Không thể xoá sản phẩm khỏi danh sách yêu thích!');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            } else {
+                // Nếu chưa có => Thêm
+                $.ajax({
+                    url: "{{ route('wishlist.store') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId,
+                        action: 'add'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Thêm màu đỏ nền nút
+                            $btn.css("background-color", "");
+                            $icon.addClass('text-danger');
+                            $btn.attr('title', 'Đã thêm vào danh sách yêu thích');
+                            showToast(response.message ||
+                                'Đã thêm sản phẩm vào danh sách yêu thích thành công!');
+                        } else {
+                            showToast(response.message ||
+                                'Không thể thêm sản phẩm vào danh sách yêu thích!');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        function showToast(message) {
+            // Chèn toast 
+            $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                message +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>').appendTo('body').delay(3000).fadeOut(500, function() {
+                $(this).remove();
+            });
+        }
     });
 </script>
 

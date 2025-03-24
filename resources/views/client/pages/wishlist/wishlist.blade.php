@@ -81,7 +81,7 @@
                                     <tr>
                                         <td><a href="#" class="text-center"><img src="{{ asset('img/products/' . $item->product->image) }}" alt=""> </a></td>
                                         <td>
-                                            <a href="{{ route('product.show', $item->product->id) }}">{{ $item->product->name }}</a>
+                                            <a href="{{ route('detail.index', $item->product->slug) }}">{{ $item->product->name }}</a>
                                         </td>
                                         <td>{{ $item->product->sku }}</td>
                                         <td>{{ $item->product->quantity }}</td>
