@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,20 +50,32 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/');
-        } else {
-            return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
+            $user = Auth::user();
+            if (!$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice')->with('status', 'Bạn cần xác thực email trước khi sử dụng hệ thống.');
+            }
+            return match ($user->role) {
+                'admin' => redirect('/admin'),
+                'shipper' => redirect('/shipper'),
+                default => redirect('/'),
+            };
         }
+        return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
     }
+
     // đăng xuất
-    public function logout()
+    public function logout(Request $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
         }
         Auth::logout();
-        return redirect()->route('login')->with('success', 'Đã đăng xuất khỏi tài khoản ');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Đăng xuất khỏi tài khoản rồi');
     }
+
     public function signinAdmin(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -133,10 +146,12 @@ class AuthController extends Controller
         if (!$request->user()) {
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xác thực email.');
         }
+
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->route('verified.email')->with('message', 'Email đã được xác thực trước đó.');
         }
         $request->user()->sendEmailVerificationNotification();
-        return redirect()->back()->with('message', 'Email xác thực đã được gửi!');
+        session(['email_verification_sent' => true]);
+        return redirect()->route('email.sent')->with('message', 'Email xác thực đã được gửi!');
     }
 }

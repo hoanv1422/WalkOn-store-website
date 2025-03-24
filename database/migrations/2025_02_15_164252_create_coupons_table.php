@@ -26,30 +26,33 @@ return new class extends Migration {
             $table->softDeletes();
         });
 
-        // Bảng theo dõi mã giảm giá đã được user sử dụng
-        Schema::create('coupon_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->integer('times_used')->default(0);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('coupon_user')) {
+            Schema::create('coupon_user', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->integer('times_used')->default(0);
+                $table->timestamps();
+            });
+        }
 
-        // Bảng liên kết coupon với danh mục sản phẩm
-        Schema::create('coupon_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('coupon_categories')) {
+            Schema::create('coupon_categories', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
+                $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+                $table->timestamps();
+            });
+        }
 
-        // Bảng liên kết coupon với thương hiệu sản phẩm
-        Schema::create('coupon_brands', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
-            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('coupon_brands')) {
+            Schema::create('coupon_brands', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('coupon_id')->constrained('coupons')->onDelete('cascade');
+                $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void
