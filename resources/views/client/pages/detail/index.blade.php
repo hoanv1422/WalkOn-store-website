@@ -12,6 +12,7 @@
     @include('client.pages.detail.product-tab')
     @include('client.pages.detail.upsell-product')
     @include('client.pages.detail.related-product')
+    
 @endsection
 
 

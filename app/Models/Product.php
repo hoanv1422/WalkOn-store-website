@@ -57,12 +57,12 @@ class Product extends Model
     }
     public function colors()
     {
-        return $this->hasManyThrough(Color::class, ProductVariant::class, 'product_id', 'id', 'id', 'color_id')->distinct();
+        return $this->belongsToMany(Color::class, 'product_variants', 'product_id', 'color_id')->distinct();
     }
-
+    
     public function sizes()
     {
-        return $this->hasManyThrough(Size::class, ProductVariant::class, 'product_id', 'id', 'id', 'size_id')->distinct();
+        return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id')->distinct();
     }
 
     public function relatedProducts()

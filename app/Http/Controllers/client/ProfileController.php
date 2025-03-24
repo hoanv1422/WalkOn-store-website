@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -15,7 +18,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)->with('orderItems')->get();
+        $orders = Order::where('user_id', $user->id)->with('orderItems')->orderBy('created_at', 'desc')->get();
         $categories = Category::all();
         $colors = Color::all();
 
@@ -72,10 +75,45 @@ class ProfileController extends Controller
         // Lưu thông tin người dùng
         try {
             $user->save();
+            // dd(get_class($user));
             return redirect()->back()->with('success', 'Thông tin cá nhân đã được cập nhật.')->with('updatedFields', $updatedFields);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật thông tin cá nhân.');
         }
     }
-    //
+
+
+
+
+    public function createAddress(Request $request)
+    {
+        $user = Auth::user();
+        $data = $request->all();
+
+        $data['user_id'] = $user->id;
+        $data['city'] = $request->province_name;
+        $data['district'] = $request->district_name;
+        $data['ward'] = $request->ward_name;
+        $data['address_line'] = $request->address_line;
+        $data['type'] = $request->addressType;
+        $data['latitude'] = $request->latitude;
+        $data['longitude'] = $request->longitude;
+        $data['is_default'] = $request->has('default_address') ? 1 : 0;
+
+        try {
+            DB::beginTransaction();
+
+            if ($data['is_default'] == 1) {
+                Address::where('user_id', $user->id)->update(['is_default' => 0]);
+            }
+
+            Address::create($data);
+
+            DB::commit();
+            return back()->with('success', 'Thêm địa chỉ thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
+    }
 }

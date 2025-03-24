@@ -23,6 +23,7 @@ class CheckoutController extends Controller
     {
 
         // dd($request->all());
+
         try {
             $user = Auth::user();
             if (!$user) {
@@ -41,7 +42,7 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng trống.');
             }
 
-            $coupon_id = Coupon::query()->where("code", $request->couponCode)->pluck("id")->first();
+            $coupon_id = Coupon::query()->where("code", $request->couponCodeForOrder)->pluck("id")->first();
 
             DB::beginTransaction();
 
@@ -50,6 +51,7 @@ class CheckoutController extends Controller
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
+
 
             $order = Order::create([
                 'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
@@ -64,11 +66,11 @@ class CheckoutController extends Controller
                 'receiver_address' => $request->receiver_address,
                 'note' => $request->note,
                 'coupon_id' => $coupon_id,
-                'coupon' => $request->couponCode,
-                'total_price' => $request->total_price,
-                'discount_amount' => $request->discount_amount,
-                'shipping_fee' => $request->shipping_fee,
-                'final_price' => $request->final_price,
+                'coupon' => $request->couponCodeForOrder,
+                'total_price' => $request->totalPrice,
+                'discount_amount' => $request->discountAmount,
+                'shipping_fee' => $request->shippingFee,
+                'final_price' => $request->finalPrice,
                 'order_status' => 'pending',
                 'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
                 'payment_method' => $request->payment_method,

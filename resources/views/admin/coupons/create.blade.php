@@ -6,15 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .bg-gradient-primary {
-            background: linear-gradient(90deg, #007bff, #00c4cc);
-        }
-
-        .card {
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
+            background: linear-gradient(90deg, #405189, #6775b0);
         }
 
         .form-control:focus {
@@ -54,11 +46,11 @@
             <div class="card shadow-sm border-0">
                 <!-- Card Header -->
                 <div class="card-header bg-gradient-primary text-white p-4">
-                    <h5 class="card-title mb-0"><i class="fas fa-plus-circle me-2"></i> Thêm Mã Giảm Giá</h5>
+                    <h5 class="card-title mb-0 text-white"><i class="fas fa-plus-circle me-2"></i> Thêm Mã Giảm Giá</h5>
                 </div>
 
                 <!-- Card Body -->
-                <form action="{{ route('coupons.store') }}" method="POST" class="p-4">
+                <form action="{{ route('coupons.store') }}" method="POST" class="p-4 tablelist-form">
                     @csrf
                     <input type="hidden" id="id-field" />
 
@@ -69,7 +61,7 @@
                             <div class="col-12">
                                 <label for="code" class="form-label fw-bold">Mã Code</label>
                                 <input type="text" id="code" name="code" class="form-control"
-                                    placeholder="Nhập mã code" required />
+                                    placeholder="Nhập mã code" />
                                 <div class="error-message text-danger mt-1">{{ $errors->first('code') }}</div>
                             </div>
                             <div class="col-12">
@@ -87,9 +79,9 @@
                             <div class="col-md-6">
                                 <label for="discount-type-field" class="form-label fw-bold">Loại</label>
                                 <select name="discount_type" id="discount-type-field" class="form-control">
-                                    <option value="percentage">Percentage</option>
-                                    <option value="fixed">Fixed</option>
-                                    <option value="freeship">FreeShip</option>
+                                    <option value="percentage">Giảm giá theo phần trăm</option>
+                                    <option value="fixed">Giảm giá cố định</option>
+                                    <option value="freeship">Miễn phí vận chuyển</option>
                                 </select>
                                 <div class="error-message text-danger mt-1">{{ $errors->first('discount_type') }}</div>
                             </div>
@@ -97,7 +89,7 @@
                                 <label for="discount-value-field" class="form-label fw-bold">Giá Trị</label>
                                 <div class="input-group">
                                     <input type="number" id="discount-value-field" class="form-control"
-                                        name="discount_value" required />
+                                        name="discount_value" />
                                     <span class="input-group-text" id="discount-unit">%</span>
                                 </div>
                                 <div class="error-message text-danger mt-1">{{ $errors->first('discount_value') }}</div>
@@ -105,17 +97,37 @@
                             <div class="col-md-6">
                                 <label for="minimum_order_value" class="form-label fw-bold">Giá Trị Đơn Hàng Tối
                                     Thiểu</label>
-                                <input type="text" name="minimum_order_value" id="minimum_order_value"
-                                    class="form-control" />
+                                <div class="input-group">
+                                    <input type="text" name="minimum_order_value" id="minimum_order_value"
+                                        class="form-control" placeholder="Giá trị đơn tối thiểu" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+
                                 <div class="error-message text-danger mt-1">{{ $errors->first('minimum_order_value') }}
                                 </div>
                             </div>
                             <div class="col-md-6" id="max-shipping-discount-container" style="display: none;">
                                 <label for="max-shipping-discount-field" class="form-label fw-bold">Giảm Giá Vận Chuyển Tối
                                     Đa</label>
-                                <input type="number" id="max-shipping-discount-field" class="form-control"
-                                    name="max_shipping_discount" placeholder="Nhập số tiền tối đa" />
+                                <div class="input-group">
+                                    <input type="number" id="max-shipping-discount-field" class="form-control"
+                                        name="max_shipping_discount" placeholder="Nhập số tiền tối đa" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
                                 <div class="error-message text-danger mt-1">{{ $errors->first('max_shipping_discount') }}
+                                </div>
+                            </div>
+                            <!-- Thêm trường Số tiền giảm tối đa -->
+                            <div class="col-md-6" id="max-discount-amount-container">
+                                <label for="max-discount-amount-field" class="form-label fw-bold">Số Tiền Giảm Tối
+                                    Đa</label>
+                                <div class="input-group">
+                                    <input type="number" id="max-discount-amount-field" class="form-control"
+                                        name="maximum_discount_amount" placeholder="Nhập số tiền giảm tối đa" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+
+                                <div class="error-message text-danger mt-1">{{ $errors->first('maximum_discount_amount') }}
                                 </div>
                             </div>
                         </div>
@@ -127,7 +139,8 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="max_uses" class="form-label fw-bold">Số Lần Sử Dụng</label>
-                                <input type="number" name="max_uses" id="max_uses" class="form-control" />
+                                <input type="number" name="max_uses" id="max_uses" class="form-control"
+                                    placeholder="Số lần sử dụng" />
                                 <div class="error-message text-danger mt-1">{{ $errors->first('max_uses') }}</div>
                             </div>
                             <div class="col-md-6">
@@ -196,7 +209,7 @@
                     <!-- Status -->
                     <div class="mb-4">
                         <h6 class="text-muted fw-bold"><i class="fas fa-toggle-on me-1"></i> Trạng Thái</h6>
-                        <select class="form-control" name="is_active" required id="delivered-status">
+                        <select class="form-control" name="is_active" id="delivered-status">
                             <option value="1">Hoạt Động</option>
                             <option value="0">Khóa</option>
                         </select>
@@ -216,197 +229,211 @@
 
 
 @endsection
-
 @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Lấy form
             const form = document.querySelector(".tablelist-form");
+            if (!form) {
+                console.error("Không tìm thấy form với class 'tablelist-form'");
+                return;
+            }
 
+            // Validation khi submit form
             form.addEventListener("submit", function(event) {
                 event.preventDefault();
                 let isValid = true;
 
+                function showError(input, message) {
+                    if (!input) return;
+                    isValid = false;
+                    input.classList.add("border-danger");
+                    let parent = input.parentElement;
+                    while (parent && !parent.querySelector(".error-message")) {
+                        parent = parent.parentElement;
+                    }
+                    const errorDiv = parent ? parent.querySelector(".error-message") : null;
+                    if (errorDiv) errorDiv.innerText = message;
+                }
                 document.querySelectorAll(".error-message").forEach(el => el.innerText = "");
                 document.querySelectorAll(".border-danger").forEach(el => el.classList.remove(
                     "border-danger"));
 
-                function showError(input, message) {
-                    isValid = false;
-                    input.classList.add("border-danger");
-                    let errorDiv = input.parentElement.querySelector(".error-message");
-                    if (errorDiv) {
-                        errorDiv.innerText = message;
-                    }
-                }
+                const code = document.getElementById("code");
+                const description = document.getElementById("description-field");
+                const discountType = document.getElementById("discount-type-field");
+                const discountValue = document.getElementById("discount-value-field");
+                const minimumOrderValue = document.getElementById("minimum_order_value");
+                const maxUses = document.getElementById("max_uses");
+                const maxUsesPerUser = document.getElementById("max-uses-per-user-field");
+                const maxShippingDiscount = document.getElementById("max-shipping-discount-field");
+                const maxDiscountAmount = document.getElementById("max-discount-amount-field");
+                const startTime = document.querySelector("input[name='start_time']");
+                const endTime = document.querySelector("input[name='end_time']");
+                const categoryId = document.getElementById("category-id");
+                const brandId = document.getElementById("brand-id");
+                const isActive = document.getElementById("delivered-status");
 
-                // Validate Mã Code
-                let code = document.getElementById("code");
                 if (!code.value.trim()) showError(code, "Mã Code không được để trống");
 
-                // Validate Mô tả
-                let description = document.getElementById("description-field");
                 if (!description.value.trim()) showError(description, "Mô tả không được để trống");
 
-                // Validate Loại Giảm Giá
-                let discountType = document.getElementById("discount-type-field");
                 if (!discountType.value) showError(discountType, "Vui lòng chọn loại giảm giá");
 
-                // Validate Giá Trị Giảm Giá
-                let discountValue = document.getElementById("discount-value-field");
-                if (discountValue.disabled) {
-                    let errorDiv = discountValue.parentElement.querySelector(".error-message");
-                    if (errorDiv) errorDiv.innerText = ""; // Xóa lỗi nếu input bị disable
-                    discountValue.classList.remove("border-danger");
-                } else if (discountValue.value === "" || parseFloat(discountValue.value) <= 0) {
-                    showError(discountValue, "Giá trị phải lớn hơn 0");
+
+                if (!minimumOrderValue.value || parseFloat(minimumOrderValue.value) < 0) {
+                    showError(minimumOrderValue, "Giá trị đơn hàng tối thiểu phải lớn hơn hoặc bằng 0");
                 }
 
-                // Validate Số Lần Sử Dụng
-                let maxUses = document.getElementById("max_uses");
-                if (maxUses.value === "" || parseInt(maxUses.value) < 1) {
+                if (!maxUses.value || parseInt(maxUses.value) < 1) {
                     showError(maxUses, "Số lần sử dụng phải lớn hơn 0");
                 }
 
-                // Validate Giá Trị Đơn Hàng Tối Thiểu
-                let minimumOrderValue = document.getElementById("minimum_order_value");
-                if (minimumOrderValue.value === "" || parseInt(minimumOrderValue.value) < 1) {
-                    showError(minimumOrderValue, "Giá trị đơn hàng tối thiểu phải lớn hơn 0");
-                }
-
-                // Validate Số Mã/Người
-                let maxUsesPerUser = document.getElementById("max-uses-per-user-field");
-                if (maxUsesPerUser.value === "" || parseInt(maxUsesPerUser.value) < 1) {
+                if (!maxUsesPerUser.value || parseInt(maxUsesPerUser.value) < 1) {
                     showError(maxUsesPerUser, "Số mã/người phải lớn hơn 0");
                 }
 
-                // Validate Số Giảm Giá Tối Đa Vận Chuyển (chỉ khi freeship)
-                let maxShippingDiscount = document.getElementById("max-shipping-discount-field");
                 if (discountType.value === "freeship") {
-                    if (maxShippingDiscount.value === "" || parseInt(maxShippingDiscount.value) < 1) {
-                        showError(maxShippingDiscount, "Số giảm giá tối đa vận chuyển phải lớn hơn 0");
+                    if (!maxShippingDiscount.value || parseInt(maxShippingDiscount.value) < 1) {
+                        showError(maxShippingDiscount, "Số giảm giá vận chuyển tối đa phải lớn hơn 0");
                     }
                 }
 
-                // Validate Ngày Phát Hành và Ngày Kết Thúc
-                let startDate = document.querySelector("input[name='start_time']");
-                let endDate = document.querySelector("input[name='end_time']");
+                if (!discountValue.disabled) {
+                    if (!discountValue.value || parseFloat(discountValue.value) <= 0) {
+                        showError(discountValue, "Giá trị giảm phải lớn hơn 0");
+                    } else if (discountType.value === "percentage" && parseFloat(discountValue.value) >
+                        100) {
+                        showError(discountValue, "Giá trị giảm không được vượt quá 100%");
+                    } else if (discountType.value === "fixed" && parseFloat(discountValue.value) >
+                        parseFloat(minimumOrderValue.value)) {
+                        showError(discountValue,
+                            "Giá trị giảm không được lớn hơn giá trị đơn hàng tối thiểu");
+                    }
+                }
 
-                if (!startDate.value) {
-                    showError(startDate, "Vui lòng chọn ngày phát hành");
+                if (discountType.value === "percentage") {
+                    if (!maxDiscountAmount.value || parseInt(maxDiscountAmount.value) < 0) {
+                        showError(maxDiscountAmount, "Số tiền giảm tối đa phải lớn hơn hoặc bằng 0");
+                    } else if (parseInt(maxDiscountAmount.value) < parseInt(minimumOrderValue.value)) {
+                        showError(maxDiscountAmount,
+                            "Số tiền giảm tối đa không được lớn hơn giá trị đơn hàng tối thiểu");
+                    }
                 }
-                if (!endDate.value) {
-                    showError(endDate, "Vui lòng chọn ngày kết thúc");
-                }
-                if (startDate.value && endDate.value && new Date(startDate.value) > new Date(endDate
+
+                if (!startTime.value) showError(startTime, "Vui lòng chọn ngày phát hành");
+
+                if (!endTime.value) showError(endTime, "Vui lòng chọn ngày kết thúc");
+
+                if (startTime.value && endTime.value && new Date(startTime.value) > new Date(endTime
                         .value)) {
-                    showError(endDate, "Ngày kết thúc phải sau ngày phát hành");
+                    showError(endTime, "Ngày kết thúc phải sau ngày phát hành");
                 }
 
-                // Nếu hợp lệ, submit form
+                if (!categoryId.value || categoryId.value === "[]") {
+                    showError(document.getElementById("category-select"),
+                        "Vui lòng chọn ít nhất một danh mục");
+                }
+
+                if (!brandId.value || brandId.value === "[]") {
+                    showError(document.getElementById("brand-select"),
+                        "Vui lòng chọn ít nhất một thương hiệu");
+                }
+
+                if (!isActive.value) showError(isActive, "Vui lòng chọn trạng thái");
+
+                // Submit nếu hợp lệ
                 if (isValid) form.submit();
             });
-        });
-    </script>
 
+            // Quản lý danh mục và thương hiệu
+            let selectedCategories = [];
+            let selectedBrands = [];
 
+            function handleSelection(selectId, array, displayId, inputId) {
+                const select = document.getElementById(selectId);
+                const option = select.options[select.selectedIndex];
+                const id = option.value;
+                const name = option.getAttribute("data-name");
 
-    <script>
-        let selectedCategories = [];
-        let selectedBrands = [];
+                if (!id) return;
 
-        function handleSelection(selectId, selectedArray, displayDivId, inputId) {
-            let selectElement = document.getElementById(selectId);
-            let selectedOption = selectElement.options[selectElement.selectedIndex];
-            let id = selectedOption.value;
-            let name = selectedOption.getAttribute("data-name");
-
-            if (!id) return;
-
-            if (id === "all") {
-                selectedArray.length = 0;
-                document.querySelectorAll(`#${selectId} option:not([value=""], [value="all"])`).forEach(option => {
-                    selectedArray.push({
-                        id: option.value,
-                        name: option.getAttribute("data-name")
+                if (id === "all") {
+                    array.length = 0;
+                    document.querySelectorAll(`#${selectId} option:not([value=""], [value="all"])`).forEach(opt => {
+                        array.push({
+                            id: opt.value,
+                            name: opt.getAttribute("data-name")
+                        });
                     });
-                });
-            } else {
-                if (!selectedArray.some(item => item.id === id)) {
-                    selectedArray.push({
+                } else if (!array.some(item => item.id === id)) {
+                    array.push({
                         id,
                         name
                     });
                 }
+
+                updateDisplay(array, displayId, inputId);
+                select.value = "";
             }
 
-            updateDisplay(selectedArray, displayDivId, inputId);
-            selectElement.value = "";
-        }
+            function updateDisplay(array, displayId, inputId) {
+                const display = document.getElementById(displayId);
+                display.innerHTML = "";
 
-        function updateDisplay(selectedArray, displayDivId, inputId) {
-            let displayDiv = document.getElementById(displayDivId);
-            displayDiv.innerHTML = "";
-
-            selectedArray.forEach(item => {
-                let badge = document.createElement("div");
-                badge.classList.add("selected-item");
-                badge.innerHTML = `${item.name} <span data-id="${item.id}">&times;</span>`;
-
-                badge.querySelector("span").addEventListener("click", function() {
-                    let index = selectedArray.findIndex(i => i.id === item.id);
-                    if (index !== -1) {
-                        selectedArray.splice(index, 1);
-                    }
-                    updateDisplay(selectedArray, displayDivId, inputId);
+                array.forEach(item => {
+                    const badge = document.createElement("div");
+                    badge.classList.add("selected-item");
+                    badge.innerHTML = `${item.name} <span data-id="${item.id}">×</span>`;
+                    badge.querySelector("span").addEventListener("click", () => {
+                        array.splice(array.findIndex(i => i.id === item.id), 1);
+                        updateDisplay(array, displayId, inputId);
+                    });
+                    display.appendChild(badge);
                 });
 
-                displayDiv.appendChild(badge);
-            });
-
-            // Cập nhật input hidden dưới dạng mảng JSON
-            document.getElementById(inputId).value = JSON.stringify(selectedArray.map(item => item.id));
-        }
-
-        document.getElementById("category-select").addEventListener("change", function() {
-            handleSelection("category-select", selectedCategories, "selected-categories", "category-id");
-        });
-
-        document.getElementById("brand-select").addEventListener("change", function() {
-            handleSelection("brand-select", selectedBrands, "selected-brands", "brand-id");
-        });
-
-        // Discount
-        document.getElementById("discount-type-field").addEventListener("change", function() {
-            let discountValueField = document.getElementById("discount-value-field");
-            let discountUnit = document.getElementById("discount-unit");
-            let maxShippingDiscountContainer = document.getElementById("max-shipping-discount-container");
-
-            if (this.value === "percentage") {
-                discountUnit.textContent = "%";
-                discountValueField.disabled = false;
-                discountValueField.placeholder = "Nhập phần trăm";
-                maxShippingDiscountContainer.style.display = "none";
-                toggleDisableElements(maxShippingDiscountContainer, true);
-            } else if (this.value === "fixed") {
-                discountUnit.textContent = "VNĐ";
-                discountValueField.disabled = false;
-                discountValueField.placeholder = "Nhập số tiền giảm";
-                maxShippingDiscountContainer.style.display = "none";
-                toggleDisableElements(maxShippingDiscountContainer, true);
-            } else if (this.value === "freeship") {
-                discountUnit.textContent = "";
-                discountValueField.value = "";
-                discountValueField.disabled = true;
-                discountValueField.placeholder = "Miễn phí vận chuyển";
-                maxShippingDiscountContainer.style.display = "block";
-                toggleDisableElements(maxShippingDiscountContainer, false);
+                document.getElementById(inputId).value = JSON.stringify(array.map(item => item.id));
             }
-        });
 
-        function toggleDisableElements(container, disable) {
-            container.querySelectorAll("input, select, textarea, button").forEach(el => {
-                el.disabled = disable;
+            document.getElementById("category-select").addEventListener("change", () => {
+                handleSelection("category-select", selectedCategories, "selected-categories",
+                    "category-id");
             });
-        }
+
+            document.getElementById("brand-select").addEventListener("change", () => {
+                handleSelection("brand-select", selectedBrands, "selected-brands", "brand-id");
+            });
+
+            // Xử lý thay đổi loại giảm giá
+            const discountTypeField = document.getElementById("discount-type-field");
+            const discountValueField = document.getElementById("discount-value-field");
+            const discountUnit = document.getElementById("discount-unit");
+            const maxShippingContainer = document.getElementById("max-shipping-discount-container");
+            const maxDiscountContainer = document.getElementById("max-discount-amount-container");
+
+            discountTypeField.addEventListener("change", function() {
+                discountValueField.disabled = false;
+                maxShippingContainer.style.display = "none";
+                maxDiscountContainer.style.display = "none";
+
+                if (this.value === "percentage") {
+                    discountUnit.textContent = "%";
+                    discountValueField.placeholder = "Nhập phần trăm";
+                    maxDiscountContainer.style.display = "block";
+                } else if (this.value === "fixed") {
+                    discountUnit.textContent = "VNĐ";
+                    discountValueField.placeholder = "Nhập số tiền giảm";
+                } else if (this.value === "freeship") {
+                    discountUnit.textContent = "";
+                    discountValueField.value = "";
+                    discountValueField.disabled = true;
+                    discountValueField.placeholder = "Miễn phí vận chuyển";
+                    maxShippingContainer.style.display = "block";
+                }
+            });
+
+            // Khởi tạo trạng thái ban đầu
+            discountTypeField.dispatchEvent(new Event("change"));
+        });
     </script>
 @endsection

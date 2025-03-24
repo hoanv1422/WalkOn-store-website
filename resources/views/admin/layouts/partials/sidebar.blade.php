@@ -186,30 +186,13 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
-                                    Projects
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarProjects">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="apps-projects-list.html" class="nav-link" data-key="t-list">
-                                                List
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-projects-overview.html" class="nav-link"
-                                                data-key="t-overview"> Overview </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-projects-create.html" class="nav-link"
-                                                data-key="t-create-project"> Create Project </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="{{route('coupons.index')}}" class="nav-link"> <span data-key="t-to-do">Mã Giảm Giá</span></a>
+                            </li>
+                             <li class="nav-item">
+                                <a href="{{route('inventories.index')}}" class="nav-link"> <span data-key="t-to-do">Kho Hàng</span></a>
                             </li>
                             <li class="nav-item">
-                                <a href="apps-todo.html" class="nav-link"> <span data-key="t-to-do">To Do</span></a>
+                                <a href="{{route('orders.index')}}" class="nav-link"> <span data-key="t-to-do">Đơn Hàng</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse" role="button"

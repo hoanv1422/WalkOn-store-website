@@ -92,9 +92,6 @@
                                                     <p class="text-muted text-center">Bạn chưa đặt đơn hàng nào.</p>
                                                 @else
                                                     <div class="card shadow-lg border-0">
-                                                        {{-- <div class="card-header bg-primary text-white">
-                                                            <h5 class="mb-0 text-center">Lịch Sử Mua Hàng</h5>
-                                                        </div> --}}
                                                         <div class="card-body bg-white">
                                                             <div class="table-responsive">
                                                                 <table
@@ -121,9 +118,9 @@
                                                                                 <td>
                                                                                     <span
                                                                                         class="badge
-                                                            @if ($order->order_status == 'Đã giao') bg-success
-                                                            @elseif($order->order_status == 'Đang xử lý') bg-warning text-dark
-                                                            @else bg-secondary @endif">
+                                                                                    @if ($order->order_status == 'Đã giao') bg-success
+                                                                                    @elseif($order->order_status == 'Đang xử lý') bg-warning text-dark
+                                                                                    @else bg-secondary @endif">
                                                                                         {{ $order->order_status }}
                                                                                     </span>
                                                                                 </td>
@@ -151,6 +148,10 @@
                                                                                                 <tr class="fw-bold">
                                                                                                     <th
                                                                                                         class="bg-white">
+                                                                                                        Ảnh sản phẩm
+                                                                                                    </th>
+                                                                                                    <th
+                                                                                                        class="bg-white">
                                                                                                         Tên sản phẩm
                                                                                                     </th>
                                                                                                     <th
@@ -167,6 +168,10 @@
                                                                                             <tbody>
                                                                                                 @foreach ($order->orderItems as $item)
                                                                                                     <tr>
+                                                                                                        <td><img src="{{ Storage::url($item->product_image) }}"
+                                                                                                                alt="{{ $item->product_name }}"
+                                                                                                                style="width: 50px; height: 50px;">
+                                                                                                        </td>
                                                                                                         <td>{{ $item->product_name }}
                                                                                                         </td>
                                                                                                         <td>{{ $item->product_sku }}
@@ -299,13 +304,9 @@
                                                 @method('PUT')
 
                                                 <div class="card shadow-lg">
-                                                    {{-- <div class="card-header bg-primary text-white">
-                                                        <h5 class="mb-0">Cập nhật thông tin cá nhân</h5>
-                                                    </div> --}}
                                                     <div class="card-body">
                                                         <p class="text-muted">Hãy chắc chắn cập nhật thông tin cá nhân
                                                             của bạn nếu nó đã thay đổi.</p>
-
                                                         <div class="row">
                                                             <!-- Tên đăng nhập (readonly) -->
                                                             <div class="col-md-6">
@@ -324,11 +325,10 @@
                                                                         <em>*</em></label>
                                                                     <input type="email" class="form-control"
                                                                         id="email" name="email"
-                                                                        value="{{ $user->email }}" readonly>
+                                                                        value="{{ $user->mail }}" readonly>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         <div class="row">
                                                             <!-- Tên người dùng -->
                                                             <div class="col-md-6">
@@ -351,7 +351,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         <!-- Địa chỉ -->
                                                         <div class="mb-3">
                                                             <label for="address" class="form-label">Địa chỉ
@@ -359,7 +358,6 @@
                                                             <input type="text" class="form-control" id="address"
                                                                 name="address" value="{{ $user->address }}">
                                                         </div>
-
                                                         <!-- Nút lưu thông tin -->
                                                         <div class="text-end">
                                                             <button type="submit" class="btn btn-primary px-4">Cập
@@ -405,7 +403,9 @@
                     </div>
                     <div class="account-button">
                         <div class="back-btn"> <a href="#">Quay lại tài khoản của bạn</a> </div>
-                        <div class="home"> <a href="index.html"> trang chủ</a> </div>
+                        <div class="home">
+                            <a href="{{ route('home.index') }}">Trang chủ</a>
+                        </div>
                     </div>
                 </div>
             </div>

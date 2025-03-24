@@ -196,7 +196,6 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         // dd($request->all());
-
         // Data Product
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
         if ($request->hasFile('image')) {

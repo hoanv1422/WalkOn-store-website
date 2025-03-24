@@ -11,25 +11,37 @@ class DetailController extends Controller
 {
     public function productDetail(string $slug)
     {
-        $product = Product::with('galleries', 'variants', 'colors', 'sizes')->where('slug', $slug)->first();
-
-        $relatedProducts = $product->relatedProducts();
-        $upSellProducts = $product->upsellProducts();
-        //    dd($product);
-        $productVariants = $product->variants->map(function ($variant) {
+        $product = Product::with([
+            'galleries',
+            'variants' => function($query) {
+                $query->with(['color', 'size']);
+            },
+            'colors',
+            'sizes'
+        ])->where('slug', $slug)->firstOrFail();
+    
+        // Chuẩn bị dữ liệu biến thể
+        $productVariants = $product->variants->map(function ($variant) use ($product) {
             return [
-                'id' => $variant->id,
                 'color_id' => $variant->color_id,
                 'size_id' => $variant->size_id,
+                'price' => $variant->price ?? $product->price,
+                'price_sale' => $variant->price_sale ?? $product->price_sale,
                 'quantity' => $variant->quantity,
-                'image' => Storage::url($variant->image ?? $variant->product->image),
+                'image' => $variant->image ? Storage::url($variant->image) : Storage::url($product->image)
             ];
         });
     
-        return view('client.pages.detail.index', compact('product','relatedProducts','upSellProducts'
-    ));
+        return view('client.pages.detail.index', [
+            'product' => $product,
+            'relatedProducts' => $product->relatedProducts(),
+            'upSellProducts' => $product->upsellProducts(),
+            'product_variants' => $productVariants 
+        ]);
+       
     }
-
+    
+    
     public function index() {
         return view('client.pages.detail.index');
 

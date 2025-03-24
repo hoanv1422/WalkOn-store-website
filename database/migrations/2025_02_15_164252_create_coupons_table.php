@@ -17,9 +17,10 @@ return new class extends Migration {
             $table->integer('max_uses')->default(1); // Tổng số lần có thể sử dụng
             $table->integer('max_uses_per_user')->default(1); // Số lần 1 user có thể sử dụng
             $table->enum('discount_type', ['percentage', 'fixed', 'freeship']);
-            $table->decimal('discount_value', 10, 2)->nullable(); // Có thể null nếu là freeship
-            $table->decimal('minimum_order_value', 10, 2)->default(0);
-            $table->decimal('max_shipping_discount', 10, 2)->nullable();
+            $table->decimal('discount_value', 20, 2)->nullable(); // Có thể null nếu là freeship
+            $table->decimal('minimum_order_value', 20, 2)->default(0);
+            $table->decimal('maximum_discount_amount', 20, 2)->nullable()->comment('Số tiền giảm tối đa');
+            $table->decimal('max_shipping_discount', 20, 2)->nullable();
             $table->boolean('is_active')->default(true)->comment('Trạng thái');// Giảm giá tối đa cho freeship
             $table->timestamps();
             $table->softDeletes();

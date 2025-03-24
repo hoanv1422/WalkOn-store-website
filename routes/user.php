@@ -45,11 +45,10 @@ Route::middleware('client')->group(function () {
     Route::delete('/cart/items/clear', [CartController::class, 'clearCartItems'])->name('cart.items.clear');
 
     //coupon
-    Route::post('/coupon-apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+    Route::post('/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
 
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     // update thong tin khách hàng
@@ -63,6 +62,8 @@ Route::middleware('client')->group(function () {
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 
+    Route::post('address', [ProfileController::class, 'createAddress'])->name('create.address');
+
 
     // Checkout
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
@@ -70,6 +71,14 @@ Route::middleware('client')->group(function () {
     Route::get('vnpay_return', [CheckoutController::class, 'vnpay_return'],)->name('vnpay.return');
 });
 
+
+// wishlist
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+
+
+// checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
