@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="alert border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                Nhập email của bạn và hướng dẫn sẽ được gửi!
+                                Nhập email của bạn và tin nhắn để lấy lại mật khẩu sẽ về email của bạn!
                             </div>
                             <div class="p-2">
                                 <form>
@@ -55,7 +55,7 @@
                     <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Đợi đã, tôi nhớ mật khẩu của mình...<a href="{{route('login.index')}}"
+                        <p class="mb-0">Đợi đã, tôi nhớ mật khẩu của mình.......<a href="{{route('admin.login')}}"
                                 class="fw-semibold text-primary text-decoration-underline"> Nhấn vào đây </a> </p>
                     </div>
 

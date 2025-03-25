@@ -56,7 +56,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value=""
                                             id="auth-remember-check">
-                                        <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
+                                        <label class="form-check-label" for="auth-remember-check">Nhớ thông tin đăng nhập</label>
                                     </div>
 
                                     <div class="mt-4">

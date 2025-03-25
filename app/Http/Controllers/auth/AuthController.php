@@ -25,7 +25,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'username' => 'required|string|unique:users,username|max:255',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|unique:users,email|max:255',
         ]);
@@ -39,8 +39,9 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('login')->with('success', 'Đăng ký người dùng success');
+        return redirect()->route('login')->with('success', 'Đăng ký người dùng thành công');
     }
+
     //đăng nhập
     public function login(Request $request)
     {
@@ -48,9 +49,13 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $credentials = ['email' => $request->email, 'password' => $request->password];
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
+            if ($user->is_active == 0) {
+                Auth::logout();
+                return back()->with('status', 'Tài khoản của bạn đã bị khóa.');
+            }
             if (!$user->hasVerifiedEmail()) {
                 return redirect()->route('verification.notice')->with('status', 'Bạn cần xác thực email trước khi sử dụng hệ thống.');
             }
@@ -60,8 +65,10 @@ class AuthController extends Controller
                 default => redirect('/'),
             };
         }
+
         return back()->with('status', 'Sai mật khẩu hoặc tên tài khoản');
     }
+
 
     // đăng xuất
     public function logout(Request $request)
@@ -73,7 +80,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Đăng xuất khỏi tài khoản rồi');
+        return redirect()->route('login')->with('success', 'Tài khoản của bạn đã được đăng xuất');
     }
 
     public function signinAdmin(Request $request)

@@ -10,7 +10,7 @@
                         <div class="login-form-container">
                             <div class="login-text">
                                 <h2>Lấy lại mật khẩu đã quên</h2>
-                                <span>Bạn hãy điền email vào để chúng tôi cho bạn đổi mật khẩu.</span>
+                                <span>Bạn hãy điền email vào để lấy lại mật khẩu tài khoản của bạn!</span>
                             </div>
                             <div class="login-form">
                                 <form action="{{ route('password.email') }}" method="POST">
@@ -22,7 +22,7 @@
                                 </form>
                             </div>
                             <div class="login-links mt-2">
-                                <a href="{{ url('/login') }}">Quay trở về đăng nhập nếu đã nhớ mật khẩu rồi</a>
+                                <a href="{{ url('/login') }}">Quay trở về đăng nhập nếu đã nhớ mật khẩu rồi!</a>
                             </div>
                         </div>
                     </div>

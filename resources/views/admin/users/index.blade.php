@@ -37,7 +37,7 @@
                                 <div class="d-flex flex-wrap align-items-start gap-2">
                                     <button class="btn btn-soft-danger" id="remove-actions"
                                         onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                    <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" disabled
+                                    <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                         id="create-btn" data-bs-target="#showModalCreate"><i
                                             class="ri-add-line align-bottom me-1"></i> Thêm Người Dùng</button>
                                 </div>
@@ -65,7 +65,7 @@
 
                                         <div class="col-sm-4">
                                             <select class="form-control" name="status">
-                                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>All</option>
+                                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả trạng thái</option>
                                                 <option value="Active" {{ request('status') == 'Active' ? 'selected' : '' }}>Hoạt động</option>
                                                 <option value="Block" {{ request('status') == 'Block' ? 'selected' : '' }}>Khóa</option>
                                             </select>
@@ -73,7 +73,7 @@
 
                                         <div class="col-sm-4">
                                             <button type="submit" class="btn btn-primary w-100">
-                                                <i class="ri-equalizer-fill me-2 align-bottom"></i> Filter
+                                                <i class="ri-equalizer-fill me-2 align-bottom"></i> Lọc
                                             </button>
                                         </div>
                                     </div>
@@ -153,15 +153,15 @@
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
                                                     </li>
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    <!-- <li class="list-inline-item" data-bs-toggle="tooltip"
                                                         data-bs-trigger="hover" data-bs-placement="top"
                                                         title="Remove">
                                                         <a class="text-danger d-inline-block remove-item-btn"
                                                             data-bs-toggle="modal" data-id="{{ $user->id }}"
-                                                            href="#deleteRecordModal">
+                                                            href="#deleteRecordModal" >
                                                             <i class="ri-delete-bin-5-fill fs-16"></i>
                                                         </a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </td>
                                         </tr>
@@ -237,7 +237,7 @@
                                                     <div class="mb-3">
                                                         <label for="password-field" class="form-label">Mật
                                                             Khẩu</label>
-                                                        <input type="text" id="password-field"
+                                                        <input type="password" id="password-field"
                                                             class="form-control" placeholder="Nhập mật khẩu"
                                                             name="password" />
                                                         <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
@@ -285,13 +285,15 @@
 
 
                                                     <div class="mb-3">
-                                                        <label for="status-field" class="form-label">Trạng
-                                                            Thái</label>
-                                                        <select class="form-control" name="is_active"
-                                                            id="status-field">
+                                                        <label for="status-field-edit" class="form-label">Trạng Thái</label>
+                                                        @if (Auth::user()->id != old('id'))
+                                                        <select class="form-control" name="is_active" id="status-field-edit">
                                                             <option value="1">Hoạt động</option>
                                                             <option value="0">Khoá</option>
                                                         </select>
+                                                        @else
+                                                        <input type="text" class="form-control" value="Hoạt động" readonly>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -418,11 +420,14 @@
                                                     <div class="mb-3">
                                                         <label for="status-field-edit" class="form-label">Trạng
                                                             Thái</label>
-                                                        <select class="form-control" name="is_active"
-                                                            id="status-field-edit">
+                                                        @if (Auth::user()->id != request()->route('user'))
+                                                        <select class="form-control" name="is_active" id="status-field-edit">
                                                             <option value="1">Hoạt động</option>
                                                             <option value="0">Khoá</option>
                                                         </select>
+                                                        @else
+                                                        <input type="text" class="form-control" value="Hoạt động" readonly>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -431,9 +436,7 @@
                                             <div class="hstack gap-2 justify-content-end">
                                                 <button type="button" class="btn btn-light"
                                                     data-bs-dismiss="modal">Đóng</button>
-                                                <button type="submit" class="btn btn-success" id="add-btn">Cập
-                                                    Nhật
-                                                    Người Dùng</button>
+                                                <button type="submit" class="btn btn-success" id="add-btn">Cập Nhật Người Dùng</button>
                                             </div>
                                         </div>
                                     </form>
@@ -465,7 +468,7 @@
                                             <form id="deleteForm" method="POST" action="">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn w-sm btn-danger"
+                                                <button type="submit" class="btn w-sm btn-danger" disabled
                                                     id="delete-record">Xóa!</button>
                                             </form>
                                         </div>
@@ -496,7 +499,6 @@
 <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
 <script src="{{ asset('templates/admin/assets/libs/validates/user.js') }}"></script>
 <script>
-
     $(document).ready(function() {
         $('table.dataTable').each(function() {
             $(this).DataTable({

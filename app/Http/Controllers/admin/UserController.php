@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -67,10 +68,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        // dd($request->all());
-
         // Data user
         $data = $request->except('avatar');
+
         if ($request->hasFile('avatar')) {
             $data['avatar'] = Storage::put(self::PATH_UPLOAD, $request->file('avatar'));
             if (!empty($user->avatar) && Storage::exists($user->avatar)) {
@@ -79,27 +79,27 @@ class UserController extends Controller
         } else {
             $data['avatar'] = $user->avatar;
         }
-        $data['is_active'] ??= 0;
+        if (!$request->has('is_active')) {
+            $data['is_active'] = $user->is_active;
+        }
+        if (Auth::user()->id == $user->id && isset($data['is_active']) && $data['is_active'] == 0) {
+            return back()->with('error', 'Bạn không thể tự khóa tài khoản quản trị của mình');
+        }
 
         try {
             DB::beginTransaction();
-            // Update user
             $user->update($data);
-
-            DB::Commit();
+            DB::commit();
             return redirect()->route('users.index')->with('success', 'Cập nhật người dùng thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
-            // DELETE IMAGE in STORAGE
-
             if (isset($data['avatar'])) {
                 Storage::delete($data['avatar']);
             }
-
-            dd($exception);
             return back()->with('error', 'Có lỗi khi cập nhật');
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

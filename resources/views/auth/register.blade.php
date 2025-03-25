@@ -30,6 +30,15 @@
                                 <span class="alert-alert-danger text-center">{{ $message }}</span>
                                 @enderror
 
+                                <div class="password-wrapper">
+                                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu " required>
+                                    <span class="toggle-password" onclick="togglePassword('password_confirmation')">
+                                        <i class="fa fa-eye" style="margin-bottom:25px"></i>
+                                    </span>
+                                </div>
+                                @error('password_confirmation')
+                                <span class="alert-alert-danger text-center">{{ $message }}</span>
+                                @enderror
                                 <input type="text" name="name" placeholder="Nhập họ tên">
                                 @error('name')
                                 <span class="alert-alert-danger text-center">{{ $message }}</span>
@@ -56,14 +65,24 @@
 </div>
 <style>
     .password-wrapper {
-        position: relative; display: flex; align-items: center;
+        position: relative;
+        display: flex;
+        align-items: center;
     }
+
     .password-wrapper input {
-        width: 100%; padding-right: 40px;
+        width: 100%;
+        padding-right: 40px;
     }
+
     .toggle-password {
-        position: absolute; right: 10px; cursor: pointer; font-size: 18px; color: #666;
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
     }
+
     .toggle-password:hover {
         color: #000;
     }
