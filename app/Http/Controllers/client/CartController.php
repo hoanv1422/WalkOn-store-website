@@ -7,6 +7,8 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
+use App\Models\Order;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,37 +17,22 @@ class CartController extends Controller
 {
     public function index()
     {
-        $user = Auth::user()->id;
+        $userId = Auth::id();
 
-        $cartItems = DB::table('cart_items')
-            ->join('product_variants', 'cart_items.product_variant_id', '=', 'product_variants.id')
-            ->join('products', 'product_variants.product_id', '=', 'products.id')
-            ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
-            ->join('colors', 'product_variants.color_id', '=', 'colors.id')
-            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
-            ->where('carts.user_id', $user)
-            ->select(
-                'products.name as product_name',
-                'sizes.size',
-                'colors.color',
-                'cart_items.quantity',
-                'products.image as product_image',
-                'cart_items.id as cart_item_id',
-                'product_variants.price',
-                'product_variants.price_sale'
-            )->orderBy('cart_items.id', 'asc')->get();
+        $cartItems = CartItem::with([
+            'productVariant.product',
+            'productVariant.size',
+            'productVariant.color'
+        ])
+            ->whereHas('cart', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->orderBy('id', 'asc')
+            ->get();
 
-        $totalAmount = $cartItems->sum(function ($item) {
-            $unitPrice = $item->price_sale && $item->price_sale < $item->price
-                ? $item->price_sale
-                : $item->price;
-            return $unitPrice * $item->quantity;
-        });
-
-
-
-        return view('client.pages.cart.index', compact('cartItems', 'totalAmount'));
+        return view('client.pages.cart.index', compact('cartItems'));
     }
+
 
     public function addToCart(Request $request, $id)
     {
@@ -142,13 +129,83 @@ class CartController extends Controller
 
     public function clearCartItems()
     {
-        $userId = Auth::user(); // Giả sử đây là ID của user (có thể dùng Auth::id() nếu có authentication)
+        $userId = Auth::user(); 
 
-        // Xóa toàn bộ sản phẩm trong giỏ hàng nhưng giữ lại giỏ hàng
         DB::table('cart_items')->whereIn('cart_id', function ($query) use ($userId) {
             $query->select('id')->from('carts')->where('user_id', $userId);
         })->delete();
 
         return redirect()->route('cart.index')->with('success', 'Tất cả sản phẩm trong giỏ hàng đã được xóa!');
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $user = auth()->user();
+        $code = $request->couponCode;
+        $totalPrice = $request->totalPrice;
+        $cartItemIds = explode(',', $request->cartItemsForCoupon);
+        $shippingFee = 20000;
+        $discount = 0;
+        $shippingDiscount = 0;
+
+        $coupon = Coupon::where('code', $code)->where('is_active', 1)->first();
+        if (!$coupon) {
+            return response()->json(['message' => 'Mã không hợp lệ'], 400);
+        }
+
+        $now = now();
+        if ($coupon->start_time > $now || $coupon->end_time < $now) {
+            return response()->json(['message' => 'Mã đã hết hạn'], 400);
+        }
+
+        if ($coupon->max_uses && Order::where('coupon_id', $coupon->id)->count() >= $coupon->max_uses) {
+            return response()->json(['message' => 'Mã đã đạt giới hạn sử dụng'], 400);
+        }
+
+        if ($coupon->max_uses_per_user && Order::where('coupon_id', $coupon->id)->where('user_id', $user->id)->count() >= $coupon->max_uses_per_user) {
+            return response()->json(['message' => 'Bạn đã sử dụng mã này quá số lần'], 400);
+        }
+
+        if ($totalPrice < $coupon->minimum_order_value) {
+            return response()->json(['message' => 'Đơn hàng không đủ điều kiện để áp dụng mã'], 400);
+        }
+        $cartItems = CartItem::query()->whereIn('id', $cartItemIds)->get();
+        $applicableCategories = $coupon->categories->pluck('id')->toArray();
+        $applicableBrands = $coupon->brands->pluck('id')->toArray();
+
+        $valid = false;
+        foreach ($cartItems as $item) {
+            if (
+                in_array($item->productVariant->product->category_id, $applicableCategories) ||
+                in_array($item->productVariant->product->brand_id, $applicableBrands)
+            ) {
+                $valid = true;
+                break;
+            }
+        }
+
+        if (!$valid) {
+            return response()->json(['message' => 'Mã không áp dụng cho sản phẩm trong giỏ hàng'], 400);
+        }
+
+        if ($coupon->discount_type === 'percentage') {
+            $discount = ($totalPrice * $coupon->discount_value) / 100;
+            if ($coupon->max_shipping_discount) {
+                $discount = min($discount, $coupon->max_shipping_discount);
+            }
+        } elseif ($coupon->discount_type === 'fixed') {
+            $discount = min($coupon->discount_value, $totalPrice);
+        } elseif ($coupon->discount_type === 'freeship') {
+            $shippingDiscount = min($shippingFee, $coupon->max_shipping_discount ?? $shippingFee);
+        }
+
+        $finalPrice = $totalPrice - $discount + $shippingFee - $shippingDiscount;
+
+        return response()->json([
+            'message' => 'Áp dụng mã thành công',
+            'discount' => $discount,
+            'shipping_discount' => $shippingDiscount,
+            'finalPrice' => $finalPrice
+        ]);
     }
 }

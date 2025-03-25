@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
@@ -20,8 +21,11 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
+
+        // dd($request->all());
         try {
             $user = Auth::user();
+
             if (!$user) {
                 return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
             }
@@ -38,15 +42,15 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng trống.');
             }
 
+            $coupon_id = Coupon::query()->where("code", $request->couponCode)->pluck("id")->first();
+
             DB::beginTransaction();
 
-            // Kiểm tra số lượng tồn kho
             foreach ($cartItems as $item) {
                 if ($item->quantity > $item->productVariant->quantity) {
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
-
             $order = Order::create([
                 'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
                 'user_id' => $user->id,
@@ -59,12 +63,17 @@ class CheckoutController extends Controller
                 'receiver_phone' => $request->receiver_phone,
                 'receiver_address' => $request->receiver_address,
                 'note' => $request->note,
-                'coupon' => null,
-                'order_status' => 'pending',
-                'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid', // COD vẫn là unpaid
-                'payment_method' => $request->payment_method,
+                'coupon_id' => $coupon_id,
+                'coupon' => $request->couponCode,
                 'total_price' => $request->total_price,
+                'discount_amount' => $request->discount_amount,
+                'shipping_fee' => $request->shipping_fee,
+                'final_price' => $request->final_price,
+                'order_status' => 'pending',
+                'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
+                'payment_method' => $request->payment_method,
             ]);
+            // dd($order);
 
             $orderItems = [];
             foreach ($cartItems as $item) {
@@ -86,8 +95,8 @@ class CheckoutController extends Controller
             CartItem::where('cart_id', $cart->id)->delete();
 
             if ($request->payment_method === 'VNPAY') {
-                DB::commit(); 
-                $vnpayUrl = $this->vnpay_payment($order->total_price, $order->order_code);
+                DB::commit();
+                $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
                 return redirect()->away($vnpayUrl);
             }
 
@@ -155,7 +164,7 @@ class CheckoutController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         header('Location: ' . $vnp_Url);
@@ -198,7 +207,7 @@ class CheckoutController extends Controller
             }
 
             // Kiểm tra số tiền
-            if ($order->total_price != $vnp_Amount) {
+            if ($order->final_price != $vnp_Amount) {
                 throw new \Exception('Số tiền thanh toán không khớp với đơn hàng.');
             }
 

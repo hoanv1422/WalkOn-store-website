@@ -44,13 +44,21 @@ Route::middleware('client')->group(function () {
     Route::put('/cart/update/{cartItemId}', [CartController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/items/clear', [CartController::class, 'clearCartItems'])->name('cart.items.clear');
 
+    //coupon
+    Route::post('/coupon-apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-
     // Profile
+    // Trang thông tin cá nhân
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // Trang lịch sử đơn hàng
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     // update thong tin khách hàng
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // Hủy đơn hàng
+    Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\ProfileController::class, 'cancelOrder'])->name('profile.orders.cancel');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -60,31 +68,27 @@ Route::middleware('client')->group(function () {
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 
+
     // Checkout
-    Route::post('/checkout/cod', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::post('/checkout/vnpay', [CheckoutController::class, 'store'],)->name('checkout.vnpay');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    // Route::post('/checkout/vnpay', [CheckoutController::class, 'store'],)->name('checkout.vnpay');
     Route::get('vnpay_return', [CheckoutController::class, 'vnpay_return'],)->name('vnpay.return');
 });
 
 
-
-
-
-
+// wishlist
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
 
 
 // checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
-
-// about-us
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
 
-// Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
 
-// Contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');

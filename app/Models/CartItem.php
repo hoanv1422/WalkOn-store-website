@@ -30,4 +30,21 @@ class CartItem extends Model
     {
         return $this->belongsTo(ProductVariant::class);
     }
+
+    public function getPriceAttribute()
+    {
+        $productVariant = $this->productVariant;
+
+        return ($productVariant->price_sale && $productVariant->price_sale < $productVariant->price)
+            ? $productVariant->price_sale * $this->quantity
+            : $productVariant->price * $this->quantity;
+    }
+
+    /**
+     * Get the formatted price.
+     */
+    public function getFormattedPriceAttribute()
+    {
+        return $this->price;
+    }
 }

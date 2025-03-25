@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Wishlist;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,15 +17,12 @@ class WishlistController extends Controller
     
     public function destroy($id)
 {
-    // Tìm sản phẩm trong wishlist của user đăng nhập
     $wishlistItem = Wishlist::where('user_id', Auth::id())->where('id', $id)->first();
 
-    // Kiểm tra nếu sản phẩm không tồn tại hoặc không thuộc về user
     if (!$wishlistItem) {
         return redirect()->route('wishlist.index')->with('error', 'Sản phẩm không tồn tại hoặc không thuộc về bạn.');
     }
 
-    // Xóa sản phẩm
     $wishlistItem->delete();
 
     return redirect()->route('wishlist.index')->with('success', 'Xóa sản phẩm khỏi Wishlist thành công!');
@@ -42,7 +38,7 @@ class WishlistController extends Controller
         $wishlistItem = Wishlist::where('user_id', Auth::id())->where('product_id', $request->product_id)->first();
     
         if ($wishlistItem) {
-            return response()->json(['redirect' => route('wishlist.index')]); // Nếu đã có, chuyển hướng đến wishlist
+            return response()->json(['redirect' => route('wishlist.index')]);
         } else {
             Wishlist::create([
                 'user_id' => Auth::id(),

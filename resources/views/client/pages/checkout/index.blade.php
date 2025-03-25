@@ -24,28 +24,6 @@
                     }
                 });
             });
-
-            // Sự kiện click nút thanh toán
-            payNowButton.addEventListener("click", function(event) {
-                event.preventDefault(); // Ngăn form gửi đi ngay lập tức
-
-                const selectedPaymentMethod = document.querySelector(
-                'input[name="payment_method"]:checked');
-
-                if (!selectedPaymentMethod) {
-                    alert("Vui lòng chọn phương thức thanh toán!");
-                    return;
-                }
-
-                // Cập nhật action dựa vào phương thức thanh toán
-                if (selectedPaymentMethod.value === "COD") {
-                    checkoutForm.action = "/checkout/cod"; // Route xử lý COD
-                } else if (selectedPaymentMethod.value === "VNPAY") {
-                    checkoutForm.action = "/checkout/vnpay"; // Route xử lý VNPAY
-                }
-
-                checkoutForm.submit(); // Gửi form
-            });
         });
     </script>
 

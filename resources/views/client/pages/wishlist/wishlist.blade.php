@@ -67,11 +67,10 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Sku</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
+                                    <th>Ảnh</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -93,9 +92,6 @@
                                                 <span class="text-danger">Sản phẩm không tồn tại</span>
                                             @endif
                                         </td>
-                            
-                                        <!-- SKU -->
-                                        <td>{{ $item->product->sku ?? 'N/A' }}</td>
                             
                                         <!-- Số lượng còn trong kho -->
                                         <td>{{ $item->product->quantity ?? 0 }}</td>
@@ -127,7 +123,7 @@
                             
                         </table>
                     </div>
-                    <button type="submit" value="Continue" class="check-button">Continue</button>
+                    <button type="submit" value="Continue" class="check-button">Tiếp Tục</button>
                 </div>
             </div>
         </div>
