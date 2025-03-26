@@ -68,22 +68,23 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        // Data user
-        $data = $request->except('avatar');
+        $data = $request->all();
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = Storage::put(self::PATH_UPLOAD, $request->file('avatar'));
-            if (!empty($user->avatar) && Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
+            $path = $request->file('avatar')->store('users', 'public');
+            $data['avatar'] = $path;
+            if (!empty($user->avatar) && Storage::exists('public/'.$user->avatar)) {
+                Storage::delete('public/'.$user->avatar);
             }
-        } else {
-            $data['avatar'] = $user->avatar;
         }
         if (!$request->has('is_active')) {
             $data['is_active'] = $user->is_active;
         }
         if (Auth::user()->id == $user->id && isset($data['is_active']) && $data['is_active'] == 0) {
             return back()->with('error', 'Bạn không thể tự khóa tài khoản quản trị của mình');
+        }
+        if (Auth::user()->id == $user->id && isset($data['role']) && $data['role'] != Auth::user()->role) {
+            return back()->with('error', 'Bạn không thể tự thay đổi vai trò của mình khi làm admin ');
         }
 
         try {
@@ -99,7 +100,6 @@ class UserController extends Controller
             return back()->with('error', 'Có lỗi khi cập nhật');
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

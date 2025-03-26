@@ -376,12 +376,15 @@
 
                                                     <div class="mb-3">
                                                         <label for="role-field-edit" class="form-label">Chức Vụ</label>
-                                                        <select class="form-control" name="role"
-                                                            id="role-field-edit">
+                                                        @if (Auth::user()->id != request()->route('user'))
+                                                        <select class="form-control" name="role" id="role-field-edit">
                                                             <option value="user">User</option>
                                                             <option value="admin">Admin</option>
                                                             <option value="shipper">Shipper</option>
                                                         </select>
+                                                        @else
+                                                        <input type="text" class="form-control" value="Admin" readonly>
+                                                        @endif
                                                         <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                                     </div>
 
