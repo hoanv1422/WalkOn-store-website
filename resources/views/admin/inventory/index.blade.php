@@ -4,8 +4,8 @@
     <!-- nouisliderribute css -->
     <link rel="stylesheet" href="{{ asset('templates/admin/assets/libs/nouislider/nouislider.min.css') }}">
 @endsection
-@section('content')
 
+@section('content')
     <div class="page-content">
         <div class="container-fluid">
             <!-- start page title -->
@@ -30,12 +30,11 @@
                         <div class="card-header">
                             <div class="d-flex mb-3">
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-16">Lọc sản phảm </h5>
+                                    <h5 class="fs-16">Bộ lọc kho hàng </h5>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <!-- Xóa tất cả bộ lọc (chỉ hiển thị khi có ít nhất một bộ lọc) -->
                                     @if (request()->hasAny(['search', 'min_price', 'max_price', 'category']))
-                                        <a href="{{ route('inventories.index') }}" class="btn btn-danger" id="clearall">
+                                        <a href="{{ route('inventory.index') }}" class="btn btn-danger" id="clearall">
                                             <i class="bi bi-x-circle"></i> Xóa tất cả
                                         </a>
                                     @endif
@@ -45,21 +44,17 @@
 
                         <div class="accordion accordion-flush filter-accordion">
                             <div class="card-body border-bottom">
-                                <!-- Lọc sản phẩm theo tên -->
                                 <div>
                                     <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
-                                    <form action="{{ route('inventories.index') }}" method="GET">
+                                    <form action="{{ route('inventory.index') }}" method="GET">
                                         <input type="hidden" name="min_price" value="{{ request()->min_price }}">
                                         <input type="hidden" name="max_price" value="{{ request()->max_price }}">
                                         <input type="hidden" name="category" value="{{ request()->category }}">
-
                                         <input type="text" name="search" class="form-control"
                                             placeholder="Tìm kiếm sản phẩm..." value="{{ request()->search }}">
                                         <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
-
-                                        <!-- Xóa bộ lọc tìm kiếm -->
                                         @if (request()->has('search') && request()->search != '')
-                                            <a href="{{ route('inventories.index', request()->except('search')) }}"
+                                            <a href="{{ route('inventory.index', request()->except('search')) }}"
                                                 class="btn btn-danger mt-2">
                                                 <i class="bi bi-x-circle"></i> Xóa
                                             </a>
@@ -69,37 +64,43 @@
                             </div>
 
                             <div class="card-body border-bottom">
-                                <!-- Lọc sản phẩm theo giá -->
                                 <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Giá</p>
-                                <form action="{{ route('inventories.index') }}" method="GET">
+                                <form action="{{ route('inventory.index') }}" method="GET">
                                     <input type="hidden" name="search" value="{{ request()->search }}">
                                     <input type="hidden" name="category" value="{{ request()->category }}">
-                                    <div class="input-group">
-                                        <input class="form-control form-control-sm" type="number" name="min_price"
-                                            id="minCost" value="{{ request()->min_price ?? '' }}"
-                                            placeholder="Giá thấp nhất" min="0">
-                                        <span class="input-group-text">đến</span>
-                                        <input class="form-control form-control-sm" type="number" name="max_price"
-                                            id="maxCost" value="{{ request()->max_price ?? '' }}"
-                                            placeholder="Giá cao nhất" min="0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="position-relative w-50">
+                                            <input class="form-control form-control-sm text-end pe-4 border rounded"
+                                                type="number" name="min_price" id="minCost"
+                                                value="{{ request()->min_price ?? '' }}" placeholder="Giá thấp nhất"
+                                                min="0">
+                                            <span
+                                                class="position-absolute top-50 translate-middle-y end-0 me-2 text-muted">đ</span>
+                                        </div>
+                                        <span class="mx-2 text-muted fw-bold">~</span>
+                                        <div class="position-relative w-50">
+                                            <input class="form-control form-control-sm text-end pe-4 border rounded"
+                                                type="number" name="max_price" id="maxCost"
+                                                value="{{ request()->max_price ?? '' }}" placeholder="Giá cao nhất"
+                                                min="0">
+                                            <span
+                                                class="position-absolute top-50 translate-middle-y end-0 me-2 text-muted">đ</span>
+                                        </div>
                                     </div>
                                     <div class="d-flex gap-2 mt-3">
-                                        <button type="submit" class="btn btn-primary">Lọc</button>
-                                        <!-- Xóa bộ lọc giá -->
+                                        <button type="submit" class="btn btn-primary px-3">Lọc</button>
                                         @if (
                                             (request()->has('min_price') && request()->min_price != '') ||
                                                 (request()->has('max_price') && request()->max_price != ''))
-                                            <a href="{{ route('inventories.index', request()->except(['min_price', 'max_price'])) }}"
-                                                class="btn btn-danger">
+                                            <a href="{{ route('inventory.index', request()->except(['min_price', 'max_price'])) }}"
+                                                class="btn btn-danger px-3">
                                                 <i class="bi bi-x-circle"></i> Xóa
                                             </a>
                                         @endif
                                     </div>
                                 </form>
                             </div>
-
                             <div class="accordion-item">
-                                <!-- Lọc sản phẩm theo danh mục -->
                                 <h2 class="accordion-header" id="flush-headingCategories">
                                     <button class="accordion-button bg-transparent shadow-none" type="button"
                                         data-bs-toggle="collapse" data-bs-target="#flush-collapseCategories"
@@ -107,18 +108,16 @@
                                         <span class="text-muted text-uppercase fs-12 fw-medium">Danh mục</span>
                                     </button>
                                 </h2>
-
                                 <div id="flush-collapseCategories" class="accordion-collapse collapse show"
                                     aria-labelledby="flush-headingCategories">
-                                    <div class="accordion-body text-body pt-0">
+                                    <div class="accordion-body text pt-0">
                                         <div class="d-flex flex-column gap-2 mt-3 filter-check">
-                                            <form action="{{ route('inventories.index') }}" method="GET">
+                                            <form action="{{ route('inventory.index') }}" method="GET">
                                                 <input type="hidden" name="search" value="{{ request()->search }}">
                                                 <input type="hidden" name="min_price"
                                                     value="{{ request()->min_price }}">
                                                 <input type="hidden" name="max_price"
                                                     value="{{ request()->max_price }}">
-
                                                 @foreach ($categories as $category)
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="category"
@@ -128,12 +127,9 @@
                                                             for="category{{ $category->id }}">{{ $category->name }}</label>
                                                     </div>
                                                 @endforeach
-
                                                 <button type="submit" class="btn btn-primary mt-2">Lọc</button>
-
-                                                <!-- Xóa bộ lọc danh mục -->
                                                 @if (!empty(request()->category))
-                                                    <a href="{{ route('inventories.index', request()->except('category')) }}"
+                                                    <a href="{{ route('inventory.index', request()->except('category')) }}"
                                                         class="btn btn-danger mt-2">
                                                         <i class="bi bi-x-circle"></i> Xóa
                                                     </a>
@@ -145,22 +141,15 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <!-- end card -->
                 </div>
-                <!-- end col -->
 
-                <!--Hiển thị quản lí kho hàng -->
                 <div class="col-xl-9 col-lg-8">
                     <div>
                         <div class="card">
                             <div class="card-header border-0">
                             </div>
-                            <!-- end card header -->
                             <div class="card-body">
                                 <div class="tab-content text-muted">
-                                    <!--Hiện thị kho hàng -->
                                     <div class="tab-pane active" id="productnav-all" role="tabpanel">
                                         <div id="table-product-list-all"
                                             class="table-card gridjs-border-none table-responsive" width="100%">
@@ -201,11 +190,11 @@
                                                             style="width: 150px;">
                                                             <div class="gridjs-th-content">Ngày thêm</div>
                                                         </th>
-                                                        {{-- <th data-column-id="action"
+                                                        <th data-column-id="action"
                                                             class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
                                                             style="width: 80px;">
                                                             <div class="gridjs-th-content">Hành động</div>
-                                                        </th> --}}
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="gridjs-tbody">
@@ -252,35 +241,40 @@
                                                                 <td class="gridjs-td">
                                                                     <span>{{ $product->created_at->format('d/m/Y') }}</span>
                                                                 </td>
-                                                                {{-- <td class="gridjs-td"><span>
-                                                                        <div class="dropdown"><button
+                                                                <td class="gridjs-td"><span>
+                                                                        <div class="dropdown">
+                                                                            <button
                                                                                 class="btn btn-soft-secondary btn-sm dropdown"
                                                                                 type="button" data-bs-toggle="dropdown"
-                                                                                aria-expanded="false"><i
-                                                                                    class="ri-more-fill"></i></button>
+                                                                                aria-expanded="false">
+                                                                                <i class="ri-more-fill"></i>
+                                                                            </button>
                                                                             <ul class="dropdown-menu dropdown-menu-end">
                                                                                 <li><a class="dropdown-item"
-                                                                                        href="{{ route('products.show', $product) }}"><i
+                                                                                        href="{{ route('inventory.show', $variant->id) }}"><i
                                                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                                                         Xem</a></li>
-                                                                                <li><a class="dropdown-item edit-list"
-                                                                                        data-edit-id="{{ $variant->id }}"
-                                                                                        href="{{ route('products.edit', $product) }}"><i
+                                                                                <!-- Nút cập nhật số lượng -->
+                                                                                <li><a class="dropdown-item update-list"
+                                                                                        href="#"
+                                                                                        data-id="{{ $variant->id }}"
+                                                                                        data-quantity="{{ $variant->quantity }}"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#updateQuantityModal"><i
                                                                                             class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                                                        Sửa</a></li>
+                                                                                        Cập nhật số lượng</a></li>
                                                                                 <li class="dropdown-divider"></li>
                                                                                 <li><a class="dropdown-item remove-list"
                                                                                         href="#"
                                                                                         data-id="{{ $variant->id }}"
                                                                                         data-bs-toggle="modal"
-                                                                                        data-action="{{ route('products.destroy', $product) }}"
+                                                                                        data-action="{{ route('inventory.destroy', $variant->id) }}"
                                                                                         data-bs-target="#removeItemModal"><i
                                                                                             class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                                                         Xóa</a></li>
                                                                             </ul>
                                                                         </div>
-                                                                    </span>
-                                                                </td> --}}
+                                                                    </span></td>
                                                             </tr>
                                                         @endforeach
                                                     @endforeach
@@ -288,22 +282,14 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <!-- end tab pane -->
                                 </div>
-                                <!-- end tab content -->
                             </div>
-                            <!-- end card body -->
                         </div>
-                        <!-- end card -->
                     </div>
                 </div>
-                <!-- end col -->
             </div>
-            <!-- end row -->
         </div>
-        <!-- container-fluid -->
     </div>
-    <!-- End Page-content -->
 
     <!-- removeItemModal -->
     <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
@@ -319,7 +305,7 @@
                             colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
                         <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                             <h4>Bạn có chắc không ?</h4>
-                            <p class="text-muted mx-4 mb-0">Bạn có chắc muốn xóa sản phẩm này không?</p>
+                            <p class="text-muted mx-4 mb-0">Bạn có chắc muốn xóa biến thể sản phẩm này không?</p>
                         </div>
                     </div>
                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
@@ -327,14 +313,41 @@
                         <form id="deleteForm" method="POST" action="">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn w-sm btn-danger " id="delete-product">Xóa!</button>
+                            <button type="submit" class="btn w-sm btn-danger" id="delete-product">Xóa!</button>
                         </form>
                     </div>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+        </div>
     </div>
-    <!-- /.modal -->
+
+    <!-- updateQuantityModal -->
+    <!-- Lưu ý: Modal này dùng để cập nhật số lượng biến thể -->
+    <div id="updateQuantityModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cập nhật số lượng biến thể</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm" method="POST" action="">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Số lượng mới</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" min="0"
+                                required>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn w-sm btn-primary">Cập nhật</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -346,19 +359,33 @@
         $(document).ready(function() {
             $('table.dataTable').each(function() {
                 $(this).DataTable({
-                    "paging": true, // Hiển thị phân trang
-                    "searching": false, // Tắt tìm kiếm
-                    "ordering": true, // Bật sắp xếp
-                    "info": true, // Hiển thị thông tin tổng
-                    "pageLength": 10, // Giới hạn số lượng bản ghi mỗi trang
+                    "paging": true,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "pageLength": 10,
                     "lengthChange": false
                 });
             });
         });
 
+        // Xử lý sự kiện xóa biến thể
         $(document).on('click', '.dropdown-item.remove-list', function() {
             var actionUrl = $(this).data('action');
             $('#deleteForm').attr('action', actionUrl);
+        });
+
+        // Xử lý sự kiện cập nhật số lượng
+        // Lưu ý: Đảm bảo ID và quantity được truyền chính xác từ data attributes
+        $(document).on('click', '.dropdown-item.update-list', function() {
+            var actionUrl = '{{ route('inventory.update', ':id') }}'.replace(':id', $(this).data('id'));
+            var currentQuantity = $(this).data('quantity');
+
+            // Cập nhật action của form
+            $('#updateForm').attr('action', actionUrl);
+
+            // Điền số lượng hiện tại vào input
+            $('#quantity').val(currentQuantity);
         });
     </script>
 @endsection

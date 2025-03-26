@@ -37,8 +37,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
 
-    //kho hàng
-    Route::resource('inventories', InventoryController::class)->only(['index']);
+    // Kho hàng
+    Route::resource('inventory', InventoryController::class)->only(['index']);
+    Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
+    Route::delete('inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::put('inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
