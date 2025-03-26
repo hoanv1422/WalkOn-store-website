@@ -55,7 +55,7 @@ class CheckoutController extends Controller
 
 
             $order = Order::create([
-                'order_code' => 'ORD' . date('YmdHis') . strtoupper(Str::random(4)),
+                'order_code' => 'ORD' . date('Ymd') . strtoupper(Str::random(4)),
                 'user_id' => $user->id,
                 'user_email' => $user->mail,
                 'user_name' => $user->username,

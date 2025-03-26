@@ -29,8 +29,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        // Giả sử bạn có model Product, lấy tất cả sản phẩm
-        $products = Product::all();
+        
+        $products = Product::query()->latest()->get();
         $products_active = Product::query()->where('is_active', true)->get();
         $products_non_active = Product::query()->where('is_active', false)->get();
 
