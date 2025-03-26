@@ -453,7 +453,7 @@
                                                                             <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
                                                                                 <img src="{{ Storage::url($item->image) }}"
                                                                                     alt=""
-                                                                                    class="img-fluid d-block object-fit-cover">
+                                                                                    class="img-fluid d-block h-100 object-fit-cover">
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">
@@ -578,10 +578,10 @@
                                                             <td class="gridjs-td"><span>
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded p-1">
-                                                                                <img src="{{ asset('templates/admin/assets/images/products/img-1.png') }}"
+                                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
+                                                                                <img src="{{ Storage::url($item->image) }}"
                                                                                     alt=""
-                                                                                    class="img-fluid d-block">
+                                                                                    class="img-fluid d-block h-100 object-fit-cover">
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">
@@ -703,10 +703,10 @@
                                                             <td class="gridjs-td"><span>
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded p-1">
-                                                                                <img src="{{ asset('templates/admin/assets/images/products/img-1.png') }}"
+                                                                            <div class="avatar-sm bg-light rounded p-1 overflow-hidden">
+                                                                                <img src="{{ Storage::url($item->image) }}"
                                                                                     alt=""
-                                                                                    class="img-fluid d-block">
+                                                                                    class="img-fluid d-block h-100 object-fit-cover">
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1">
