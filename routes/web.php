@@ -54,7 +54,6 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-        session()->forget('email_verification_sent');
         return redirect()->route('verified.email')->with('message', 'Email đã được xác thực thành công!');
     })->middleware('signed')->name('verification.verify');
 

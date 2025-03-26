@@ -5,7 +5,9 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Order;
 use App\Policies\OrderPolicy;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Xác thực email của bạn ')
+                ->view('emails.verify_email', ['verificationUrl' => $url]);
+        });
     }
 }

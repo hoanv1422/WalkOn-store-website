@@ -15,7 +15,7 @@
                             <div class="login-form">
                                 <form action="{{ route('password.email') }}" method="POST">
                                     @csrf
-                                    <input name="email" placeholder="Nhập email" type="email" required>
+                                    <input name="email" placeholder="Nhập email " type="email" required>
                                     <div class="button-box">
                                         <button type="submit" class="default-btn">Lấy lại mật khẩu</button>
                                     </div>

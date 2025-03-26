@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -100,22 +101,20 @@ class AuthController extends Controller
 
     public function sendResetLink(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email'
-        ]);
+        $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return back()->withErrors(['email' => 'Không tìm thấy tài khoản.']);
+        $status = Password::sendResetLink($request->only('email'), function ($user, $token) {
+            Mail::to($user->email)->send(new ResetPasswordMail($token, $user->email));
+        });
+
+        if ($status === Password::RESET_LINK_SENT) {
+            session(['password_reset_requested' => true]);
+            return redirect()->route('confirmation.password');
         }
 
-        Password::sendResetLink($request->only('email'));
-
-        session(['password_reset_requested' => true]);
-        Log::info('Session password_reset_requested: ', ['session' => session()->all()]);
-
-        return redirect()->route('confirmation.password');
+        return back()->withErrors(['email' => 'Không thể gửi email. Vui lòng thử lại sau.']);
     }
+
 
     public function showResetForm($token)
     {
@@ -153,12 +152,12 @@ class AuthController extends Controller
         if (!$request->user()) {
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xác thực email.');
         }
-
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->route('verified.email')->with('message', 'Email đã được xác thực trước đó.');
         }
         $request->user()->sendEmailVerificationNotification();
         session(['email_verification_sent' => true]);
+
         return redirect()->route('email.sent')->with('message', 'Email xác thực đã được gửi!');
     }
 }
