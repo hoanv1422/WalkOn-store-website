@@ -65,6 +65,11 @@ class Product extends Model
         return $this->belongsToMany(Size::class, 'product_variants', 'product_id', 'size_id')->distinct();
     }
 
+    public function comments() 
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function relatedProducts()
     {
         return Product::where('id', '!=', $this->id)

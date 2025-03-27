@@ -35,8 +35,8 @@ class StoreProductRequest extends FormRequest
             'price_sale' => 'nullable|numeric|min:0|max:9999999999.99|lt:price', // Giá sale phải nhỏ hơn giá gốc
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Chỉ chấp nhận ảnh, tối đa 2MB
             'product_galleries.*' => 'nullable|image|mimes:jpeg,png,jpg', // Mỗi ảnh trong thư viện ảnh
-            'product_variant' => 'nullable|array|min:1', // Bắt buộc, phải là mảng, ít nhất 1 biến thể
-            'product_variant.*.size' => 'required', // Dung lượng biến thể
+            'product_variant' => 'required|array|min:1', // Bắt buộc, phải là mảng, ít nhất 1 biến thể
+            'product_variant.*.size' => 'required', 
             'product_variant.*.color' => 'required', 
             'product_variant.*.quantity' => 'required|numeric|min:0', 
             'product_variant.*.price' => 'required|numeric|min:0',
@@ -75,6 +75,7 @@ class StoreProductRequest extends FormRequest
             'product_galleries.*.image' => 'Mỗi tệp trong thư viện ảnh phải là hình ảnh.',
             'product_galleries.*.mimes' => 'Ảnh trong thư viện phải có định dạng: jpeg, png, jpg.',
 
+            'product_variant.required' => 'Phải có ít nhất 1 biến thể.',
             'product_variant.array' => 'Danh sách biến thể sản phẩm không hợp lệ.',
             'product_variant.min' => 'Sản phẩm phải có ít nhất một biến thể.',
 

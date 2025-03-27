@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CouponBrand;
 use App\Models\CouponCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,20 +22,24 @@ class CouponController extends Controller
     public function index(Request $request)
     {
         try {
-            $categories = Category::query()->where("is_active", true)->get();
-            $brands = Brand::query()->where("is_active", true)->get();
-            $status = $request->get('status');
+            $categories = Category::where("is_active", true)->get();
+            $brands = Brand::where("is_active", true)->get();
 
             $query = Coupon::query();
 
-            if ($status === 'delivered') {
-                $query->where('is_active', 1)->where('end_time', '>', now());
-            } elseif ($status === 'pickups') {
-                $query->where('is_active', 0);
-            } elseif ($status === 'returns') {
-                $query->where('end_time', '<', now());
-            } elseif ($status === 'cancelled') {
-                $query->where('is_active', 0)->where('end_time', '<', now());
+            // Lọc theo tên
+            if ($request->filled('name')) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('code', 'LIKE', "%{$request->name}%")
+                        ->orWhere('description', 'LIKE', "%{$request->name}%");
+                });
+            }
+
+            // Lọc theo ngày
+            if ($request->filled('date')) {
+                $date = Carbon::parse($request->date)->startOfDay();
+                $query->whereDate('start_time', '<=', $date)
+                    ->whereDate('end_time', '>=', $date);
             }
 
             $coupons = $query->get();
@@ -43,6 +48,9 @@ class CouponController extends Controller
             return back()->with("error", "Lỗi không thể vào trang này");
         }
     }
+
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -80,7 +88,7 @@ class CouponController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()-> route("coupons.index")->with("success", "Thêm thành công!");
+            return redirect()->route("coupons.index")->with("success", "Thêm thành công!");
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
@@ -91,7 +99,8 @@ class CouponController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Coupon $coupon) {
+    public function show(Coupon $coupon)
+    {
         $categories = Category::query()->where("is_active", true)->get();
         $brands = Brand::query()->where("is_active", true)->get();
 
@@ -127,7 +136,7 @@ class CouponController extends Controller
 
             $coupon->update($data);
 
-            CouponCategory::where('coupon_id', $coupon->id)->delete(); 
+            CouponCategory::where('coupon_id', $coupon->id)->delete();
             foreach ($categories as $category_id) {
                 CouponCategory::query()->create([
                     'coupon_id' => $coupon->id,
@@ -135,7 +144,7 @@ class CouponController extends Controller
                 ]);
             }
 
-            CouponBrand::where('coupon_id', $coupon->id)->delete(); 
+            CouponBrand::where('coupon_id', $coupon->id)->delete();
             foreach ($brands as $brand_id) {
                 CouponBrand::query()->create([
                     'coupon_id' => $coupon->id,

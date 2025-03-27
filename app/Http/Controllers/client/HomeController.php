@@ -15,6 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $products = Product::orderBy('id', 'desc')->take(6)->get();
+        
         $brands = Brand::with('products')->get();
         $products_average_rating = Product::where('average_rating', '>', 3.5)->get();
         

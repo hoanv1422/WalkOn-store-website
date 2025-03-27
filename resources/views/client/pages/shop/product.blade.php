@@ -5,7 +5,7 @@
             <div class="col-lg-3">
                 <div class="product-sidebar">
                     <div class="sidebar-title">
-                        <h2>Shopping Options</h2>
+                        <h2>BỘ LỌC TÌm kiếm</h2>
                     </div>
 
                     {{-- Form lọc sản phẩm --}}
@@ -13,7 +13,7 @@
                         {{-- Category --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Category</h3>
+                                <h3>danh mục</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -31,7 +31,7 @@
                         {{-- Color --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Color</h3>
+                                <h3>màu sắc</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -49,7 +49,7 @@
                         {{-- Brand --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Manufacturer</h3>
+                                <h3>thương hiệu</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -63,18 +63,48 @@
                                 </ul>
                             </div>
                         </div>
+                        {{-- Sizes --}}
+                        <div class="single-sidebar">
+                            <div class="single-sidebar-title">
+                                <h3> Kích cỡ</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <ul>
+                                    @foreach ($sizes as $size)
+    <li>
+        <input type="checkbox" name="size[]" value="{{ $size->id }}" 
+            {{ request()->has('size') && in_array($size->id, (array) request()->size) ? 'checked' : '' }}>
+        {{ $size->size }}
+    </li>
+@endforeach
+                                </ul>
+                            </div>
+                        </div>
 
                         {{-- Price --}}
                         <div class="single-sidebar price">
                             <div class="single-sidebar-title">
-                                <h3>Price</h3>
+                                <h3>Khoảng Giá</h3>
                             </div>
-                            <div class="single-sidebar-content">
-                                <input type="number" name="min_price" placeholder="Min Price"
-                                    value="{{ request('min_price') }}">
-                                <input type="number" name="max_price" placeholder="Max Price"
-                                    value="{{ request('max_price') }}">
+                            <div class="d-flex align-items-center">
+                                <!-- Ô nhập giá thấp nhất -->
+                                <div class="input-group">
+                                    <span class="input-group-text">₫</span>
+                                    <input type="number" name="min_price" min="0" class="form-control" placeholder="TỪ" value="{{ request('min_price') }}">
+                                </div>
+                                
+                                <span class="mx-2">–</span> 
+                                
+                                <!-- Ô nhập giá cao nhất -->
+                                <div class="input-group">
+                                    <span class="input-group-text">₫</span>
+                                    <input type="number" name="max_price" min="0" class="form-control" placeholder="ĐẾN" value="{{ request('max_price') }}">
+                                </div>
                             </div>
+                            {{-- <div class="single-sidebar-content">
+                                <input type="number" name="min_price" min="0" placeholder="Min Price" value="{{ request('min_price') }}">
+                                <input type="number" name="max_price" min="0" placeholder="Max Price" value="{{ request('max_price') }}">
+                            </div> --}}
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-3">Search</button>
@@ -174,93 +204,30 @@
                                                         <a href="" title="{{ $product->name }}">
                                                             {{ $product->name }}</a>
                                                     </div>
-                                                    <div class="price-rating">
-                                                        <span
-                                                            class="old-price">{{ number_format($product->price, 0, ',', '.') }}
-                                                            VND</span>
-                                                        <span class="text-danger">
-                                                            {{ number_format($product->price_sale, 0, ',', '.') }}
-                                                            VND</span>
-                                                        <div class="ratings">
-                                                            @for ($i = 0; $i < 5; $i++)
-                                                                @if ($i < $product->average_rating)
-                                                                    <i class="fa fa-star"></i>
-                                                                @else
-                                                                    <i class="fa fa-star-half-o"></i>
-                                                                @endif
-                                                            @endfor
-                                                            {{-- <a href="#"
-                                                                class="review">{{ $product->reviews_count }}
-                                                                Review(s)</a>
-                                                            <a href="#" class="add-review">Add Your Review</a> --}}
-                                                        </div>
+                                                    <div class="product-img">
+                                                        <a href="{{ route('detail.index', $product->slug) }}">
+                                                            <img src="{{ Storage::url($product->image) }}" alt="" class="primary-img">
+                                                            <img src="{{ Storage::url($product->image) }}" alt="" class="secondary-img">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-price">
+                                                        <a href="{{ route('detail.index', $product->slug) }}" title="{{ $product->name }}">{{ $product->name }}</a>
+                                                        <span>{{ number_format($product->price, 0, ',', '.') }} VND</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                           
+                                        @endforeach
+                                    @endif
                                 </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade home2" id="list">
-                                <div class="product-catagory">
-                                    @foreach ($products as $product)
-                                        <div class="single-list-product row">
-                                            <div class="col-md-4">
-                                                <div class="list-product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="{{ Storage::url($product->image) }}" alt=""
-                                                            class="primary-img">
-                                                        <img src="{{ Storage::url($product->image) }}" alt=""
-                                                            class="secondary-img">
-                                                        {{-- <img src="img/product/25.png" alt=""> --}}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="list-product-info">
-                                                    <a href="{{ url('single-product/' . $product->id) }}"
-                                                        class="list-product-name">{{ $product->name }}</a>
-                                                    <div class="price-rating">
-                                                        <span
-                                                            class="old-price">{{ number_format($product->price, 0, ',', '.') }}
-                                                            VND</span>
-                                                        <span class="text-danger">
-                                                            {{ number_format($product->price_sale, 0, ',', '.') }}
-                                                            VND</span>
-                                                        <div class="ratings">
-                                                            @for ($i = 0; $i < 5; $i++)
-                                                                @if ($i < $product->average_rating)
-                                                                    <i class="fa fa-star"></i>
-                                                                @else
-                                                                    <i class="fa fa-star-half-o"></i>
-                                                                @endif
-                                                            @endfor
-                                                            <a href="#"
-                                                                class="review">{{ $product->reviews_count }}
-                                                                Review(s)</a>
-                                                            <a href="#" class="add-review">Add Your Review</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="list-product-details">
-                                                        <p>
-                                                            {{ $product->description }}
-
-                                                        </p>
-                                                        <a href="{{ url('single-product/' . $product->id) }}">Learn
-                                                            More</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="toolbar-bottom">
-                            {{ $products->links() }}
-                        </div>
+
+                    {{-- Phân trang --}}
+                    <div class="col-md-12 d-flex justify-content-center">
+                        {{ $products->appends(request()->input())->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

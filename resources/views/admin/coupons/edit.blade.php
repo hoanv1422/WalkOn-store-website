@@ -1,7 +1,27 @@
 @extends('admin.layouts.app')
 @section('title', 'Mã Giảm Giá')
 @section('style')
-    {{-- <style>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(90deg, #405189, #6775b0);
+
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .badge {
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
         .selected-item {
             display: inline-block;
             background: #007bff;
@@ -17,52 +37,16 @@
             font-weight: bold;
             cursor: pointer;
         }
-    </style> --}}
 
-    <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
 
-<!-- Custom CSS -->
-<style>
-    .bg-gradient-primary {
-        background: linear-gradient(90deg, #007bff, #00c4cc);
-    }
-    .card {
-        transition: transform 0.2s;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-    }
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-    .badge {
-        font-weight: bold;
-        border-radius: 10px;
-    }
-    .selected-item {
-        display: inline-block;
-        background: #007bff;
-        color: #fff;
-        padding: 5px 10px;
-        margin: 2px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .selected-item span {
-        margin-left: 8px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .btn-success {
-        background-color: #28a745;
-        border: none;
-    }
-    .btn-success:hover {
-        background-color: #218838;
-    }
-</style>
+        .btn-success:hover {
+            background-color: #218838;
+        }
+    </style>
 @endsection
 @section('content')
     @php
@@ -75,12 +59,12 @@
                 <!-- Card Header -->
                 <div
                     class="card-header bg-gradient-primary text-white p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0"><i class="fas fa-edit me-2"></i> Sửa Mã Giảm Giá</h5>
+                    <h5 class="card-title mb-0 text-white"><i class="fas fa-edit me-2"></i> Sửa Mã Giảm Giá</h5>
                     <span class="badge bg-light text-dark fs-4 px-3 py-2">{{ $coupon->code }}</span>
                 </div>
 
                 <!-- Card Body -->
-                <form action="{{ route('coupons.update', $coupon) }}" method="POST" class="p-4">
+                <form action="{{ route('coupons.update', $coupon) }}" method="POST" class="p-4 tablelist-form">
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="id-field" />
@@ -92,7 +76,7 @@
                             <div class="col-12">
                                 <label for="code" class="form-label fw-bold">Mã Code</label>
                                 <input type="text" id="code" name="code" class="form-control"
-                                    placeholder="Nhập mã code" value="{{ $coupon->code }}" required />
+                                    placeholder="Nhập mã code" value="{{ $coupon->code }}" />
                                 <div class="error-message text-danger mt-1">{{ $errors->first('code') }}</div>
                             </div>
                             <div class="col-12">
@@ -111,11 +95,13 @@
                                 <label for="discount-type-field" class="form-label fw-bold">Loại</label>
                                 <select name="discount_type" id="discount-type-field" class="form-control">
                                     <option value="percentage"
-                                        {{ $coupon->discount_type == 'percentage' ? 'selected' : '' }}>Percentage</option>
-                                    <option value="fixed" {{ $coupon->discount_type == 'fixed' ? 'selected' : '' }}>Fixed
+                                        {{ $coupon->discount_type == 'percentage' ? 'selected' : '' }}>Giảm giá theo phần
+                                        trăm</option>
+                                    <option value="fixed" {{ $coupon->discount_type == 'fixed' ? 'selected' : '' }}>Giảm
+                                        giá cố định
                                     </option>
                                     <option value="freeship" {{ $coupon->discount_type == 'freeship' ? 'selected' : '' }}>
-                                        FreeShip</option>
+                                        Miễn phí giảm giá</option>
                                 </select>
                                 <div class="error-message text-danger mt-1">{{ $errors->first('discount_type') }}</div>
                             </div>
@@ -123,7 +109,7 @@
                                 <label for="discount-value-field" class="form-label fw-bold">Giá Trị</label>
                                 <div class="input-group">
                                     <input type="number" id="discount-value-field" class="form-control"
-                                        name="discount_value" value="{{ $coupon->discount_value }}" required />
+                                        name="discount_value" value="{{ $coupon->discount_value }}" />
                                     <span class="input-group-text"
                                         id="discount-unit">{{ $coupon->discount_type == 'percentage' ? '%' : 'VNĐ' }}</span>
                                 </div>
@@ -145,6 +131,20 @@
                                     name="max_shipping_discount" value="{{ $coupon->max_shipping_discount }}"
                                     placeholder="Nhập số tiền tối đa" />
                                 <div class="error-message text-danger mt-1">{{ $errors->first('max_shipping_discount') }}
+                                </div>
+                            </div>
+                            <!-- Thêm trường Số tiền giảm tối đa -->
+                            <div class="col-md-6" id="max-discount-amount-container">
+                                <label for="max-discount-amount-field" class="form-label fw-bold">Số Tiền Giảm Tối
+                                    Đa</label>
+                                <div class="input-group">
+                                    <input type="number" id="max-discount-amount-field" class="form-control"
+                                        name="maximum_discount_amount" value="{{ $coupon->maximum_discount_amount }}"
+                                        placeholder="Nhập số tiền giảm tối đa" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+
+                                <div class="error-message text-danger mt-1">{{ $errors->first('maximum_discount_amount') }}
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                     <!-- Status -->
                     <div class="mb-4">
                         <h6 class="text-muted fw-bold"><i class="fas fa-toggle-on me-1"></i> Trạng Thái</h6>
-                        <select class="form-control" name="is_active" required id="delivered-status">
+                        <select class="form-control" name="is_active" id="delivered-status">
                             <option value="1" {{ $coupon->is_active == 1 ? 'selected' : '' }}>Hoạt Động</option>
                             <option value="0" {{ $coupon->is_active == 0 ? 'selected' : '' }}>Khóa</option>
                         </select>
@@ -266,78 +266,101 @@
                     "border-danger"));
 
                 function showError(input, message) {
+                    if (!input) return;
                     isValid = false;
                     input.classList.add("border-danger");
-                    let errorDiv = input.parentElement.querySelector(".error-message");
-                    if (errorDiv) {
-                        errorDiv.innerText = message;
+                    let parent = input.parentElement;
+                    while (parent && !parent.querySelector(".error-message")) {
+                        parent = parent.parentElement;
                     }
+                    const errorDiv = parent ? parent.querySelector(".error-message") : null;
+                    if (errorDiv) errorDiv.innerText = message;
                 }
 
-                // Validate Mã Code
-                let code = document.getElementById("code");
+                const code = document.getElementById("code");
+                const description = document.getElementById("description-field");
+                const discountType = document.getElementById("discount-type-field");
+                const discountValue = document.getElementById("discount-value-field");
+                const minimumOrderValue = document.getElementById("minimum_order_value");
+                const maxUses = document.getElementById("max_uses");
+                const maxUsesPerUser = document.getElementById("max-uses-per-user-field");
+                const maxShippingDiscount = document.getElementById("max-shipping-discount-field");
+                const maxDiscountAmount = document.getElementById("max-discount-amount-field");
+                const startTime = document.querySelector("input[name='start_time']");
+                const endTime = document.querySelector("input[name='end_time']");
+                const categoryId = document.getElementById("category-id");
+                const brandId = document.getElementById("brand-id");
+                const isActive = document.getElementById("delivered-status");
+
                 if (!code.value.trim()) showError(code, "Mã Code không được để trống");
 
-                // Validate Mô tả
-                let description = document.getElementById("description-field");
                 if (!description.value.trim()) showError(description, "Mô tả không được để trống");
 
-                // Validate Loại Giảm Giá
-                let discountType = document.getElementById("discount-type-field");
                 if (!discountType.value) showError(discountType, "Vui lòng chọn loại giảm giá");
 
-                // Validate Giá Trị Giảm Giá
-                let discountValue = document.getElementById("discount-value-field");
-                if (discountValue.disabled) {
-                    let errorDiv = discountValue.parentElement.querySelector(".error-message");
-                    if (errorDiv) errorDiv.innerText = ""; // Xóa lỗi nếu input bị disable
-                    discountValue.classList.remove("border-danger");
-                } else if (discountValue.value === "" || parseFloat(discountValue.value) <= 0) {
-                    showError(discountValue, "Giá trị phải lớn hơn 0");
+
+                if (!minimumOrderValue.value || parseFloat(minimumOrderValue.value) < 0) {
+                    showError(minimumOrderValue, "Giá trị đơn hàng tối thiểu phải lớn hơn hoặc bằng 0");
                 }
 
-                // Validate Số Lần Sử Dụng
-                let maxUses = document.getElementById("max_uses");
-                if (maxUses.value === "" || parseInt(maxUses.value) < 1) {
+                if (!maxUses.value || parseInt(maxUses.value) < 1) {
                     showError(maxUses, "Số lần sử dụng phải lớn hơn 0");
                 }
 
-                // Validate Giá Trị Đơn Hàng Tối Thiểu
-                let minimumOrderValue = document.getElementById("minimum_order_value");
-                if (minimumOrderValue.value === "" || parseInt(minimumOrderValue.value) < 1) {
-                    showError(minimumOrderValue, "Giá trị đơn hàng tối thiểu phải lớn hơn 0");
-                }
-
-                // Validate Số Mã/Người
-                let maxUsesPerUser = document.getElementById("max-uses-per-user-field");
-                if (maxUsesPerUser.value === "" || parseInt(maxUsesPerUser.value) < 1) {
+                if (!maxUsesPerUser.value || parseInt(maxUsesPerUser.value) < 1) {
                     showError(maxUsesPerUser, "Số mã/người phải lớn hơn 0");
                 }
 
-                // Validate Số Giảm Giá Tối Đa Vận Chuyển (chỉ khi freeship)
-                let maxShippingDiscount = document.getElementById("max-shipping-discount-field");
                 if (discountType.value === "freeship") {
-                    if (maxShippingDiscount.value === "" || parseInt(maxShippingDiscount.value) < 1) {
-                        showError(maxShippingDiscount, "Số giảm giá tối đa vận chuyển phải lớn hơn 0");
+                    if (!maxShippingDiscount.value || parseInt(maxShippingDiscount.value) < 1) {
+                        showError(maxShippingDiscount, "Số giảm giá vận chuyển tối đa phải lớn hơn 0");
                     }
                 }
 
-                // Validate Ngày Phát Hành và Ngày Kết Thúc
-                let startDate = document.querySelector("input[name='start_time']");
-                let endDate = document.querySelector("input[name='end_time']");
+                if (!discountValue.disabled) {
+                    if (!discountValue.value || parseFloat(discountValue.value) <= 0) {
+                        showError(discountValue, "Giá trị giảm phải lớn hơn 0");
+                    } else if (discountType.value === "percentage" && parseFloat(discountValue.value) >
+                        100) {
+                        showError(discountValue, "Giá trị giảm không được vượt quá 100%");
+                    } else if (discountType.value === "fixed" && parseFloat(discountValue.value) >
+                        parseFloat(minimumOrderValue.value)) {
+                        showError(discountValue,
+                            "Giá trị giảm không được lớn hơn giá trị đơn hàng tối thiểu");
+                    }
+                }
 
-                if (!startDate.value) {
-                    showError(startDate, "Vui lòng chọn ngày phát hành");
+                if (discountType.value === "percentage") {
+                    if (!maxDiscountAmount.value || parseInt(maxDiscountAmount.value) < 0) {
+                        showError(maxDiscountAmount, "Số tiền giảm tối đa phải lớn hơn hoặc bằng 0");
+                    } else if (parseInt(maxDiscountAmount.value) < parseInt(minimumOrderValue.value)) {
+                        showError(maxDiscountAmount,
+                            "Số tiền giảm tối đa không được lớn hơn giá trị đơn hàng tối thiểu");
+                    }
                 }
-                if (!endDate.value) {
-                    showError(endDate, "Vui lòng chọn ngày kết thúc");
-                }
-                if (startDate.value && endDate.value && new Date(startDate.value) > new Date(endDate
+
+                if (!startTime.value) showError(startTime, "Vui lòng chọn ngày phát hành");
+
+                if (!endTime.value) showError(endTime, "Vui lòng chọn ngày kết thúc");
+
+                if (startTime.value && endTime.value && new Date(startTime.value) > new Date(endTime
                         .value)) {
-                    showError(endDate, "Ngày kết thúc phải sau ngày phát hành");
+                    showError(endTime, "Ngày kết thúc phải sau ngày phát hành");
                 }
 
-                // Nếu hợp lệ, submit form
+                if (!categoryId.value || categoryId.value === "[]") {
+                    showError(document.getElementById("category-select"),
+                        "Vui lòng chọn ít nhất một danh mục");
+                }
+
+                if (!brandId.value || brandId.value === "[]") {
+                    showError(document.getElementById("brand-select"),
+                        "Vui lòng chọn ít nhất một thương hiệu");
+                }
+
+                if (!isActive.value) showError(isActive, "Vui lòng chọn trạng thái");
+
+                // Submit nếu hợp lệ
                 if (isValid) form.submit();
             });
         });

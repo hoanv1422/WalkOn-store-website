@@ -45,7 +45,7 @@ Route::middleware('client')->group(function () {
     Route::delete('/cart/items/clear', [CartController::class, 'clearCartItems'])->name('cart.items.clear');
 
     //coupon
-    Route::post('/coupon-apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+    Route::post('/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
 
     // Order
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
@@ -67,6 +67,8 @@ Route::middleware('client')->group(function () {
 
     // Blog comment
     Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
+
+    Route::post('address', [ProfileController::class, 'createAddress'])->name('create.address');
 
 
     // Checkout

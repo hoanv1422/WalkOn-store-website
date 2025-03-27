@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -147,6 +148,41 @@ class ProfileController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+    public function createAddress(Request $request)
+    {
+        $user = Auth::user();
+        $data = $request->all();
+
+        $data['user_id'] = $user->id;
+        $data['city'] = $request->province_name;
+        $data['district'] = $request->district_name;
+        $data['ward'] = $request->ward_name;
+        $data['address_line'] = $request->address_line;
+        $data['type'] = $request->addressType;
+        $data['latitude'] = $request->latitude;
+        $data['longitude'] = $request->longitude;
+        $data['is_default'] = $request->has('default_address') ? 1 : 0;
+
+        try {
+            DB::beginTransaction();
+
+            if ($data['is_default'] == 1) {
+                Address::where('user_id', $user->id)->update(['is_default' => 0]);
+            }
+
+            Address::create($data);
+
+            DB::commit();
+            return back()->with('success', 'Thêm địa chỉ thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi khi thêm');
         }
     }
 }

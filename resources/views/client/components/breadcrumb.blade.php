@@ -4,7 +4,7 @@
             <div class="location">
                 <ul>
                     <li><a href="index.html" title="go to homepage">Home<span>/</span></a> </li>
-                    <li><strong> wishlist ** </strong></li>
+                    <li><strong>  *wishlist* </strong></li>
                 </ul>
             </div>
         </div>
