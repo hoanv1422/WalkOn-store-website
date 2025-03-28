@@ -154,11 +154,10 @@ class OrderController extends Controller
             'confirmed'  => ['processing', 'cancelled'],
             'processing' => ['shipped', 'cancelled'],
             'shipped'    => ['delivered'],
-            'delivered'  => ['returned'],
-            'returned'   => [],
+            'delivered'  => [],
             'cancelled'  => [],
         ];
-
+        
         if (! in_array($newStatus, $allowedTransitions[$oldStatus])) {
             $errorMsg = "Chuyển trạng thái từ '$oldStatus' sang '$newStatus' không hợp lệ. Vui lòng kiểm tra lại quy trình chuyển trạng thái.";
             if ($request->ajax()) {
@@ -206,8 +205,7 @@ class OrderController extends Controller
             'confirmed'  => ['processing', 'cancelled'],
             'processing' => ['shipped', 'cancelled'],
             'shipped'    => ['delivered', 'cancelled'],
-            'delivered'  => ['returned'],
-            'returned'   => [],
+            'delivered'  => [],
             'cancelled'  => [],
         ];
 
@@ -219,7 +217,6 @@ class OrderController extends Controller
                 'shipped'    => 'Đang giao',
                 'delivered'  => 'Đã giao',
                 'cancelled'  => 'Đã hủy',
-                'returned'   => 'Trả hàng'
             ];
             $errorMsg = "Chuyển trạng thái từ '{$order->order_status_vn}' sang '" . ($mapping[$newStatus] ?? $newStatus) . "' không hợp lệ. Vui lòng kiểm tra lại quy trình chuyển trạng thái.";
             return redirect()->back()->with('error', $errorMsg);
@@ -243,94 +240,4 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Đơn hàng đã được hủy thành công.');
     }
-    /**
-     * Hiển thị danh sách backup dựa trên bộ lọc.
-     */
-    public function showBackups(Request $request)
-    {
-        // Lấy bộ lọc từ request
-        $orderCode = $request->input('order_code'); // Mã đơn hàng
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-
-        $query = OrderBackup::query();
-
-        // Nếu có order_code, lọc theo đơn hàng đó
-        if ($orderCode) {
-            // Giả sử bạn có thể tìm đơn hàng theo order_code
-            $order = Order::where('order_code', $orderCode)->first();
-            if ($order) {
-                $query->where('original_order_id', $order->id);
-            }
-        }
-
-        // Lọc theo khoảng ngày (nếu được cung cấp)
-        if ($startDate) {
-            $query->whereDate('created_at', '>=', Carbon::parse($startDate));
-        }
-        if ($endDate) {
-            $query->whereDate('created_at', '<=', Carbon::parse($endDate));
-        }
-
-        $backups = $query->orderBy('created_at', 'desc')->get();
-
-        // Trả về view với danh sách backup
-        return view('admin.orders.restore_backups', compact('backups'));
-    }
-
-    /**
-     * Thực hiện restore một bản backup cụ thể.
-     *
-     * @param int $backupId
-     */
-    public function restoreBackup($backupId)
-    {
-        $backup = OrderBackup::find($backupId);
-
-        if (!$backup) {
-            return redirect()->back()->with('error', 'Không tìm thấy bản backup nào.');
-        }
-
-        $order = Order::find($backup->original_order_id);
-        if (!$order) {
-            return redirect()->back()->with('error', 'Không tìm thấy đơn hàng gốc.');
-        }
-
-        $data = json_decode($backup->data, true);
-        // Loại bỏ các trường không cần thiết
-        unset($data['id'], $data['created_at'], $data['updated_at']);
-
-        $order->update($data);
-
-        return redirect()->route('orders.index')
-            ->with('success', 'Đơn hàng đã được khôi phục thành công từ bản backup.');
-    }
-    public function restoreBackupsByDate(Request $request)
-{
-    $date = $request->input('date');
-    if (!$date) {
-        return redirect()->back()->with('error', 'Bạn chưa chọn ngày để khôi phục.');
-    }
-
-    $backups = OrderBackup::whereDate('created_at', $date)->orderBy('created_at', 'desc')->get();
-
-    if ($backups->isEmpty()) {
-        return redirect()->back()->with('error', "Không có bản backup nào cho ngày {$date}.");
-    }
-
-    $restoredCount = 0;
-    foreach ($backups as $backup) {
-        $order = Order::find($backup->original_order_id);
-        if ($order) {
-            $data = json_decode($backup->data, true);
-            unset($data['id'], $data['created_at'], $data['updated_at']);
-            $order->update($data);
-            $restoredCount++;
-        }
-    }
-
-    return redirect()->route('orders.index')
-           ->with('success', "Đã khôi phục thành công {$restoredCount} đơn hàng từ bản backup ngày {$date}.");
-}
-
 }

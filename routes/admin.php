@@ -45,11 +45,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('orders.updateStatus');
     Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
-        Route::get('order-backups', [OrderController::class, 'showBackups'])
-        ->name('orders.backups');
-    Route::put('order-backups/restore/{backupId}', [OrderController::class, 'restoreBackup'])
-        ->name('orders.restoreBackup');
-        Route::put('order-backups/restore-by-date', [OrderController::class, 'restoreBackupsByDate'])->name('orders.restoreBackupsByDate');
+
+
 });
 
 Route::prefix('admin')->group(function () {

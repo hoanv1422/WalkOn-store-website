@@ -30,7 +30,7 @@ return new class extends Migration
 
             // Thông tin đơn hàng
             $table->string('coupon')->nullable();
-            $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
+            $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
             $table->decimal('total_price', 15, 2);

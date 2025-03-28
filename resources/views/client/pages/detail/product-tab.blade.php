@@ -165,6 +165,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
 <!-- single product tab end -->

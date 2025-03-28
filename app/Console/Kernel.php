@@ -10,14 +10,11 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected $commands = [
-        \App\Console\Commands\RestoreOrderCommand::class,
-    ];
+ 
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('backup:orders-daily')->dailyAt('23:59');
-        $schedule->command('order:cleanup-backups --days=14')->dailyAt('03:00');
+   
     }
 
     /**

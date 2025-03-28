@@ -348,7 +348,7 @@
             if (!addButton) return;
             const inStock = state.currentVariant && parseInt(state.currentVariant['quantity']) > 0;
             addButton.disabled = !inStock;
-            addButton.innerHTML = inStock ? 'Thêm vào giỏ hàng' : 'Hết hàng';
+            addButton.innerHTML = inStock ? 'Thêm vào giỏ hàng' : 'Thêm vào giỏ hàng';
             addButton.classList.toggle('btn-success', inStock);
             addButton.classList.toggle('btn-secondary', !inStock);
         };

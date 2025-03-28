@@ -109,7 +109,6 @@
                                                 <option value="shipped">Đang giao</option>
                                                 <option value="delivered">Đã giao</option>
                                                 <option value="cancelled">Đã hủy</option>
-                                                <option value="returned">Trả hàng</option>
                                             </select>
                                         </div>
                                     </div>
