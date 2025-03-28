@@ -5,7 +5,7 @@
             <div class="col-md-12">
                 <div class="big-banner">
                     <a href="#">
-                        <img src="img/banner/banner-10.jpg" alt="">
+                        <img src="img/banner/banner-10.jpg" alt=""> 
                     </a>
                 </div>
             </div>

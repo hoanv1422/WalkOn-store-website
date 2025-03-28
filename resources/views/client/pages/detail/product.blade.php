@@ -116,7 +116,7 @@
                         <span id="totalPriceDisplay"></span>
                     </div>
                     <!-- Form thêm vào giỏ hàng -->
-                    <form action="{{ route('cart.add', $product->id) }}" method="post">
+                    <form action="{{ route('cart.add') }}" method="post">
                         @csrf
                         <!-- Chỉ để 1 bộ hidden inputs -->
                         <input type="hidden" name="color" id="selectedColor">

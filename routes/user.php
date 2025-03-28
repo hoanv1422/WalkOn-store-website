@@ -39,11 +39,12 @@ Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
 Route::middleware('client')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'delete'])->name('cart.delete');
     Route::put('/cart/update/{cartItemId}', [CartController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/items/clear', [CartController::class, 'clearCartItems'])->name('cart.items.clear');
 
+    Route::get('/get-product', [HomeController::class, 'getProductById'])->name('get.product');
     //coupon
     Route::post('/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
 

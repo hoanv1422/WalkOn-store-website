@@ -18,10 +18,12 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         try {
+
             $userId = Auth::id();
             $addresses = Address::query()->where('user_id', $userId)->get();
             $addressDefault = Address::query()->where('user_id', $userId)->where('is_default', 1)->first();
             $cart = Cart::query()->where('user_id', $userId)->first();
+            $cartItemId = $request->cartItems;
             $cartItemIds = explode(',', $request->cartItems);
             $cartItems = CartItem::query()->where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->get();
             $totalPrice = 0;
@@ -34,7 +36,7 @@ class OrderController extends Controller
 
                 
             }            
-            return view('client.pages.checkout.index', compact("cartItems", "totalPrice", "addresses", "addressDefault"));
+            return view('client.pages.checkout.index', compact("cartItems", "cartItemId" ,"totalPrice", "addresses", "addressDefault"));
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {

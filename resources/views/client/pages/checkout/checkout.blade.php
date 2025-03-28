@@ -33,7 +33,7 @@
                             </button>
                         </div>
                         <div id="distance-display" class="mt-2 text-muted"></div>
-                        <input type="hidden" name="receiver_address" id="selected-address" value="">
+                        <input type="hidden" name="receiver_address" id="selected-address" value="{{ $addressDefault->full_address }}">
                         <input type="hidden" id="selected-lat" value="{{ $addressDefault->latitude }}">
                         <input type="hidden" id="selected-lon" value="{{ $addressDefault->longitude }}">
                     </div>
@@ -49,6 +49,7 @@
                 <h3 class="section-title">Đơn Hàng Của Bạn</h3>
                 <div class="order-items mb-4">
                     @foreach ($cartItems as $item)
+                        <input type="hidden" name="cartItemIds[]" value="{{$item->id}}">
                         <div class="order-item d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
                                 <img src="" alt="{{ $item->productVariant->product->name }}" class="me-3"

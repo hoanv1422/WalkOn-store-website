@@ -30,21 +30,22 @@ class CartController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-            
+
 
         return view('client.pages.cart.index', compact('cartItems'));
     }
 
-    public function addToCart(Request $request, $id)
+    public function addToCart(Request $request)
     {
-        try {
+            try {
             $user = Auth::user();
+            $productId = $request->input('product_id');
             $sizeId = $request->input('size');
             $colorId = $request->input('color');
             $quantity = $request->input('quantity');
 
             $productVariant = ProductVariant::with('product')
-                ->where('product_id', $id)
+                ->where('product_id', $productId)
                 ->where('size_id', $sizeId)
                 ->where('color_id', $colorId)
                 ->select('id', 'price', 'quantity')
@@ -98,11 +99,13 @@ class CartController extends Controller
                     'quantity' => $quantity,
                 ]);
             }
-
+            // return 1;
             return back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e);
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại!');
         }
     }
@@ -128,7 +131,7 @@ class CartController extends Controller
 
     public function clearCartItems()
     {
-        $userId = Auth::user(); 
+        $userId = Auth::user();
 
         DB::table('cart_items')->whereIn('cart_id', function ($query) use ($userId) {
             $query->select('id')->from('carts')->where('user_id', $userId);
@@ -136,5 +139,4 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Tất cả sản phẩm trong giỏ hàng đã được xóa!');
     }
-
 }

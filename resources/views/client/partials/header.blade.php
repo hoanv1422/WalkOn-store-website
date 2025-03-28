@@ -55,18 +55,27 @@
                         </div>
                         <div class="cart-menu">
                             <ul>
-                                <li><a href="#"> <img src="img/icon-cart.png" alt="">
+                                <li><a href="{{ route('cart.index') }}"> <img src="img/icon-cart.png" alt="">
                                         <span>{{ $cartCount }}</span> </a>
                                     <div class="cart-info">
                                         <ul>
                                             @foreach ($cartItems as $item)
                                                 <li>
-                                                    <div class="cart-img">
-                                                        <img src="{{ Storage::url($item->productVariant->product->image) }}"
-                                                            alt="" width="65px">
+                                                    <div class="cart-img"
+                                                        style="width: 50px; height: 50px; overflow:hidden">
+                                                        @if (!empty($item->productVariant->image) && Storage::exists($item->productVariant->image))
+                                                            <img src="{{ Storage::url($item->productVariant->image) }}"
+                                                                alt="{{ $item->productVariant->product->name }}"
+                                                                style="height: 100%; width: 100%; object-fit: cover;">
+                                                        @else
+                                                            <img src="{{ asset('img/default-image.jpg') }}"
+                                                                alt="{{ $item->productVariant->product->name }}"
+                                                                style="height: 100%; width: 100%; object-fit: cover;">
+                                                        @endif
+
                                                     </div>
                                                     <div class="cart-details">
-                                                        <a href="#"
+                                                        <a href="{{ route('detail.index', $item->productVariant->product->slug) }}"
                                                             title="{{ $item->productVariant->product->name }}">
                                                             {{ Str::limit($item->productVariant->product->name, 20, '...') }}
                                                         </a>
