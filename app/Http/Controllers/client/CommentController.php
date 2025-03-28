@@ -23,10 +23,11 @@ class CommentController extends Controller
 
         // Kiểm tra xem người dùng đã mua sản phẩm này chưa
         $hasPurchased = Order::where('user_id', $user->id)
-            ->whereHas('orderDetails', function ($query) use ($productId) {
-                $query->where('product_id', $productId);
-            })
-            ->exists();
+        ->whereHas('orderDetails', function ($query) use ($productId) {
+            $query->where('product_id', $productId);
+        })
+        ->where('status', 'Delivered')  // Thêm điều kiện trạng thái là "Delivered"
+        ->exists();
 
         return view('client.pages.detail.comments', compact('comments', 'productId', 'hasPurchased', 'user', 'averageRating'));
     }

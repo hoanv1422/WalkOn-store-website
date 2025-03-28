@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\Product;
+use App\Models\User;
 use App\Models\CommentHidden;
 use Illuminate\Http\Request;
 
@@ -12,13 +14,41 @@ class AdminCommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $comments = Comment::with('user', 'product','replies')
-        ->orderBy('created_at', 'desc')->paginate(10);
-
-    return view('admin.comments.index', compact('comments'));
+        // Lấy các tham số từ bộ lọc (nếu có)
+        $query = Comment::with('user', 'product', 'replies')->orderBy('created_at', 'desc');
+    
+        // Lọc theo sản phẩm (nếu có)
+        if ($request->filled('product_id')) {
+            $query->where('product_id', $request->product_id);
+        }
+    
+        // Lọc theo người dùng (nếu có)
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+    
+        // Lọc theo trạng thái (hiển thị hoặc ẩn)
+        if ($request->filled('hidden_comment')) {
+            $query->where('hidden_comment', $request->hidden_comment);
+        }
+    
+        // Lọc theo đánh giá(nếu có)
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+    
+        // Lấy các bình luận đã lọc
+        $comments = $query->paginate(10);
+    
+        // Truyền dữ liệu sản phẩm và người dùng để hiển thị trong bộ lọc
+        $products = Product::all();
+        $users = User::all();
+    
+        return view('admin.comments.index', compact('comments', 'products', 'users'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -70,18 +100,18 @@ class AdminCommentController extends Controller
     public function hide($id)
     {
         $comment = Comment::findOrFail($id);
-
+    
         // Kiểm tra xem bình luận đã bị ẩn chưa
-        if (!CommentHidden::where('comment_id', $id)->exists()) {
-            // Tạo một bản ghi trong bảng comment_hidden để đánh dấu bình luận bị ẩn
-            CommentHidden::create([
-                'comment_id' => $id,
-                'hidden_at' => now(),
-            ]);
+        if ($comment->hidden_comment != 1) {
+            // Đánh dấu bình luận là đã ẩn (cập nhật cột hidden_comment)
+            $comment->hidden_comment = 1; // 1 = bị ẩn
+            
+            $comment->save();
         }
-
+    
         return redirect()->back()->with('success', 'Bình luận đã được ẩn.');
     }
+    
 
     // Xem các bình luận đã ẩn
     public function hiddenComments()

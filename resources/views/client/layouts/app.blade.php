@@ -61,8 +61,16 @@
     <!-- responsive CSS
         ============================================ -->
     <link rel="stylesheet" href={{asset("templates/client/css/responsive.css")}}>
+
+    <link href="{{ asset('templates/client/css/cm.css') }}" rel="stylesheet">
     <!-- modernizr JS
+        
         ============================================ -->
+
+       {{-- binh luan  --}}
+    
+       
+
     <script src={{asset("templates/client/js/vendor/modernizr-2.8.3.min.js")}}></script>
 
     @yield('style')

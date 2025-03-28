@@ -1,0 +1,58 @@
+.fa-star {
+    color: gold;
+    /* Màu vàng */
+}
+
+.user_name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+}
+
+.muathemewpgiare-4 {
+    background-color:blue;
+    color: white;
+    width: 70px;
+    height: 30px;
+}
+
+.muathemewpgiare-4:hover {
+    animation: flame 0.5s infinite alternate;
+}
+
+@keyframes flame {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+.avg_rating {
+    font-size: 20px;
+    color: blue;
+    
+}
+
+.filler_avg{
+    font-size: 17px;
+    color: #000;
+    
+}
+.select_avg{
+    color: #000;
+    font-size:14px ;
+}
+.comment_ct{
+    color: #000;
+    font-size: 15px;
+}
+
+.content_cm{
+    width: 500px;
+    height: 250px;
+    border: 1px solid #000;
+    padding: 10px;
+}

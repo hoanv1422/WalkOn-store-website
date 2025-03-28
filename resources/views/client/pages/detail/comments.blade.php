@@ -11,12 +11,12 @@
     @endif
 
     <div>
-        <p>Đánh giá trung bình: {{ $averageRating }}</p>
+        <p class="avg_rating">Đánh giá trung bình: {{ $averageRating }}  <i class="fa fa-star"></i> </p>
     </div>
 
     <form method="GET" action="{{ route('product.detail', $product->slug) }}">
-        <label for="rating">Lọc theo đánh giá:</label>
-        <select name="rating" id="rating">
+        <label for="rating" class="filler_avg">Lọc theo đánh giá:</label>
+        <select name="rating" id="rating" class="select_avg">
             <option value="">Tất cả</option>
             <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 sao</option>
             <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 sao</option>
@@ -24,7 +24,7 @@
             <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 sao</option>
             <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 sao</option>
         </select>
-        <button type="submit">Lọc</button>
+        <button type="submit" class="muathemewpgiare muathemewpgiare-4">Lọc</button> 
     </form>
     
 
@@ -32,25 +32,29 @@
     <div class="space-y-4">
         @isset($comments)
         @foreach ($comments as $comment)
-            <div class="p-3 border rounded-lg bg-gray-100">
-                <p class="font-semibold text-blue-600">{{ $comment->user ? $comment->user->name : 'Tên người dùng không xác định' }}</p>
-                <p>{{ $comment->content }}</p>
+            <div class="p-3 border rounded-lg ">
+                <p class="user_name">{{ $comment->user ? $comment->user->name : 'Tên người dùng không xác định' }}</p>
+                <div class="product-rating-info">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <img src="{{ $i <= $comment->rating ? asset('img/comment/star-filled.png') : asset('img/comment/star-empty.png') }}" alt="star" class="star" width="25px" height="25px">
+                    @endfor
+                </div>
+                <p></p>
+
+                <p class="comment_ct">{{ $comment->content }}</p>
+                
                 
                 <!-- Hiển thị ảnh bình luận (nếu có) -->
                 <div class="mt-2">
                     @foreach ($comment->galleries as $gallery)
-                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="Image" class="w-full h-auto rounded-lg mb-2">
+                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="Image" class="w-full h-auto rounded-lg mb-2" width="150px" height="150px">
                     @endforeach
                 </div>
 
-                <div class="stars">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <img src="{{ $i <= $comment->rating ? asset('img/comment/star-filled.png') : asset('img/comment/star-empty.png') }}" alt="star" class="star" width="20px" height="20px">
-                    @endfor
-                </div>
-                <span class="text-green-600 flex items-center text-sm mt-1">
+
+                {{-- <span class="text-green-600 flex items-center text-sm mt-1">
                     ✅ Đã mua hàng
-                </span>
+                </span> --}}
             </div>
         @endforeach
         @else
@@ -62,15 +66,15 @@
     @isset($user)
         @if ($user)
             @if ($hasPurchased)
-                @if ($existingComment == null)
+                {{-- @if ($existingComment == null) --}}
                     <div class="mt-4">
                         <form method="POST" action="{{ route('comments.store') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <textarea name="content" class="w-full border p-2 rounded-lg" placeholder="Viết bình luận của bạn..." required></textarea>
+                            <textarea name="content" class="content_cm" placeholder="Viết bình luận của bạn..." required></textarea>
                             <div class="stars">
                                 @for ($i = 1; $i <= 5; $i++)
-                                    <img src="{{ asset('img/comment/star-empty.png') }}" alt="star" class="star" data-value="{{ $i }}" width="20px" height="20px">
+                                    <img src="{{ asset('img/comment/star-empty.png') }}" alt="star" class="star" data-value="{{ $i }}"width="25px" height="25px">
                                 @endfor
                             </div>
                             <input type="hidden" name="rating" id="rating-input">
@@ -79,18 +83,67 @@
                             <div class="mt-4">
                                 <input type="file" name="images[]" multiple class="border p-2 rounded-lg">
                             </div>
-
-                            <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg">Gửi bình luận</button>
+                              
+                            <p></p>
+                            <button type="submit" class="btn btn-primary">Gửi bình luận</button>
                         </form>
                     </div>
-                @else
+                {{-- @else
                     <p class="text-red-500 mt-4">Bạn đã bình luận sản phẩm này rồi.</p>
-                @endif
+                @endif --}}
             @else
                 <p class="text-red-500 mt-4">Bạn cần mua sản phẩm để có thể bình luận.</p>
             @endif
         @else
             <p class="text-gray-600 mt-4">Vui lòng <a href="{{ route('login') }}" class="text-blue-600">đăng nhập</a> để bình luận.</p>
         @endif
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const stars = document.querySelectorAll('.star');
+                const ratingInput = document.getElementById('rating-input');
+        
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-value');
+                        ratingInput.value = rating;
+        
+                        // Thay đổi hình ảnh của các sao
+                        stars.forEach(star => {
+                            if (star.getAttribute('data-value') <= rating) {
+                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng
+                            } else {
+                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
+                            }
+                        });
+                    });
+        
+                    // Thêm hiệu ứng hover để người dùng có thể thấy sao vàng khi di chuột
+                    star.addEventListener('mouseenter', function() {
+                        const rating = this.getAttribute('data-value');
+                        stars.forEach(star => {
+                            if (star.getAttribute('data-value') <= rating) {
+                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng khi hover
+                            } else {
+                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
+                            }
+                        });
+                    });
+        
+                    // Reset khi rời chuột
+                    star.addEventListener('mouseleave', function() {
+                        const rating = ratingInput.value;
+                        stars.forEach(star => {
+                            if (star.getAttribute('data-value') <= rating) {
+                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng khi đã chọn
+                            } else {
+                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
+        
     @endisset
+    
 </div>

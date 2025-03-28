@@ -27,10 +27,11 @@
                         <div role="tabpanel" class="tab-pane fade" id="tab2">
                             <div class="single-p-tab-content">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    @include('client.pages.detail.comments')
+                                    {{-- <div class="col-md-5">
                                         <div class="product-review">
-                                            @include('client.pages.detail.comments')
-                                            {{-- <p> <a href="#"> plaza</a> <span>Review by</span> plaza </p>
+                                           
+                                            <p> <a href="#"> plaza</a> <span>Review by</span> plaza </p>
                                             <div class="product-rating-info">
                                                 <p>value</p>
                                                 <div class="ratings">
@@ -141,9 +142,9 @@
                                                     </li>
                                                 </ul>
                                                 <button type="submit"> submit review</button>
-                                            </form>--}}
-                                        {{-- </div> --}}
-                                    </div>
+                                            </form>
+                                         </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

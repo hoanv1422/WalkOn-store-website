@@ -20,16 +20,19 @@ class DetailController extends Controller
            // Lấy số sao từ request nếu có
         $rating = $request->query('rating'); // Đọc giá trị rating từ query string
         $comments = Comment::where('product_id', $product->id)
+
         ->with('user')
-        ->whereNotIn('id', CommentHidden::pluck('comment_id')->toArray())  // Lọc các bình luận đã bị ẩn
+        ->where('hidden_comment', 0) // Lọc các bình luận không bị ẩn (giá trị 0)
         ->latest()
         ->get();
+    
 
                 // Lấy tất cả bình luận, lọc theo sản phẩm và kiểm tra nếu bình luận không bị ẩn
-        $commentsQuery = Comment::where('product_id', $product->id)
-                ->with('user')
-                ->whereNotIn('id', CommentHidden::pluck('comment_id')->toArray())  // Lọc các bình luận đã bị ẩn
-                ->latest();
+ $commentsQuery = Comment::where('product_id', $product->id)
+    ->with('user')
+    ->where('hidden_comment', 0)  // Lọc các bình luận không bị ẩn (giá trị 0)
+    ->latest();
+
     
             // Nếu có filter theo rating, áp dụng điều kiện lọc
             if ($rating) {
@@ -39,12 +42,10 @@ class DetailController extends Controller
             // Lấy bình luận đã lọc
             $comments = $commentsQuery->get();
 
-     $averageRating = Comment::where('product_id', $product->id)
-        ->whereNotIn('id', function ($query) {
-        $query->select('comment_id')
-              ->from('comment_hidden');
-    })
-    ->avg('rating');
+            $averageRating = Comment::where('product_id', $product->id)
+            ->where('hidden_comment', 0)  // Lọc các bình luận không bị ẩn
+            ->avg('rating');
+        
    
     if ($rating) {
         $comments->where('rating', $rating);
@@ -63,11 +64,13 @@ class DetailController extends Controller
                 ->whereHas('orderItems', function ($query) use ($product) {
                     $query->whereIn('product_variant_id', $product->variants->pluck('id')->toArray());
                 })
+                ->where('order_status', 'delivered')
                 ->exists();
         }
-        $existingComment = Comment::where('user_id', $user->id)
-        ->where('product_id', $product->id)
-        ->first();
+        
+        // $existingComment = Comment::where('user_id', $user->id)
+        // ->where('product_id', $product->id)
+        // ->first();
    
 
 
@@ -81,7 +84,7 @@ class DetailController extends Controller
             ];
         });
     
-        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased','averageRating','existingComment'));
+        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased','averageRating'));
     }
 
     public function index()
