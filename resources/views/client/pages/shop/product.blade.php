@@ -71,12 +71,12 @@
                             <div class="single-sidebar-content">
                                 <ul>
                                     @foreach ($sizes as $size)
-    <li>
-        <input type="checkbox" name="size[]" value="{{ $size->id }}" 
-            {{ request()->has('size') && in_array($size->id, (array) request()->size) ? 'checked' : '' }}>
-        {{ $size->size }}
-    </li>
-@endforeach
+                                        <li>
+                                            <input type="checkbox" name="size[]" value="{{ $size->id }}"
+                                                {{ request()->has('size') && in_array($size->id, (array) request()->size) ? 'checked' : '' }}>
+                                            {{ $size->size }}
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -90,15 +90,17 @@
                                 <!-- Ô nhập giá thấp nhất -->
                                 <div class="input-group">
                                     <span class="input-group-text">₫</span>
-                                    <input type="number" name="min_price" min="0" class="form-control" placeholder="TỪ" value="{{ request('min_price') }}">
+                                    <input type="number" name="min_price" min="0" class="form-control"
+                                        placeholder="TỪ" value="{{ request('min_price') }}">
                                 </div>
-                                
-                                <span class="mx-2">–</span> 
-                                
+
+                                <span class="mx-2">–</span>
+
                                 <!-- Ô nhập giá cao nhất -->
                                 <div class="input-group">
                                     <span class="input-group-text">₫</span>
-                                    <input type="number" name="max_price" min="0" class="form-control" placeholder="ĐẾN" value="{{ request('max_price') }}">
+                                    <input type="number" name="max_price" min="0" class="form-control"
+                                        placeholder="ĐẾN" value="{{ request('max_price') }}">
                                 </div>
                             </div>
                             {{-- <div class="single-sidebar-content">
@@ -166,8 +168,8 @@
                             <div role="tabpanel" class="tab-pane active fade show home2" id="gird">
                                 {{-- Hiển thị sản phẩm --}}
                                 <div class="row">
-                                    @foreach ($products as $product)
-                                        <div class="col-lg-4 col-md-6">
+                                    <div class="col-lg-4 col-md-6">
+                                        @foreach ($products as $product)
                                             <div class="single-product">
                                                 <div class="level-pro-new">
                                                     <span>new</span>
@@ -206,31 +208,32 @@
                                                     </div>
                                                     <div class="product-img">
                                                         <a href="{{ route('detail.index', $product->slug) }}">
-                                                            <img src="{{ Storage::url($product->image) }}" alt="" class="primary-img">
-                                                            <img src="{{ Storage::url($product->image) }}" alt="" class="secondary-img">
+                                                            <img src="{{ Storage::url($product->image) }}"
+                                                                alt="" class="primary-img">
+                                                            <img src="{{ Storage::url($product->image) }}"
+                                                                alt="" class="secondary-img">
                                                         </a>
                                                     </div>
                                                     <div class="product-price">
-                                                        <a href="{{ route('detail.index', $product->slug) }}" title="{{ $product->name }}">{{ $product->name }}</a>
-                                                        <span>{{ number_format($product->price, 0, ',', '.') }} VND</span>
+                                                        <a href="{{ route('detail.index', $product->slug) }}"
+                                                            title="{{ $product->name }}">{{ $product->name }}</a>
+                                                        <span>{{ number_format($product->price, 0, ',', '.') }}
+                                                            VND</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                           
                                         @endforeach
-                                    @endif
+                                    </div>
                                 </div>
-                              
                             </div>
                         </div>
-                    </div>
 
-                    {{-- Phân trang --}}
-                    <div class="col-md-12 d-flex justify-content-center">
-                        {{ $products->appends(request()->input())->links('pagination::bootstrap-4') }}
+                        {{-- Phân trang --}}
+                        <div class="col-md-12 d-flex justify-content-center">
+                            {{ $products->appends(request()->input())->links('pagination::bootstrap-4') }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- product main items area end -->
+        <!-- product main items area end -->

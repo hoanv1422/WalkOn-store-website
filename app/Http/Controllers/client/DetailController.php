@@ -44,6 +44,5 @@ class DetailController extends Controller
     
     public function index() {
         return view('client.pages.detail.index');
-
     }
 }

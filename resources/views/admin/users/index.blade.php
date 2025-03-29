@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="card-body border-bottom-dashed border-bottom">
-                        <form method="GET" action="">
+                        <form method="GET" action="{{ route('users.filter') }}">
                             <div class="row g-3">
                                 <div class="col-xl-6">
                                     <div class="search-box">

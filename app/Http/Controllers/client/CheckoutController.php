@@ -9,6 +9,8 @@ use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,12 +38,13 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng của bạn trống.');
             }
 
-            $cartItems = CartItem::where('cart_id', $cart->id)
+            if (Empty($request->cartItemIds)) {
+                return back()->with('error', 'Giỏ hàng trống.');
+            }
+
+            $cartItems = CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)
                 ->with(['productVariant.product', 'productVariant.size', 'productVariant.color'])
                 ->get();
-            if ($cartItems->isEmpty()) {
-                return redirect()->route('cart.list')->with('error', 'Giỏ hàng trống.');
-            }
 
             $coupon_id = Coupon::query()->where("code", $request->couponCodeForOrder)->pluck("id")->first();
 
@@ -52,7 +55,6 @@ class CheckoutController extends Controller
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
-
 
             $order = Order::create([
                 'order_code' => 'ORD' . date('Ymd') . strtoupper(Str::random(4)),
@@ -75,8 +77,9 @@ class CheckoutController extends Controller
                 'order_status' => 'pending',
                 'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
                 'payment_method' => $request->payment_method,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
-            // dd($order);
 
             $orderItems = [];
             foreach ($cartItems as $item) {
@@ -95,9 +98,11 @@ class CheckoutController extends Controller
                     'updated_at' => now(),
                 ];
                 $item->productVariant->decrement('quantity', $item->quantity);
+                $this->updateQuantityProduct($item->productVariant->product_id);
+                $item->productVariant->product->increment('sold_quantity', $item->quantity);
             }
             OrderItem::insert($orderItems);
-            CartItem::where('cart_id', $cart->id)->delete();
+            CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
 
             if ($request->payment_method === 'VNPAY') {
                 DB::commit();
@@ -240,5 +245,13 @@ class CheckoutController extends Controller
             dd($e);
             return redirect('/order')->with('error', 'Có lỗi xảy ra khi xử lý đơn hàng: ' . $e->getMessage());
         }
+    }
+
+    public function updateQuantityProduct($productId)
+    {
+        $totalQuantity = ProductVariant::where('product_id', $productId)->sum('quantity');
+        $product = Product::find($productId);
+        $product->quantity = $totalQuantity;
+        $product->save();
     }
 }

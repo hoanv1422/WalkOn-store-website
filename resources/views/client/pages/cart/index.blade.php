@@ -1,6 +1,7 @@
 @extends('client.layouts.app')
 
 @section('title', 'Giỏ Hàng')
+@section('breadcrumb', 'Giỏ Hàng')
 
 @section('content')
     @include('client.components.breadcrumb')

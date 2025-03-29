@@ -1,6 +1,7 @@
 @extends('client.layouts.app')
 
 @section('title', 'Checkout')
+@section('breadcrumb', 'Thanh Toán')
 
 @section('style')
     <style>
@@ -276,7 +277,7 @@
 
             if (latitude && longitude) {
                 await calculateDistance(latitude, longitude);
-                updatePrices(); // Cập nhật giá sau khi thay đổi địa chỉ
+                updatePrices(); 
             } else {
                 document.getElementById('distance-display').innerHTML =
                     'Không có thông tin khoảng cách (thiếu tọa độ)';

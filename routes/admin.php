@@ -33,6 +33,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
+    Route::get('/users/filter', [UserController::class, 'filterUsers'])->name('users.filter'); 
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);

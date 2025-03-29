@@ -4,8 +4,8 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="newsleter">
-                            <h3>newsletter</h3>
-                            <p>Subscribe to the james mailing list to receive updates on new arrivals, special offers and other discount information.</p>
+                            <h3>bản tin</h3>
+                            <p>Đăng ký vào danh sách gửi thư của WalkOn để nhận thông tin cập nhật về hàng mới về, ưu đãi đặc biệt và thông tin giảm giá khác.</p>
                             <div class="Subscribe">
                                 <form action="#">
                                     <input type="text" title="Sign up">
@@ -16,8 +16,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="follow">
-                            <h3>follow</h3>
-                            <p>Subscribe to the james mailing list to receive updates on new arrivals, special offers and other discount information.</p>
+                            <h3>Theo dõi</h3>
+                            <p>Theo dõi WalkOn với các mạng xã hội để có cơ hội nhận các mã giảm giá cũng như thông tin giảm giá sản phẩm nhanh nhất.</p>
                             <ul class="follow-link">
                                 <li><a href="#"> <i class="fa fa-facebook"></i> </a></li>
                                 <li><a href="#"> <i class="fa fa-rss"></i> </a></li>

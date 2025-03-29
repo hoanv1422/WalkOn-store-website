@@ -10,10 +10,10 @@
                     <div class="slider-progress"></div>
                     <div class="slider-content t-lfl s-tb slider-1">
                         <div class="title-container s-tb-c title-compress">
-                            <h1 class="title1">Sale products</h1>
+                            <h1 class="title1">Giảm giá sản phẩm</h1>
                             <h2 class="title2" >nike Ari max 2015</h2>
-                            <h3 class="title3" >Lorem Ipsum is simply dummy text of the printing</h3>
-                            <a href="#"><span>read more</span></a>
+                            <h3 class="title3" >Siêu sốc, siêu rẻ, siêu tiết kiệm</h3>
+                            <a href="#"><span>Đọc Thêm</span></a>
                         </div>
                     </div>
                 </div>
@@ -22,10 +22,10 @@
                     <div class="slider-progress"></div>
                     <div class="slider-content t-lfl s-tb slider-2">
                         <div class="title-container s-tb-c">
-                            <h1 class="title1">Sale products</h1>
-                            <h2 class="title2" >GET UP TO 50% SALE</h2>
-                            <h3 class="title3" >Lorem Ipsum is simply dummy text of the printing</h3>
-                            <a href="#"><span>read more</span></a>
+                            <h1 class="title1">Giảm giá sản phẩm</h1>
+                            <h2 class="title2" >Giảm giá lên tới 20%</h2>
+                            <h3 class="title3" >Sản phẩm chính hãng, chất lượng</h3>
+                            <a href="#"><span>Đọc Thêm</span></a>
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -73,8 +74,8 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('users', 'public');
             $data['avatar'] = $path;
-            if (!empty($user->avatar) && Storage::exists('public/'.$user->avatar)) {
-                Storage::delete('public/'.$user->avatar);
+            if (!empty($user->avatar) && Storage::exists('public/' . $user->avatar)) {
+                Storage::delete('public/' . $user->avatar);
             }
         }
         if (!$request->has('is_active')) {
@@ -129,38 +130,34 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        if ($request->filled('keyword')) {
+        $query->when($request->filled('keyword'), function ($q) use ($request) {
             $keyword = $request->input('keyword');
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%")
+            $q->where(function ($subQuery) use ($keyword) {
+                $subQuery->where('name', 'LIKE', "%$keyword%")
                     ->orWhere('email', 'LIKE', "%$keyword%")
                     ->orWhere('phone', 'LIKE', "%$keyword%");
             });
-        }
+        });
 
-        if ($request->filled('date_range')) {
-            $dates = preg_split('/\s(to|-)\s/', $request->input('date_range'));
-
+        $query->when($request->filled('date_range'), function ($q) use ($request) {
+            $dates = explode(' - ', $request->input('date_range'));
             if (count($dates) == 2) {
                 try {
-                    $start_date = \Carbon\Carbon::createFromFormat('d/m/Y', trim($dates[0]))->startOfDay();
-                    $end_date = \Carbon\Carbon::createFromFormat('d/m/Y', trim($dates[1]))->endOfDay();
-
-                    $query->whereBetween('created_at', [$start_date, $end_date]);
+                    $start_date = Carbon::createFromFormat('d/m/Y', trim($dates[0]))->startOfDay();
+                    $end_date = Carbon::createFromFormat('d/m/Y', trim($dates[1]))->endOfDay();
+                    $q->whereBetween('created_at', [$start_date, $end_date]);
                 } catch (\Exception $e) {
                     return back()->with('error', 'Định dạng ngày không hợp lệ!');
                 }
             }
-        }
+        });
 
-
-        if ($request->filled('status') && $request->input('status') != 'all') {
-            $query->where('is_active', $request->input('status') == 'Active' ? 1 : 0);
-        }
+        $query->when($request->filled('status') && $request->input('status') != 'all', function ($q) use ($request) {
+            $q->where('is_active', $request->input('status') == 'Active' ? 1 : 0);
+        });
 
         $users = $query->get();
 
-        $title = "Người Dùng";
-        return view(self::PATH_VIEW . 'index', compact('users', 'title'));
+        return view(self::PATH_VIEW . 'index', compact('users'))->with('title', 'Người Dùng');
     }
 }

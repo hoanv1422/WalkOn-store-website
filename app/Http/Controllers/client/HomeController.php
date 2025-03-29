@@ -21,6 +21,41 @@ class HomeController extends Controller
         
         return view('client.pages.home.index',compact('products', 'brands','products_average_rating'));
     }
+
+    public function getProductById(Request $request)
+    {
+        try {
+            $idProduct = $request->idProduct;
+            $product = Product::query()->where('id', $idProduct)->first();
+
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy sản phẩm'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'image'=> $product->image,
+                    'price' => $product->price,
+                    'quantity' => $product->quantity,
+                    'price_sale' => $product->price_sale,
+                    'colors' => $product->colors, 
+                    'sizes' => $product->sizes,
+                    'variants' => $product->variants
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi hệ thống: ' . $e->getMessage()
+            ], 500);
+        }
+    }
    
 
 }

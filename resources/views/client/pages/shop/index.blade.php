@@ -1,6 +1,7 @@
 @extends('client.layouts.app')
 
 @section('title', 'Cửa Hàng')
+@section('breadcrumb', 'Của Hàng')
 
 @section('css')
 <style>
