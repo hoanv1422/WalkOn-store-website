@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\admin\ShipperController;
 use App\Http\Controllers\Auth\AuthController;
 
 /*
@@ -36,7 +37,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
-
+    Route::resource('shippers',ShipperController::class);
+    Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
 

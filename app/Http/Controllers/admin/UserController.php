@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $title = "Người Dùng";
         $users = User::all();
-        $validateUser = User::select('id', 'mail', 'username')->get();
+        $validateUser = User::select('id', 'email', 'username')->get();
         return view(self::PATH_VIEW . __FUNCTION__, compact('users', 'validateUser', 'title'));
     }
 
@@ -133,7 +133,7 @@ class UserController extends Controller
             $keyword = $request->input('keyword');
             $query->where(function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', "%$keyword%")
-                    ->orWhere('mail', 'LIKE', "%$keyword%")
+                    ->orWhere('email', 'LIKE', "%$keyword%")
                     ->orWhere('phone', 'LIKE', "%$keyword%");
             });
         }

@@ -188,6 +188,9 @@
                             <li class="nav-item">
                                 <a href="{{route('coupons.index')}}" class="nav-link"> <span data-key="t-to-do">Mã Giảm Giá</span></a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('shippers.index')}}" class="nav-link"> <span data-key="t-to-do">Shipper</span></a>
+                            </li>
                              <li class="nav-item">
                                 <a href="{{route('inventories.index')}}" class="nav-link"> <span data-key="t-to-do">Kho Hàng</span></a>
                             </li>
