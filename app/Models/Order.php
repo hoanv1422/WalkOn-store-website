@@ -9,7 +9,6 @@ class Order extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'user_id',
         'order_code',
@@ -43,8 +42,19 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the items in the order.
+     */
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Get the cancellation record associated with the order.
+     */
+    public function cancellation()
+    {
+        return $this->hasOne(OrderCancellation::class, 'order_id');
     }
 }
