@@ -88,27 +88,3 @@ Route::prefix('admin')->group(function () {
         return view('auth.admin.pass-confirm');
     })->name('pass-confirm.index');
 });
-
-Route::prefix('admin')->group(function () {
-    Route::get('signin', function () {
-        return view('auth.admin.signin');
-    })->name('admin.login');
-
-    Route::post('signin', [AuthController::class, 'signinAdmin'])->name('signin.post');
-
-    Route::get('signup', function () {
-        return view('auth.admin.signup');
-    })->name('signup.index');
-
-    Route::get('pass-reset', function () {
-        return view('auth.admin.pass-reset');
-    })->name('pass-reset.index');
-
-    Route::get('pass-change', function () {
-        return view('auth.admin.pass-change');
-    })->name('pass-change.index');
-
-    Route::get('pass-confirm', function () {
-        return view('auth.admin.pass-confirm');
-    })->name('pass-confirm.index');
-});
