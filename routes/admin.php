@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\admin\ShipperController;
 use App\Http\Controllers\Auth\AuthController;
 
 /*
@@ -42,6 +43,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
     Route::delete('inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::put('inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
+    Route::resource('shippers',ShipperController::class);
+    Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
+    //kho hàng
+    Route::resource('inventories', InventoryController::class)->only(['index']);
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
