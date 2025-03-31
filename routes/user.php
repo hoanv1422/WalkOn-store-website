@@ -28,23 +28,29 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 // Shop
+Route::get('/api/shop', [ShopController::class, 'listProducts']);
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+
 Route::get('/shop/filter', [ShopController::class, 'filter'])->name('shop.filter');
 
 // Detail
 Route::get('/detail/{slug}', [DetailController::class, 'productDetail'])->name('detail.index');
 // // Profile
 
+Route::get('/get-product', [HomeController::class, 'getProductById'])->name('get.product');
 
 // Cart (Chỉ cho phép người dùng đã đăng nhập)
 Route::middleware('client')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/api/add-to-cart', [CartController::class, 'addToCartAPI'])->name('cartApi.add');
     Route::delete('/cart/{cartItemId}', [CartController::class, 'delete'])->name('cart.delete');
     Route::put('/cart/update/{cartItemId}', [CartController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/items/clear', [CartController::class, 'clearCartItems'])->name('cart.items.clear');
 
-    Route::get('/get-product', [HomeController::class, 'getProductById'])->name('get.product');
+
+
+   
     //coupon
     Route::post('/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
 

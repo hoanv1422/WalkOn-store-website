@@ -9,14 +9,23 @@
                     <div class="mb-3">
                         <input type="text" class="form-control" placeholder="Họ và tên" name="receiver_name"
                             value="{{ Auth::user()->name }}">
+                        @error('receiver_name')
+                            <p class="small text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <input type="email" class="form-control" placeholder="Email" name="receiver_email"
                             value="{{ Auth::user()->email }}">
+                        @error('receiver_email')
+                            <p class="small text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <input type="tel" class="form-control" placeholder="Số điện thoại" name="receiver_phone"
                             value="{{ Auth::user()->phone }}">
+                        @error('receiver_phone')
+                            <p class="small text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Hiển thị địa chỉ mặc định -->
@@ -24,19 +33,31 @@
                         <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
                         <div class="address-display d-flex justify-content-between align-items-center">
                             <div id="current-address">
-                                <strong>{{ $addressDefault->type_label }}</strong><br>
-                                <span>{{ $addressDefault->full_address }}</span>
+                                @if ($addressDefault)
+                                    <strong>{{ $addressDefault->type_label }}</strong><br>
+                                    @if ($addressDefault->full_address)
+                                        <span>{{ $addressDefault->full_address }}</span>
+                                    @endif
+                                @endif
                             </div>
                             <button type="button" class="btn change-address-btn" data-bs-toggle="modal"
                                 data-bs-target="#addressModal">
                                 Thay đổi
                             </button>
                         </div>
+                        @error('receiver_address')
+                            <p class="small text-danger">{{ $message }}</p>
+                        @enderror
                         <div id="distance-display" class="mt-2 text-muted"></div>
-                        <input type="hidden" name="receiver_address" id="selected-address" value="{{ $addressDefault->full_address }}">
-                        <input type="hidden" id="selected-lat" value="{{ $addressDefault->latitude }}">
-                        <input type="hidden" id="selected-lon" value="{{ $addressDefault->longitude }}">
+                        @if ($addressDefault)
+                            <input type="hidden" name="receiver_address" id="selected-address"
+                                value="{{ $addressDefault->full_address ?? '' }}">
+                            <input type="hidden" id="selected-lat" value="{{ $addressDefault->latitude ?? '' }}">
+                            <input type="hidden" id="selected-lon" value="{{ $addressDefault->longitude ?? '' }}">
+                        @endif
+                        
                     </div>
+
 
                     <div class="mb-3">
                         <textarea class="form-control" rows="2" placeholder="Ghi chú (nếu có)" name=""></textarea>
@@ -49,7 +70,7 @@
                 <h3 class="section-title">Đơn Hàng Của Bạn</h3>
                 <div class="order-items mb-4">
                     @foreach ($cartItems as $item)
-                        <input type="hidden" name="cartItemIds[]" value="{{$item->id}}">
+                        <input type="hidden" name="cartItemIds[]" value="{{ $item->id }}">
                         <div class="order-item d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
                                 <img src="" alt="{{ $item->productVariant->product->name }}" class="me-3"
@@ -226,5 +247,3 @@
         </form>
     </div>
 </div>
-
-
