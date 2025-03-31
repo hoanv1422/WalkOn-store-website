@@ -11,6 +11,7 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\WishlistController;
+use App\Models\Banner;
 use Illuminate\Support\Facades\Route;
 
 /*

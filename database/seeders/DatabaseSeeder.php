@@ -17,6 +17,7 @@ use App\Models\ProductVariant;
 use App\Models\Size;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
@@ -130,7 +131,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username' => 'example_user',
             'name' => 'John Doe',
-            'mail' => 'member@gmail.com', 
+            'email' => 'member@gmail.com', 
             'password' =>'123456', 
             'avatar' => 'default-avatar.png',
             'phone' => '0123456789',
@@ -143,8 +144,8 @@ class DatabaseSeeder extends Seeder
         User::query()->create([
             'username'          => 'example_admin',
             'name'              => 'John Doe',
-            'mail'              => 'admin@gmail.com',
-            'password'          => '123456',
+            'email'              => 'admin@gmail.com',
+            'password'          => Hash::make('123456'),
             'avatar'            => 'default-avatar.png',
             'phone'             => '0123456789',
             'address'           => '123 Main Street',
@@ -167,7 +168,7 @@ class DatabaseSeeder extends Seeder
                 'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
             ]);
         }
-
+//banner
         // // Order
         // Order::create([
         //     'user_id' => 1,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
@@ -17,7 +18,8 @@ class ShopController extends Controller
         $categories = Category::all();
         $colors = Color::all();
         $brand = Brand::all();
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand'));
+        $banners = Banner::orderBy('position')->get();
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','banners'));
     }
 
     // Lọc Sản phần theo danh mục
@@ -55,7 +57,7 @@ class ShopController extends Controller
         $categories = Category::all();
         $colors = Color::all();
         $brand = Brand::all();
-
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand'));
+        $banners = Banner::orderBy('position')->get();
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','banners'));
     }
 }
