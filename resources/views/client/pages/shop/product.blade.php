@@ -5,7 +5,7 @@
             <div class="col-lg-3">
                 <div class="product-sidebar">
                     <div class="sidebar-title">
-                        <h2>Shopping Options</h2>
+                        <h2>BỘ LỌC TÌm kiếm</h2>
                     </div>
 
                     {{-- Form lọc sản phẩm --}}
@@ -13,7 +13,7 @@
                         {{-- Category --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Category</h3>
+                                <h3>danh mục</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -31,7 +31,7 @@
                         {{-- Color --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Color</h3>
+                                <h3>màu sắc</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -49,7 +49,7 @@
                         {{-- Brand --}}
                         <div class="single-sidebar">
                             <div class="single-sidebar-title">
-                                <h3>Manufacturer</h3>
+                                <h3>thương hiệu</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <ul>
@@ -63,11 +63,28 @@
                                 </ul>
                             </div>
                         </div>
+                        {{-- Sizes --}}
+                        <div class="single-sidebar">
+                            <div class="single-sidebar-title">
+                                <h3> Kích cỡ</h3>
+                            </div>
+                            <div class="single-sidebar-content">
+                                <ul>
+                                    @foreach ($sizes as $size)
+    <li>
+        <input type="checkbox" name="size[]" value="{{ $size->id }}" 
+            {{ request()->has('size') && in_array($size->id, (array) request()->size) ? 'checked' : '' }}>
+        {{ $size->size }}
+    </li>
+@endforeach
+                                </ul>
+                            </div>
+                        </div>
 
                         {{-- Price --}}
                         <div class="single-sidebar price">
                             <div class="single-sidebar-title">
-                                <h3>Price</h3>
+                                <h3>Khoảng Giá</h3>
                             </div>
                             <div class="single-sidebar-content">
                                 <input type="number" name="min_price" placeholder="Min Price"
@@ -75,6 +92,10 @@
                                 <input type="number" name="max_price" placeholder="Max Price"
                                     value="{{ request('max_price') }}">
                             </div>
+                            {{-- <div class="single-sidebar-content">
+                                <input type="number" name="min_price" min="0" placeholder="Min Price" value="{{ request('min_price') }}">
+                                <input type="number" name="max_price" min="0" placeholder="Max Price" value="{{ request('max_price') }}">
+                            </div> --}}
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-3">Search</button>
@@ -254,6 +275,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+                              
                             </div>
                         </div>
                     </div>

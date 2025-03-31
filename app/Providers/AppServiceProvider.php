@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
         View::composer('client.partials.header', function ($view) {
             $categories = Category::where('is_active', true)->get();
             $cartCount = 0;
