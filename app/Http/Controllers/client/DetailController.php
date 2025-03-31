@@ -68,9 +68,9 @@ class DetailController extends Controller
                 ->exists();
         }
         
-        // $existingComment = Comment::where('user_id', $user->id)
-        // ->where('product_id', $product->id)
-        // ->first();
+        $existingComment = Comment::where('user_id', $user->id)
+        ->where('product_id', $product->id)
+        ->first();
    
 
 
@@ -84,7 +84,7 @@ class DetailController extends Controller
             ];
         });
     
-        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased','averageRating'));
+        return view('client.pages.detail.index', compact('product', 'relatedProducts', 'upSellProducts', 'comments', 'productVariants', 'user', 'hasPurchased','averageRating', 'existingComment'));
     }
 
     public function index()

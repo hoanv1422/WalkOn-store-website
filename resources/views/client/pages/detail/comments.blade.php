@@ -11,7 +11,7 @@
     @endif
 
     <div>
-        <p class="avg_rating">Đánh giá trung bình: {{ $averageRating }}  <i class="fa fa-star"></i> </p>
+        <p class="avg_rating">Đánh giá trung bình: {{ number_format($averageRating, 1) }}  <i class="fa fa-star"></i> </p>
     </div>
 
     <form method="GET" action="{{ route('product.detail', $product->slug) }}">
@@ -66,7 +66,7 @@
     @isset($user)
         @if ($user)
             @if ($hasPurchased)
-                {{-- @if ($existingComment == null) --}}
+                @if ($existingComment == null)
                     <div class="mt-4">
                         <form method="POST" action="{{ route('comments.store') }}" enctype="multipart/form-data">
                             @csrf
@@ -88,9 +88,9 @@
                             <button type="submit" class="btn btn-primary">Gửi bình luận</button>
                         </form>
                     </div>
-                {{-- @else
-                    <p class="text-red-500 mt-4">Bạn đã bình luận sản phẩm này rồi.</p>
-                @endif --}}
+                @else
+                    {{-- <p class="text-red-500 mt-4">Bạn đã bình luận sản phẩm này rồi.</p> --}}
+                @endif
             @else
                 <p class="text-red-500 mt-4">Bạn cần mua sản phẩm để có thể bình luận.</p>
             @endif
