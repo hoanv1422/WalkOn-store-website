@@ -143,6 +143,9 @@
                 <li class="nav-item">
                     <a href="{{route('users.index')}}" class="nav-link" data-key="t-user">Người Dùng</a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('contacts.index')}}" class="nav-link" data-key="t-user">Tin Nhắn Liên Hệ</a>
+                </li>
             </ul>
         </div>
     </li>

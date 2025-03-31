@@ -19,10 +19,9 @@ return new class extends Migration
             $table->string('ward');
             $table->string('address_line');
             $table->enum('type', ['HOME', 'OFFICE', 'OTHER'])->default('HOME');
-            $table->boolean('is_default')->default(false);
+            $table->boolean('is_default')->default(false)->comment('Mặc định'); 
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
-            $table->boolean('is_default')->default(false)->comment('Mặc định');
             $table->timestamps();
         });
     }

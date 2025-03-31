@@ -97,7 +97,7 @@
                                             <th class="sort" data-sort="username">Tên Tài Khoản</th>
                                             <th class="sort" data-sort="name">Tên Người Dùng</th>
                                             <th class="sort" data-sort="email">Email</th>
-                                            <th class="sort" data-sort="phone">Số Điện Thoại</th>r
+                                            <th class="sort" data-sort="phone">Số Điện Thoại</th>
                                             <th class="sort" data-sort="date">Ngày Tạo</th>
                                             <th class="sort" data-sort="authentic">Xác thực</th>
                                             <th class="sort" data-sort="role">Chức Vụ</th>

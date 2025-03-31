@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
@@ -33,11 +34,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
-    Route::get('/users/filter', [UserController::class, 'filterUsers'])->name('users.filter'); 
+    Route::get('/users/filter', [UserController::class, 'filterUsers'])->name('users.filter');
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
-
+    Route::resource('contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy']);
+    
     // Kho hàng
     Route::resource('inventory', InventoryController::class)->only(['index']);
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
