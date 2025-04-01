@@ -18,9 +18,15 @@
                                     </a>
                                     <ul class="search">
                                         <li>
-                                            <form action="#">
-                                                <input type="text">
-                                                <button type="submit"> <i class="fa fa-search"></i> </button>
+                                            <form id="header-search-form" action="{{ route('shop.index') }}"
+                                                method="GET">
+                                                <input type="text" name="keyword" id="header-search-input"
+                                                    placeholder="Tìm kiếm sản phẩm..."
+                                                    value="{{ request()->input('keyword') }}">
+                                                <button type="submit"
+                                                    style="border: none; background: none; padding: 0; cursor: pointer;">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
                                             </form>
                                         </li>
                                     </ul>
@@ -135,12 +141,14 @@
                             <ul>
                                 <li><a href="{{ route('home.index') }}">Trang Chủ</a></li>
 
-                                <li class="mega-men"><a href="{{ route('shop.index') }}">Cửa Hàng</a>
+                                <li class="mega-men">
+                                    <a href="{{ route('shop.index') }}">Cửa Hàng</a>
                                     <div class="mega-menu men">
                                         @if ($categories->count() > 0)
                                             @foreach ($categories as $category)
                                                 <span>
-                                                    <a href="">{{ $category->name }}</a>
+                                                    <a
+                                                        href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a>
                                                 </span>
                                             @endforeach
                                         @endif
@@ -153,115 +161,7 @@
                         </nav>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <div class="mobile-menu">
-                        <nav>
-                            <ul>
-                                <li><a href="index.html">Home</a>
-                                    <ul>
-                                        <li><a href="index.html">Home 1</a></li>
-                                        <li><a href="index-2.html">Home 2</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Women</a>
-                                    <ul>
-                                        <li><a href="#">Dresses</a>
-                                            <ul>
-                                                <li><a href="#">Coctail</a></li>
-                                                <li><a href="#">day</a></li>
-                                                <li><a href="#">evening</a></li>
-                                                <li><a href="#">sports</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">shoes</a>
-                                            <ul>
-                                                <li><a href="#">Sports</a></li>
-                                                <li><a href="#">run</a></li>
-                                                <li><a href="#">sandals</a></li>
-                                                <li><a href="#">boots</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">handbags</a>
-                                            <ul>
-                                                <li><a href="#">Blazers</a></li>
-                                                <li><a href="#">table</a></li>
-                                                <li><a href="#">coats</a></li>
-                                                <li><a href="#">kids</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">clothing</a>
-                                            <ul>
-                                                <li><a href="#">T-shirts</a></li>
-                                                <li><a href="#">coats</a></li>
-                                                <li><a href="#">Jackets</a></li>
-                                                <li><a href="#">jeans</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Men</a>
-                                    <ul>
-                                        <li><a href="#">Bags</a>
-                                            <ul>
-                                                <li><a href="#">Bootees bag</a></li>
-                                                <li><a href="#">Blazers</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">clothing</a>
-                                            <ul>
-                                                <li><a href="#">coats</a></li>
-                                                <li><a href="#">T-shirts</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">Lingerie</a>
-                                            <ul>
-                                                <li><a href="#">Bands</a></li>
-                                                <li><a href="#">Furniture</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Foorwear</a>
-                                    <ul>
-                                        <li><a href="#">footwear men</a>
-                                            <ul>
-                                                <li><a href="#">gifts</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">footwear women</a>
-                                            <ul>
-                                                <li><a href="#">boots</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Jewellery</a>
-                                    <ul>
-                                        <li><a href="#">Rings</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Accessories</a></li>
-                                <li><a href="#">Pages</a>
-                                    <ul>
-                                        <li><a href="about-us.html">About us</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="blog-details.html">Blog Details</a></li>
-                                        <li><a href="cart.html">Cart</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                        <li><a href="my-account.html">My account</a></li>
-                                        <li><a href="shop.html">Shop</a></li>
-                                        <li><a href="shop-list.html">Shop list</a></li>
-                                        <li><a href="single-product.html">Single Shop</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="{{ url('/login') }}">login page</a></li>
-                                        <li><a href="{{ url('/register') }}">register page</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

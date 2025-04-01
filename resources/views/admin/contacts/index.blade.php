@@ -111,7 +111,9 @@
                                             <td class="contact_code">{{ $contact->contact_code}}</td>
                                             <td class="name">{{ $contact->user->name ?? 'Không có' }}</td>
                                             <td class="name">{{ $contact->name }}</td>
-                                            <td class="email">{{ $contact->email }}</td>
+                                            <td class="email">
+                                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $contact->email }}" target="_blank">{{ $contact->email }}</a>
+                                            </td>
                                             <td class="phone">{{ $contact->phone }}</td>
                                             <td class="message">{{ $contact->message }}</td>
                                             <td class="status">

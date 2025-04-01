@@ -18,17 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("phone-field-edit").value = phone || "";
         document.getElementById("message-field-edit").value = message || "";
         let statusField = document.getElementById("status-field-edit");
-        if (statusField) {
-          let optionExists = Array.from(statusField.options).some(
-            (option) => option.value === status
-          );
+            if (statusField) {
+                statusField.value = status || "UNREAD"; 
+            }
 
-          if (optionExists) {
-            statusField.value = status;
-          } else {
-            statusField.value = "UNREAD";
-          }
-        }
         document.querySelector(".tablelist-form.edit").setAttribute("action", `contacts/${id}`);
       });
     });

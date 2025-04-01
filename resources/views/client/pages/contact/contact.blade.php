@@ -112,7 +112,7 @@
                                         </li>
                                     </ul>
                                     <div class="buttons-set">
-                                        <p><em>*</em> Required Fields</p>
+                                        <!-- <p><em>*</em> Required Fields</p> -->
                                         <button type="submit">Gửi đi</button>
                                     </div>
                                 </form>

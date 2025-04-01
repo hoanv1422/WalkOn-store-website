@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
+use App\Mail\OrderMail;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Coupon;
@@ -15,6 +16,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 
@@ -109,6 +111,8 @@ class CheckoutController extends Controller
                 $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
                 return redirect()->away($vnpayUrl);
             }
+
+            Mail::to($user->email)->send(new OrderMail());
 
             DB::commit();
             return redirect()->route('cart.index')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');

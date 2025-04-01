@@ -11,7 +11,6 @@
                 <div class="col-lg-3 mb-4">
                     <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
                         <div class="card-body p-0">
-                            <!-- Thông tin người dùng -->
                             <div class="text-center p-4 bg-white">
                                 <div class="position-relative d-inline-block mb-3">
                                     <div class="rounded-circle p-3891 bg-light border border-primary-subtle">
@@ -21,9 +20,8 @@
                                     </div>
                                 </div>
                                 <h5 class="fw-bold mb-1 text-dark">{{ $user->name }}</h5>
-                                <p class="text-muted small mb-0">{{ $user->mail }}</p>
+                                <p class="text-muted small mb-0">{{ $user->email }}</p>
                             </div>
-                            <!-- Menu điều hướng -->
                             <div class="list-group list-group-flush">
                                 <a href="{{ route('profile.index') }}"
                                     class="list-group-item list-group-item-action d-flex align-items-center py-3 px-4 text-dark border-0">
@@ -48,7 +46,6 @@
                 <!-- Nội dung chính -->
                 <div class="col-lg-9">
                     <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
-                        <!-- Tiêu đề trang -->
                         <div class="card-header bg-white border-0 pt-4 pb-0">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
@@ -63,7 +60,6 @@
 
                         <div class="card-body p-4">
                             @if ($orders->isEmpty())
-                                <!-- Hiển thị khi không có đơn hàng -->
                                 <div class="text-center py-5">
                                     <div
                                         class="rounded-circle bg-light p-4 d-inline-flex mb-4 border border-secondary-subtle">
@@ -77,7 +73,6 @@
                                     </a>
                                 </div>
                             @else
-                                <!-- Bộ lọc và tìm kiếm -->
                                 <div class="row mb-4 g-3">
                                     <div class="col-md-4">
                                         <form id="statusFilterForm" method="GET" action="{{ route('profile.orders') }}">
@@ -117,7 +112,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Thông báo không tìm thấy đơn hàng -->
                                 <div id="no-orders-found" class="alert alert-info d-none rounded-4 shadow-sm mb-4">
                                     <div class="d-flex align-items-center">
                                         <i class="fa fa-info-circle me-3 fs-4"></i>
@@ -125,21 +119,19 @@
                                     </div>
                                 </div>
 
-                                <!-- Danh sách đơn hàng -->
                                 <div class="order-list">
                                     @foreach ($orders as $order)
                                         <div class="order-item mb-4">
                                             <div
                                                 class="card border-0 shadow-sm rounded-4 overflow-hidden order-card
-                                                @switch($order->order_status)
-                                                    @case('pending') border-start border-secondary border-4 @break
-                                                    @case('processing') border-start border-warning border-4 @break
-                                                    @case('shipped') border-start border-info border-4 @break
-                                                    @case('delivered') border-start border-success border-4 @break
-                                                    @case('cancelled') border-start border-danger border-4 @break
-                                                    @case('returned') border-start border-dark border-4 @break
-                                                @endswitch">
-                                                <!-- Tiêu đề đơn hàng -->
+                                            @switch($order->order_status)
+                                                @case('pending') border-start border-secondary border-4 @break
+                                                @case('processing') border-start border-warning border-4 @break
+                                                @case('shipped') border-start border-info border-4 @break
+                                                @case('delivered') border-start border-success border-4 @break
+                                                @case('cancelled') border-start border-danger border-4 @break
+                                                @case('returned') border-start border-dark border-4 @break
+                                            @endswitch">
                                                 <div
                                                     class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4 border-bottom border-light">
                                                     <div>
@@ -153,14 +145,14 @@
                                                     <div class="d-flex align-items-center">
                                                         <span
                                                             class="badge fw-medium px-3 py-2 rounded-pill
-                                                            @switch($order->order_status)
-                                                                @case('pending') bg-secondary bg-opacity-75 @break
-                                                                @case('processing') bg-warning bg-opacity-75 text-dark @break
-                                                                @case('shipped') bg-info bg-opacity-75 text-white @break
-                                                                @case('delivered') bg-success bg-opacity-75 @break
-                                                                @case('cancelled') bg-danger bg-opacity-75 @break
-                                                                @case('returned') bg-dark bg-opacity-75 @break
-                                                            @endswitch me-2">
+                                                        @switch($order->order_status)
+                                                            @case('pending') bg-secondary bg-opacity-75 @break
+                                                            @case('processing') bg-warning bg-opacity-75 text-dark @break
+                                                            @case('shipped') bg-info bg-opacity-75 text-white @break
+                                                            @case('delivered') bg-success bg-opacity-75 @break
+                                                            @case('cancelled') bg-danger bg-opacity-75 @break
+                                                            @case('returned') bg-dark bg-opacity-75 @break
+                                                        @endswitch me-2">
                                                             @switch($order->order_status)
                                                                 @case('pending')
                                                                     Đang chờ xử lý
@@ -197,20 +189,18 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Tóm tắt đơn hàng -->
                                                 <div class="card-body py-3 px-4">
                                                     <div class="row align-items-center">
-                                                        <!-- Icon trạng thái -->
                                                         <div class="col-md-2 text-center mb-3 mb-md-0">
                                                             <div class="order-icon rounded-circle p-3 mx-auto
-                                                                @switch($order->order_status)
-                                                                    @case('pending') bg-secondary bg-opacity-10 @break
-                                                                    @case('processing') bg-warning bg-opacity-10 @break
-                                                                    @case('shipped') bg-info bg-opacity-10 @break
-                                                                    @case('delivered') bg-success bg-opacity-10 @break
-                                                                    @case('cancelled') bg-danger bg-opacity-10 @break
-                                                                    @case('returned') bg-dark bg-opacity-10 @break
-                                                                @endswitch"
+                                                            @switch($order->order_status)
+                                                                @case('pending') bg-secondary bg-opacity-10 @break
+                                                                @case('processing') bg-warning bg-opacity-10 @break
+                                                                @case('shipped') bg-info bg-opacity-10 @break
+                                                                @case('delivered') bg-success bg-opacity-10 @break
+                                                                @case('cancelled') bg-danger bg-opacity-10 @break
+                                                                @case('returned') bg-dark bg-opacity-10 @break
+                                                            @endswitch"
                                                                 style="width: 60px; height: 60px;">
                                                                 @switch($order->order_status)
                                                                     @case('pending')
@@ -240,7 +230,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <!-- Hình ảnh sản phẩm -->
                                                         <div class="col-md-7 mb-3 mb-md-0">
                                                             <div class="d-flex flex-wrap">
                                                                 @foreach ($order->orderItems->take(3) as $item)
@@ -267,18 +256,17 @@
                                                             </div>
                                                         </div>
 
-                                                        <!-- Thông tin giá và thanh toán -->
                                                         <div class="col-md-3 text-md-end">
                                                             <div class="fw-bold text-primary mb-2 fs-5">
                                                                 {{ number_format($order->total_price, 0, ',', '.') }} VND
                                                             </div>
                                                             <span
                                                                 class="badge fw-medium px-3 py-2 rounded-pill
-                                                                @switch($order->payment_status)
-                                                                    @case('unpaid') bg-warning bg-opacity-75 text-dark @break
-                                                                    @case('paid') bg-success bg-opacity-75 @break
-                                                                    @case('refunded') bg-danger bg-opacity-75 @break
-                                                                @endswitch">
+                                                            @switch($order->payment_status)
+                                                                @case('unpaid') bg-warning bg-opacity-75 text-dark @break
+                                                                @case('paid') bg-success bg-opacity-75 @break
+                                                                @case('refunded') bg-danger bg-opacity-75 @break
+                                                            @endswitch">
                                                                 @switch($order->payment_status)
                                                                     @case('unpaid')
                                                                         Chưa thanh toán
@@ -297,11 +285,9 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Chi tiết đơn hàng (ẩn) -->
                                                 <div class="collapse" id="order-details-{{ $order->id }}">
                                                     <div class="card-body border-top bg-light pt-4 px-4">
                                                         <div class="row g-4">
-                                                            <!-- Thông tin đơn hàng -->
                                                             <div class="col-md-6">
                                                                 <div
                                                                     class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
@@ -345,12 +331,21 @@
                                                                                 <div class="fw-bold text-dark">
                                                                                     {{ $order->note ?? 'Không có' }}</div>
                                                                             </div>
+                                                                            @if ($order->order_status === 'cancelled' && $order->cancellation)
+                                                                                <div class="col-12 mt-2">
+                                                                                    <div
+                                                                                        class="text-muted small fw-medium">
+                                                                                        Lý do hủy:</div>
+                                                                                    <div class="fw-bold text-danger">
+                                                                                        {{ $order->cancellation->reason_id ? $order->cancellation->reason->reason : $order->cancellation->custom_reason }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Thông tin người nhận -->
                                                             <div class="col-md-6">
                                                                 <div
                                                                     class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
@@ -384,7 +379,6 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Danh sách sản phẩm -->
                                                             <div class="col-12">
                                                                 <div
                                                                     class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -480,7 +474,6 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Nút thao tác -->
                                                             <div class="col-12 text-end">
                                                                 <button type="button"
                                                                     class="btn btn-light btn-sm px-3 py-2 shadow-sm rounded-pill"
@@ -523,7 +516,6 @@
                                     @endforeach
                                 </div>
 
-                                <!-- Phân trang -->
                                 <div class="d-flex justify-content-center mt-4">
                                     {{ $orders->links() }}
                                 </div>
@@ -547,10 +539,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <p class="text-muted mb-4">Vui lòng xác nhận và cung cấp lý do hủy đơn hàng. Hành động này không thể
-                        hoàn tác.</p>
+                    <p class="text-muted mb-4">Vui lòng chọn lý do hủy đơn hàng. Hành động này không thể hoàn tác.</p>
                     <div class="row g-4">
-                        <!-- Tóm tắt đơn hàng -->
                         <div class="col-md-6">
                             <div class="card border-0 shadow-sm rounded-3 p-3 bg-light">
                                 <h6 class="fw-bold text-dark mb-3"><i class="fa fa-info-circle me-2 text-primary"></i> Tóm
@@ -569,16 +559,21 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Lý do hủy -->
                         <div class="col-md-6">
                             <div class="card border-0 shadow-sm rounded-3 p-3 bg-light">
                                 <h6 class="fw-bold text-dark mb-3"><i class="fa fa-comment me-2 text-primary"></i> Lý do
                                     hủy đơn</h6>
-                                <textarea class="form-control border-0 shadow-sm" id="cancel-reason" name="cancel_reason" rows="4"
-                                    placeholder="Vui lòng nhập lý do hủy đơn hàng..." required></textarea>
+                                <select class="form-select mb-3" id="cancel-reason" name="reason" required>
+                                    <option value="" disabled selected>Chọn lý do hủy</option>
+                                    @foreach ($cancellationReasons as $reason)
+                                        <option value="{{ $reason->reason }}">{{ $reason->reason }}</option>
+                                    @endforeach
+                                    <option value="other">Khác (Vui lòng nhập lý do)</option>
+                                </select>
+                                <textarea class="form-control border-0 shadow-sm d-none" id="custom-reason" name="custom_reason" rows="4"
+                                    placeholder="Vui lòng nhập lý do hủy đơn hàng..."></textarea>
                             </div>
                         </div>
-                        <!-- Sản phẩm -->
                         <div class="col-12">
                             <div class="card border-0 shadow-sm rounded-3 p-3">
                                 <h6 class="fw-bold text-dark mb-3"><i class="fa fa-shopping-cart me-2 text-primary"></i>
@@ -618,7 +613,6 @@
         </div>
     </div>
 
-    <!-- CSS tối ưu -->
     <style>
         .list-group-item-action.active {
             background-color: rgba(var(--bs-primary-rgb), 0.1);
@@ -703,12 +697,14 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .form-control {
+        .form-control,
+        .form-select {
             border-radius: 0.5rem;
             transition: all 0.3s ease;
         }
 
-        .form-control:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--bs-primary);
             box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
         }
@@ -739,11 +735,9 @@
         }
     </style>
 
-    <!-- JavaScript tối ưu -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Biến và elements
             const searchInput = document.getElementById('orderSearch');
             const orderItems = document.querySelectorAll('.order-item');
             const noOrdersFound = document.getElementById('no-orders-found');
@@ -754,39 +748,37 @@
             const modalOrderDate = document.getElementById('modal-order-date');
             const modalOrderTotal = document.getElementById('modal-order-total');
             const modalOrderItemsBody = document.getElementById('modal-order-items');
-            const cancelReason = document.getElementById('cancel-reason');
+            const reasonSelect = document.getElementById('cancel-reason');
+            const customReason = document.getElementById('custom-reason');
 
-            // Hàm tìm kiếm đơn hàng theo mã
+            // Tìm kiếm đơn hàng
             function searchOrders() {
                 const searchTerm = searchInput.value.toLowerCase();
                 let visibleCount = 0;
-
                 orderItems.forEach(item => {
                     const orderCode = item.querySelector('.badge.bg-dark').textContent.toLowerCase();
                     const searchMatch = searchTerm === '' || orderCode.includes(searchTerm);
-
                     item.style.display = searchMatch ? '' : 'none';
                     if (searchMatch) visibleCount++;
                 });
-
                 noOrdersFound.classList.toggle('d-none', visibleCount > 0);
             }
 
-            // Sự kiện tìm kiếm
             searchInput.addEventListener('input', searchOrders);
 
-            // Sự kiện thay đổi icon khi mở/đóng chi tiết
+            // Thay đổi icon khi mở/đóng chi tiết
             toggleButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const icon = this.querySelector('i');
-                    if (icon.classList.contains('fa-chevron-down')) {
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-up');
-                    } else {
-                        icon.classList.remove('fa-chevron-up');
-                        icon.classList.add('fa-chevron-down');
-                    }
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
                 });
+            });
+
+            // Xử lý hiển thị trường nhập lý do tùy chỉnh
+            reasonSelect.addEventListener('change', function() {
+                customReason.classList.toggle('d-none', this.value !== 'other');
+                customReason.required = this.value === 'other';
             });
 
             // Xử lý nút hủy đơn hàng
@@ -806,17 +798,19 @@
                     orderItems.forEach(item => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${item.name}</td>
-                            <td>${item.color}</td>
-                            <td>${item.size}</td>
-                            <td>${item.quantity}</td>
-                            <td>${item.price}</td>
-                            <td class="text-end">${item.total}</td>
-                        `;
+                        <td>${item.name}</td>
+                        <td>${item.color}</td>
+                        <td>${item.size}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price}</td>
+                        <td class="text-end">${item.total}</td>
+                    `;
                         modalOrderItemsBody.appendChild(row);
                     });
 
-                    cancelReason.value = '';
+                    reasonSelect.value = '';
+                    customReason.value = '';
+                    customReason.classList.add('d-none');
                     cancelForm.action = `/profile/orders/${orderId}/cancel`;
                 });
             });
@@ -825,11 +819,12 @@
             cancelForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                if (!cancelReason.value.trim()) {
+                if (!reasonSelect.value || (reasonSelect.value === 'other' && !customReason.value.trim())) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Thiếu thông tin',
-                        text: 'Vui lòng nhập lý do hủy đơn hàng!',
+                        text: reasonSelect.value === 'other' ? 'Vui lòng nhập lý do tùy chỉnh!' :
+                            'Vui lòng chọn lý do hủy đơn hàng!',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#3085d6'
                     });
@@ -837,24 +832,15 @@
                 }
 
                 const formData = new FormData(this);
-                formData.append('cancel_reason', cancelReason.value);
-
-                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfTokenElement) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi hệ thống',
-                        text: 'Không tìm thấy CSRF token. Vui lòng tải lại trang và thử lại.',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#d33'
-                    });
-                    return;
+                formData.append('reason', reasonSelect.value);
+                if (reasonSelect.value === 'other') {
+                    formData.append('custom_reason', customReason.value);
                 }
 
                 fetch(this.action, {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': csrfTokenElement.content,
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                             'Accept': 'application/json',
                         },
                         body: formData
@@ -895,12 +881,8 @@
             // Hiệu ứng hover cho card
             orderItems.forEach(item => {
                 const card = item.querySelector('.card');
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px)';
-                });
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
+                card.addEventListener('mouseenter', () => card.style.transform = 'translateY(-5px)');
+                card.addEventListener('mouseleave', () => card.style.transform = 'translateY(0)');
             });
         });
     </script>

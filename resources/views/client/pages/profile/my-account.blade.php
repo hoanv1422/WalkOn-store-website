@@ -52,7 +52,7 @@
                                     alt="Avatar" class="rounded-circle img-fluid">
                             </div>
                             <h5 id="sidebar-name" class="fw-bold mb-1 mt-3">{{ $user->name }}</h5>
-                            <p class="text-muted small mb-0">{{ $user->mail }}</p>
+                            <p class="text-muted small mb-0">{{ $user->email }}</p>
                         </div>
                         <div class="list-group list-group-flush">
                             <a href="{{ route('profile.index') }}"
@@ -116,7 +116,7 @@
                                         <div class="col-sm-8">
                                             <div class="readonly-field-container">
                                                 <input type="email" class="form-control-plaintext fw-medium"
-                                                    id="email" value="{{ $user->mail }}" readonly>
+                                                    id="email" value="{{ $user->email }}" readonly>
                                                 <div class="readonly-badge">
                                                     <i class="fa fa-lock me-1"></i>Không thể sửa
                                                 </div>
