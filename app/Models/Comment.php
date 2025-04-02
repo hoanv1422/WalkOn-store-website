@@ -15,6 +15,7 @@ class Comment extends Model
         'parent_id',
         'content',
         'rating',
+        'last_admin_username',
     ];
 
     /**

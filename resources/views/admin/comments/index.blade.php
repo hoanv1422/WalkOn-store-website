@@ -82,6 +82,7 @@
                 <th>Thời gian</th>
                 <th>Hành động</th>
                 <th>Trạng Thái</th>
+                <th>Admin xử lý</th>
             </tr>
         </thead>
         <tbody>
@@ -94,11 +95,20 @@
                     <td>{{ $comment->rating }}</td>
                     <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
                     <td>
-                          
+                        @if($comment->hidden_comment == 0)
+                            <!-- Nếu đang hiển thị: cho phép ẩn -->
                             <form action="{{ route('comments.hide', $comment->id) }}" method="POST">
                                 @csrf
                                 <button class="btn btn-warning" onclick="return confirm('Bạn có chắc chắn muốn ẩn bình luận này?')">Ẩn</button>
                             </form>
+                        @else
+                            <!-- Nếu đang bị ẩn: cho phép hiển thị lại -->
+                            <form action="{{ route('admin.comments.unhide', $comment->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn hiển thị lại bình luận này?')">Hiển thị lại</button>
+                            </form>
+                        @endif
                     </td>
                     <td>   
                      @if($comment->hidden_comment == 1)
@@ -106,9 +116,12 @@
                     @else
                         <span class="badge bg-success">Hiển thị</span> <!-- Hiển thị trạng thái hiển thị -->
                     @endif</td>
+              
+                    <td>{{ $comment->last_admin_username ?? 'Không có thông tin' }}</td> <!-- Hiển thị tên admin đã thay đổi -->
                 </tr>
-
             @endforeach
+            
+        
         </tbody>
     </table>
 

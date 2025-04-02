@@ -89,10 +89,12 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::resource('admincomments', AdminCommentController::class);
     Route::post('comments/{comment}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
     Route::get('comments/hidden', [AdminCommentController::class, 'hiddenComments'])->name('comments.hidden');
+    Route::put('/comments/{comment}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
 });
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::resource('commentshidden', CommentHiddenController::class);
-});
+// Route::prefix('admin')->name('admin.')->group(function() {
+//     Route::resource('commentshidden', CommentHiddenController::class);
+//     Route::put('/comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
+// });
 
 
 // Route::get('/detail/{id}', [ProductController::class, 'show'])->name('client.pages.detail.comments');

@@ -121,4 +121,24 @@ class AdminCommentController extends Controller
 
         return view('admin.comments.hidden', compact('comments'));
     }
+    
+    // Hiện lại bình luận đã ẩn
+    public function unhide($id)
+{
+    $comment = Comment::findOrFail($id);
+
+    // Lấy tên tài khoản admin từ thông tin đăng nhập
+    $adminUsername = auth()->user()->name;
+
+    // Kiểm tra xem bình luận đã bị ẩn chưa
+    if ($comment->hidden_comment != 0) {
+        // Đánh dấu bình luận là đã hiển thị lại (cập nhật cột hidden_comment)
+        $comment->hidden_comment = 0; // 0 = hiển thị lại
+        $comment->last_admin_username = $adminUsername; // Lưu tên tài khoản admin cuối cùng thay đổi
+        $comment->save();
+    }
+
+    return redirect()->back()->with('success', 'Bình luận đã được hiển thị lại.');
+}
+
 }
