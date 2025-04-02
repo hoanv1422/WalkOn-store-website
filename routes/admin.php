@@ -19,6 +19,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     })->name('admin.index');
 
     Route::resource('products', ProductController::class);
+    Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);

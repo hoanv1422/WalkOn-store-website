@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Models\Size;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Color;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\ProductGallery;
 use App\Models\ProductVariant;
-use App\Models\Size;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 
 class ProductController extends Controller
@@ -29,13 +31,110 @@ class ProductController extends Controller
 
     public function index()
     {
-        // Giả sử bạn có model Product, lấy tất cả sản phẩm
-        $products = Product::all();
-        $products_active = Product::query()->where('is_active', true)->get();
-        $products_non_active = Product::query()->where('is_active', false)->get();
+        $allProducts = Product::with('category')->get();
+        $products_active = Product::where('is_active', true)->get();
+        $products_non_active = Product::where('is_active', false)->get();
+        $categories = Category::withCount('products')->where('is_active', true)->get();
+        $brands = Brand::all();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('products', 'products_active', 'products_non_active'));
+        return view('admin.products.index', compact(
+            'allProducts',
+            'products_active',
+            'products_non_active',
+            'categories',
+            'brands'
+        ));
     }
+
+    public function filter(Request $request)
+    {
+        $query = Product::with('category');
+
+        // Lọc theo danh mục
+        if ($request->categories) {
+            $query->whereIn('category_id', $request->categories);
+        }
+
+        // Lọc theo giá 
+        $query->whereBetween('price', [
+            $request->minPrice ?? 0,
+            $request->maxPrice ?? 100000000
+        ]);
+
+        // Lọc theo thương hiệu (theo brand_id)
+        if ($request->brands) {
+            $query->whereIn('brand_id', $request->brands);
+        }
+
+        // Tìm kiếm sản phẩm (theo tên sản phẩm)
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Tìm kiếm brands (lọc sản phẩm theo tên thương hiệu)
+        if ($request->searchBrands) {
+            $query->whereHas('brand', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->searchBrands . '%');
+            });
+        }
+
+        // Lọc theo rating
+        if ($request->ratings) {
+            $query->where(function ($q) use ($request) {
+                foreach ($request->ratings as $rating) {
+                    if (str_contains($rating, 'Above')) {
+                        $minRating = (float)explode(' ', $rating)[0];
+                        $q->orWhere('average_rating', '>=', $minRating);
+                    } elseif ($rating === 'Below 1 Star') {
+                        $q->orWhere('average_rating', '<', 1);
+                    }
+                }
+            });
+        }
+
+        // // Lọc theo discount
+        // if ($request->discounts) {
+        //     $query->where(function ($q) use ($request) {
+        //         foreach ($request->discounts as $discount) {
+        //             if (str_contains($discount, 'Less than')) {
+        //                 $q->orWhereRaw('
+        //                     CASE 
+        //                         WHEN price > 0 THEN ROUND(((price - IFNULL(price_sale, price)) / price) * 100)
+        //                         ELSE 0 
+        //                     END < ?
+        //                 ', [10]);
+        //             } else {
+        //                 preg_match('/(\d+)%/', $discount, $matches);
+        //                 $minDiscount = (int)($matches[1] ?? 0);
+        //                 $q->orWhereRaw('
+        //                     CASE 
+        //                         WHEN price > 0 THEN ROUND(((price - IFNULL(price_sale, price)) / price) * 100)
+        //                         ELSE 0 
+        //                     END >= ?
+        //                 ', [$minDiscount]);
+        //             }
+        //         }
+        //     });
+        // }
+
+        $baseQuery = clone $query;
+
+        return response()->json([
+            'html' => view('admin.products.product_lists', [
+                'all' => $query->get(),
+                'active' => (clone $baseQuery)->where('is_active', true)->get(),
+                'nonActive' => (clone $baseQuery)->where('is_active', false)->get()
+            ])->render(),
+            'counts' => [
+                'all' => $query->count(),
+                'active' => (clone $baseQuery)->where('is_active', true)->count(),
+                'nonActive' => (clone $baseQuery)->where('is_active', false)->count()
+            ]
+        ]);
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,7 +156,7 @@ class ProductController extends Controller
         // Data Product
         // dd($request->all());
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
-        
+
 
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));

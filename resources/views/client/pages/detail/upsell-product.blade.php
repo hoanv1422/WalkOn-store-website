@@ -19,8 +19,10 @@
                             </div>
                             <div class="product-img">
                                 <a href="{{ route('detail.index', $upSell->slug) }}">
-                                    <img src="{{ Storage::url($upSell->image) }}" alt="{{ $upSell->name }}" class="primary-img">
-                                    <img src="{{ Storage::url($upSell->secondary_image ?? $upSell->image) }}" alt="{{ $upSell->name }}" class="secondary-img">
+                                    <img src="{{ Storage::url($upSell->image) }}" alt="{{ $upSell->name }}"
+                                        class="primary-img">
+                                    <img src="{{ Storage::url($upSell->secondary_image ?? $upSell->image) }}"
+                                        alt="{{ $upSell->name }}" class="secondary-img">
                                 </a>
                             </div>
                             <div class="product-name">
@@ -40,17 +42,23 @@
                                 </div>
                             </div>
                             <div class="actions">
-                                <button type="submit" class="cart-btn" title="Thêm vào giỏ hàng">thêm vào giỏ hàng</button>
+                                <button type="submit" class="cart-btn" title="Thêm vào giỏ hàng">thêm vào giỏ
+                                    hàng</button>
                                 <ul class="add-to-link">
                                     <li>
-                                        <a class="modal-view" data-target="#productModal" data-bs-toggle="modal" href="#">
+                                        <a class="modal-view" data-target="#productModal" data-bs-toggle="modal"
+                                            href="#">
                                             <i class="fa fa-search"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
-                                            <i class="fa fa-heart-o"></i>
+
+                                        <a href="#" class="wishlist-link" data-product-id="{{ $product->id }}"
+                                            title="{{ in_array($product->id, $wishlistProductIds) ? 'Đã thêm vào danh sách yêu thích' : 'Thêm vào danh sách yêu thích' }}">
+                                            <i
+                                                class="fa {{ in_array($product->id, $wishlistProductIds) ? 'fa-heart text-danger' : 'fa-heart-o' }}"></i>
                                         </a>
+
                                     </li>
                                     <li>
                                         <a href="#">
@@ -61,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                @endforeach                
+                @endforeach
             </div>
         </div>
     </div>
