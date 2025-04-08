@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
@@ -31,7 +32,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
-
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
