@@ -67,7 +67,6 @@
                                 <span class="badge bg-secondary-subtle text-secondary">{{ $order->order_status }}</span>
                             @endif
                         </td>
-
                         <td class="action">
                             <ul class="list-inline hstack gap-2 mb-0">
                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"

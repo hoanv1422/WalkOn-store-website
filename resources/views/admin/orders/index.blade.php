@@ -25,6 +25,13 @@
                 </div>
             </div>
             <!-- end page title -->
+            <!-- Thông báo từ session -->
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+                </div>
+            @endif
 
             <!-- Thông báo từ session -->
             @if (session('error'))
@@ -140,6 +147,8 @@
         </div><!-- container-fluid -->
     </div><!-- End Page-content -->
 @endsection
+<!-- Bao gồm flatpickr CSS và JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <!-- Bao gồm flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

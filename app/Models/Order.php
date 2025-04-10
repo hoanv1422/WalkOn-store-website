@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\OrderAudit;
 
-class Order extends Model
+class Order extends Model 
 {
     use HasFactory;
 

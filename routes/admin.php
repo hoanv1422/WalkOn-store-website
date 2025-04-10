@@ -58,7 +58,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     ->name('post-comments.filter');
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
 
-
     Route::resource('orders', OrderController::class);
     Route::put('orders/{order}/updateStatus', [OrderController::class, 'updateStatus'])
         ->name('orders.updateStatus');
