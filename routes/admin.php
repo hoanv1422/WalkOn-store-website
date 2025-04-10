@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PostCategoryController;
-use App\Http\Controllers\admin\PostCommentController;
+use App\Http\Controllers\Admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -16,23 +16,13 @@ use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\ShipperController;
 use App\Http\Controllers\Auth\AuthController;
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
 
     Route::resource('products', ProductController::class);
+    Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
@@ -43,7 +33,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
     Route::delete('inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::put('inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::resource('shippers',ShipperController::class);
+    Route::resource('shippers', ShipperController::class);
     Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
@@ -61,9 +51,19 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
 
     Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::get('post-categories/filter', [PostCategoryController::class, 'filter'])
+        ->name('post-categories.filter');
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
+    Route::get('post-comments/filter', [PostCommentController::class, 'filter'])
+    ->name('post-comments.filter');
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
+
+
     Route::resource('orders', OrderController::class);
+    Route::put('orders/{order}/updateStatus', [OrderController::class, 'updateStatus'])
+        ->name('orders.updateStatus');
+    Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
+        ->name('orders.cancel');
 });
 
 Route::prefix('admin')->group(function () {

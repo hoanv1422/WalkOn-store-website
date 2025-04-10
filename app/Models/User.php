@@ -53,6 +53,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_active' => 'boolean',
         'email_verified_at' => 'datetime',
     ];
+    public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists', 'user_id', 'product_id');
+    }
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());

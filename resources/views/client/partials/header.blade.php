@@ -61,7 +61,7 @@
                         </div>
                         <div class="cart-menu">
                             <ul>
-                                <li><a href="{{ route('cart.index') }}"> <img src="img/icon-cart.png" alt="">
+                                <li><a href="{{ route('cart.index') }}"> <img src="{{asset('img/icon-cart.png') }}" alt="">
                                         <span>{{ $cartCount }}</span> </a>
                                     <div class="cart-info">
                                         <ul>

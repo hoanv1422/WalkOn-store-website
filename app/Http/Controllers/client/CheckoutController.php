@@ -25,12 +25,8 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
-
-        // dd($request->all());
-
         try {
             $user = Auth::user();
-
             if (!$user) {
                 return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
             }
@@ -40,11 +36,12 @@ class CheckoutController extends Controller
                 return redirect()->route('cart.list')->with('error', 'Giỏ hàng của bạn trống.');
             }
 
-            if (Empty($request->cartItemIds)) {
+            if (empty($request->cartItemIds)) {
                 return back()->with('error', 'Giỏ hàng trống.');
             }
 
-            $cartItems = CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)
+            $cartItems = CartItem::where('cart_id', $cart->id)
+                ->whereIn('id', $request->cartItemIds)
                 ->with(['productVariant.product', 'productVariant.size', 'productVariant.color'])
                 ->get();
 
@@ -52,78 +49,89 @@ class CheckoutController extends Controller
 
             DB::beginTransaction();
 
+            // Kiểm tra số lượng tồn kho của từng sản phẩm
             foreach ($cartItems as $item) {
                 if ($item->quantity > $item->productVariant->quantity) {
                     throw new \Exception('Sản phẩm ' . $item->productVariant->product->name . ' không đủ số lượng.');
                 }
             }
 
+            // Nếu thanh toán online (VNPAY) thì đặt trạng thái đơn hàng là confirmed và thanh toán là paid ngay lập tức,
+            // còn nếu là COD thì giữ nguyên trạng thái pending và thanh toán chưa thanh toán.
+            $isOnline = $request->payment_method === 'VNPAY';
+
             $order = Order::create([
-                'order_code' => 'ORD' . date('Ymd') . strtoupper(Str::random(4)),
-                'user_id' => $user->id,
-                'user_email' => $user->mail,
-                'user_name' => $user->username,
-                'user_address' => $user->address,
-                'user_phone' => $user->phone,
-                'receiver_name' => $request->receiver_name,
-                'receiver_email' => $request->receiver_email,
-                'receiver_phone' => $request->receiver_phone,
+                'order_code'       => 'ORD' . date('Ymd') . strtoupper(Str::random(4)),
+                'user_id'          => $user->id,
+                'user_email'       => $user->mail,
+                'user_name'        => $user->username,
+                'user_address'     => $user->address,
+                'user_phone'       => $user->phone,
+                'receiver_name'    => $request->receiver_name,
+                'receiver_email'   => $request->receiver_email,
+                'receiver_phone'   => $request->receiver_phone,
                 'receiver_address' => $request->receiver_address,
-                'note' => $request->note,
-                'coupon_id' => $coupon_id,
-                'coupon' => $request->couponCodeForOrder,
-                'total_price' => $request->totalPrice,
-                'discount_amount' => $request->discountAmount,
-                'shipping_fee' => $request->shippingFee,
-                'final_price' => $request->finalPrice,
-                'order_status' => 'pending',
-                'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
-                'payment_method' => $request->payment_method,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'note'             => $request->note,
+                'coupon_id'        => $coupon_id,
+                'coupon'           => $request->couponCodeForOrder,
+                'total_price'      => $request->totalPrice,
+                'discount_amount'  => $request->discountAmount,
+                'shipping_fee'     => $request->shippingFee,
+                'final_price'      => $request->finalPrice,
+                'order_status'     => $isOnline ? 'confirmed' : 'pending',
+                'payment_status'   => $isOnline ? 'paid' : 'unpaid',
+                'payment_method'   => $request->payment_method,
+                'created_at'       => now(),
+                'updated_at'       => now(),
             ]);
 
             $orderItems = [];
             foreach ($cartItems as $item) {
                 $orderItems[] = [
-                    'order_id' => $order->id,
-                    'product_variant_id' => $item->product_variant_id,
-                    'product_name' => $item->productVariant->product->name,
-                    'product_sku' => $item->productVariant->product->sku,
-                    'product_image' => $item->productVariant->image,
-                    'product_price' => $item->productVariant->price,
-                    'product_price_sale' => $item->productVariant->price_sale,
-                    'variant_size_name' => $item->productVariant->size->size,
-                    'variant_color_name' => $item->productVariant->color->color,
-                    'quantity' => $item->quantity,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'order_id'             => $order->id,
+                    'product_variant_id'   => $item->product_variant_id,
+                    'product_name'         => $item->productVariant->product->name,
+                    'product_sku'          => $item->productVariant->product->sku,
+                    'product_image'        => $item->productVariant->image,
+                    'product_price'        => $item->productVariant->price,
+                    'product_price_sale'   => $item->productVariant->price_sale,
+                    'variant_size_name'    => $item->productVariant->size->size,
+                    'variant_color_name'   => $item->productVariant->color->color,
+                    'quantity'             => $item->quantity,
+                    'created_at'           => now(),
+                    'updated_at'           => now(),
                 ];
+                // Cập nhật tồn kho và số lượng đã bán
                 $item->productVariant->decrement('quantity', $item->quantity);
                 $this->updateQuantityProduct($item->productVariant->product_id);
                 $item->productVariant->product->increment('sold_quantity', $item->quantity);
             }
             OrderItem::insert($orderItems);
-            CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
 
-            if ($request->payment_method === 'VNPAY') {
+            // Xóa các mặt hàng trong giỏ đã được đặt hàng
+            CartItem::where('cart_id', $cart->id)
+                ->whereIn('id', $request->cartItemIds)
+                ->delete();
+
+            // Nếu thanh toán onl, đơn hàng đã được xác nhận ngay, gửi mail thông báo và commit luôn giao dịch.
+            if ($isOnline) {
+                Mail::to($user->email)->send(new OrderMail());
                 DB::commit();
-                $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
-                return redirect()->away($vnpayUrl);
+                return redirect()->route('cart.index')
+                    ->with('success', 'Đơn hàng của bạn đã được đặt thành công và đã được xác nhận.');
             }
 
-            Mail::to($user->email)->send(new OrderMail());
-
+            // Nếu là thanh toán COD, commit giao dịch và trả về thông báo đặt hàng thành công.
             DB::commit();
-            return redirect()->route('cart.index')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
+            return redirect()->route('cart.index')
+                ->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            dd($e);
+            // Bạn có thể log lỗi tại đây nếu cần: Log::error($e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi đặt đơn hàng: ' . $e->getMessage());
         }
     }
-
 
     private function vnpay_payment($amount, $orderCode)
     {
