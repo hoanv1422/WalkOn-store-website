@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\admin\PostCommentController;
+use App\Mail\ContactReplyMail;
+use App\Models\Contact;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -40,13 +43,27 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
     Route::resource('contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy']);
-    
+
+    Route::get('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
+    Route::post('contacts/{contact}/reply', [ContactController::class, 'sendReply'])->name('contacts.sendReply');
+    Route::post('/contacts/reply/{id}', [ContactController::class, 'sendReply'])->name('contacts.reply.send');
+
+    Route::get('test-email', function () {
+        $contact = Contact::first();
+        $responseMessage = "Đây là email thử nghiệm gửi từ hệ thống.";
+        try {
+            Mail::to($contact->email)->send(new ContactReplyMail($contact, $responseMessage));
+            return 'Email đã được gửi thành công!';
+        } catch (\Exception $e) {
+            return 'Có lỗi xảy ra: ' . $e->getMessage();
+        }
+    })->name('test-email');
     // Kho hàng
     Route::resource('inventory', InventoryController::class)->only(['index']);
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
     Route::delete('inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::put('inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::resource('shippers',ShipperController::class);
+    Route::resource('shippers', ShipperController::class);
     Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);

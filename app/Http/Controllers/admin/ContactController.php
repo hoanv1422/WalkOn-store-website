@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Mail\ContactReplyMail;
 use App\Models\Contact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -71,27 +73,27 @@ class ContactController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateContactRequest $request, Contact $contact)
-{
-    $data = $request->validated();
+    {
+        $data = $request->validated();
 
-    // Chỉ gán responded_by khi trạng thái là REPLIED
-    if ($data['status'] === 'REPLIED') {
-        $data['responded_by'] = auth()->id();
-    } else {
-        // Nếu không phải trạng thái REPLIED thì không thay đổi người trả lời
-        unset($data['responded_by']);
-    }
+        // Chỉ gán responded_by khi trạng thái là REPLIED
+        if ($data['status'] === 'REPLIED') {
+            $data['responded_by'] = auth()->id();
+        } else {
+            // Nếu không phải trạng thái REPLIED thì không thay đổi người trả lời
+            unset($data['responded_by']);
+        }
 
-    try {
-        DB::beginTransaction();
-        $contact->update($data);
-        DB::commit();
-        return redirect()->route('contacts.index')->with('success', 'Cập nhật trạng thái thành công');
-    } catch (\Exception $exception) {
-        DB::rollBack();
-        return back()->with('error', 'Có lỗi khi cập nhật liên hệ');
+        try {
+            DB::beginTransaction();
+            $contact->update($data);
+            DB::commit();
+            return redirect()->route('contacts.index')->with('success', 'Cập nhật trạng thái thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return back()->with('error', 'Có lỗi khi cập nhật liên hệ');
+        }
     }
-}
 
     /**
      * Remove the specified resource from storage.
@@ -108,6 +110,39 @@ class ContactController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
             return back()->with('error', 'Lỗi khi xóa liên hệ');
+        }
+    }
+
+    public function reply($id)
+    {
+        $contact = Contact::findOrFail($id);
+        return view('admin.contacts.reply', compact('contact'));
+    }
+    public function sendReply(Request $request, $id)
+    {
+        $request->validate([
+            'response_message' => 'required|string'
+        ]);
+        $contact = Contact::findOrFail($id);
+        if ($contact->status === 'REPLIED') {
+            return redirect()->route('contacts.index')
+                ->with('error', 'Tin nhắn phản hồi khách hàng chỉ có thể trả lời một lần.');
+        }
+
+        try {
+            Mail::to($contact->email)->send(new ContactReplyMail($contact, $request->response_message));
+
+            $contact->update([
+                'status' => 'REPLIED',
+                'responded_by' => auth()->user()->id,
+                'response_message' => $request->response_message
+            ]);
+            return redirect()->route('contacts.index')
+                ->with('success', 'Đã gửi phản hồi liên hệ khách hàng thành công.');
+        } catch (\Exception $e) {
+            logger('Lỗi gửi email: ' . $e->getMessage());
+            return redirect()->route('contacts.index')
+                ->with('error', 'Đã xảy ra lỗi khi gửi phản hồi.');
         }
     }
 }

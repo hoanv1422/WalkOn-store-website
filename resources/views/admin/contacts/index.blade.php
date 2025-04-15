@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
 @section('title', 'Tin nhắn liên hệ')
 @section('content')
+<meta name="base-url" content="{{ url('/') }}">
 <div class="page-content">
     <div class="container-fluid">
-
         <!-- start page title -->
         <div class="row">
             <div class="col-12">
@@ -94,7 +94,7 @@
                                             <th class="sort" data-sort="phone">Số Điện Thoại</th>
                                             <th class="sort" data-sort="message">Tin nhắn</th>
                                             <th class="sort" data-sort="status">Trạng thái</th>
-                                            <th class="sort" data-sort="response_message">Trả lời bằng</th>
+                                            <th class="sort" data-sort="response_message">Tin nhắn trả lời</th>
                                             <th class="sort" data-sort="responded_by">Trả lời bởi</th>
                                             <th class="sort" data-sort="action">Hành Động</th>
                                         </tr>
@@ -104,56 +104,68 @@
                                         <tr>
                                             <th scope="row">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        name="chk_child">
+                                                    <input class="form-check-input" type="checkbox" name="chk_child">
                                                 </div>
                                             </th>
-                                            <td class="contact_code">{{ $contact->contact_code}}</td>
-                                            <td class="name">{{ $contact->user->name ?? 'Không có' }}</td>
+                                            <td class="contact_code">{{ $contact->contact_code }}</td>
+                                            <td class="username">{{ $contact->user->name ?? 'Không có' }}</td>
                                             <td class="name">{{ $contact->name }}</td>
-                                            <td class="email">
-                                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $contact->email }}" target="_blank">{{ $contact->email }}</a>
-                                            </td>
+                                            <td class="email">{{ $contact->email }}</td>
                                             <td class="phone">{{ $contact->phone }}</td>
                                             <td class="message">{{ $contact->message }}</td>
                                             <td class="status">
                                                 <span class="badge
-                                                {{ $contact->status === 'UNREAD' ? 'bg-danger-subtle text-danger' :
-                                                ($contact->status === 'READ' ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success') }}">
+                {{ $contact->status === 'UNREAD' ? 'bg-danger-subtle text-danger' :
+                ($contact->status === 'READ' ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success') }}">
                                                     {{ $contact->status === 'UNREAD' ? 'CHƯA ĐỌC' :
-                                                ($contact->status === 'READ' ? 'ĐÃ ĐỌC' : 'ĐÃ TRẢ LỜI') }}
+                ($contact->status === 'READ' ? 'ĐÃ ĐỌC' : 'ĐÃ TRẢ LỜI') }}
                                                 </span>
                                             </td>
-                                            <td class="response_message">EMAIL</td>
+                                            <td class="response_message">{{ $contact->response_message}}</td>
                                             <td class="responded_by">{{ $contact->responder->name ?? '' }}</td>
                                             <td>
                                                 <ul class="list-inline hstack gap-2 mb-0">
+                                                    <!-- View Button -->
                                                     <li class="list-inline-item edit">
                                                         <a href="#showModalEdit" data-bs-toggle="modal"
                                                             class="text-primary d-inline-block edit-item-btn"
                                                             data-id="{{ $contact->id }}"
                                                             data-contact_code="{{ $contact->contact_code }}"
-                                                            data-username="{{ $contact->username }}"
+                                                            data-username="{{ $contact->user->name ?? '' }}"
                                                             data-name="{{ $contact->name }}"
                                                             data-email="{{ $contact->email }}"
-                                                            data-role="{{ $contact->role }}"
                                                             data-phone="{{ $contact->phone }}"
-                                                            data-password="{{ $contact->password }}"
                                                             data-message="{{ $contact->message }}"
-                                                            data-status="{{ $contact->is_active }}">
+                                                            data-status="{{ $contact->status }}"
+                                                            data-response_message="{{ $contact->response_message ?? 'Chưa có phản hồi' }}">
                                                             <i class="ri-eye-fill fs-16"></i>
                                                         </a>
+                                                    </li>
+                                                    <!-- Reply Button -->
+                                                    <li class="list-inline-item">
+                                                        <a href="#replyModal" data-bs-toggle="modal"
+                                                            class="text-success d-inline-block reply-item-btn"
+                                                            data-id="{{ $contact->id }}"
+                                                            data-name="{{ $contact->name }}"
+                                                            data-email="{{ $contact->email }}"
+                                                            data-message="{{ $contact->message }}"
+                                                            data-action="{{ route('contacts.reply.send', ['id' => $contact->id]) }}">
+                                                            <i class="ri-pencil-fill fs-16"></i>
+                                                        </a>
+
                                                     </li>
                                                 </ul>
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
+
                                 </table>
+
                             </div>
                         </div>
 
-                        <!-- Modal -->
+                        <!-- Modal thêm tin nhắn liên hệ-->
                         <div class="modal fade" id="showModalCreate" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered">
                                 <div class="modal-content">
@@ -216,6 +228,7 @@
                             </div>
                         </div>
 
+                        <!-- modal cập nhật trạng thái liên hệ -->
                         <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered">
                                 <div class="modal-content">
@@ -253,17 +266,19 @@
                                                         <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="message-field-edit" class="form-label">Tin Nhắn</label>
+                                                        <label for="message-field-edit" class="form-label">Tin Nhắn Khách Hàng</label>
                                                         <textarea id="message-field-edit" class="form-control" placeholder="Nhập tin nhắn" name="message" readonly></textarea>
                                                         <div class="invalid-feedback">Vui lòng nhập tin nhắn.</div>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="status-field-edit" class="form-label">Trạng Thái</label>
-                                                        <select class="form-control" name="status" id="status-field-edit">
-                                                            <option value="UNREAD">Chưa Đọc</option>
-                                                            <option value="READ">Đã Đọc</option>
-                                                            <option value="REPLIED">Đã Trả Lời</option>
-                                                        </select>
+                                                        <label for="response-message-field-edit" class="form-label">Tin Nhắn Phản Hồi Admin</label>
+                                                        <textarea
+                                                            id="response-message-field-edit"
+                                                            class="form-control d-none"
+                                                            placeholder="Nhập tin nhắn phản hồi"
+                                                            name="response_message"
+                                                            readonly></textarea>
+                                                        <div class="invalid-feedback">Vui lòng nhập tin nhắn.</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -271,7 +286,7 @@
                                         <div class="modal-footer">
                                             <div class="hstack gap-2 justify-content-end">
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                                                <button type="submit" class="btn btn-success">Cập Nhật Trạng Thái Tin Nhắn Liên Hệ</button>
+                                                <!-- <button type="submit" class="btn btn-success" disabled>Cập Nhật Trạng Thái Tin Nhắn Liên Hệ</button> -->
                                             </div>
                                         </div>
                                     </form>
@@ -280,6 +295,39 @@
                             </div>
                         </div>
 
+                        <!-- Modal reply email -->
+                        <div class="modal fade" id="replyModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <form method="POST" action="#" id="replyForm">
+                                        @csrf
+                                        <input type="hidden" id="reply-contact-id" name="contact_id">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Phản Hồi Liên Hệ Khách Hàng </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Tên người dùng:</strong> <span id="reply-contact-name"></span></p>
+                                            <p><strong>Email:</strong> <span id="reply-contact-email"></span></p>
+                                            <div class="mb-3">
+                                                <label for="reply-customer-message" class="form-label">Tin nhắn của khách hàng:</label>
+                                                <p id="reply-customer-message" class="form-control-plaintext"></p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="reply-message" class="form-label">Nội dung phản hồi</label>
+                                                <textarea name="response_message" id="reply-message" class="form-control" rows="5" placeholder="Nhập nội dung phản hồi..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Gửi tin nhắn qua email</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- xóa delete -->
                         <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog  modal-dialog-centered">
                                 <div class="modal-content">
