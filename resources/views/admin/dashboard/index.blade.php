@@ -236,9 +236,14 @@
                                 </div><!-- end card header -->
                 
                                 <div class="card-body p-0 pb-2">
-                                    <div class="w-100">
+                                    {{-- <div class="w-100">
                                         <div id="combined_chart" class="apex-charts" dir="ltr"></div>
+                                    </div> --}}
+                                    <div class="w-100">
+                                        <h2>Tổng quan tài chính</h2>
+                                        <div id="financial_chart" class="apex-charts" dir="ltr"></div>
                                     </div>
+
                                 </div><!-- end card body -->
                             </div><!-- end card -->
                         </div><!-- end col -->
@@ -1039,6 +1044,57 @@
     var combinedChart = new ApexCharts(document.querySelector("#combined_chart"), combinedOptions);
     combinedChart.render();
     
+       // Script cho Financial Chart
+       var financialChartData = @json($financialChartData);
+        var financialOptions = {
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            series: [{
+                name: 'Số tiền',
+                data: Object.values(financialChartData)
+            }],
+            xaxis: {
+                categories: Object.keys(financialChartData),
+                title: {
+                    text: 'Danh mục'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Số tiền (VND)'
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            colors: ['#3b82f6', '#ef4444', '#10b981'], // Màu cho Doanh thu, Chi phí, Lợi nhuận
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + ' VND';
+                    }
+                }
+            }
+        };
+        var financialChart = new ApexCharts(document.querySelector("#financial_chart"), financialOptions);
+        financialChart.render();
     // Biểu đồ tròn (Trạng thái đơn hàng)
     var statusChartData = @json($statusChartData);
     var statusOptions = {

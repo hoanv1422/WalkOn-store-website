@@ -50,7 +50,23 @@ class DashboardController extends Controller
         $revenue = Order::where('order_status', 'delivered')
                        ->whereBetween('created_at', [$startDate, $endDate])
                        ->sum('final_price');
+       // Thống kê chi phí (dùng selectRaw thay vì DB::raw)
+       $cost = Order::where('order_status', 'delivered')
+       ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+       ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+       ->join('products', 'product_variants.product_id', '=', 'products.id')
+       ->selectRaw('SUM(order_items.quantity * COALESCE(products.price_income, 0)) as total_cost')
+       ->value('total_cost');
 
+// Thống kê lợi nhuận
+$profit = $revenue - $cost;
+
+// Dữ liệu cho biểu đồ cột: Doanh thu, Chi phí, Lợi nhuận
+$financialChartData = [
+'Doanh thu' => (float) $revenue,
+'Chi phí' => (float) $cost,
+'Lợi nhuận' => (float) $profit,
+];
         // Dữ liệu cho biểu đồ số đơn hàng theo ngày
         // Biến: $chartData - Dữ liệu biểu đồ (số đơn hàng theo ngày)
         $chartData = Order::selectRaw('DATE(created_at) as date, COUNT(*) as count')
@@ -164,7 +180,10 @@ $statusChartData = Order::selectRaw('order_status, COUNT(*) as count')
             'topSellingProducts',
             'productsByBrand',
             'productsByCategory',
-            'pendingOrders'
+            'pendingOrders',
+            'financialChartData',
+            'cost', 
+            'profit'
         ));
     }
 }
