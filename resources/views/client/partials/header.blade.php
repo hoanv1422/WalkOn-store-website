@@ -37,6 +37,7 @@
                                     </a>
                                     <ul>
                                         <li><a href="{{ route('profile.index') }}">Tài Khoản</a></li>
+                                        <li><a href="{{ route('order.list') }}">Đơn đã đặt</a></li>
                                         <li><a href="{{ route('wishlist.index') }}">Yêu Thích</a></li>
                                         <li><a href="{{ route('cart.index') }}">Giỏ Hàng</a></li>
                                         <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
@@ -52,7 +53,7 @@
                                                 </form>
                                             </li>
                                         @else
-                                            <li><a href="{{ route('login') }}">Đăng Nhập</a></li>
+                                            <li><a href="{{ route('login.form') }}">Đăng Nhập</a></li>
                                         @endauth
 
                                     </ul>
@@ -61,61 +62,15 @@
                         </div>
                         <div class="cart-menu">
                             <ul>
-                                <li><a href="{{ route('cart.index') }}"> <img src="img/icon-cart.png" alt="">
-                                        <span>{{ $cartCount }}</span> </a>
+                                <li><a href="{{ route('cart.index') }}"> <img src="{{asset('img/icon-cart.png')}}" alt="Cart">
+                                        <span id="cart-count-header">0</span> </a>
                                     <div class="cart-info">
-                                        <ul>
-                                            @foreach ($cartItems as $item)
-                                                <li>
-                                                    <div class="cart-img"
-                                                        style="width: 50px; height: 50px; overflow:hidden">
-                                                        @if (!empty($item->productVariant->image) && Storage::exists($item->productVariant->image))
-                                                            <img src="{{ Storage::url($item->productVariant->image) }}"
-                                                                alt="{{ $item->productVariant->product->name }}"
-                                                                style="height: 100%; width: 100%; object-fit: cover;">
-                                                        @else
-                                                            <img src="{{ asset('img/default-image.jpg') }}"
-                                                                alt="{{ $item->productVariant->product->name }}"
-                                                                style="height: 100%; width: 100%; object-fit: cover;">
-                                                        @endif
-
-                                                    </div>
-                                                    <div class="cart-details">
-                                                        <a href="{{ route('detail.index', $item->productVariant->product->slug) }}"
-                                                            title="{{ $item->productVariant->product->name }}">
-                                                            {{ Str::limit($item->productVariant->product->name, 20, '...') }}
-                                                        </a>
-
-                                                        <p>{{ $item->quantity }} x
-                                                            {{ $item->productVariant->price }} VND</p>
-
-                                                        <p>{{ $item->productVariant->size->size }} x
-                                                            {{ $item->productVariant->color->color }}</p>
-                                                    </div>
-                                                    <div class="d-flex">
-                                                        <form action="{{ route('cart.delete', $item->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?');"
-                                                            class="ms-auto">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-link p-0 border-0 text-danger">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-
-                                                </li>
-                                            @endforeach
-
-                                            @if ($cartCount > 2)
-                                                <a href="{{ route('cart.index') }}" class="small text-white">Xem
-                                                    thêm</a>
-                                            @endif
+                                        <ul id="cart-items-header">
+                                            <!-- Nơi hiển thị giỏ hàng -->
                                         </ul>
-                                        <h3>Tổng: <span>{{ $subTotal }} VND</span></h3>
-                                        <a href="{{ route('cart.index') }}" class="checkout">Go To Cart</a>
+                                        <h3>Tổng: <span id="subtotal-header">0 VND
+                                            </span></h3>
+                                        <a href="{{ route('cart.index') }}" class="checkout">Tới Giỏ Hàng</a>
                                     </div>
                                 </li>
                             </ul>
@@ -144,16 +99,37 @@
                                 <li class="mega-men">
                                     <a href="{{ route('shop.index') }}">Cửa Hàng</a>
                                     <div class="mega-menu men">
-                                        @if ($categories->count() > 0)
-                                            @foreach ($categories as $category)
-                                                <span>
-                                                    <a
-                                                        href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a>
-                                                </span>
-                                            @endforeach
-                                        @endif
+                                        <div class="row">
+                                            <div class="col left">
+                                                <h5 class="text-white">Danh mục</h5>
+                                                @if ($categories->count())
+                                                    @foreach ($categories as $category)
+                                                        <span>
+                                                            <a
+                                                                href="{{ route('shop.index', ['category' => $category->id]) }}">
+                                                                {{ $category->name }}
+                                                            </a>
+                                                        </span>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                            <div class="col right">
+                                                <h5 class="text-white">Thương hiệu</h5>
+                                                @if ($brands->count())
+                                                    @foreach ($brands as $brand)
+                                                        <span>
+                                                            <a
+                                                                href="{{ route('shop.index', ['brand' => $brand->id]) }}">
+                                                                {{ $brand->name }}
+                                                            </a>
+                                                        </span>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
+
                                 <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
                                 <li><a href="{{ route('about-us.index') }}">Về Chúng Tôi</a></li>
                                 <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>

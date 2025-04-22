@@ -2,13 +2,21 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Category;
+use App\Models\Color;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductGallery;
 use App\Models\ProductVariant;
+use App\Models\Size;
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
@@ -21,513 +29,308 @@ class DatabaseSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        // Xóa dữ liệu cũ trong bảng orders và order_items
-        if (Schema::hasTable((new Order())->getTable())) {
-            Order::query()->truncate();
-        }
-        if (Schema::hasTable((new OrderItem())->getTable())) {
-            OrderItem::query()->truncate();
-        }
+        User::query()->truncate();
+        Size::query()->truncate();
+        Color::query()->truncate();
+        Category::query()->truncate();
+        Brand::query()->truncate();
+        Product::query()->truncate();
+        ProductVariant::query()->truncate();
+        ProductGallery::query()->truncate();
 
-        // Tạo 16 đơn hàng mẫu (10 cũ + 6 mới)
-        $orders = [
-            [
-                'order_code' => 'ORD001',
-                'user_id' => 1,
-                'user_email' => 'member@gmail.com',
-                'user_name' => 'John Doe',
-                'user_address' => '123 Street, Hanoi',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'member@gmail.com',
-                'receiver_name' => 'John Doe',
-                'receiver_address' => '123 Street, Hanoi',
-                'receiver_phone' => '0123456789',
-                'note' => 'Giao nhanh',
-                'total_price' => 1200000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 1230000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK001',
-                'created_at' => '2025-03-30 06:00:00',
-                'updated_at' => '2025-03-30 06:00:00'
-            ],
-            [
-                'order_code' => 'ORD002',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Gói cẩn thận',
-                'total_price' => 2000000.00,
-                'discount_amount' => 200000.00,
-                'shipping_fee' => 35000.00,
-                'final_price' => 1835000.00,
-                'order_status' => 'confirmed',
-                'payment_status' => 'paid',
-                'payment_method' => 'Bank Card',
-                'payment_date' => '2025-03-30 07:00:00',
-                'tracking_code' => 'TRACK002',
-                'created_at' => '2025-03-30 07:00:00',
-                'updated_at' => '2025-03-30 07:30:00'
-            ],
-            [
-                'order_code' => 'ORD003',
-                'user_id' => 1,
-                'user_email' => 'member@gmail.com',
-                'user_name' => 'John Doe',
-                'user_address' => '123 Street, Hanoi',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'friend@gmail.com',
-                'receiver_name' => 'Jane Smith',
-                'receiver_address' => '789 Road, Da Nang',
-                'receiver_phone' => '0987654321',
-                'note' => null,
-                'total_price' => 510000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 25000.00,
-                'final_price' => 535000.00,
-                'order_status' => 'shipped',
-                'payment_status' => 'paid',
-                'payment_method' => 'COD',
-                'payment_date' => '2025-03-30 08:00:00',
-                'tracking_code' => 'TRACK003',
-                'created_at' => '2025-03-30 08:00:00',
-                'updated_at' => '2025-03-30 08:15:00'
-            ],
-            [
-                'order_code' => 'ORD004',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Giao buổi sáng',
-                'total_price' => 900000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 930000.00,
-                'order_status' => 'delivered',
-                'payment_status' => 'paid',
-                'payment_method' => 'Bank Card',
-                'payment_date' => '2025-03-30 09:00:00',
-                'delivered_at' => '2025-03-30 11:00:00',
-                'tracking_code' => 'TRACK004',
-                'created_at' => '2025-03-30 09:00:00',
-                'updated_at' => '2025-03-30 11:00:00'
-            ],
-            [
-                'order_code' => 'ORD005',
-                'user_id' => 1,
-                'user_email' => 'member@gmail.com',
-                'user_name' => 'John Doe',
-                'user_address' => '123 Street, Hanoi',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'member@gmail.com',
-                'receiver_name' => 'John Doe',
-                'receiver_address' => '123 Street, Hanoi',
-                'receiver_phone' => '0123456789',
-                'note' => null,
-                'total_price' => 1500000.00,
-                'discount_amount' => 150000.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 1380000.00,
-                'order_status' => 'processing',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK005',
-                'created_at' => '2025-03-30 10:00:00',
-                'updated_at' => '2025-03-30 10:00:00'
-            ],
-            [
-                'order_code' => 'ORD006',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Giao chiều',
-                'total_price' => 620000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 25000.00,
-                'final_price' => 645000.00,
-                'order_status' => 'cancelled',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK006',
-                'created_at' => '2025-03-30 11:00:00',
-                'updated_at' => '2025-03-30 11:30:00'
-            ],
-            [
-                'order_code' => 'ORD007',
-                'user_id' => 1,
-                'user_email' => 'member@gmail.com',
-                'user_name' => 'John Doe',
-                'user_address' => '123 Street, Hanoi',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'member@gmail.com',
-                'receiver_name' => 'John Doe',
-                'receiver_address' => '123 Street, Hanoi',
-                'receiver_phone' => '0123456789',
-                'note' => null,
-                'total_price' => 800000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 830000.00,
-                'order_status' => 'returned',
-                'payment_status' => 'refunded',
-                'payment_method' => 'Bank Card',
-                'payment_date' => '2025-03-30 12:00:00',
-                'delivered_at' => '2025-03-30 14:00:00',
-                'tracking_code' => 'TRACK007',
-                'created_at' => '2025-03-30 12:00:00',
-                'updated_at' => '2025-03-30 14:00:00'
-            ],
-            [
-                'order_code' => 'ORD008',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'friend2@gmail.com',
-                'receiver_name' => 'Tom Brown',
-                'receiver_address' => '321 Lane, Hue',
-                'receiver_phone' => '0912345678',
-                'note' => 'Giao nhanh',
-                'total_price' => 430000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 25000.00,
-                'final_price' => 455000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK008',
-                'created_at' => '2025-03-30 13:00:00',
-                'updated_at' => '2025-03-30 13:00:00'
-            ],
-            [
-                'order_code' => 'ORD009',
-                'user_id' => 1,
-                'user_email' => 'member@gmail.com',
-                'user_name' => 'John Doe',
-                'user_address' => '123 Street, Hanoi',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'member@gmail.com',
-                'receiver_name' => 'John Doe',
-                'receiver_address' => '123 Street, Hanoi',
-                'receiver_phone' => '0123456789',
-                'note' => null,
-                'total_price' => 940000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 970000.00,
-                'order_status' => 'shipped',
-                'payment_status' => 'paid',
-                'payment_method' => 'Bank Card',
-                'payment_date' => '2025-03-30 14:00:00',
-                'tracking_code' => 'TRACK009',
-                'created_at' => '2025-03-30 14:00:00',
-                'updated_at' => '2025-03-30 14:15:00'
-            ],
-            [
-                'order_code' => 'ORD010',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Gói kỹ',
-                'total_price' => 660000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 35000.00,
-                'final_price' => 695000.00,
-                'order_status' => 'delivered',
-                'payment_status' => 'paid',
-                'payment_method' => 'COD',
-                'payment_date' => '2025-03-30 15:00:00',
-                'delivered_at' => '2025-03-30 17:00:00',
-                'tracking_code' => 'TRACK010',
-                'created_at' => '2025-03-30 15:00:00',
-                'updated_at' => '2025-03-30 17:00:00'
-            ],
-            // Thêm 6 đơn hàng mới ở trạng thái pending cho admin@gmail.com
-            [
-                'order_code' => 'ORD011',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Giao trong ngày',
-                'total_price' => 780000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 810000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK011',
-                'created_at' => '2025-03-30 16:00:00',
-                'updated_at' => '2025-03-30 16:00:00'
-            ],
-            [
-                'order_code' => 'ORD012',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'friend3@gmail.com',
-                'receiver_name' => 'Mary Johnson',
-                'receiver_address' => '654 Boulevard, Nha Trang',
-                'receiver_phone' => '0934567890',
-                'note' => null,
-                'total_price' => 1250000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 35000.00,
-                'final_price' => 1285000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK012',
-                'created_at' => '2025-03-30 17:00:00',
-                'updated_at' => '2025-03-30 17:00:00'
-            ],
-            [
-                'order_code' => 'ORD013',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Gói cẩn thận',
-                'total_price' => 560000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 25000.00,
-                'final_price' => 585000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK013',
-                'created_at' => '2025-03-30 18:00:00',
-                'updated_at' => '2025-03-30 18:00:00'
-            ],
-            [
-                'order_code' => 'ORD014',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => null,
-                'total_price' => 890000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 920000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'Bank Card',
-                'tracking_code' => 'TRACK014',
-                'created_at' => '2025-03-30 19:00:00',
-                'updated_at' => '2025-03-30 19:00:00'
-            ],
-            [
-                'order_code' => 'ORD015',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'friend4@gmail.com',
-                'receiver_name' => 'Peter Parker',
-                'receiver_address' => '987 Street, Da Lat',
-                'receiver_phone' => '0918765432',
-                'note' => 'Giao nhanh',
-                'total_price' => 670000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 25000.00,
-                'final_price' => 695000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK015',
-                'created_at' => '2025-03-30 20:00:00',
-                'updated_at' => '2025-03-30 20:00:00'
-            ],
-            [
-                'order_code' => 'ORD016',
-                'user_id' => 2,
-                'user_email' => 'admin@gmail.com',
-                'user_name' => 'Admin User',
-                'user_address' => '456 Avenue, HCMC',
-                'user_phone' => '0123456789',
-                'receiver_email' => 'admin@gmail.com',
-                'receiver_name' => 'Admin User',
-                'receiver_address' => '456 Avenue, HCMC',
-                'receiver_phone' => '0123456789',
-                'note' => 'Gói kỹ càng',
-                'total_price' => 1080000.00,
-                'discount_amount' => 0.00,
-                'shipping_fee' => 30000.00,
-                'final_price' => 1110000.00,
-                'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => 'COD',
-                'tracking_code' => 'TRACK016',
-                'created_at' => '2025-03-30 21:00:00',
-                'updated_at' => '2025-03-30 21:00:00'
-            ]
-        ];
-        foreach ($orders as $order) {
-            Order::create($order);
-        }
 
-        // Tạo các mục đơn hàng (OrderItem) tương ứng (10 cũ + 6 mới)
-        $orderItems = [
-            ['order_id' => 1, 'product_variant_id' => 1, 'product_name' => 'Adidas Ultraboost 22', 'product_sku' => 'SKU2', 'product_image' => '', 'product_price' => 990000.00, 'product_price_sale' => 520000.00, 'variant_size_name' => 'L', 'variant_color_name' => 'Red', 'quantity' => 2, 'created_at' => '2025-03-30 06:00:00', 'updated_at' => '2025-03-30 06:00:00'],
-            ['order_id' => 2, 'product_variant_id' => 3, 'product_name' => 'Nike Air Max 90', 'product_sku' => 'SKU1', 'product_image' => '', 'product_price' => 1190000.00, 'product_price_sale' => 400000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Blue', 'quantity' => 3, 'created_at' => '2025-03-30 07:00:00', 'updated_at' => '2025-03-30 07:00:00'],
-            ['order_id' => 3, 'product_variant_id' => 5, 'product_name' => 'Nike Dunk Low', 'product_sku' => 'SKU11', 'product_image' => '', 'product_price' => 910000.00, 'product_price_sale' => 510000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Green', 'quantity' => 1, 'created_at' => '2025-03-30 08:00:00', 'updated_at' => '2025-03-30 08:00:00'],
-            ['order_id' => 4, 'product_variant_id' => 4, 'product_name' => 'Adidas NMD R1', 'product_sku' => 'SKU7', 'product_image' => '', 'product_price' => 970000.00, 'product_price_sale' => 430000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Black', 'quantity' => 2, 'created_at' => '2025-03-30 09:00:00', 'updated_at' => '2025-03-30 09:00:00'],
-            ['order_id' => 5, 'product_variant_id' => 2, 'product_name' => 'New Balance 574', 'product_sku' => 'SKU5', 'product_image' => '', 'product_price' => 1120000.00, 'product_price_sale' => 500000.00, 'variant_size_name' => 'S', 'variant_color_name' => 'Black', 'quantity' => 3, 'created_at' => '2025-03-30 10:00:00', 'updated_at' => '2025-03-30 10:00:00'],
-            ['order_id' => 6, 'product_variant_id' => 9, 'product_name' => 'Puma Suede Classic', 'product_sku' => 'SKU3', 'product_image' => '', 'product_price' => 1210000.00, 'product_price_sale' => 620000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Black', 'quantity' => 1, 'created_at' => '2025-03-30 11:00:00', 'updated_at' => '2025-03-30 11:00:00'],
-            ['order_id' => 7, 'product_variant_id' => 10, 'product_name' => 'Reebok Classic Leather', 'product_sku' => 'SKU4', 'product_image' => '', 'product_price' => 960000.00, 'product_price_sale' => 450000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Red', 'quantity' => 2, 'created_at' => '2025-03-30 12:00:00', 'updated_at' => '2025-03-30 12:00:00'],
-            ['order_id' => 8, 'product_variant_id' => 6, 'product_name' => 'Puma Future Rider', 'product_sku' => 'SKU13', 'product_image' => '', 'product_price' => 640000.00, 'product_price_sale' => 380000.00, 'variant_size_name' => 'L', 'variant_color_name' => 'Green', 'quantity' => 1, 'created_at' => '2025-03-30 13:00:00', 'updated_at' => '2025-03-30 13:00:00'],
-            ['order_id' => 9, 'product_variant_id' => 7, 'product_name' => 'Reebok Club C', 'product_sku' => 'SKU14', 'product_image' => '', 'product_price' => 940000.00, 'product_price_sale' => 490000.00, 'variant_size_name' => 'M', 'variant_color_name' => 'White', 'quantity' => 2, 'created_at' => '2025-03-30 14:00:00', 'updated_at' => '2025-03-30 14:00:00'],
-            ['order_id' => 10, 'product_variant_id' => 8, 'product_name' => 'Reebok Question', 'product_sku' => 'SKU19', 'product_image' => '', 'product_price' => 860000.00, 'product_price_sale' => 660000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'White', 'quantity' => 1, 'created_at' => '2025-03-30 15:00:00', 'updated_at' => '2025-03-30 15:00:00'],
-            // Thêm 6 mục đơn hàng mới
-            ['order_id' => 11, 'product_variant_id' => 1, 'product_name' => 'Adidas Ultraboost 22', 'product_sku' => 'SKU2', 'product_image' => '', 'product_price' => 990000.00, 'product_price_sale' => 520000.00, 'variant_size_name' => 'L', 'variant_color_name' => 'Red', 'quantity' => 1, 'created_at' => '2025-03-30 16:00:00', 'updated_at' => '2025-03-30 16:00:00'],
-            ['order_id' => 12, 'product_variant_id' => 3, 'product_name' => 'Nike Air Max 90', 'product_sku' => 'SKU1', 'product_image' => '', 'product_price' => 1190000.00, 'product_price_sale' => 400000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Blue', 'quantity' => 2, 'created_at' => '2025-03-30 17:00:00', 'updated_at' => '2025-03-30 17:00:00'],
-            ['order_id' => 13, 'product_variant_id' => 5, 'product_name' => 'Nike Dunk Low', 'product_sku' => 'SKU11', 'product_image' => '', 'product_price' => 910000.00, 'product_price_sale' => 510000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Green', 'quantity' => 1, 'created_at' => '2025-03-30 18:00:00', 'updated_at' => '2025-03-30 18:00:00'],
-            ['order_id' => 14, 'product_variant_id' => 4, 'product_name' => 'Adidas NMD R1', 'product_sku' => 'SKU7', 'product_image' => '', 'product_price' => 970000.00, 'product_price_sale' => 430000.00, 'variant_size_name' => 'XL', 'variant_color_name' => 'Black', 'quantity' => 2, 'created_at' => '2025-03-30 19:00:00', 'updated_at' => '2025-03-30 19:00:00'],
-            ['order_id' => 15, 'product_variant_id' => 6, 'product_name' => 'Puma Future Rider', 'product_sku' => 'SKU13', 'product_image' => '', 'product_price' => 640000.00, 'product_price_sale' => 380000.00, 'variant_size_name' => 'L', 'variant_color_name' => 'Green', 'quantity' => 1, 'created_at' => '2025-03-30 20:00:00', 'updated_at' => '2025-03-30 20:00:00'],
-            ['order_id' => 16, 'product_variant_id' => 7, 'product_name' => 'Reebok Club C', 'product_sku' => 'SKU14', 'product_image' => '', 'product_price' => 940000.00, 'product_price_sale' => 490000.00, 'variant_size_name' => 'M', 'variant_color_name' => 'White', 'quantity' => 2, 'created_at' => '2025-03-30 21:00:00', 'updated_at' => '2025-03-30 21:00:00'],
-        ];
-        foreach ($orderItems as $item) {
-            OrderItem::create($item);
-        }
-
-        // Product Variant
-        for ($i = 0; $i < 5; $i++) {
-            ProductVariant::query()->create([
-                'product_id' => rand(1, 5), // ID sản phẩm thực tế
-                'size_id'    => rand(1, 4), // ID kích thước
-                'color_id'   => rand(1, 4), // ID màu sắc
-                'image'      => 'variant' . ($i + 1) . '.jpg', // Ảnh sản phẩm
-                'price'      => rand(100000, 500000), // Giá sản phẩm
-                'price_sale'      => rand(100000, 500000), // Giá sản phẩm
-                'quantity'   => rand(1, 50),
-            ]);
-        }
 
         // User
-        User::create([
-            'username' => 'example_user',
-            'name' => 'John Doe',
-            'email' => 'member@gmail.com',
-            'password' => Hash::make('123456'),
-            'email' => 'member@gmail.com', 
-            'password' => Hash::make('123456'), 
-            'avatar' => 'default-avatar.png',
-            'phone' => '0123456789',
-            'email_verified_at' => now(),
-            'role' => 'user',
-            'is_active' => true,
-        ]);
+        $roles = ['user', 'admin', 'shipper'];
 
-        User::query()->create([
-            'username'          => 'example_admin',
-            'name'              => 'John Doe',
-            'email'              => 'admin@gmail.com',
-            'password'          => Hash::make('123456'),
-            'password' => Hash::make('123456'),
-            'avatar'            => 'default-avatar.png',
-            'phone'             => '0123456789',
-            'email_verified_at' => now(),
-            'role'              => 'admin',
-            'is_active'         => true,
-        ]);
-
-
-
-        Cart::query()->create([
-            'user_id'          => '1',
-        ]);
-
-        // Cart Items
-        for ($i = 0; $i < 3; $i++) {
-            CartItem::query()->create([
-                'cart_id'            => 1, // ID giỏ hàng thực tế
-                'product_variant_id' => rand(1, 4), // ID biến thể sản phẩm
-                'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
+        foreach ($roles as $i => $role) {
+            User::create([
+                'username' => $role,
+                'name' => ucfirst($role) . ' Account',
+                'email' => $role . '@gmail.com',
+                'password' => Hash::make('123456'),
+                'avatar' => 'avatars/default.png',
+                'phone' => '090000000' . ($i + 1),
+                'email_verified_at' => null,
+                'role' => $role,
+                'is_active' => true,
             ]);
         }
 
-        // // Order
-        // Order::create([
-        //     'user_id' => 1,
-        //     'user_email' => 'buyer@example.com',
-        //     'user_name' => 'Nguyễn Văn A',
-        //     'user_address' => '123 Đường ABC, TP.HCM',
-        //     'user_phone' => '0123456789',
-        //     'receiver_email' => 'receiver@example.com',
-        //     'receiver_name' => 'Trần Văn B',
-        //     'receiver_address' => '456 Đường XYZ, Hà Nội',
-        //     'receiver_phone' => '0987654321',
-        //     'coupon' => 'DISCOUNT10',
-        //     'order_status' => 'pending',
-        //     'payment_status' => 'unpaid',
-        //     'payment_method' => 'cod',
-        //     'order_code' => Str::uuid(),
-        //     'total_price' => 500000,
-        // ]);
 
-        // // Order Items
-        // for ($i = 0; $i < 3; $i++) {
-        //     OrderItem::create([
-        //         'order_id' => 1,
-        //         'product_variant_id' => rand(1, 4),
-        //         'product_name' => 'Sản phẩm ' . ($i + 1),
-        //         'product_sku' => 'SKU' . ($i + 1),
-        //         'product_image' => 'product' . ($i + 1) . '.jpg',
-        //         'product_price' => 100000,
-        //         'product_price_sale' => 90000,
-        //         'variant_size_name' => 'M',
-        //         'variant_color_name' => 'Đỏ',
-        //         'quantity' => rand(1, 5),
-        //     ]);
-        // }
+        // Size
+        $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+        foreach ($sizes as $size) {
+            Size::create([
+                'size' => $size,
+                'slug' => Str::slug($size),
+            ]);
+        }
+
+
+        // Color
+        $colors = [
+            ['color' => 'Đỏ', 'code' => '#FF0000'],
+            ['color' => 'Xanh lá', 'code' => '#00FF00'],
+            ['color' => 'Xanh dương', 'code' => '#0000FF'],
+            ['color' => 'Vàng', 'code' => '#FFFF00'],
+            ['color' => 'Đen', 'code' => '#000000'],
+        ];
+
+        foreach ($colors as $item) {
+            Color::create([
+                'color' => $item['color'],
+                'slug' => Str::slug($item['color']),
+                'code' => $item['code'],
+            ]);
+        }
+
+        // Category
+        $categories = [
+            'Áo',
+            'Quần',
+            'Giày',
+            'Phụ kiện',
+            'Khuyến mãi',
+        ];
+
+        foreach ($categories as $name) {
+            Category::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'is_active' => true,
+            ]);
+        }
+
+        // Brand
+        $brands = [
+            [
+                'name' => 'Nike',
+                'logo' => 'brands/nike.png',
+                'description' => 'Thương hiệu thể thao nổi tiếng toàn cầu.',
+            ],
+            [
+                'name' => 'Adidas',
+                'logo' => 'brands/adidas.png',
+                'description' => 'Đối thủ cạnh tranh chính của Nike.',
+            ],
+            [
+                'name' => 'Puma',
+                'logo' => 'brands/puma.png',
+                'description' => 'Phong cách thể thao trẻ trung và năng động.',
+            ],
+            [
+                'name' => 'Converse',
+                'logo' => 'brands/converse.png',
+                'description' => 'Nổi bật với giày vải cổ điển.',
+            ],
+            [
+                'name' => 'New Balance',
+                'logo' => 'brands/new-balance.png',
+                'description' => 'Giày thể thao chất lượng cao, nổi bật với sự thoải mái.',
+            ],
+        ];
+
+        foreach ($brands as $brand) {
+            Brand::create([
+                'name' => $brand['name'],
+                'slug' => Str::slug($brand['name']),
+                'logo' => $brand['logo'],
+                'description' => $brand['description'],
+                'is_active' => true,
+            ]);
+        }
+
+        // Product
+        $products = [
+            [
+                'name' => 'Giày thể thao Nike Air Max',
+                'price_income' => 1200000,
+                'price' => 1500000,
+                'price_sale' => 1350000,
+                'image' => 'products/nike-air-max.jpg',
+                'quantity' => 100,
+                'sold_quantity' => 20,
+                'average_rating' => 4.5,
+                'category_id' => 1,
+                'brand_id' => 1,
+                'view_count' => 350,
+            ],
+            [
+                'name' => 'Áo thun Adidas Originals',
+                'price_income' => 200000,
+                'price' => 350000,
+                'price_sale' => 300000,
+                'image' => 'products/adidas-shirt.jpg',
+                'quantity' => 80,
+                'sold_quantity' => 30,
+                'average_rating' => 4.2,
+                'category_id' => 2,
+                'brand_id' => 2,
+                'view_count' => 120,
+            ],
+            [
+                'name' => 'Quần short Puma Active',
+                'price_income' => 180000,
+                'price' => 250000,
+                'price_sale' => 220000,
+                'image' => 'products/puma-shorts.jpg',
+                'quantity' => 60,
+                'sold_quantity' => 10,
+                'average_rating' => 4.0,
+                'category_id' => 2,
+                'brand_id' => 3,
+                'view_count' => 90,
+            ],
+            [
+                'name' => 'Giày Converse cổ cao',
+                'price_income' => 700000,
+                'price' => 1000000,
+                'price_sale' => 950000,
+                'image' => 'products/converse-high.jpg',
+                'quantity' => 40,
+                'sold_quantity' => 15,
+                'average_rating' => 4.3,
+                'category_id' => 1,
+                'brand_id' => 4,
+                'view_count' => 200,
+            ],
+            [
+                'name' => 'Áo hoodie New Balance',
+                'price_income' => 450000,
+                'price' => 600000,
+                'price_sale' => 550000,
+                'image' => 'products/nb-hoodie.jpg',
+                'quantity' => 30,
+                'sold_quantity' => 5,
+                'average_rating' => 4.1,
+                'category_id' => 2,
+                'brand_id' => 5,
+                'view_count' => 70,
+            ],
+            [
+                'name' => 'Mũ lưỡi trai Nike',
+                'price_income' => 100000,
+                'price' => 180000,
+                'price_sale' => 150000,
+                'image' => 'products/nike-cap.jpg',
+                'quantity' => 50,
+                'sold_quantity' => 12,
+                'average_rating' => 4.4,
+                'category_id' => 3,
+                'brand_id' => 1,
+                'view_count' => 60,
+            ],
+            [
+                'name' => 'Balo Adidas Street',
+                'price_income' => 350000,
+                'price' => 500000,
+                'price_sale' => 450000,
+                'image' => 'products/adidas-backpack.jpg',
+                'quantity' => 40,
+                'sold_quantity' => 18,
+                'average_rating' => 4.6,
+                'category_id' => 4,
+                'brand_id' => 2,
+                'view_count' => 150,
+            ],
+            [
+                'name' => 'Quần jogger Puma Lifestyle',
+                'price_income' => 250000,
+                'price' => 400000,
+                'price_sale' => 360000,
+                'image' => 'products/puma-joggers.jpg',
+                'quantity' => 70,
+                'sold_quantity' => 25,
+                'average_rating' => 4.2,
+                'category_id' => 2,
+                'brand_id' => 3,
+                'view_count' => 110,
+            ],
+            [
+                'name' => 'Áo khoác Converse Windbreaker',
+                'price_income' => 500000,
+                'price' => 750000,
+                'price_sale' => 700000,
+                'image' => 'products/converse-jacket.jpg',
+                'quantity' => 35,
+                'sold_quantity' => 8,
+                'average_rating' => 4.0,
+                'category_id' => 2,
+                'brand_id' => 4,
+                'view_count' => 85,
+            ],
+            [
+                'name' => 'Giày chạy bộ New Balance 520',
+                'price_income' => 900000,
+                'price' => 1200000,
+                'price_sale' => 1100000,
+                'image' => 'products/nb-running-shoes.jpg',
+                'quantity' => 45,
+                'sold_quantity' => 19,
+                'average_rating' => 4.7,
+                'category_id' => 1,
+                'brand_id' => 5,
+                'view_count' => 250,
+            ],
+        ];
+
+        foreach ($products as $index => $product) {
+            Product::create([
+                'sku' => 'SP' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
+                'name' => $product['name'],
+                'slug' => Str::slug($product['name']),
+                'description' => 'Mô tả sản phẩm: ' . $product['name'],
+                'price_income' => $product['price_income'],
+                'price' => $product['price'],
+                'price_sale' => $product['price_sale'],
+                'image' => $product['image'],
+                'quantity' => $product['quantity'],
+                'sold_quantity' => $product['sold_quantity'],
+                'average_rating' => $product['average_rating'],
+                'category_id' => $product['category_id'],
+                'view_count' => $product['view_count'],
+                'brand_id' => $product['brand_id'],
+                'is_active' => true,
+            ]);
+        }
+
+
+        // Product Variant
+        $products = DB::table('products')->pluck('id');
+        $sizes = DB::table('sizes')->pluck('id');
+        $colors = DB::table('colors')->pluck('id');
+
+        foreach ($products as $productId) {
+            foreach ($sizes as $sizeId) {
+                foreach ($colors as $colorId) {
+                    ProductVariant::create([
+                        'product_id' => $productId,
+                        'size_id' => $sizeId,
+                        'color_id' => $colorId,
+                        'image' => 'variants/variant-' . $productId . '-' . $sizeId . '-' . $colorId . '.jpg',
+                        'price' => rand(200000, 500000),
+                        'price_sale' => rand(180000, 450000),
+                        'quantity' => rand(5, 50),
+                    ]);
+                }
+            }
+        }
+
+        // Product Gallery
+        $products = DB::table('products')->pluck('id');
+
+        foreach ($products as $productId) {
+            for ($i = 1; $i <= 3; $i++) {
+                ProductGallery::create([
+                    'product_id' => $productId,
+                    'image' => "galleries/product-{$productId}-{$i}.jpg",
+                ]);
+            }
+        }
+
+
 
         Schema::enableForeignKeyConstraints();
     }

@@ -601,7 +601,6 @@
             address_type: addressType
         };
 
-        console.log("Dữ liệu sẽ lưu vào database:", addressData);
 
         // Gửi dữ liệu lên server (ví dụ)
         try {

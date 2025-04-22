@@ -1,50 +1,344 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xác nhận đơn hàng</title>
-</head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; max-width: 600px; margin: auto; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <tr>
-            <td style="background-color: #4a6fa5; padding: 20px; text-align: center; color: white; font-size: 24px; font-weight: bold;">
-                <img src="LOGO_URL" alt="Logo cửa hàng" style="max-width: 150px; display: block; margin: 0 auto 10px;">
-                Xác nhận đơn hàng
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 30px 20px;">
-                <p style="color: #333333; margin-top: 0;">Chào quý khách,</p>
-                <p style="color: #333333;">Cảm ơn bạn đã đặt hàng! Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="5" border="0" style="border-collapse: collapse; text-align: left; width: 100%; margin: 20px 0; border-radius: 6px; overflow: hidden;">
-                    <tr>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px; border-top-left-radius: 6px;">Sản phẩm</th>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px;">Số lượng</th>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px; border-top-right-radius: 6px;">Giá</th>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0;">Tên sản phẩm</td>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0; text-align: center;">1</td>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0; text-align: right;">99.99$</td>
-                    </tr>
-                </table>
-                <p style="margin-top: 20px; color: #333333; font-size: 18px; text-align: right;"><strong>Tổng cộng: <span style="color: #4a6fa5;">99.99$</span></strong></p>
-                <div style="background-color: #f2f6fc; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                    <p style="margin-top: 0; color: #333333;"><strong>Đơn hàng của bạn sẽ được giao đến:</strong></p>
-                    <p style="margin-bottom: 0; color: #555555;"><strong>John Doe</strong><br>123 Đường Chính, Thành phố, Quốc gia</p>
-                </div>
-                <p style="color: #333333;">Chúng tôi rất trân trọng sự ủng hộ của bạn và mong được phục vụ bạn trong tương lai!</p>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="#" style="background-color: #4a6fa5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Theo dõi đơn hàng</a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td style="background-color: #4a6fa5; padding: 15px; text-align: center; color: white;">
-                &copy; 2025 Công ty của bạn. Mọi quyền được bảo lưu.
-            </td>
-        </tr>
-    </table>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Related Products Slider - Fixed 4 Items</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: Arial, sans-serif;
+            }
+            .products-slider-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                position: relative;
+            }
+            .products-slider {
+                display: flex;
+                overflow-x: hidden;
+                scroll-behavior: smooth;
+                gap: 20px;
+                padding: 10px 0;
+            }
+            .single-product {
+                flex: 0 0 calc(25% - 15px); /* Chính xác 4 items mỗi slide */
+                min-width: calc(25% - 15px);
+                border: 1px solid #eee;
+                border-radius: 8px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .single-product:hover {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                transform: translateY(-5px);
+            }
+            .product-img {
+                position: relative;
+                height: 200px;
+                overflow: hidden;
+            }
+            .product-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: opacity 0.3s;
+            }
+            .product-img .secondary-img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+            }
+            .product-img:hover .primary-img {
+                opacity: 0;
+            }
+            .product-img:hover .secondary-img {
+                opacity: 1;
+            }
+            .product-price {
+                padding: 15px;
+            }
+            .product-name a {
+                color: #333;
+                text-decoration: none;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+            }
+            .price-rating span {
+                color: #e74c3c;
+                font-weight: bold;
+            }
+            .slider-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, 0.8);
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                z-index: 10;
+            }
+            .slider-button:hover {
+                background: rgba(255, 255, 255, 1);
+            }
+            .prev-button {
+                left: 10px;
+            }
+            .next-button {
+                right: 10px;
+            }
+            .slider-dots {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px;
+                gap: 8px;
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: #ddd;
+                cursor: pointer;
+            }
+            .dot.active {
+                background-color: #e74c3c;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 992px) {
+                .single-product {
+                    flex: 0 0 calc(50% - 10px);
+                    min-width: calc(50% - 10px);
+                }
+            }
+
+            @media (max-width: 576px) {
+                .single-product {
+                    flex: 0 0 calc(100% - 10px);
+                    min-width: calc(100% - 10px);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="row">
+            <div class="products-slider-container">
+                <button class="slider-button prev-button">←</button>
+                <button class="slider-button next-button">→</button>
+                <div class="products-slider" id="related-products"></div>
+                <div class="slider-dots" id="slider-dots"></div>
+            </div>
+        </div>
+
+
+
+        <script>
+            async function fetchRelatedProducts(slug) {
+                try {
+                    const response = await fetch(
+                        `/api/get-related-products/${slug}`
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! Status: ${response.status}`
+                        );
+                    }
+                    const data = await response.json();
+                    const relatedProducts = data.data.related_products;
+                    const relatedProductsDisplay =
+                        document.getElementById("related-products");
+
+                    if (data.status === "success") {
+                        console.log(relatedProducts);
+                        relatedProductsDisplay.innerHTML = "";
+
+                        // Generate slider items
+                        relatedProducts.forEach((product) => {
+                            relatedProductsDisplay.innerHTML += `
+                            <div class="single-product">
+                                <div class="product-img">
+                                    <a href="single-product.html">
+                                        <img src="img/product/23.png" alt="" class="primary-img">
+                                        <img src="img/product/24.png" alt="" class="secondary-img">
+                                    </a>
+                                </div>
+                                <div class="product-price">
+                                    <div class="product-name">
+                                        <a href="single-product.html" title="Fusce aliquam">Fusce aliquam</a>
+                                    </div>
+                                    <div class="price-rating">
+                                        <span>$170.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        });
+
+                        // Initialize slider
+                        initSlider();
+                    } else {
+                        console.error(
+                            "Failed to fetch related products:",
+                            data.message
+                        );
+                        document.getElementById("related-products").innerHTML =
+                            "<p>Không tìm thấy sản phẩm liên quan.</p>";
+                    }
+                } catch (error) {
+                    console.error("Error fetching related products:", error);
+                    document.getElementById("related-products").innerHTML =
+                        "<p>Lỗi khi tải sản phẩm liên quan.</p>";
+                }
+            }
+
+            // For demo purposes - create dummy data if API is not available
+            function loadDummyData() {
+                const relatedProductsDisplay =
+                    document.getElementById("related-products");
+                relatedProductsDisplay.innerHTML = "";
+
+                // Generate 8 dummy products
+                for (let i = 0; i < 8; i++) {
+                    relatedProductsDisplay.innerHTML += `
+                    <div class="single-product">
+                        <div class="product-img">
+                            <a href="single-product.html">
+                                <img src="/api/placeholder/250/200" alt="" class="primary-img">
+                                <img src="/api/placeholder/250/200" alt="" class="secondary-img">
+                            </a>
+                        </div>
+                        <div class="product-price">
+                            <div class="product-name">
+                                <a href="single-product.html" title="Product ${
+                                    i + 1
+                                }">Product ${i + 1}</a>
+                            </div>
+                            <div class="price-rating">
+                                <span>$${(150 + i * 10).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                }
+
+                // Initialize slider after loading dummy data
+                initSlider();
+            }
+
+            function initSlider() {
+                const slider = document.querySelector(".products-slider");
+                const prevButton = document.querySelector(".prev-button");
+                const nextButton = document.querySelector(".next-button");
+                const dotsContainer = document.getElementById("slider-dots");
+
+                // Fixed 4 items per slide
+                const itemsPerSlide = 4;
+                const totalItems = slider.children.length;
+                const totalSlides = Math.ceil(totalItems / itemsPerSlide);
+
+                // Create dots
+                dotsContainer.innerHTML = "";
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement("div");
+                    dot.classList.add("dot");
+                    if (i === 0) dot.classList.add("active");
+                    dot.addEventListener("click", () => {
+                        goToSlide(i);
+                        updateActiveDot(i);
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+
+                let currentSlide = 0;
+
+                // Calculate slide width based on container width
+                const sliderWidth = slider.offsetWidth;
+                const slideWidth = sliderWidth;
+
+                // Slide functions
+                function goToSlide(slideIndex) {
+                    const scrollAmount = slideIndex * slideWidth;
+                    slider.scrollLeft = scrollAmount;
+                    currentSlide = slideIndex;
+                }
+
+                function updateActiveDot(slideIndex) {
+                    const dots = document.querySelectorAll(".dot");
+                    dots.forEach((dot, index) => {
+                        if (index === slideIndex) {
+                            dot.classList.add("active");
+                        } else {
+                            dot.classList.remove("active");
+                        }
+                    });
+                }
+
+                // Event listeners
+                prevButton.addEventListener("click", () => {
+                    if (currentSlide > 0) {
+                        goToSlide(currentSlide - 1);
+                        updateActiveDot(currentSlide);
+                    }
+                });
+
+                nextButton.addEventListener("click", () => {
+                    if (currentSlide < totalSlides - 1) {
+                        goToSlide(currentSlide + 1);
+                        updateActiveDot(currentSlide);
+                    }
+                });
+
+                // Add touch/swipe functionality for mobile
+                let startX, scrollLeft;
+
+                slider.addEventListener("touchstart", (e) => {
+                    startX = e.touches[0].pageX - slider.offsetLeft;
+                    scrollLeft = slider.scrollLeft;
+                });
+
+                slider.addEventListener("touchmove", (e) => {
+                    e.preventDefault();
+                    const x = e.touches[0].pageX - slider.offsetLeft;
+                    const dist = x - startX;
+                    slider.scrollLeft = scrollLeft - dist;
+                });
+
+                slider.addEventListener("touchend", () => {
+                    // Calculate which slide to snap to
+                    const slideIndex = Math.round(
+                        slider.scrollLeft / slideWidth
+                    );
+                    goToSlide(slideIndex);
+                    updateActiveDot(slideIndex);
+                });
+            }
+
+            // Load data when page loads
+            document.addEventListener("DOMContentLoaded", () => {
+                // Try to fetch data from API if slug is available
+                const urlParams = new URLSearchParams(window.location.search);
+                const slug = urlParams.get("product");
+
+                if (slug) {
+                    fetchRelatedProducts(slug);
+                } else {
+                    // Load dummy data for demo
+                    loadDummyData();
+                }
+            });
+        </script>
+    </body>
 </html>

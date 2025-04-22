@@ -13,7 +13,7 @@ class ShipperController extends Controller
     public function logout(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
+            return redirect()->route('login.form')->with('status', 'Bạn cần đăng nhập trước khi đăng xuất tài khoản');
         }
         Auth::logout();
         if ($request) {
@@ -21,7 +21,7 @@ class ShipperController extends Controller
             $request->session()->regenerateToken();
         }
 
-        return redirect()->route('login')->with('success', 'Đã đăng xuất khỏi tài khoản');
+        return redirect()->route('login.form')->with('success', 'Đã đăng xuất khỏi tài khoản');
     }
 
 }

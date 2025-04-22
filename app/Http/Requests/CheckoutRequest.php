@@ -19,8 +19,7 @@ class CheckoutRequest extends FormRequest
             'receiver_phone' => ['required', 'regex:/^0[0-9]{9,10}$/'],
             'receiver_address' => 'required|string|max:500',
             'note' => 'nullable|string|max:1000',
-            'payment_method' => 'required|in:COD,VNPAY,Momo,PayPal',
-            'total_price' => 'required|numeric|min:0',
+            'payment_method' => 'required|in:COD,VNPAY',
         ];
     }
 
@@ -34,8 +33,6 @@ class CheckoutRequest extends FormRequest
             'receiver_phone.regex' => 'Số điện thoại không hợp lệ.',
             'receiver_address.required' => 'Vui lòng nhập địa chỉ.',
             'payment_method.required' => 'Vui lòng chọn phương thức thanh toán.',
-            'total_price.required' => 'Tổng giá không được để trống.',
-            'total_price.numeric' => 'Tổng giá phải là số.',
         ];
     }
 }

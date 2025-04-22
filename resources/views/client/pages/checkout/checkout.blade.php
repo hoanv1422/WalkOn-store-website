@@ -8,7 +8,7 @@
                 <form id="checkout-form">
                     <div class="mb-3">
                         <input type="text" class="form-control" placeholder="Họ và tên" name="receiver_name"
-                            value="{{ Auth::user()->name }}">
+                            value="{{Auth::user()->name }}">
                         @error('receiver_name')
                             <p class="small text-danger">{{ $message }}</p>
                         @enderror
@@ -136,11 +136,11 @@
 
                 <div class="mb-4">
                     <div class="payment-option">
-                        <input type="radio" name="payment_method" id="cod" value="cod" checked>
+                        <input type="radio" name="payment_method" id="cod" value="COD" checked>
                         <label for="cod" class="ms-2">Thanh toán khi nhận hàng (COD)</label>
                     </div>
                     <div class="payment-option">
-                        <input type="radio" name="payment_method" id="vnpay" value="vnpay">
+                        <input type="radio" name="payment_method" id="vnpay" value="VNPAY">
                         <label for="vnpay" class="ms-2">Thanh toán qua VNPAY</label>
                     </div>
                 </div>
