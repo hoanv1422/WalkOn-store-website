@@ -26,13 +26,12 @@ class CheckoutController extends Controller
     public function store(CheckoutRequest $request)
     {
 
-        // dd($request->all());
 
         try {
             $user = Auth::user();
 
             if (!$user) {
-                return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
+                return redirect()->route('login.form')->with('error', 'Bạn cần đăng nhập để thanh toán.');
             }
 
             $cart = Cart::where('user_id', $user->id)->first();
@@ -111,12 +110,15 @@ class CheckoutController extends Controller
                 $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
                 return redirect()->away($vnpayUrl);
             }
+            $token = route('profile.orders');
 
-            Mail::to($user->email)->send(new OrderMail());
+
+            // Mail::to($user->email)->send(new OrderMail($order, $orderItems, $user->name, $token));
 
             DB::commit();
-            return redirect()->route('cart.index')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
+            return redirect()->route('profile.orders')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e);
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             dd($e);

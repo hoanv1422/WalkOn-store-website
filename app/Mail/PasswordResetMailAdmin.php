@@ -9,26 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderMail extends Mailable
+class PasswordResetMailAdmin extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $order;
-    public $orderItems;
-    public $username;
-    public $token;
 
+    public $code;
 
-
-    public function __construct($order, $orderItems, $username, $token)
+    public function __construct($code)
     {
-        $this->order = $order;
-        $this->orderItems = $orderItems;
-        $this->username = $username;
-        $this->token = $token;
+        $this->code = $code;
     }
 
     /**
@@ -37,8 +30,9 @@ class OrderMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Mail',
+            subject: 'Password Reset Mail Admin',
         );
+        
     }
 
     /**
@@ -47,13 +41,9 @@ class OrderMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.orderMail',
+            view: 'mail.PasswordResetMailAdmin',
             with: [
-                'order' => $this->order,
-                'orderItems' => $this->orderItems,
-                'username' => $this->username,
-                'token' => $this->token
-                
+                'code'=>$this-> code
             ]
         );
     }

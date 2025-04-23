@@ -43,7 +43,7 @@ class HomeController extends Controller
         });
 
         // 1. Lấy top 20 sản phẩm mới nhất (trong 7 ngày gần nhất)
-        $newProducts = Product::where('created_at', '>=', Carbon::now()->subWeek())
+        $newProducts = Product::where('created_at', '>=', Carbon::now()->subYear())
             ->orderByDesc('created_at')
             ->take(20)
             ->get();

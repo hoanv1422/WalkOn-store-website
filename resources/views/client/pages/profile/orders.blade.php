@@ -1,50 +1,17 @@
 @extends('client.layouts.app')
 
 @section('title', 'Lịch Sử Đơn Hàng')
+@section('breadcrumb', 'Lịch Sử Đơn Hàng')
 
 @section('content')
     @include('client.components.breadcrumb')
     <div class="account-area py-5 bg-light">
         <div class="container">
             <div class="row justify-content-center">
-                <!-- Sidebar -->
-                <div class="col-lg-3 mb-4">
-                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                        <div class="card-body p-0">
-                            <div class="text-center p-4 bg-white">
-                                <div class="position-relative d-inline-block mb-3">
-                                    <div class="rounded-circle p-3891 bg-light border border-primary-subtle">
-                                        <img src="{{ $user->avatar ? Storage::url($user->avatar) : asset('default-avatar.png') }}"
-                                            alt="Avatar" class="rounded-circle img-fluid shadow-sm"
-                                            style="width: 100px; height: 100px; object-fit: cover;">
-                                    </div>
-                                </div>
-                                <h5 class="fw-bold mb-1 text-dark">{{ $user->name }}</h5>
-                                <p class="text-muted small mb-0">{{ $user->email }}</p>
-                            </div>
-                            <div class="list-group list-group-flush">
-                                <a href="{{ route('profile.index') }}"
-                                    class="list-group-item list-group-item-action d-flex align-items-center py-3 px-4 text-dark border-0">
-                                    <i class="fa fa-user-circle me-3 text-secondary"></i>
-                                    <span>Thông tin cá nhân</span>
-                                </a>
-                                <a href="{{ route('profile.orders') }}"
-                                    class="list-group-item list-group-item-action active d-flex align-items-center py-3 px-4 border-0">
-                                    <i class="fa fa-shopping-bag me-3"></i>
-                                    <span>Lịch sử đơn hàng</span>
-                                </a>
-                                <a href="{{ route('home.index') }}"
-                                    class="list-group-item list-group-item-action d-flex align-items-center py-3 px-4 text-dark border-0">
-                                    <i class="fa fa-home me-3 text-secondary"></i>
-                                    <span>Trang chủ</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Nội dung chính -->
-                <div class="col-lg-9">
+                <div class="col-lg-12">
                     <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white">
                         <div class="card-header bg-white border-0 pt-4 pb-0">
                             <div class="d-flex align-items-center mb-3">

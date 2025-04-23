@@ -144,7 +144,7 @@
                                                     <!-- Reply Button -->
                                                     <li class="list-inline-item">
                                                         <a href="#replyModal" data-bs-toggle="modal"
-                                                            class="text-success d-inline-block reply-item-btn"
+                                                            class="text-primary d-inline-block reply-item-btn"
                                                             data-id="{{ $contact->id }}"
                                                             data-name="{{ $contact->name }}"
                                                             data-email="{{ $contact->email }}"
@@ -280,13 +280,20 @@
                                                             readonly></textarea>
                                                         <div class="invalid-feedback">Vui lòng nhập tin nhắn.</div>
                                                     </div>
+                                                    <div class="mb-3">
+                                                         <label for="status-field-edit" class="form-label">Trạng Thái Tin Nhắn</label>
+                                                         <select class="form-control" name="status" id="status-field-edit">
+                                                             <option value="UNREAD">Chưa Đọc</option>
+                                                             <option value="READ">Đã Đọc</option>
+                                                         </select>
+                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="hstack gap-2 justify-content-end">
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                                                <!-- <button type="submit" class="btn btn-success" disabled>Cập Nhật Trạng Thái Tin Nhắn Liên Hệ</button> -->
+                                                <button type="submit" class="btn btn-success" >Cập Nhật Trạng Thái Tin Nhắn Liên Hệ</button>
                                             </div>
                                         </div>
                                     </form>

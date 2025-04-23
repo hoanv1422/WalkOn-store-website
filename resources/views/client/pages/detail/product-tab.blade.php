@@ -28,15 +28,7 @@
                                             <div class="product-rating-info">
                                                 <p>Sản Phẩm:</p>
                                                 <div class="ratings">
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        @if ($i <= floor($product->average_rating))
-                                                            <i class="fa fa-star"></i>
-                                                        @elseif($i - 0.5 == $product->average_rating)
-                                                            <i class="fa fa-star-half-o"></i>
-                                                        @else
-                                                            <i class="fa fa-star-o"></i>
-                                                        @endif
-                                                    @endfor   
+
                                                 </div>
                                             </div>
                                             
@@ -48,7 +40,7 @@
                                     <div class="col-md-7">
                                         <div class="rate-product hidden-xs">
                                             <div class="rate-product-heading">
-                                                <h3>Bạn đang đánh giá:  <span style="font-weight: bold"> {{$product->name}} </span></h3>
+                                                <h3>Bạn đang đánh giá:  <span style="font-weight: bold"> </span></h3>
                                                 <h3>Bạn đánh giá sản phẩm này thế nào? <em>*</em></h3>
                                             </div>
                                             <form action="#">
@@ -96,7 +88,7 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab2">
                             <div class="single-p-tab-content">
-                                {!! $product->description !!}
+                                {{-- {!! $product->description !!} --}}
                             </div>
                             
                         </div>

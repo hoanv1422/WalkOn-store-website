@@ -2,211 +2,115 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Tính Khoảng Cách</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Test Mega Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .address-item { padding: 10px; border-bottom: 1px solid #ddd; cursor: pointer; }
-        .address-item:hover { background-color: #f5f5f5; }
-        .address-item.selected { background-color: #e0f7fa; font-weight: bold; }
-        .address-display { padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            position: relative;
+        }
+
+        nav {
+            background: #333;
+            padding: 10px 20px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .mega-men:hover .mega-menu {
+            display: block;
+        }
+
+        .mega-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 500px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .mega-menu .row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mega-menu .col {
+            width: 48%;
+        }
+
+        .mega-menu h4 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .mega-menu span {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .mega-menu a {
+            color: #444;
+            text-decoration: none;
+        }
+
+        .mega-menu a:hover {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="mb-3">
-            <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
-            <div class="address-display d-flex justify-content-between align-items-center">
-                <div id="current-address">
-                    <strong>Nhà riêng</strong><br>
-                    <span>123 Đường Láng, Đống Đa, Hà Nội</span>
-                </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" 
-                        data-bs-target="#addressModal">Thay đổi</button>
-            </div>
-            <div id="distance-display" class="mt-2 text-muted"></div>
-            <input type="hidden" name="receiver_address" id="selected-address" value="123 Đường Láng, Đống Đa, Hà Nội">
-            <input type="hidden" id="selected-lat" value="21.0285">
-            <input type="hidden" id="selected-lon" value="105.8542">
-        </div>
 
-        <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addressModalLabel">Chọn Địa Chỉ Giao Hàng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<nav>
+    <ul>
+        <li><a href="#">Trang Chủ</a></li>
+        <li class="mega-men">
+            <a href="#">Cửa Hàng</a>
+            <div class="mega-menu">
+                <div class="row">
+                    <div class="col">
+                        <h4>Danh mục</h4>
+                        <span><a href="#">Điện thoại</a></span>
+                        <span><a href="#">Máy tính bảng</a></span>
+                        <span><a href="#">Laptop</a></span>
+                        <span><a href="#">Phụ kiện</a></span>
                     </div>
-                    <div class="modal-body">
-                        <div class="address-list" id="addressList">
-                            <div class="address-item" data-address="123 Đường Láng, Đống Đa, Hà Nội" 
-                                 data-lat="21.0285" data-lon="105.8542" onclick="selectAddress(this)">
-                                <strong>Nhà riêng</strong><br><span>123 Đường Láng, Đống Đa, Hà Nội</span>
-                            </div>
-                            <div class="address-item" data-address="456 Lê Lợi, Quận 1, TP. Hồ Chí Minh" 
-                                 data-lat="10.7626" data-lon="106.6602" onclick="selectAddress(this)">
-                                <strong>Văn phòng</strong><br><span>456 Lê Lợi, Quận 1, TP. Hồ Chí Minh</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                                data-bs-target="#addAddressModal" onclick="hideAddressModal()">Thêm mới</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-primary" onclick="confirmAddress()">Xác nhận</button>
+                    <div class="col">
+                        <h4>Thương hiệu</h4>
+                        <span><a href="#">Apple</a></span>
+                        <span><a href="#">Samsung</a></span>
+                        <span><a href="#">Xiaomi</a></span>
+                        <span><a href="#">Asus</a></span>
                     </div>
                 </div>
             </div>
-        </div>
+        </li>
+        <li><a href="#">Liên Hệ</a></li>
+    </ul>
+</nav>
 
-        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addAddressModalLabel">Thêm Địa Chỉ Mới</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="newAddressName" class="form-label">Tên địa chỉ</label>
-                            <input type="text" class="form-control" id="newAddressName" placeholder="Ví dụ: Nhà riêng">
-                        </div>
-                        <div class="mb-3">
-                            <label for="newAddressDetail" class="form-label">Chi tiết địa chỉ</label>
-                            <input type="text" class="form-control" id="newAddressDetail" placeholder="Ví dụ: 123 Đường Láng, Hà Nội">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-primary" onclick="saveNewAddress()">Lưu</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let selectedAddressElement = null;
-        const defaultLat = 21.0285; // Tọa độ mặc định (Hà Nội)
-        const defaultLon = 105.8542;
-
-        function selectAddress(element) {
-            document.querySelectorAll('.address-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            element.classList.add('selected');
-            selectedAddressElement = element;
-        }
-
-        async function confirmAddress() {
-            if (selectedAddressElement) {
-                const addressText = selectedAddressElement.getAttribute('data-address');
-                const addressName = selectedAddressElement.querySelector('strong').textContent;
-                const lat = selectedAddressElement.getAttribute('data-lat');
-                const lon = selectedAddressElement.getAttribute('data-lon');
-
-                document.getElementById('current-address').innerHTML =
-                    `<strong>${addressName}</strong><br><span>${addressText}</span>`;
-                document.getElementById('selected-address').value = addressText;
-                const latitude = document.getElementById('selected-lat').value = lat || '';
-                const longitude = document.getElementById('selected-lon').value = lon || '';
-
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
-                modal.hide();
-
-                // Tính khoảng cách nếu có tọa độ
-                if (latitude && longitude) {
-                    await calculateDistance(latitude, longitude);
-                } else {
-                    document.getElementById('distance-display').innerHTML =
-                        'Không có thông tin khoảng cách (thiếu tọa độ)';
-                }
-            } else {
-                alert('Vui lòng chọn một địa chỉ!');
-            }
-        }
-
-        function hideAddressModal() {
-            const addressModal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
-            addressModal.hide();
-        }
-
-        function saveNewAddress() {
-            const name = document.getElementById('newAddressName').value.trim();
-            const detail = document.getElementById('newAddressDetail').value.trim();
-
-            if (!name || !detail) {
-                alert('Vui lòng nhập đầy đủ thông tin địa chỉ!');
-                return;
-            }
-
-            const newAddress = document.createElement('div');
-            newAddress.className = 'address-item';
-            newAddress.setAttribute('data-address', detail);
-            newAddress.innerHTML = `<strong>${name}</strong><br><span>${detail}</span>`;
-            newAddress.onclick = function() {
-                selectAddress(this);
-            };
-            document.getElementById('addressList').appendChild(newAddress);
-
-            document.getElementById('newAddressName').value = '';
-            document.getElementById('newAddressDetail').value = '';
-            const addModal = bootstrap.Modal.getInstance(document.getElementById('addAddressModal'));
-            addModal.hide();
-
-            setTimeout(() => {
-                const addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
-                addressModal.show();
-                selectAddress(newAddress);
-            }, 300);
-        }
-
-        async function calculateDistance(lat2, lon2) {
-            const apiKey = '8c5e66d0-53b9-4218-af36-3223f27769ec'; // Kiểm tra key này
-            const url =
-                `https://graphhopper.com/api/1/route?point=${defaultLat},${defaultLon}&point=${lat2},${lon2}&vehicle=car&locale=vi&key=${apiKey}`;
-            const distanceDisplay = document.getElementById('distance-display');
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.paths && data.paths.length > 0) {
-                    const distance = (data.paths[0].distance / 1000).toFixed(2);
-                    distanceDisplay.innerHTML = `Khoảng cách từ Hà Nội: ${distance} km`;
-                } else {
-                    distanceDisplay.innerHTML = 'Không thể tính khoảng cách!';
-                }
-            } catch (error) {
-                distanceDisplay.innerHTML = 'Lỗi khi tính khoảng cách!';
-                console.error(error);
-            }
-        }
-
-        document.getElementById('addAddressModal').addEventListener('hidden.bs.modal', () => {
-            document.getElementById('newAddressName').value = '';
-            document.getElementById('newAddressDetail').value = '';
-        });
-
-        document.getElementById('addressModal').addEventListener('show.bs.modal', () => {
-            const firstAddress = document.querySelector('.address-item');
-            if (firstAddress && !selectedAddressElement) {
-                selectAddress(firstAddress);
-            }
-        });
-
-        // Tính khoảng cách ngay khi trang tải dựa trên giá trị ban đầu của selected-lat và selected-lon
-        window.addEventListener('DOMContentLoaded', async () => {
-            const initialLat = document.getElementById('selected-lat').value;
-            const initialLon = document.getElementById('selected-lon').value;
-            if (initialLat && initialLon) {
-                await calculateDistance(initialLat, initialLon);
-            } else {
-                document.getElementById('distance-display').innerHTML =
-                    'Không có thông tin khoảng cách (thiếu tọa độ)';
-            }
-        });
-    </script>
 </body>
 </html>

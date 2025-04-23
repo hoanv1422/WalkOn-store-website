@@ -259,7 +259,6 @@
                 console.error("Không tìm thấy ID bình luận cần xóa!");
                 return;
             }
-            console.log("Deleting comment with ID:", commentId);
             var actionUrl = `/admin/post-comments/${commentId}`;
             $('#deleteForm').attr('action', actionUrl);
         });

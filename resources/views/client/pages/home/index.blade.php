@@ -100,80 +100,36 @@
         .btn-outline-secondary:focus {
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
+
+        .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            margin: 4px;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.2s ease;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            border-color: #999;
+        }
+
+        .color-btn.active {
+            border: 2px solid #000;
+        }
     </style>
 @endsection
 
 @section('content')
-    @foreach (['slider', 'banner','features-product', 'new-product', 'hot-product', 'product', 'another-banner', 'testimonial', 'blog', 'newsletter'] as $section)
+    @foreach (['slider', 'banner', 'features-product', 'new-product', 'hot-product', 'product', 'another-banner', 'testimonial', 'blog', 'newsletter'] as $section)
         @include("client.pages.home.$section")
     @endforeach
-
 @endsection
-
 @section('script')
 
-
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true"
-        id="add-to-cart-form">
-        <form action="{{ route('cartApi.add') }}" method="POST" id="add-to-cart-api">
-            @csrf
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header-1">
-                        <h5 class="modal-title" id="cartModalLabel">Sản phẩm</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="d-flex align-items-start gap-4">
-                            <input type="hidden" name="product_id" id="product-id-modal" value="">
-                            <img src="img/default-image.jpg" alt="Ảnh sản phẩm" id="product-image-modal"
-                                class="img-fluid product-img-modal">
-
-                            <div class="flex-grow-1">
-                                <h5 id="product-name-modal" class="fw-bold mb-2">Tên sản phẩm</h5>
-                                <div class="d-flex align-items-end">
-                                    <p id="product-price-modal" class="text-secondary small fw-semibold "
-                                        style="text-decoration: line-through"></p>
-                                    <p id="product-price-sale-modal" class="text-danger fw-bold"></p>
-                                </div>
-                                <div class="">
-                                    <p class="small" id="product-quantity-modal">Còn 0 sản phẩm</p>
-                                </div>
-
-                                <div class="mb-3">
-                                    <!-- Chọn màu sắc -->
-                                    <label class="form-label fw-medium">Màu sắc:</label>
-                                    <input type="hidden" id="color-for-cart" name="color" value="">
-                                    <div class="d-flex gap-3 mb-3" id="color-options">
-
-                                    </div>
-
-                                    <!-- Chọn kích cỡ -->
-                                    <label class="form-label fw-medium">Kích cỡ:</label>
-                                    <input type="hidden" id="size-for-cart" name="size" value="">
-                                    <div class="d-flex gap-3" id="size-options">
-
-                                    </div>
-                                </div>
-
-                                <p id="error-modal" class="text-danger" style="font-size: 13px"></p>
-                                <!-- Chọn số lượng -->
-                                <div>
-                                    <label for="quantity" class="form-label fw-medium">Số lượng:</label>
-                                    <input type="number" id="quantity" name="quantity" class="form-control w-25"
-                                        value="1" min="1">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary px-4">Thêm vào giỏ hàng</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
     <!-- products area end -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -199,7 +155,6 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                console.log('Thành công:', data);
                                 document.getElementById('product-id-modal').value = data.data
                                     .id;
                                 document.getElementById('product-name-modal').textContent = data
@@ -208,8 +163,7 @@
                                     'Còn ' + data.data.quantity + ' sản phẩm';
                                 const initialQuantity = data.data.quantity;
                                 document.getElementById('product-image-modal').setAttribute(
-                                    'src', 'http://127.0.0.1:8000/storage/' + data.data
-                                    .image);
+                                    'src', 'http://127.0.0.1:8000/storage/' + data.data.image);
                                 const priceProduct = Number(data.data.price);
                                 const priceSaleProduct = Number(data.data.price_sale);
                                 if (priceSaleProduct > 0 && priceSaleProduct < priceProduct) {
@@ -235,7 +189,7 @@
                                 data.data.colors.forEach((color, index) => {
                                     const active = index === 0 ? 'active' : '';
                                     colorOptions.innerHTML += `
-                                <button type="button" name="color" class="btn btn-outline-secondary color-btn" data-value="${color.id}" value="${color.id}">${color.color}</button>
+                                <button type="button" name="color" style="background-color: ${color.code};"  class=" color-btn" data-value="${color.id}" value="${color.id}"></button>
                             `;
                                 });
 
@@ -419,7 +373,7 @@
 
                                 // Quản lý màu sắc với toggle
                                 const colorButtons = document.querySelectorAll('.color-btn');
-                                colorButtons.forEach(button => {
+                                 colorButtons.forEach(button => {
                                     button.addEventListener('click', function() {
                                         if (!this.disabled) {
                                             const isActive = this.classList
@@ -456,7 +410,7 @@
 
                                 // Quản lý kích cỡ với toggle
                                 const sizeButtons = document.querySelectorAll('.size-btn');
-                                sizeButtons.forEach(button => {
+                                 sizeButtons.forEach(button => {
                                     button.addEventListener('click', function() {
                                         if (!this.disabled) {
                                             const isActive = this.classList
@@ -518,14 +472,14 @@
 
     <script>
         document.getElementById('add-to-cart-api').addEventListener('submit', function(e) {
-            e.preventDefault(); // Ngăn form submit mặc định
+            e.preventDefault();
 
-            // Lấy dữ liệu từ form
+
             const formData = new FormData(this);
+            console.log(formData);
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ||
                 document.querySelector('input[name="_token"]').value;
 
-            // Gửi request Ajax
             fetch("{{ route('cartApi.add') }}", {
                     method: 'POST',
                     headers: {
@@ -540,21 +494,20 @@
                     errorModal.innerHTML = ''; // Xóa lỗi cũ
 
                     if (data.status === 'success') {
-                        // Cập nhật nội dung modal
+
                         document.getElementById('notificationModalBody').innerText = data.message;
 
-                        // Hiển thị modal
                         const notificationModalEl = document.getElementById('notificationModal');
+
                         const notificationModal = new bootstrap.Modal(notificationModalEl);
                         notificationModal.show();
 
-                        // Đóng modal sau 2 giây
                         setTimeout(() => {
                             notificationModal.hide();
                         }, 1000);
 
-                        // Đóng modal giỏ hàng (nếu cần)
                         bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+                        fetchCart();
                     } else {
                         if (data.errors) {
                             let errorMessages = '';
