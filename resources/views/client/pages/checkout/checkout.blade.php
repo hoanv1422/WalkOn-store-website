@@ -1,121 +1,81 @@
 <div class="checkout-container">
-    <form action="{{ route('checkout.store') }}" method="POST">
+    <form id="checkout-form">
         @csrf
         <div class="row g-0">
             <!-- Phần thông tin khách hàng -->
             <div class="col-lg-6 p-5">
                 <h3 class="section-title">Thông Tin Thanh Toán</h3>
-                <form id="checkout-form">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Họ và tên" name="receiver_name"
-                            value="{{Auth::user()->name }}">
-                        @error('receiver_name')
-                            <p class="small text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Email" name="receiver_email"
-                            value="{{ Auth::user()->email }}">
-                        @error('receiver_email')
-                            <p class="small text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <input type="tel" class="form-control" placeholder="Số điện thoại" name="receiver_phone"
-                            value="{{ Auth::user()->phone }}">
-                        @error('receiver_phone')
-                            <p class="small text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Họ và tên" name="receiver_name"
+                        value="{{ Auth::user()->name }}" id="receiver-name">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Email" name="receiver_email"
+                        value="{{ Auth::user()->email }}" id="receiver-email">
+                </div>
+                <div class="mb-3">
+                    <input type="tel" class="form-control" placeholder="Số điện thoại" name="receiver_phone"
+                        value="{{ Auth::user()->phone }}" id="receiver-phone">
+                </div>
 
-                    <!-- Hiển thị địa chỉ mặc định -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
-                        <div class="address-display d-flex justify-content-between align-items-center">
-                            <div id="current-address">
-                                @if ($addressDefault)
-                                    <strong>{{ $addressDefault->type_label }}</strong><br>
-                                    @if ($addressDefault->full_address)
-                                        <span>{{ $addressDefault->full_address }}</span>
-                                    @endif
-                                @endif
-                            </div>
-                            <button type="button" class="btn change-address-btn" data-bs-toggle="modal"
-                                data-bs-target="#addressModal">
-                                Thay đổi
-                            </button>
+                <!-- Hiển thị địa chỉ mặc định -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
+                    <div class="address-display d-flex justify-content-between align-items-center">
+                        <div id="current-address">
+                            {{-- Địa chỉ  --}}
                         </div>
-                        @error('receiver_address')
-                            <p class="small text-danger">{{ $message }}</p>
-                        @enderror
-                        <div id="distance-display" class="mt-2 text-muted"></div>
-                        @if ($addressDefault)
-                            <input type="hidden" name="receiver_address" id="selected-address"
-                                value="{{ $addressDefault->full_address ?? '' }}">
-                            <input type="hidden" id="selected-lat" value="{{ $addressDefault->latitude ?? '' }}">
-                            <input type="hidden" id="selected-lon" value="{{ $addressDefault->longitude ?? '' }}">
-                        @endif
-                        
+                        <button type="button" class="btn change-address-btn" data-bs-toggle="modal"
+                            data-bs-target="#addressModal">
+                            Thay đổi
+                        </button>
                     </div>
 
+                    <div id="distance-display" class="mt-2 text-muted"></div>
+                    <input type="hidden" name="receiver_address" id="selected-address" value="">
+                    <input type="hidden" id="selected-lat" value="">
+                    <input type="hidden" id="selected-lon" value="">
 
-                    <div class="mb-3">
-                        <textarea class="form-control" rows="2" placeholder="Ghi chú (nếu có)" name=""></textarea>
-                    </div>
-                </form>
+                </div>
+
+                <div class="mb-3">
+                    <textarea class="form-control" rows="2" placeholder="Ghi chú (nếu có)" name="" id="note"></textarea>
+                </div>
             </div>
 
             <!-- Phần đơn hàng -->
             <div class="col-lg-6 p-5 bg-light">
                 <h3 class="section-title">Đơn Hàng Của Bạn</h3>
                 <div class="order-items mb-4">
-                    @foreach ($cartItems as $item)
-                        <input type="hidden" name="cartItemIds[]" value="{{ $item->id }}">
-                        <div class="order-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="" alt="{{ $item->productVariant->product->name }}" class="me-3"
-                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
-                                <div>
-                                    <span>{{ $item->productVariant->product->name }} × {{ $item->quantity }}</span>
-                                    <div class="text-muted small">Màu: {{ $item->productVariant->color->color }} |
-                                        Size:
-                                        {{ $item->productVariant->size->size }}</div>
-                                </div>
-                            </div>
-                            <span>{{ number_format($item->formatted_price, 0, ',', '.') }} VND</span>
-                        </div>
-                    @endforeach
+                    {{-- CartItems --}}
                 </div>
 
                 <div class="coupon-area">
-                    <form id="couponForm" action="{{ route('coupon.apply') }}" method="POST" autocomplete="off">
-                        @csrf
-                        <div class="input-group mb-2">
-                            <input type="text" name="couponCode" id="couponCodeInput"
-                                class="form-control coupon-input" placeholder="Nhập mã giảm giá">
-                            <button type="submit" class="btn coupon-btn text-white">Áp dụng</button>
-                        </div>
 
-                        <div class="d-flex justify-content-between">
-                            <small id="couponMessage"></small>
-                            <div class="text-end">
-                                <a href="#" class="btn btn-outline-secondary" id="clearCoupon">Xóa</a>
-                            </div>
+                    <div class="input-group mb-2">
+                        <input type="text" name="couponCode" id="couponCodeInput" class="form-control coupon-input"
+                            placeholder="Nhập mã giảm giá" form="coupon-form">
+                        <input type="hidden" name="totalPrice" id="totalPriceForCoupon" value="" form="coupon-form">
+                        <input type="hidden" name="shippingFeeForCoupon" id="shippingFeeForCoupon" value="0" form="coupon-form">
+                        <div id="cart-items-for-coupon">
+                            {{-- CartItemIds --}}
                         </div>
-                        <input type="hidden" name="totalPrice" id="totalPriceForCoupon" value="{{ $totalPrice }}">
-                        <input type="hidden" name="shippingFeeForCoupon" id="shippingFeeForCoupon" value="0">
-                        @foreach ($cartItems as $item)
-                            <input type="hidden" name="cartItemsForCoupon[]" id="cartItemsForCoupon"
-                                value="{{ $item->id }}">
-                        @endforeach
-                    </form>
+                        <button type="submit" class="btn coupon-btn text-white" form="coupon-form">Áp dụng</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <small id="couponMessage"></small>
+                        <div class="text-end">
+                            <a href="#" class="btn btn-outline-secondary" id="clearCoupon">Xóa</a>
+                        </div>
+                    </div>
                 </div>
                 <input type="hidden" name="couponCodeForOrder" id="couponCodeForOrder" value="">
                 <div class="mb-4">
                     <div class="d-flex justify-content-between mb-2">
                         <span>Tạm tính</span>
-                        <span id="displayTotalPrice">{{ number_format($totalPrice, 0, ',', '.') }} VND</span>
-                        <input type="hidden" id="totalPrice" name="totalPrice" value="{{ $totalPrice }}">
+                        <span id="displayTotalPrice"></span>
+                        <input type="hidden" id="totalPrice" name="totalPrice" value="">
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Phí vận chuyển</span>
@@ -150,6 +110,10 @@
         </div>
     </form>
 
+      <form id="coupon-form">
+        @csrf
+      </form>
+
 </div>
 
 <!-- Modal chọn địa chỉ -->
@@ -161,15 +125,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="address-list" id="addressList">
-                    @foreach ($addresses as $item)
-                        <div class="address-item" data-address="{{ $item->full_address }}"
-                            data-lat="{{ $item->latitude }}" data-lon="{{ $item->longitude }}"
-                            onclick="selectAddress(this)">
-                            <strong>{{ $item->type_label }}</strong><br>
-                            <span>{{ $item->full_address }}</span>
-                        </div>
-                    @endforeach
+                <div class="address-list" id="address-list">
+                    {{-- Address List --}}
 
                 </div>
             </div>

@@ -21,33 +21,118 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        try {
+        $cartItems = $request->input('cartItems');
 
+        if (empty($cartItems)) {
+            return redirect()->route('cart.index')->withErrors(['cart' => 'Không có sản phẩm trong giỏ hàng.']);
+        }
+
+        $cartItemIds = explode(',', $cartItems);
+
+        foreach ($cartItemIds as $cartItemId) {
+            if (!is_numeric($cartItemId) || (int)$cartItemId <= 0) {
+                return redirect()->route('cart.index')->withErrors(['cart' => 'Một hoặc nhiều ID sản phẩm không hợp lệ.']);
+            }
+        }
+
+        $userId = Auth::id();
+        $cart = Cart::where('user_id', $userId)->first();
+
+        if (!$cart) {
+            return redirect()->route('cart.index')->withErrors(['cart' => 'Giỏ hàng không tìm thấy.']);
+        }
+
+        $validCartItems = CartItem::where('cart_id', $cart->id)
+            ->whereIn('id', $cartItemIds)
+            ->get();
+
+        if ($validCartItems->count() !== count($cartItemIds)) {
+            return redirect()->route('cart.index')->withErrors(['cart' => 'Một hoặc nhiều sản phẩm không hợp lệ hoặc không thuộc giỏ hàng của bạn.']);
+        }
+
+        return view('client.pages.checkout.index');
+    }
+
+
+
+    public function indexAPI(Request $request)
+    {
+        try {
             $userId = Auth::id();
-            $addresses = Address::query()->where('user_id', $userId)->get();
-            $addressDefault = Address::query()->where('user_id', $userId)->where('is_default', 1)->first();
-            $cart = Cart::query()->where('user_id', $userId)->first();
-            $cartItemId = $request->cartItems;
-            $cartItemIds = explode(',', $request->cartItems);
-            $cartItems = CartItem::query()->where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->get();
+            // Fetch addresses
+            $addresses = Address::where('user_id', $userId)->get();
+            $addressDefault = Address::where('user_id', $userId)
+                ->where('is_default', 1)
+                ->first();
+
+            if ($addressDefault) {
+                $addressDefault->append(['full_address', 'type_label']);
+            }
+            
+            foreach($addresses as $address) {
+                $address->append(['full_address', 'type_label']);
+            }
+
+
+            // Fetch cart and items
+            $cart = Cart::where('user_id', $userId)->first();
+
+            if (!$cart) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Cart not found'
+                ], 404);
+            }
+
+            $cartItemIds = explode(',', $request->input('cartItems'));
+            $cartItems = CartItem::with('productVariant.product', 'productVariant.color', 'productVariant.size')
+                ->where('cart_id', $cart->id)
+                ->whereIn('id', $cartItemIds)
+                ->get();
+
+            if ($cartItems) {
+                $cartItems->append(['formatted_price']);
+            }
+
+            // Calculate total price
             $totalPrice = 0;
-            foreach($cartItems as $item) {
-                 if ($item->productVariant->price_sale && $item->productVariant->price_sale < $item->productVariant->price) {
-                   $totalPrice += $item->productVariant->price_sale * $item->quantity;
-                 } else {
+            foreach ($cartItems as $item) {
+                if (
+                    $item->productVariant->price_sale &&
+                    $item->productVariant->price_sale < $item->productVariant->price
+                ) {
+                    $totalPrice += $item->productVariant->price_sale * $item->quantity;
+                } else {
                     $totalPrice += $item->productVariant->price * $item->quantity;
                 }
+            }
 
-                
-            }            
-            return view('client.pages.checkout.index', compact("cartItems", "cartItemId" ,"totalPrice", "addresses", "addressDefault"));
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'cartItems' => $cartItems,
+                    'cartItemIds' => $cartItemIds,
+                    'totalPrice' => $totalPrice,
+                    'addresses' => $addresses,
+                    'addressDefault' => $addressDefault
+                ]
+            ], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Có lỗi xảy ra');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
         }
-        
     }
+
+
 
 
     public function applyCoupon(Request $request)
@@ -242,7 +327,4 @@ class OrderController extends Controller
             return back()->with('error', 'Có lỗi khi thêm');
         }
     }
-
-    
-
 }

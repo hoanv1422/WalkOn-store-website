@@ -48,9 +48,7 @@
         <div class="row justify-content-end">
             <div class="col-md-4">
                 <form action="{{ route('order.index') }}" method="GET">
-                    @csrf
                     <input type="hidden" name="cartItems" id="cartItems">
-                    <input type="hidden" name="totalPrice" id="totalPrice">
                     <div class="totals p-3">
                         <hr>
                         <div class="row">

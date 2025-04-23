@@ -42,7 +42,7 @@
                             @else
                                 <div class="row mb-4 g-3">
                                     <div class="col-md-4">
-                                        <form id="statusFilterForm" method="GET" action="{{ route('profile.orders') }}">
+                                        <form id="statusFilterForm" method="GET" action="{{ route('order.list') }}">
                                             <select class="form-select border rounded-pill py-2 px-3 shadow-sm"
                                                 name="status" onchange="this.form.submit()">
                                                 <option value="" {{ request('status') === '' ? 'selected' : '' }}>Tất

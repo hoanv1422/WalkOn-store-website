@@ -64,7 +64,6 @@ Route::middleware('client')->group(function () {
 
 
     Route::get('/order-list', [OrderController::class, 'ordersList'])->name('order.list');
-    Route::get('/orders', [OrderController::class, 'orders'])->name('profile.orders');
     Route::post('/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -76,9 +75,9 @@ Route::middleware('client')->group(function () {
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
     Route::middleware('verified')->group(function () {
-        Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-        Route::post('/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::get('/checkout', [OrderController::class, 'index'])->name('order.index');
+        Route::get('/api/checkout', [OrderController::class, 'indexAPI'])->name('api.order.index');
+        Route::post('/api/coupon-apply', [OrderController::class, 'applyCoupon'])->name('coupon.apply');
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
         Route::get('vnpay_return', [CheckoutController::class, 'vnpay_return'],)->name('vnpay.return');
         Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');

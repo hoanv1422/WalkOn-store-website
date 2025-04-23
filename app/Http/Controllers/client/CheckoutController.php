@@ -31,16 +31,25 @@ class CheckoutController extends Controller
             $user = Auth::user();
 
             if (!$user) {
-                return redirect()->route('login.form')->with('error', 'Bạn cần đăng nhập để thanh toán.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn cần đăng nhập để thanh toán.'
+                ], 401);
             }
 
             $cart = Cart::where('user_id', $user->id)->first();
             if (!$cart) {
-                return redirect()->route('cart.list')->with('error', 'Giỏ hàng của bạn trống.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Giỏ hàng của bạn trống.'
+                ], 404);
             }
 
-            if (Empty($request->cartItemIds)) {
-                return back()->with('error', 'Giỏ hàng trống.');
+            if (empty($request->cartItemIds)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Giỏ hàng trống.'
+                ], 400);
             }
 
             $cartItems = CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)
@@ -76,7 +85,7 @@ class CheckoutController extends Controller
                 'shipping_fee' => $request->shippingFee,
                 'final_price' => $request->finalPrice,
                 'order_status' => 'pending',
-                'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'unpaid',
+                'payment_status' => $request->payment_method === 'COD' ? 'unpaid' : 'paid',
                 'payment_method' => $request->payment_method,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -108,21 +117,37 @@ class CheckoutController extends Controller
             if ($request->payment_method === 'VNPAY') {
                 DB::commit();
                 $vnpayUrl = $this->vnpay_payment($order->final_price, $order->order_code);
-                return redirect()->away($vnpayUrl);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Đơn hàng đã được tạo, chuyển hướng đến thanh toán VNPAY',
+                    'redirect_url' => $vnpayUrl,
+                    'order' => $order
+                ]);
             }
-            $token = route('profile.orders');
 
-
+            $token = route('order.list');
             // Mail::to($user->email)->send(new OrderMail($order, $orderItems, $user->name, $token));
-
             DB::commit();
-            return redirect()->route('profile.orders')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Đơn hàng của bạn đã được đặt thành công.',
+                'order' => $order,
+                'order_items' => $orderItems
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e);
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            dd($e);
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi đặt đơn hàng: ' . $e->getMessage());
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi đặt đơn hàng: ' . $e->getMessage()
+            ], 500);
         }
     }
 

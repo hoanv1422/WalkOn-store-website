@@ -196,7 +196,6 @@
                 const selectAll = document.getElementById("selectAll");
                 const checkboxes = document.querySelectorAll(".cartItemCheckbox");
                 const cartItemsInput = document.getElementById("cartItems");
-                const totalPriceInput = document.getElementById("totalPrice");
                 const displayTotalPrice = document.getElementById("displayTotalPrice");
                 const checkoutButton = document.getElementById("checkoutButton");
 
@@ -217,9 +216,6 @@
                         // Nếu không có checkbox (giỏ hàng trống), đặt tổng giá về 0
                         if (displayTotalPrice) {
                             displayTotalPrice.textContent = "0 VND";
-                        }
-                        if (totalPriceInput) {
-                            totalPriceInput.value = 0;
                         }
                         if (checkoutButton) {
                             checkoutButton.disabled = true;
@@ -246,9 +242,6 @@
                             .replace("₫", "VND");
                     }
 
-                    if (totalPriceInput) {
-                        totalPriceInput.value = totalPrice;
-                    }
 
                     if (checkoutButton) {
                         checkoutButton.disabled = selectedCount === 0;

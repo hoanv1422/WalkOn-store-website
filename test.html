@@ -1,344 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Related Products Slider - Fixed 4 Items</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            body {
-                font-family: Arial, sans-serif;
-            }
-            .products-slider-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                position: relative;
-            }
-            .products-slider {
-                display: flex;
-                overflow-x: hidden;
-                scroll-behavior: smooth;
-                gap: 20px;
-                padding: 10px 0;
-            }
-            .single-product {
-                flex: 0 0 calc(25% - 15px); /* Chính xác 4 items mỗi slide */
-                min-width: calc(25% - 15px);
-                border: 1px solid #eee;
-                border-radius: 8px;
-                overflow: hidden;
-                transition: all 0.3s ease;
-            }
-            .single-product:hover {
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                transform: translateY(-5px);
-            }
-            .product-img {
-                position: relative;
-                height: 200px;
-                overflow: hidden;
-            }
-            .product-img img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: opacity 0.3s;
-            }
-            .product-img .secondary-img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                opacity: 0;
-            }
-            .product-img:hover .primary-img {
-                opacity: 0;
-            }
-            .product-img:hover .secondary-img {
-                opacity: 1;
-            }
-            .product-price {
-                padding: 15px;
-            }
-            .product-name a {
-                color: #333;
-                text-decoration: none;
-                font-weight: bold;
-                display: block;
-                margin-bottom: 10px;
-            }
-            .price-rating span {
-                color: #e74c3c;
-                font-weight: bold;
-            }
-            .slider-button {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(255, 255, 255, 0.8);
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                z-index: 10;
-            }
-            .slider-button:hover {
-                background: rgba(255, 255, 255, 1);
-            }
-            .prev-button {
-                left: 10px;
-            }
-            .next-button {
-                right: 10px;
-            }
-            .slider-dots {
-                display: flex;
-                justify-content: center;
-                margin-top: 15px;
-                gap: 8px;
-            }
-            .dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background-color: #ddd;
-                cursor: pointer;
-            }
-            .dot.active {
-                background-color: #e74c3c;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Selection Modal</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
 
-            /* Responsive adjustments */
-            @media (max-width: 992px) {
-                .single-product {
-                    flex: 0 0 calc(50% - 10px);
-                    min-width: calc(50% - 10px);
-                }
-            }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
 
-            @media (max-width: 576px) {
-                .single-product {
-                    flex: 0 0 calc(100% - 10px);
-                    min-width: calc(100% - 10px);
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="row">
-            <div class="products-slider-container">
-                <button class="slider-button prev-button">←</button>
-                <button class="slider-button next-button">→</button>
-                <div class="products-slider" id="related-products"></div>
-                <div class="slider-dots" id="slider-dots"></div>
-            </div>
-        </div>
+        .modal-header-1 {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #333;
+        }
 
+        .modal-body {
+            padding: 16px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
 
-        <script>
-            async function fetchRelatedProducts(slug) {
-                try {
-                    const response = await fetch(
-                        `/api/get-related-products/${slug}`
-                    );
-                    if (!response.ok) {
-                        throw new Error(
-                            `HTTP error! Status: ${response.status}`
-                        );
-                    }
-                    const data = await response.json();
-                    const relatedProducts = data.data.related_products;
-                    const relatedProductsDisplay =
-                        document.getElementById("related-products");
+        .address-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-                    if (data.status === "success") {
-                        console.log(relatedProducts);
-                        relatedProductsDisplay.innerHTML = "";
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #fff;
+            transition: background-color 0.2s ease;
+        }
 
-                        // Generate slider items
-                        relatedProducts.forEach((product) => {
-                            relatedProductsDisplay.innerHTML += `
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="img/product/23.png" alt="" class="primary-img">
-                                        <img src="img/product/24.png" alt="" class="secondary-img">
-                                    </a>
-                                </div>
-                                <div class="product-price">
-                                    <div class="product-name">
-                                        <a href="single-product.html" title="Fusce aliquam">Fusce aliquam</a>
-                                    </div>
-                                    <div class="price-rating">
-                                        <span>$170.00</span>
-                                    </div>
-                                </div>
+        .d-flex:hover {
+            background-color: #f5f5f5;
+        }
+
+        .d-flex > div:first-child {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .d-flex > div:first-child strong {
+            font-size: 16px;
+            color: #333;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .d-flex > div:first-child span {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .d-flex > div:last-child {
+            display: flex;
+            gap: 8px;
+        }
+
+        .d-flex button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .d-flex button:first-child {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .d-flex button:first-child:hover {
+            background-color: #0056b3;
+        }
+
+        .d-flex button:last-child {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .d-flex button:last-child:hover {
+            background-color: #b02a37;
+        }
+
+        .modal-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Delivery Address Selector</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
+            Open Address Modal
+        </button>
+    </div>
+
+    <!-- Address Selection Modal -->
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-1">
+                    <h5 class="modal-title" id="addressModalLabel">Chọn Địa Chỉ Giao Hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="address-list" id="addressList">
+                        <!-- Sample address items (replacing @foreach) -->
+                        <div class="d-flex">
+                            <div data-address="123 Main St, City, Country" data-lat="40.7128" data-lon="-74.0060" onclick="selectAddress(this)">
+                                <strong>Home</strong><br>
+                                <span>123 Main St, City, Country</span>
                             </div>
-                        `;
-                        });
-
-                        // Initialize slider
-                        initSlider();
-                    } else {
-                        console.error(
-                            "Failed to fetch related products:",
-                            data.message
-                        );
-                        document.getElementById("related-products").innerHTML =
-                            "<p>Không tìm thấy sản phẩm liên quan.</p>";
-                    }
-                } catch (error) {
-                    console.error("Error fetching related products:", error);
-                    document.getElementById("related-products").innerHTML =
-                        "<p>Lỗi khi tải sản phẩm liên quan.</p>";
-                }
-            }
-
-            // For demo purposes - create dummy data if API is not available
-            function loadDummyData() {
-                const relatedProductsDisplay =
-                    document.getElementById("related-products");
-                relatedProductsDisplay.innerHTML = "";
-
-                // Generate 8 dummy products
-                for (let i = 0; i < 8; i++) {
-                    relatedProductsDisplay.innerHTML += `
-                    <div class="single-product">
-                        <div class="product-img">
-                            <a href="single-product.html">
-                                <img src="/api/placeholder/250/200" alt="" class="primary-img">
-                                <img src="/api/placeholder/250/200" alt="" class="secondary-img">
-                            </a>
+                            <div>
+                                <button class="">Sửa</button>
+                                <button class="">Xóa</button>
+                            </div>
                         </div>
-                        <div class="product-price">
-                            <div class="product-name">
-                                <a href="single-product.html" title="Product ${
-                                    i + 1
-                                }">Product ${i + 1}</a>
+                        <div class="d-flex">
+                            <div data-address="456 Oak Ave, Town, Country" data-lat="35.6762" data-lon="139.6503" onclick="selectAddress(this)">
+                                <strong>Work</strong><br>
+                                <span>456 Oak Ave, Town, Country</span>
                             </div>
-                            <div class="price-rating">
-                                <span>$${(150 + i * 10).toFixed(2)}</span>
+                            <div>
+                                <button class="">Sửa</button>
+                                <button class="">Xóa</button>
                             </div>
                         </div>
                     </div>
-                `;
-                }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAddressModal" onclick="hideAddressModal()">Thêm mới</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmAddress()">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                // Initialize slider after loading dummy data
-                initSlider();
-            }
+    <!-- Placeholder for Add Address Modal (not implemented) -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-1">
+                    <h5 class="modal-title" id="addAddressModalLabel">Thêm Địa Chỉ Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Form to add a new address (not implemented).</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            function initSlider() {
-                const slider = document.querySelector(".products-slider");
-                const prevButton = document.querySelector(".prev-button");
-                const nextButton = document.querySelector(".next-button");
-                const dotsContainer = document.getElementById("slider-dots");
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script>
+        let selectedAddress = null;
 
-                // Fixed 4 items per slide
-                const itemsPerSlide = 4;
-                const totalItems = slider.children.length;
-                const totalSlides = Math.ceil(totalItems / itemsPerSlide);
-
-                // Create dots
-                dotsContainer.innerHTML = "";
-                for (let i = 0; i < totalSlides; i++) {
-                    const dot = document.createElement("div");
-                    dot.classList.add("dot");
-                    if (i === 0) dot.classList.add("active");
-                    dot.addEventListener("click", () => {
-                        goToSlide(i);
-                        updateActiveDot(i);
-                    });
-                    dotsContainer.appendChild(dot);
-                }
-
-                let currentSlide = 0;
-
-                // Calculate slide width based on container width
-                const sliderWidth = slider.offsetWidth;
-                const slideWidth = sliderWidth;
-
-                // Slide functions
-                function goToSlide(slideIndex) {
-                    const scrollAmount = slideIndex * slideWidth;
-                    slider.scrollLeft = scrollAmount;
-                    currentSlide = slideIndex;
-                }
-
-                function updateActiveDot(slideIndex) {
-                    const dots = document.querySelectorAll(".dot");
-                    dots.forEach((dot, index) => {
-                        if (index === slideIndex) {
-                            dot.classList.add("active");
-                        } else {
-                            dot.classList.remove("active");
-                        }
-                    });
-                }
-
-                // Event listeners
-                prevButton.addEventListener("click", () => {
-                    if (currentSlide > 0) {
-                        goToSlide(currentSlide - 1);
-                        updateActiveDot(currentSlide);
-                    }
-                });
-
-                nextButton.addEventListener("click", () => {
-                    if (currentSlide < totalSlides - 1) {
-                        goToSlide(currentSlide + 1);
-                        updateActiveDot(currentSlide);
-                    }
-                });
-
-                // Add touch/swipe functionality for mobile
-                let startX, scrollLeft;
-
-                slider.addEventListener("touchstart", (e) => {
-                    startX = e.touches[0].pageX - slider.offsetLeft;
-                    scrollLeft = slider.scrollLeft;
-                });
-
-                slider.addEventListener("touchmove", (e) => {
-                    e.preventDefault();
-                    const x = e.touches[0].pageX - slider.offsetLeft;
-                    const dist = x - startX;
-                    slider.scrollLeft = scrollLeft - dist;
-                });
-
-                slider.addEventListener("touchend", () => {
-                    // Calculate which slide to snap to
-                    const slideIndex = Math.round(
-                        slider.scrollLeft / slideWidth
-                    );
-                    goToSlide(slideIndex);
-                    updateActiveDot(slideIndex);
-                });
-            }
-
-            // Load data when page loads
-            document.addEventListener("DOMContentLoaded", () => {
-                // Try to fetch data from API if slug is available
-                const urlParams = new URLSearchParams(window.location.search);
-                const slug = urlParams.get("product");
-
-                if (slug) {
-                    fetchRelatedProducts(slug);
-                } else {
-                    // Load dummy data for demo
-                    loadDummyData();
-                }
+        function selectAddress(element) {
+            // Remove active class from all address items
+            document.querySelectorAll('.d-flex').forEach(item => {
+                item.classList.remove('active');
             });
-        </script>
-    </body>
+
+            // Add active class to selected item
+            element.parentElement.classList.add('active');
+
+            // Store selected address data
+            selectedAddress = {
+                address: element.getAttribute('data-address'),
+                lat: element.getAttribute('data-lat'),
+                lon: element.getAttribute('data-lon')
+            };
+
+            // Optional: Visual feedback for selection
+            element.querySelector('strong').style.color = '#007bff';
+        }
+
+        function confirmAddress() {
+            if (selectedAddress) {
+                alert(`Confirmed Address: ${selectedAddress.address}\nLatitude: ${selectedAddress.lat}\nLongitude: ${selectedAddress.lon}`);
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
+                modal.hide();
+            } else {
+                alert('Please select an address first.');
+            }
+        }
+
+        function hideAddressModal() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
+            modal.hide();
+        }
+    </script>
+    <style>
+        .d-flex.active {
+            border-color: #007bff;
+            background-color: #e7f1ff;
+        }
+    </style>
+</body>
 </html>
