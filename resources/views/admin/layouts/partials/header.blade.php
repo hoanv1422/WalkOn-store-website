@@ -10,7 +10,7 @@
                                 height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ asset('templates/admin/assets/images/logo-dark.png') }}" alt=""
+                            <img src="{{ asset('templates/admin/assets/images/logo_admin.png') }}" alt=""
                                 height="17">
                         </span>
                     </a>
@@ -21,7 +21,7 @@
                                 height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ asset('templates/admin/assets/images/logo-light.png') }}" alt=""
+                            <img src="{{ asset('templates/admin/assets/images/logo_admin.png') }}" alt=""
                                 height="17">
                         </span>
                     </a>

@@ -28,6 +28,9 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 
+
+Route::get('/api/list-product', [ProductController::class, 'listProductApi'])->name('api.get.product');
+
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
@@ -36,6 +39,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     Route::resource('products', ProductController::class);
+
+
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
