@@ -23,7 +23,7 @@ class ContactController extends Controller
 
         $userId = auth()->check() ? auth()->id() : null;
 
-        Contact::create([
+        Contact::create(attributes: [
             'contact_code' => 'CNT' . now()->timestamp,
             'user_id'      => $userId,
             'name'         => $request->name,

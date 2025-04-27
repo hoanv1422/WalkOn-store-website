@@ -94,7 +94,6 @@
                                             <th class="sort" data-sort="phone">Số Điện Thoại</th>
                                             <th class="sort" data-sort="message">Tin nhắn</th>
                                             <th class="sort" data-sort="status">Trạng thái</th>
-                                            <th class="sort" data-sort="response_message">Tin nhắn trả lời</th>
                                             <th class="sort" data-sort="responded_by">Trả lời bởi</th>
                                             <th class="sort" data-sort="action">Hành Động</th>
                                         </tr>
@@ -121,7 +120,6 @@
                 ($contact->status === 'READ' ? 'ĐÃ ĐỌC' : 'ĐÃ TRẢ LỜI') }}
                                                 </span>
                                             </td>
-                                            <td class="response_message">{{ $contact->response_message}}</td>
                                             <td class="responded_by">{{ $contact->responder->name ?? '' }}</td>
                                             <td>
                                                 <ul class="list-inline hstack gap-2 mb-0">
