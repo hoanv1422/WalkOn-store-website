@@ -11,7 +11,8 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\WishlistController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Client\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -89,5 +90,35 @@ Route::middleware('client')->group(function () {
 
 
 
+
+
+
+
+// checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+
+// about-us
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
+
+// Blog
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
+
+// Contact
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+
+//commment
+
+// Tuyến đường hiển thị trang bình luận của sản phẩm
+Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
+
+// Tuyến đường xử lý thêm bình luận
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+
+Route::get('/product/{slug}', [DetailController::class, 'productDetail'])->name('product.detail');
 
 

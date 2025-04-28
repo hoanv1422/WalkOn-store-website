@@ -99,3 +99,9 @@ Route::controller(AuthController::class)->group(function () {
             ->name('api.change.password.admin');    
     });
 });
+
+// Tuyến đường hiển thị trang bình luận của sản phẩm
+// Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
+
+// Tuyến đường xử lý thêm bình luận
+// Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');

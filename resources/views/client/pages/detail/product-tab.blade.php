@@ -22,9 +22,11 @@
                         <div role="tabpanel" class="tab-pane fade show active" id="tab1">
                             <div class="single-p-tab-content">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    @include('client.pages.detail.comments')
+                                    {{-- <div class="col-md-5">
                                         <div class="product-review">
-                                            <p>  <span>Đánh giá của khách hàng</span>  </p>
+                                           
+                                            <p> <a href="#"> plaza</a> <span>Review by</span> plaza </p>
                                             <div class="product-rating-info">
                                                 <p>Sản Phẩm:</p>
                                                 <div class="ratings">
@@ -81,8 +83,8 @@
                                                 </ul>
                                                 <button type="submit"> Gửi đánh giá</button>
                                             </form>
-                                        </div>
-                                    </div>
+                                         </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

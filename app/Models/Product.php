@@ -118,4 +118,8 @@ class Product extends Model
 
         return $relatedProducts;
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -152,6 +152,7 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function show(Product $product)
+
     {
         $sizes = $product->variants()
             ->select('size_id')

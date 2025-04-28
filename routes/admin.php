@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCommentController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\admin\PostCommentController;
+use App\Models\CommentHidden;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -15,6 +17,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\ShipperController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\CommentHiddenController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
