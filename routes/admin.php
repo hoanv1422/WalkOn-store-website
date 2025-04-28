@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminCommentController;
+use App\Http\Controllers\admin\FooterController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +36,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::put('inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
     // Route::resource('shippers',ShipperController::class);
     // Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
+    Route::resource('footers',FooterController::class)->except(['create', 'edit', 'show']);
+    
+    Route::match(['put', 'patch'], 'admin/footers/{id}', [FooterController::class, 'update'])->name('footers.update');
+
+    
+
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
 

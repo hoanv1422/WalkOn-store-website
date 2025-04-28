@@ -208,6 +208,9 @@
                                 <a href="{{route('orders.index')}}" class="nav-link"> <span data-key="t-to-do">Đơn Hàng</span></a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{route('footers.index')}}" class="nav-link"> <span data-key="t-to-do">Footer</span></a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarjobs" data-key="t-jobs"> Jobs</a>
                                 <div class="collapse menu-dropdown" id="sidebarjobs">
