@@ -340,7 +340,7 @@ class CheckoutController extends Controller
             'discount_amount' => $request->discountAmount,
             'shipping_fee' => $request->shippingFee,
             'final_price' => $request->finalPrice,
-            'order_status' => 'confirmed', // Đơn hàng COD được xác nhận ngay
+            'order_status' => 'pending', // Đơn hàng COD được xác nhận ngay
             'payment_status' => 'unpaid',   // COD chưa thanh toán
             'payment_method' => 'COD',
             'created_at' => now(),

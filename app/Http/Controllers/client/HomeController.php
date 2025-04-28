@@ -61,9 +61,9 @@ class HomeController extends Controller
             ->orderByDesc('average_rating')
             ->take(20)
             ->get();
+        $banners = Banner::orderBy('position')->get();
 
-
-        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts'));
+        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts', 'banners'));
     }
 
     public function getProductById(Request $request)

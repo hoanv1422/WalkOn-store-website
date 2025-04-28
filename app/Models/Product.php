@@ -113,14 +113,13 @@ class Product extends Model
             return $product;
         });
 
-
-
-
         return $relatedProducts;
     }
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
+
+
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class);
+    // }
     
 }
