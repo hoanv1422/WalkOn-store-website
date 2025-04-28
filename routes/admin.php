@@ -3,7 +3,10 @@
 use App\Http\Controllers\admin\FooterController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostCategoryController;
-use App\Http\Controllers\Admin\PostCommentController;
+use App\Http\Controllers\admin\PostCommentController;
+use App\Mail\ContactReplyMail;
+use App\Models\Contact;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,6 +14,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
@@ -30,11 +34,26 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::resource('products', ProductController::class);
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
+    Route::get('/users/filter', [UserController::class, 'filterUsers'])->name('users.filter');
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
-   
-    
+    Route::resource('contacts', ContactController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
+    Route::post('contacts/{contact}/reply', [ContactController::class, 'sendReply'])->name('contacts.sendReply');
+    Route::post('/contacts/reply/{id}', [ContactController::class, 'sendReply'])->name('contacts.reply.send');
+
+    Route::get('test-email', function () {
+        $contact = Contact::first();
+        $responseMessage = "Đây là email thử nghiệm gửi từ hệ thống.";
+        try {
+            Mail::to($contact->email)->send(new ContactReplyMail($contact, $responseMessage));
+            return 'Email đã được gửi thành công!';
+        } catch (\Exception $e) {
+            return 'Có lỗi xảy ra: ' . $e->getMessage();
+        }
+    })->name('test-email');
     // Kho hàng
     Route::resource('inventory', InventoryController::class)->only(['index']);
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');

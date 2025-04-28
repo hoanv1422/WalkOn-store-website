@@ -8,7 +8,9 @@ use App\Models\PostComments;
 use App\Policies\OrderPolicy;
 use App\Policies\PostCommentPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,12 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete-comment', function ($user, PostComments $comment) {
             // Cho phép user sở hữu comment hoặc admin xóa
             return $user->id === $comment->user_id || $user->hasRole('admin');
+        });
+
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Xác thực email của bạn ')
+                ->view('emails.verify_email', ['verificationUrl' => $url]);
         });
     }
 }

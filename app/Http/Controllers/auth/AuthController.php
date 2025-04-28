@@ -139,8 +139,8 @@ class AuthController extends Controller
             'email.email' => 'Email không đúng định dạng.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
         ]);
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $credentials = ['email' => $request->email, 'password' => $request->password];
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if (!$user->is_active) {
                 Auth::logout(); // Đảm bảo không giữ phiên đăng nhập
@@ -174,6 +174,7 @@ class AuthController extends Controller
             'message' => 'Sai mật khẩu hoặc tên tài khoản'
         ], 401);
     }
+
 
     // đăng xuất
     public function logout(Request $request)
@@ -247,22 +248,20 @@ class AuthController extends Controller
 
     public function sendResetLink(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email'
-        ]);
+        $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return back()->withErrors(['email' => 'Không tìm thấy tài khoản.']);
+        $status = Password::sendResetLink($request->only('email'), function ($user, $token) {
+            Mail::to($user->email)->send(new ResetPasswordMail($token, $user->email));
+        });
+
+        if ($status === Password::RESET_LINK_SENT) {
+            session(['password_reset_requested' => true]);
+            return redirect()->route('confirmation.password');
         }
 
-        Password::sendResetLink($request->only('email'));
-
-        session(['password_reset_requested' => true]);
-        Log::info('Session password_reset_requested: ', ['session' => session()->all()]);
-
-        return redirect()->route('confirmation.password');
+        return back()->withErrors(['email' => 'Không thể gửi email. Vui lòng thử lại sau.']);
     }
+
 
     public function showResetForm($token)
     {
@@ -300,12 +299,12 @@ class AuthController extends Controller
         if (!$request->user()) {
             return redirect()->route('login.form')->with('error', 'Bạn cần đăng nhập để xác thực email.');
         }
-
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->route('verified.email')->with('message', 'Email đã được xác thực trước đó.');
         }
         $request->user()->sendEmailVerificationNotification();
         session(['email_verification_sent' => true]);
+
         return redirect()->route('email.sent')->with('message', 'Email xác thực đã được gửi!');
     }
 

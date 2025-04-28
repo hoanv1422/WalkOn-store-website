@@ -75,6 +75,7 @@ Route::middleware('client')->group(function () {
     Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
     Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact-store', [ContactController::class, 'store'])->name('contact.store');
 
     Route::middleware('verified')->group(function () {
         Route::get('/checkout', [OrderController::class, 'index'])->name('order.index');

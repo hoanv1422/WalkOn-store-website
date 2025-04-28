@@ -25,7 +25,6 @@ return new class extends Migration
             // Đã xóa dòng trùng lặp ở đây
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
-            $table->boolean('is_default')->default(false)->comment('Mặc định');
             $table->timestamps();
         });
     }

@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="alert border-0 alert-warning text-center mb-2 mx-2" role="alert">
-                                Nhập email của bạn và hướng dẫn sẽ được gửi!
+                                Nhập email của bạn và tin nhắn để lấy lại mật khẩu sẽ về email của bạn!
                             </div>
                             <div class="p-2">
                                 <form id="mail-password-reset-form-admin">
