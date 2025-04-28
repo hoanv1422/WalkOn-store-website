@@ -113,4 +113,47 @@ class PostCommentController extends Controller
             return back()->with('error', 'Lỗi');
         }
     }
+    public function filter(Request $request)
+    {
+        $query = PostComments::query();
+
+        // Lọc theo nội dung bình luận, tên bài viết hoặc tên người viết (nếu cần join thêm)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('content', 'like', '%' . $search . '%');
+                // Nếu muốn lọc theo bài viết hoặc người viết cần join bảng posts, users...
+                // $q->orWhereHas('post', function($q2) use ($search) {
+                //     $q2->where('title', 'like', '%' . $search . '%');
+                // });
+                // $q->orWhereHas('user', function($q2) use ($search) {
+                //     $q2->where('name', 'like', '%' . $search . '%');
+                // });
+            });
+        }
+
+        // Lọc theo trạng thái
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Lọc theo khoảng ngày (giả sử trường created_at)
+        if ($request->filled('date')) {
+            $dates = explode(' - ', $request->date);
+            if (count($dates) === 2) {
+                $start = date('Y-m-d', strtotime($dates[0]));
+                $end = date('Y-m-d', strtotime($dates[1]));
+                $query->whereBetween('created_at', [$start, $end]);
+            }
+        }
+
+        $postComments = $query->get();
+
+        $html = view(self::PATH_VIEW . 'table-rows', compact('postComments'))->render();
+
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ]);
+    }
 }

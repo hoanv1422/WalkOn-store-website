@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -14,7 +17,6 @@ class UserController extends Controller
 
     const PATH_VIEW = 'admin.users.';
     const PATH_UPLOAD = 'users';
-
 
     /**
      * Display a listing of the resource.
@@ -24,8 +26,8 @@ class UserController extends Controller
 
         $title = "Người Dùng";
         $users = User::all();
-        $validateUser = User::select('id', 'mail', 'username')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('users','validateUser', 'title'));
+        $validateUser = User::select('id', 'email', 'username')->get();
+        return view(self::PATH_VIEW . __FUNCTION__, compact('users', 'validateUser', 'title'));
     }
 
     /**
@@ -67,36 +69,35 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        // dd($request->all());
+        $data = $request->all();
 
-        // Data user
-        $data = $request->except('avatar');
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = Storage::put(self::PATH_UPLOAD, $request->file('avatar'));
-            if (!empty($user->avatar) && Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
+            $path = $request->file('avatar')->store('users', 'public');
+            $data['avatar'] = $path;
+            if (!empty($user->avatar) && Storage::exists('public/' . $user->avatar)) {
+                Storage::delete('public/' . $user->avatar);
             }
-        } else {
-            $data['avatar'] = $user->avatar;
         }
-        $data['is_active'] ??= 0;
+        if (!$request->has('is_active')) {
+            $data['is_active'] = $user->is_active;
+        }
+        if (Auth::user()->id == $user->id && isset($data['is_active']) && $data['is_active'] == 0) {
+            return back()->with('error', 'Bạn không thể tự khóa tài khoản quản trị của mình');
+        }
+        if (Auth::user()->id == $user->id && isset($data['role']) && $data['role'] != Auth::user()->role) {
+            return back()->with('error', 'Bạn không thể tự thay đổi vai trò của mình khi làm admin ');
+        }
 
         try {
             DB::beginTransaction();
-            // Update user 
             $user->update($data);
-
-            DB::Commit();
+            DB::commit();
             return redirect()->route('users.index')->with('success', 'Cập nhật người dùng thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
-            // DELETE IMAGE in STORAGE
-
             if (isset($data['avatar'])) {
                 Storage::delete($data['avatar']);
             }
-
-            dd($exception);
             return back()->with('error', 'Có lỗi khi cập nhật');
         }
     }
@@ -123,5 +124,40 @@ class UserController extends Controller
             dd($exception);
             return back()->with('error', 'Lỗi');
         }
+    }
+
+    public function filterUsers(Request $request)
+    {
+        $query = User::query();
+
+        $query->when($request->filled('keyword'), function ($q) use ($request) {
+            $keyword = $request->input('keyword');
+            $q->where(function ($subQuery) use ($keyword) {
+                $subQuery->where('name', 'LIKE', "%$keyword%")
+                    ->orWhere('email', 'LIKE', "%$keyword%")
+                    ->orWhere('phone', 'LIKE', "%$keyword%");
+            });
+        });
+
+        $query->when($request->filled('date_range'), function ($q) use ($request) {
+            $dates = explode(' - ', $request->input('date_range'));
+            if (count($dates) == 2) {
+                try {
+                    $start_date = Carbon::createFromFormat('d/m/Y', trim($dates[0]))->startOfDay();
+                    $end_date = Carbon::createFromFormat('d/m/Y', trim($dates[1]))->endOfDay();
+                    $q->whereBetween('created_at', [$start_date, $end_date]);
+                } catch (\Exception $e) {
+                    return back()->with('error', 'Định dạng ngày không hợp lệ!');
+                }
+            }
+        });
+
+        $query->when($request->filled('status') && $request->input('status') != 'all', function ($q) use ($request) {
+            $q->where('is_active', $request->input('status') == 'Active' ? 1 : 0);
+        });
+
+        $users = $query->get();
+
+        return view(self::PATH_VIEW . 'index', compact('users'))->with('title', 'Người Dùng');
     }
 }

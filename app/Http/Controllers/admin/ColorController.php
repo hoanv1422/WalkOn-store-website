@@ -44,6 +44,17 @@ class ColorController extends Controller
         try {
             DB::beginTransaction();
 
+            // Add your logic here for storing the color
+
+            DB::commit();
+            return redirect()->route('attributes.index')->with('success', 'Thêm màu sắc thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
+    }
+
     /**
      * Display the specified resource.
      */

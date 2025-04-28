@@ -3,8 +3,8 @@
         <div class="col-md-12">
             <div class="location">
                 <ul>
-                    <li><a href="index.html" title="go to homepage">Home<span>/</span></a> </li>
-                    <li><strong> wishlist ** </strong></li>
+                    <li><a href="{{route('home.index')}}" title="Về Trang Chủ">Trang Chủ<span>/</span></a> </li>
+                    <li><strong>  @yield('breadcrumb') </strong></li>
                 </ul>
             </div>
         </div>

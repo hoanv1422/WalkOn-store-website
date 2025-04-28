@@ -117,7 +117,7 @@
                                                     <div class="d-flex p-2">
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar-sm bg-light rounded overflow-hidden">
-                                                                <img class="img-fluid rounded d-block object-fit-cover"
+                                                                <img class="img-fluid rounded d-block h-100 object-fit-cover "
                                                                     src="{{ Storage::url($item->image) }}"
                                                                     alt="Product-Image" />
                                                             </div>
@@ -126,7 +126,12 @@
                                                             <div class="pt-1">
                                                                 <h5 class="fs-14 mb-1">{{ basename($item->image) }}</h5>
                                                                 <p class="fs-13 text-muted mb-0">
-                                                                    {{ round(Storage::size($item->image) / 1024, 2) }} KB
+                                                                    @if ($item->image && Storage::url($item->image))
+                                                                        {{-- {{ round(Storage::size($item->image) / 1024, 2) }} --}}
+                                                                        KB
+                                                                    @else
+                                                                        0 KB   
+                                                                    @endif
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -172,8 +177,8 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="manufacturer-brand-input">Thương
                                                         Hiệu</label>
-                                                    <a href="#" class="float-end text-decoration-underline">Thêm
-                                                        Mới</a>
+                                                    <a href="{{ route('brands.index') }}"
+                                                        class="float-end text-decoration-underline">Thêm Mới</a>
                                                     <select class="form-select" id="choices-brand-input" name="brand_id">
                                                         @foreach ($brands as $item)
                                                             <option value="{{ $item->id }}"
@@ -253,6 +258,10 @@
                             </div>
                             <!-- end card body -->
                         </div>
+
+                        @error('product_variant')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                         <div class="card">
                             <div class="card-header">
                                 <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
@@ -264,6 +273,8 @@
                                     </li>
                                 </ul>
                             </div>
+
+
                             <!-- end card header -->
                             <div class="card-body">
                                 <div class="tab-content">
@@ -290,7 +301,7 @@
                                                         ? $product_variants->count()
                                                         : array_key_last($productVariants);
                                                 @endphp
-                                                <input type="hidden" id="lastIndex" value="{{ $lastIndex }}">
+                                                <input type="hidden" id="lastIndex" value="{{ $lastIndex - 1 }}">
                                                 @if (old('product_variant'))
                                                     @foreach ($productVariants as $index => $product_variant)
                                                         <tr class="variant">
@@ -326,7 +337,7 @@
                                                                             class="avatar-title bg-light rounded overflow-hidden">
                                                                             <img src=""
                                                                                 id="imagePreviewVariant_{{ $index }}"
-                                                                                class="avatar-sm h-auto object-fit-cover"
+                                                                                class="avatar-sm h-100 object-fit-cover"
                                                                                 alt="">
                                                                         </div>
                                                                     </div>
@@ -431,16 +442,19 @@
                                                                             name="product_variant[{{ $index }}][image]">
                                                                     </div>
                                                                     <div class="avatar-sm">
-                                                                        <div class="avatar-title bg-light rounded">
+                                                                        <div
+                                                                            class="avatar-title bg-light rounded overflow-hidden">
                                                                             <img src="{{ Storage::url($item->image) }}"
                                                                                 id="imagePreviewVariant_{{ $index }}"
-                                                                                class="avatar-sm h-auto" alt="">
+                                                                                class="avatar-sm h-100 object-fit-cover"
+                                                                                alt="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td  class="align-middle">
-                                                                <select class="form-control  @error("product_variant.$index.size") is-invalid @enderror"
+                                                            <td class="align-middle">
+                                                                <select
+                                                                    class="form-control  @error("product_variant.$index.size") is-invalid @enderror"
                                                                     name="product_variant[{{ $index }}][size]">
                                                                     <option value="">Chọn kích cỡ</option>
                                                                     @foreach ($sizes as $size_id => $size)
@@ -451,8 +465,9 @@
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td  class="align-middle">
-                                                                <select class="form-control  @error("product_variant.$index.color") is-invalid @enderror"
+                                                            <td class="align-middle">
+                                                                <select
+                                                                    class="form-control  @error("product_variant.$index.color") is-invalid @enderror"
                                                                     name="product_variant[{{ $index }}][color]">
                                                                     <option value="">Chọn màu</option>
                                                                     @foreach ($colors as $color_id => $color)
@@ -463,32 +478,36 @@
                                                                     @endforeach
                                                                 </select>
                                                             </td>
-                                                            <td  class="align-middle">
-                                                                <input class="form-control @error("product_variant.$index.quantity") is-invalid @enderror" type="text"
+                                                            <td class="align-middle">
+                                                                <input
+                                                                    class="form-control @error("product_variant.$index.quantity") is-invalid @enderror"
+                                                                    type="text"
                                                                     name="product_variant[{{ $index }}][quantity]"
                                                                     value="{{ $item->quantity }}" placeholder="Số lượng">
                                                             </td>
-                                                            <td  class="align-middle">
+                                                            <td class="align-middle">
                                                                 <div class="input-group has-validation">
                                                                     <span class="input-group-text">VNĐ</span>
-                                                                    <input type="text" class="form-control @error("product_variant.$index.price") is-invalid @enderror"
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price") is-invalid @enderror"
                                                                         id="product-price-input"
                                                                         name="product_variant[{{ $index }}][price]"
                                                                         value="{{ number_format($item->price, 0, ',', '.') }}"
                                                                         oninput="formatCurrency(this)">
                                                                 </div>
                                                             </td>
-                                                            <td  class="align-middle">
+                                                            <td class="align-middle">
                                                                 <div class="input-group has-validation">
                                                                     <span class="input-group-text">VNĐ</span>
-                                                                    <input type="text" class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
+                                                                    <input type="text"
+                                                                        class="form-control @error("product_variant.$index.price_sale") is-invalid @enderror"
                                                                         id="product-price-input"
                                                                         name="product_variant[{{ $index }}][price_sale]"
                                                                         value="{{ number_format($item->price, 0, ',', '.') }}"
                                                                         oninput="formatCurrency(this)">
                                                                 </div>
                                                             </td>
-                                                            <td  class="align-middle">
+                                                            <td class="align-middle">
                                                                 <div class="btn btn-danger removeVariant"
                                                                     data-id="{{ $item->id }}">X</div>
                                                             </td>
@@ -541,7 +560,7 @@
                                 <h5 class="card-title mb-0">Danh Mục Sản Phẩm</h5>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted mb-2"> <a href="#"
+                                <p class="text-muted mb-2"> <a href="{{ route('categories.index') }}"
                                         class="float-end text-decoration-underline">Thêm Mới </a>Chọn danh mục</p>
                                 <select class="form-select" id="choices-category-input" name="category_id">
                                     @foreach ($categories as $item)

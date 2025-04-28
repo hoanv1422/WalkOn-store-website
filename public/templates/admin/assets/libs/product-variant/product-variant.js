@@ -2,11 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let variantsTable = document.getElementById("variantsContainer");
     let sizes = JSON.parse(variantsTable.dataset.sizes);
     let colors = JSON.parse(variantsTable.dataset.colors);
-    let variantIndex = parseInt(document.getElementById("lastIndex").value) ;
-
+    let variantIndex = parseInt(document.getElementById("lastIndex").value) + 1;
 
     console.log(variantIndex);
-    
 
     document
         .getElementById("addMoreVariant")
@@ -41,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                         <div class="avatar-sm">
                             <div class="avatar-title bg-light rounded overflow-hidden">
-                                <img src="" id="imagePreviewVariant_${variantIndex}" class="avatar-sm h-auto  object-fit-cover" alt="">
+                                <img src="" id="imagePreviewVariant_${variantIndex}" class="avatar-sm h-100  object-fit-cover" alt="">
                             </div>
                         </div>
                     </div>

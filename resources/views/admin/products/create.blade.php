@@ -7,7 +7,6 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -81,7 +80,7 @@
                                                 </label>
                                                 <input class="form-control d-none" id="product-image-input" name="image"
                                                     type="file" accept="image/png, image/gif, image/jpeg" value=""
-                                                    onchange="previewImage(event)" value="{{old('image')}}">
+                                                    onchange="previewImage(event)" value="{{ old('image') }}">
                                             </div>
                                             <div class="avatar-lg">
                                                 <div class="avatar-title bg-light rounded overflow-hidden">
@@ -254,6 +253,9 @@
                                     </li>
                                 </ul>
                             </div>
+                            @error('product_variant')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
                             <!-- end card header -->
                             <div class="card-body">
                                 <div class="tab-content">
@@ -321,7 +323,7 @@
                                                                             class="avatar-title bg-light rounded overflow-hidden">
                                                                             <img src=""
                                                                                 id="imagePreviewVariant_{{ $index }}"
-                                                                                class="avatar-sm h-auto object-fit-cover"
+                                                                                class="avatar-sm h-100 object-fit-cover"
                                                                                 alt="">
                                                                         </div>
                                                                     </div>
@@ -397,6 +399,103 @@
                                                             </td>
                                                         </tr>
                                                     @endforeach
+                                                @else
+                                                    <tr class="variant">
+                                                        <td class="align-middle">
+                                                            <div class="position-relative d-inline-block">
+                                                                <div
+                                                                    class="position-absolute top-100 start-100 translate-middle">
+                                                                    <label for="imagePreviewVariantInput_0" class="mb-0"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        aria-label="Select Image"
+                                                                        data-bs-original-title="Select Image">
+                                                                        <div class="avatar-xs">
+                                                                            <div
+                                                                                class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                                <i
+                                                                                    class="mdi mdi-image text-muted fs-16 p-1"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input class="form-control d-none"
+                                                                        id="imagePreviewVariantInput_0" type="file"
+                                                                        accept="image/png, image/gif, image/jpeg"
+                                                                        onchange="previewImageVariant(event, 0)"
+                                                                        name="product_variant[0][image]">
+                                                                </div>
+                                                                <div class="avatar-sm">
+                                                                    <div
+                                                                        class="avatar-title bg-light rounded overflow-hidden">
+                                                                        <img src="" id="imagePreviewVariant_0"
+                                                                            class="avatar-sm h-100 object-fit-cover"
+                                                                            alt="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <select
+                                                                class="form-control @error('product_variant.0.size') is-invalid @enderror"
+                                                                name="product_variant[0][size]">
+                                                                <option value="">Chọn kích cỡ</option>
+                                                                @foreach ($sizes as $size_id => $size)
+                                                                    <option value="{{ $size_id }}">
+                                                                        {{ $size }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <select
+                                                                class="form-control @error('product_variant.0.color') is-invalid @enderror"
+                                                                name="product_variant[0][color]">
+                                                                <option value="">Chọn màu</option>
+                                                                @foreach ($colors as $color_id => $color)
+                                                                    <option value="{{ $color_id }}">
+                                                                        {{ $color }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+
+                                                        <td class="align-middle">
+                                                            <input
+                                                                class="form-control @error('product_variant.0.quantity') is-invalid @enderror"
+                                                                type="text" name="product_variant[0][quantity]"
+                                                                value="" placeholder="Số lượng">
+
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text"
+                                                                    id="product-price-addon">VNĐ</span>
+                                                                <input type="text"
+                                                                    class="form-control @error('product_variant.0.price') is-invalid @enderror"
+                                                                    id="product-price-input" placeholder="Giá"
+                                                                    aria-label="Price"
+                                                                    aria-describedby="product-price-addon"
+                                                                    name="product_variant[0][price]" value=""
+                                                                    oninput="formatCurrency(this)">
+                                                            </div>
+                                                        </td>
+
+                                                        <td class="align-middle">
+                                                            <div class="input-group has-validation">
+                                                                <span class="input-group-text"
+                                                                    id="product-price-addon">VNĐ</span>
+                                                                <input type="text"
+                                                                    class="form-control @error('product_variant.0.price_sale') is-invalid @enderror"
+                                                                    id="product-price-input" placeholder="Giá"
+                                                                    aria-label="Price Sale"
+                                                                    aria-describedby="product-price-addon"
+                                                                    name="product_variant[0][price_sale]" value=""
+                                                                    oninput="formatCurrency(this)">
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <div class="btn btn-danger removeVariant">X</div>
+                                                        </td>
+                                                    </tr>
                                                 @endif
                                             </tbody>
                                         </table>

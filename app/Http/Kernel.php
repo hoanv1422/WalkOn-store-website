@@ -36,6 +36,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Session\Middleware\StartSession::class,
         ],
 
         'api' => [
@@ -63,11 +64,15 @@ class Kernel extends HttpKernel
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
     protected $routeMiddleware = [
+        'guest.to.home' => \App\Http\Middleware\RedirectIfAuthenticatedToHome::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
+        'shipper' => \App\Http\Middleware\ShipperMiddleware::class,
+        'password.reset.check' => \App\Http\Middleware\CheckPasswordResetRequest::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'email.sent' => \App\Http\Middleware\CheckEmailVerificationSent::class,
     ];
 }

@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comment_hiddens', function (Blueprint $table) {
+        Schema::create('order_audits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('comment_id')->constrained()->onDelete('cascade');
-            $table->timestamp('hidden_at')->useCurrent();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->string('field_name');
+            $table->text('old_value')->nullable();
+            $table->text('new_value')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_hidden');
+        Schema::dropIfExists('order_audits');
     }
 };

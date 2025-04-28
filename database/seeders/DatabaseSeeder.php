@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -15,11 +13,12 @@ use App\Models\Product;
 use App\Models\ProductGallery;
 use App\Models\ProductVariant;
 use App\Models\Size;
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
-
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,57 +29,38 @@ class DatabaseSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        // Xóa dữ liệu cũ để tránh lỗi duplicate
-        foreach ([
-            Category::class, Brand::class, Size::class, Color::class, Product::class,
-            ProductVariant::class, ProductGallery::class, Cart::class, CartItem::class,
-            Order::class, OrderItem::class, User::class
-        ] as $model) {
-            if (Schema::hasTable((new $model)->getTable())) {
-                $model::query()->truncate();
-            }
-        }
+        User::query()->truncate();
+        Size::query()->truncate();
+        Color::query()->truncate();
+        Category::query()->truncate();
+        Brand::query()->truncate();
+        Product::query()->truncate();
+        ProductVariant::query()->truncate();
+        ProductGallery::query()->truncate();
 
-        // Tạo dữ liệu mẫu
 
-        // Category
-        $categories = ['Sneakers', 'Boots', 'Sandals', 'Loafers', 'Sports Shoes'];
-        foreach ($categories as $category) {
-            Category::create([
-                'name' => $category,
-                'slug' => Str::slug($category),
+
+        // User
+        $roles = ['user', 'admin', 'shipper'];
+
+        foreach ($roles as $i => $role) {
+            User::create([
+                'username' => $role,
+                'name' => ucfirst($role) . ' Account',
+                'email' => $role . '@gmail.com',
+                'password' => Hash::make('123456'),
+                'avatar' => 'avatars/default.png',
+                'phone' => '090000000' . ($i + 1),
+                'email_verified_at' => null,
+                'role' => $role,
+                'is_active' => true,
             ]);
         }
 
-        // Brand
-        $brands = ['Nike', 'Adidas', 'Puma', 'Reebok', 'New Balance'];
-        foreach ($brands as $brand) {
-            Brand::create([
-                'name' => $brand,
-                'slug' => Str::slug($brand),
-                'logo' => '',
-                'description' => '',
-            ]);
-        }
-
-        // Color
-        $colors = [
-            ['name' => 'Red', 'code' => '#FF0000'],
-            ['name' => 'Blue', 'code' => '#0000FF'],
-            ['name' => 'Green', 'code' => '#008000'],
-            ['name' => 'Black', 'code' => '#000000'],
-            ['name' => 'White', 'code' => '#FFFFFF'],
-        ];
-        foreach ($colors as $color) {
-            Color::create([
-                'color' => $color['name'],
-                'slug' => Str::slug($color['name']),
-                'code' => $color['code'],
-            ]);
-        }
 
         // Size
         $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
         foreach ($sizes as $size) {
             Size::create([
                 'size' => $size,
@@ -88,120 +68,269 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Product
-        $productNames = [
-            'Nike Air Max', 'Adidas Ultraboost', 'Puma Suede',
-            'Reebok Classic', 'New Balance 574', 'Nike Air Force',
-            'Adidas NMD', 'Puma RS-X', 'Reebok Zig'
+
+        // Color
+        $colors = [
+            ['color' => 'Đỏ', 'code' => '#FF0000'],
+            ['color' => 'Xanh lá', 'code' => '#00FF00'],
+            ['color' => 'Xanh dương', 'code' => '#0000FF'],
+            ['color' => 'Vàng', 'code' => '#FFFF00'],
+            ['color' => 'Đen', 'code' => '#000000'],
         ];
-        foreach ($productNames as $index => $productName) {
-            Product::create([
-                'sku' => 'SKU' . ($index + 1),
-                'name' => $productName,
-                'slug' => Str::slug($productName),
-                'description' => 'A great pair of ' . $productName . ' shoes.',
-                'price_income' => rand(30, 70),
-                'price' => rand(50, 150),
-                'price_sale' => rand(40, 140),
-                'image' => '',
-                'quantity' => rand(10, 100),
-                'sold_quantity' => rand(0, 50),
-                'average_rating' => rand(0, 50) / 10,
-                'category_id' => ($index % 5) + 1,
-                'brand_id' => ($index % 5) + 1,
+
+        foreach ($colors as $item) {
+            Color::create([
+                'color' => $item['color'],
+                'slug' => Str::slug($item['color']),
+                'code' => $item['code'],
+            ]);
+        }
+
+        // Category
+        $categories = [
+            'Áo',
+            'Quần',
+            'Giày',
+            'Phụ kiện',
+            'Khuyến mãi',
+        ];
+
+        foreach ($categories as $name) {
+            Category::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
                 'is_active' => true,
             ]);
         }
 
+        // Brand
+        $brands = [
+            [
+                'name' => 'Nike',
+                'logo' => 'brands/nike.png',
+                'description' => 'Thương hiệu thể thao nổi tiếng toàn cầu.',
+            ],
+            [
+                'name' => 'Adidas',
+                'logo' => 'brands/adidas.png',
+                'description' => 'Đối thủ cạnh tranh chính của Nike.',
+            ],
+            [
+                'name' => 'Puma',
+                'logo' => 'brands/puma.png',
+                'description' => 'Phong cách thể thao trẻ trung và năng động.',
+            ],
+            [
+                'name' => 'Converse',
+                'logo' => 'brands/converse.png',
+                'description' => 'Nổi bật với giày vải cổ điển.',
+            ],
+            [
+                'name' => 'New Balance',
+                'logo' => 'brands/new-balance.png',
+                'description' => 'Giày thể thao chất lượng cao, nổi bật với sự thoải mái.',
+            ],
+        ];
+
+        foreach ($brands as $brand) {
+            Brand::create([
+                'name' => $brand['name'],
+                'slug' => Str::slug($brand['name']),
+                'logo' => $brand['logo'],
+                'description' => $brand['description'],
+                'is_active' => true,
+            ]);
+        }
+
+        // Product
+        $products = [
+            [
+                'name' => 'Giày thể thao Nike Air Max',
+                'price_income' => 1200000,
+                'price' => 1500000,
+                'price_sale' => 1350000,
+                'image' => 'products/nike-air-max.jpg',
+                'quantity' => 100,
+                'sold_quantity' => 20,
+                'average_rating' => 4.5,
+                'category_id' => 1,
+                'brand_id' => 1,
+                'view_count' => 350,
+            ],
+            [
+                'name' => 'Áo thun Adidas Originals',
+                'price_income' => 200000,
+                'price' => 350000,
+                'price_sale' => 300000,
+                'image' => 'products/adidas-shirt.jpg',
+                'quantity' => 80,
+                'sold_quantity' => 30,
+                'average_rating' => 4.2,
+                'category_id' => 2,
+                'brand_id' => 2,
+                'view_count' => 120,
+            ],
+            [
+                'name' => 'Quần short Puma Active',
+                'price_income' => 180000,
+                'price' => 250000,
+                'price_sale' => 220000,
+                'image' => 'products/puma-shorts.jpg',
+                'quantity' => 60,
+                'sold_quantity' => 10,
+                'average_rating' => 4.0,
+                'category_id' => 2,
+                'brand_id' => 3,
+                'view_count' => 90,
+            ],
+            [
+                'name' => 'Giày Converse cổ cao',
+                'price_income' => 700000,
+                'price' => 1000000,
+                'price_sale' => 950000,
+                'image' => 'products/converse-high.jpg',
+                'quantity' => 40,
+                'sold_quantity' => 15,
+                'average_rating' => 4.3,
+                'category_id' => 1,
+                'brand_id' => 4,
+                'view_count' => 200,
+            ],
+            [
+                'name' => 'Áo hoodie New Balance',
+                'price_income' => 450000,
+                'price' => 600000,
+                'price_sale' => 550000,
+                'image' => 'products/nb-hoodie.jpg',
+                'quantity' => 30,
+                'sold_quantity' => 5,
+                'average_rating' => 4.1,
+                'category_id' => 2,
+                'brand_id' => 5,
+                'view_count' => 70,
+            ],
+            [
+                'name' => 'Mũ lưỡi trai Nike',
+                'price_income' => 100000,
+                'price' => 180000,
+                'price_sale' => 150000,
+                'image' => 'products/nike-cap.jpg',
+                'quantity' => 50,
+                'sold_quantity' => 12,
+                'average_rating' => 4.4,
+                'category_id' => 3,
+                'brand_id' => 1,
+                'view_count' => 60,
+            ],
+            [
+                'name' => 'Balo Adidas Street',
+                'price_income' => 350000,
+                'price' => 500000,
+                'price_sale' => 450000,
+                'image' => 'products/adidas-backpack.jpg',
+                'quantity' => 40,
+                'sold_quantity' => 18,
+                'average_rating' => 4.6,
+                'category_id' => 4,
+                'brand_id' => 2,
+                'view_count' => 150,
+            ],
+            [
+                'name' => 'Quần jogger Puma Lifestyle',
+                'price_income' => 250000,
+                'price' => 400000,
+                'price_sale' => 360000,
+                'image' => 'products/puma-joggers.jpg',
+                'quantity' => 70,
+                'sold_quantity' => 25,
+                'average_rating' => 4.2,
+                'category_id' => 2,
+                'brand_id' => 3,
+                'view_count' => 110,
+            ],
+            [
+                'name' => 'Áo khoác Converse Windbreaker',
+                'price_income' => 500000,
+                'price' => 750000,
+                'price_sale' => 700000,
+                'image' => 'products/converse-jacket.jpg',
+                'quantity' => 35,
+                'sold_quantity' => 8,
+                'average_rating' => 4.0,
+                'category_id' => 2,
+                'brand_id' => 4,
+                'view_count' => 85,
+            ],
+            [
+                'name' => 'Giày chạy bộ New Balance 520',
+                'price_income' => 900000,
+                'price' => 1200000,
+                'price_sale' => 1100000,
+                'image' => 'products/nb-running-shoes.jpg',
+                'quantity' => 45,
+                'sold_quantity' => 19,
+                'average_rating' => 4.7,
+                'category_id' => 1,
+                'brand_id' => 5,
+                'view_count' => 250,
+            ],
+        ];
+
+        foreach ($products as $index => $product) {
+            Product::create([
+                'sku' => 'SP' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
+                'name' => $product['name'],
+                'slug' => Str::slug($product['name']),
+                'description' => 'Mô tả sản phẩm: ' . $product['name'],
+                'price_income' => $product['price_income'],
+                'price' => $product['price'],
+                'price_sale' => $product['price_sale'],
+                'image' => $product['image'],
+                'quantity' => $product['quantity'],
+                'sold_quantity' => $product['sold_quantity'],
+                'average_rating' => $product['average_rating'],
+                'category_id' => $product['category_id'],
+                'view_count' => $product['view_count'],
+                'brand_id' => $product['brand_id'],
+                'is_active' => true,
+            ]);
+        }
+
+
         // Product Variant
-        for ($i = 0; $i < 5; $i++) {
-            ProductVariant::query()->create([
-                'product_id' => rand(1, 5), // ID sản phẩm thực tế
-                'size_id'    => rand(1, 4), // ID kích thước
-                'color_id'   => rand(1, 4), // ID màu sắc
-                'image'      => 'variant' . ($i + 1) . '.jpg', // Ảnh sản phẩm
-                'price'      => rand(100000, 500000), // Giá sản phẩm
-                'price_sale'      => rand(100000, 500000), // Giá sản phẩm
-                'quantity'   => rand(1, 50),
-            ]);
+        $products = DB::table('products')->pluck('id');
+        $sizes = DB::table('sizes')->pluck('id');
+        $colors = DB::table('colors')->pluck('id');
+
+        foreach ($products as $productId) {
+            foreach ($sizes as $sizeId) {
+                foreach ($colors as $colorId) {
+                    ProductVariant::create([
+                        'product_id' => $productId,
+                        'size_id' => $sizeId,
+                        'color_id' => $colorId,
+                        'image' => 'variants/variant-' . $productId . '-' . $sizeId . '-' . $colorId . '.jpg',
+                        'price' => rand(200000, 500000),
+                        'price_sale' => rand(180000, 450000),
+                        'quantity' => rand(5, 50),
+                    ]);
+                }
+            }
         }
 
-        // User
-        User::create([
-            'username' => 'example_user',
-            'name' => 'John Doe',
-            'mail' => 'member@gmail.com', 
-            'password' =>'123456', 
-            'avatar' => 'default-avatar.png',
-            'phone' => '0123456789',
-            'address' => '123 Main Street',
-            'email_verified_at' => now(),
-            'role' => 'user',
-            'is_active' => true,
-        ]);
+        // Product Gallery
+        $products = DB::table('products')->pluck('id');
 
-        User::query()->create([
-            'username'          => 'example_admin',
-            'name'              => 'John Doe',
-            'mail'              => 'admin@gmail.com',
-            'password'          => '123456',
-            'avatar'            => 'default-avatar.png',
-            'phone'             => '0123456789',
-            'address'           => '123 Main Street',
-            'email_verified_at' => now(),
-            'role'              => 'admin',
-            'is_active'         => true,
-        ]);
-
-
-
-        Cart::query()->create([
-            'user_id'          => '1',
-        ]);
-
-        // Cart Items
-        for ($i = 0; $i < 3; $i++) {
-            CartItem::query()->create([
-                'cart_id'            => 1, // ID giỏ hàng thực tế
-                'product_variant_id' => rand(1, 4), // ID biến thể sản phẩm
-                'quantity'           => rand(1, 5), // Số lượng ngẫu nhiên
-            ]);
+        foreach ($products as $productId) {
+            for ($i = 1; $i <= 3; $i++) {
+                ProductGallery::create([
+                    'product_id' => $productId,
+                    'image' => "galleries/product-{$productId}-{$i}.jpg",
+                ]);
+            }
         }
 
-        // Order
-        Order::create([
-            'user_id' => 1,
-            'user_email' => 'buyer@example.com',
-            'user_name' => 'Nguyễn Văn A',
-            'user_address' => '123 Đường ABC, TP.HCM',
-            'user_phone' => '0123456789',
-            'receiver_email' => 'receiver@example.com',
-            'receiver_name' => 'Trần Văn B',
-            'receiver_address' => '456 Đường XYZ, Hà Nội',
-            'receiver_phone' => '0987654321',
-            'coupon' => 'DISCOUNT10',
-            'order_status' => 'pending',
-            'payment_status' => 'unpaid',
-            'payment_method' => 'cod',
-            'order_code' => Str::uuid(),
-            'total_price' => 500000,
-        ]);
 
-        // Order Items
-        for ($i = 0; $i < 3; $i++) {
-            OrderItem::create([
-                'order_id' => 1,
-                'product_variant_id' => rand(1, 4),
-                'product_name' => 'Sản phẩm ' . ($i + 1),
-                'product_sku' => 'SKU' . ($i + 1),
-                'product_image' => 'product' . ($i + 1) . '.jpg',
-                'product_price' => 100000,
-                'product_price_sale' => 90000,
-                'variant_size_name' => 'M',
-                'variant_color_name' => 'Đỏ',
-                'quantity' => rand(1, 5),
-            ]);
-        }
 
         Schema::enableForeignKeyConstraints();
     }

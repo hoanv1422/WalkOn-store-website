@@ -13,19 +13,51 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('templates/admin/assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ asset('templates/admin/assets/images/favicon.ico') }}">
 
     <!-- Layout config Js -->
-    <script src="{{asset('templates/admin/assets/js/layout.js')}}"></script>
+    <script src="{{ asset('templates/admin/assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
-    <link href="{{asset('templates/admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
-    <link href="{{asset('templates/admin/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/admin/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="{{asset('templates/admin/assets/css/app.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/admin/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
-    <link href="{{asset('templates/admin/assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/admin/assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
+    <style>
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 300px;
+            z-index: 99999;
+            overflow: hidden;
+        }
+
+        .message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            transform: translateX(100%);
+            opacity: 1;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .message.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .message.hide {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -43,26 +75,76 @@
             </div>
         </div>
 
+        <div class="message-container" id="messageContainer"></div>
+
         @yield('content')
 
         @include('auth.admin.components.footer')
+
     </div>
     <!-- end auth-page-wrapper -->
 
     <!-- JAVASCRIPT -->
-    <script src="{{asset('templates/admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('templates/admin/assets/libs/simplebar/simplebar.min.js')}}"></script>
-    <script src="{{asset('templates/admin/assets/libs/node-waves/waves.min.js')}}"></script>
-    <script src="{{asset('templates/admin/assets/libs/feather-icons/feather.min.js')}}"></script>
-    <script src="{{asset('templates/admin/assets/js/pages/plugins/lord-icon-2.1.0.js')}}"></script>
-    <script src="{{asset('templates/admin/assets/js/plugins.js')}}"></script>
+
+    <script>
+        function showMessage(message, bgColor) {
+            // Lấy nội dung từ input nếu không có tham số message
+            if (!message) {
+                message = document.getElementById('messageInput').value;
+            }
+
+            // Kiểm tra kiểu dữ liệu
+            if (typeof message !== 'string') {
+                console.error('Lỗi: Nội dung thông báo phải là chuỗi');
+                return;
+            }
+
+            // Tạo phần tử thông báo
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.textContent = message;
+
+            // Gán màu nền nếu có truyền vào
+            if (bgColor && typeof bgColor === 'string') {
+                messageElement.style.backgroundColor = bgColor;
+            }
+
+            // Thêm vào container
+            const container = document.getElementById('messageContainer');
+            container.appendChild(messageElement);
+
+            // Hiệu ứng xuất hiện
+            setTimeout(() => {
+                messageElement.classList.add('show');
+            }, 10);
+
+            // Ẩn sau 2.5s
+            setTimeout(() => {
+                messageElement.classList.add('hide');
+                messageElement.classList.remove('show');
+            }, 2500);
+
+            // Xóa sau 3s
+            setTimeout(() => {
+                container.removeChild(messageElement);
+            }, 3000);
+        }
+    </script>
+    <script src="{{ asset('templates/admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+    <script src="{{ asset('templates/admin/assets/js/plugins.js') }}"></script>
 
     <!-- particles js -->
-    <script src="{{asset('templates/admin/assets/libs/particles.js/particles.js')}}"></script>
+    <script src="{{ asset('templates/admin/assets/libs/particles.js/particles.js') }}"></script>
     <!-- particles app js -->
-    <script src="{{asset('templates/admin/assets/js/pages/particles.app.js')}}"></script>
+    <script src="{{ asset('templates/admin/assets/js/pages/particles.app.js') }}"></script>
     <!-- password-addon init -->
-    <script src="{{asset('templates/admin/assets/js/pages/password-addon.init.js')}}"></script>
+    <script src="{{ asset('templates/admin/assets/js/pages/password-addon.init.js') }}"></script>
+
+    @yield('script')
 </body>
 
 

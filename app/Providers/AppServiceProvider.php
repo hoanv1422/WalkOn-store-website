@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
@@ -24,32 +25,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
         View::composer('client.partials.header', function ($view) {
             $categories = Category::where('is_active', true)->get();
-            $cartCount = 0;
-            $subTotal = 0;
-            $cartItems = collect(); 
-
-            if (Auth::check()) {
-                $cart = Cart::where('user_id', Auth::id())->first();
-
-                if ($cart) {
-                    $allCartItems = CartItem::where('cart_id', $cart->id)->get();
-                    $cartCount = $allCartItems->count();
-                    $subTotal = $allCartItems->sum('price');
-
-                    $cartItems = CartItem::where('cart_id', $cart->id)
-                        ->orderBy('created_at', 'desc')
-                        ->take(2)
-                        ->get();
-                }
-            }
+            $brands = Brand::where('is_active', true)->get();
 
             $view->with([
                 'categories' => $categories,
-                'cartCount' => $cartCount,
-                'subTotal' => $subTotal,
-                'cartItems' => $cartItems,
+                'brands' => $brands,
             ]);
         });
     }

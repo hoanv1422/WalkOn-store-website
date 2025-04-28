@@ -281,9 +281,7 @@
         </div>
         <!-- container-fluid -->
     </div>
-    <!-- End Page-content -->
-
-
+    <!-- End Page-content -->   
 @endsection
 
 @section('script')

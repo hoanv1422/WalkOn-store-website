@@ -9,20 +9,20 @@
                     <div class="login">
                         <div class="login-form-container">
                             <div class="login-text">
-                                <h2>Reset Password</h2>
-                                <span>Please enter your email to receive a password reset link.</span>
+                                <h2>Lấy lại mật khẩu đã quên</h2>
+                                <span>Bạn hãy điền email vào để lấy lại mật khẩu tài khoản của bạn!</span>
                             </div>
                             <div class="login-form">
-                                <form action="#" method="POST">
+                                <form action="{{ route('password.email') }}" method="POST">
                                     @csrf
-                                    <input name="email" placeholder="Enter your email" type="email" required>
+                                    <input name="email" placeholder="Nhập email " type="email" required>
                                     <div class="button-box">
-                                        <button type="submit" class="default-btn">Send Reset Link</button>
+                                        <button type="submit" class="default-btn">Lấy lại mật khẩu</button>
                                     </div>
                                 </form>
                             </div>
                             <div class="login-links mt-2">
-                                <a href="{{ url('/login') }}">Back to Login</a>
+                                <a href="{{ url('/login') }}">Quay trở về đăng nhập nếu đã nhớ mật khẩu rồi!</a>
                             </div>
                         </div>
                     </div>

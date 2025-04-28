@@ -1,5 +1,7 @@
 <!-- products area start -->
 
+
+
 <div class="products-area">
     <div class="container">
         <div class="products">
@@ -14,8 +16,8 @@
                             <ul class="nav tab-navigation" role="tablist">
                                 @foreach ($brands as $index => $brand)
                                     <li role="presentation">
-                                        <a class="{{ $loop->first ? 'active' : '' }}" href="#tab{{ $index + 1 }}"  
-                                        aria-controls="tab{{ $index + 1 }}" role="tab" data-bs-toggle="tab">
+                                        <a class="{{ $loop->first ? 'active' : '' }}" href="#tab{{ $index + 1 }}"
+                                            aria-controls="tab{{ $index + 1 }}" role="tab" data-bs-toggle="tab">
                                             {{ $brand->name }}
                                         </a>
                                     </li>
@@ -28,7 +30,12 @@
                                         data-bs-toggle="tab">Footwear</a>
                                 </li> --}}
                                 
-                                <li><img src="img/banner/banner-5.jpg" alt=""></li>
+                                @foreach ($banners as $banner)
+                                @if ($banner->position == 8)
+                                    
+                                <li><img src="{{ asset('storage/' . $banner->image_url) }}" alt="banner8" width="262.5px" style="height: 280px"></li>
+                                @endif
+                            @endforeach
                             </ul>
                         </div>
                     </div>
@@ -40,409 +47,94 @@
                             $tabIndex = 1;
                         @endphp
                         <div class="tab-content">
-                            @foreach ( $brands as $brand )
-                            <div role="tabpanel" class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="tab{{ $tabIndex }}">
-                                <div class="row">
-                                    
+                            @foreach ($brands as $brand)
+                                <div role="tabpanel" class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                    id="tab{{ $tabIndex }}">
+                                    <div class="row">
                                         @foreach ($brand->products as $product)
-                                        
-
                                             <div class="col-4">
-                                                
                                                 <div class="single-product">
-                                                    <div class="level-pro-new">
-                                                        <span>new</span>
-                                                    </div>
+                                                    @if ($product->is_sale)
+                                                        <div class="level-pro-sale"><span>sale</span></div>
+                                                    @elseif ($product->is_new)
+                                                        <div class="level-pro-new"><span>new</span></div>
+                                                    @elseif ($product->is_top_selling)
+                                                        <div class="level-pro-hot"><span>hot</span></div>
+                                                    @endif
+
                                                     <div class="product-img">
-                                                        <a href="{{route('detail.index', $product->slug)}}">
-                                                            <img src="img/product/1.png" alt="" class="primary-img">
-                                                            <img src="img/product/2.png" alt=""
-                                                                class="secondary-img">
+                                                        <a href="{{ route('detail.index', $product->slug) }}">
+                                                            @if (Storage::exists($product->image))
+                                                                <img src="{{ Storage::url($product->image) }}"
+                                                                    alt="{{ $product->name }}" class="primary-img">
+                                                            @else
+                                                                <img src="img/default-image.jpg"
+                                                                    alt="{{ $product->name }}" class="primary-img">
+                                                            @endif
+                                                            @if ($product->variants->isNotEmpty() && Storage::exists($product->variants->first()->image))
+                                                                <img src="{{ Storage::url($product->variants->first()->image) }}"
+                                                                    alt="{{ $product->name }}" class="secondary-img">
+                                                            @else
+                                                                <img src="img/default-image.jpg"
+                                                                    alt="{{ $product->name }}" class="secondary-img">
+                                                            @endif
                                                         </a>
                                                     </div>
                                                     <div class="product-name">
-                                                        <a href="{{route('detail.index', $product->slug)}}"
-                                                            title="Fusce aliquam">{{ $product->name }}</a>
+                                                        <a href="{{ route('detail.index', $product->slug) }}"
+                                                            title="{{ $product->name }}">{{ $product->name }}</a>
                                                     </div>
                                                     <div class="price-rating">
-                                                        <span>{{ $product->price }}</span>
+                                                        @if ($product->price_sale && $product->price_sale <= $product->price)
+                                                            <span
+                                                                class="old-price">{{ number_format($product->price) }}
+                                                                VND</span>
+                                                            <span
+                                                                style="color:red">{{ number_format($product->price_sale) }}VND</span>
+                                                        @else
+                                                            <span>{{ number_format($product->price) }}VND</span>
+                                                        @endif
+
                                                         <div class="ratings">
-                                                            <span>{{$product->average_rating}}</span> <i class="fa fa-star"></i>
+                                                            <span>{{ $product->average_rating }}</span> <i
+                                                                class="fa fa-star"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="actions">
-                                                        <button type="submit" class="cart-btn" title="Add to cart">Thêm vào
-                                                            giỏ hàng</button>
+                                                    <div class="actions d-flex justify-content-between">
+                                                        <form class="add-to-cart-form"
+                                                            action="{{ route('get.product') }}" method="get">
+                                                            <input type="hidden" name="idProduct"
+                                                                value="{{ $product->id }}">
+                                                            <button type="submit" class="cart-btn"
+                                                                title="Thêm vào giỏ hàng" data-bs-toggle="modal"
+                                                                data-bs-target="#cartModal">
+                                                                Thêm vào giỏ hàng
+                                                            </button>
+                                                        </form>
                                                         <ul class="add-to-link">
-                                                            <li><a class="modal-view" data-target="#productModal"
-                                                                    data-bs-toggle="modal" href="#"> <i
-                                                                        class="fa fa-search"></i></a></li>
-                                                            <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                            <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
+                                                            <li><a class="modal-view" title="Chi tiết sản phẩm"
+                                                                    href="{{ route('detail.index', $product->slug) }}">
+                                                                    <i class="fa fa-search"></i></a></li>
+                                                            <li>
+                                                                <a href="#" class="wishlist-action"
+                                                                    title="Thêm vào danh sách yêu thích"
+                                                                    data-id="{{ $product->id }}">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                            
+
                                             </div>
-                                    
                                         @endforeach
-                                   
-                                        
+                                    </div>
                                 </div>
-                            </div>
-                            @php
-                                $tabIndex++;
-                            @endphp
+                                @php
+                                    $tabIndex++;
+                                @endphp
                             @endforeach
-                            {{-- <div role="tabpanel" class="tab-pane fade" id="tab2">
-                                <div class="row">
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="{{ Storage::url($product->image) }}" alt=""
-                                                            class="primary-img">
-                                                        <img src="{{ Storage::url($product->image) }}" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
 
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab3">
-                                <div class="row">
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    @endforeach
-
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab4">
-                                <div class="row">
-                                    
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    @endforeach
-
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab5">
-                                <div class="row">
-                                   
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    @endforeach
-
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab6">
-                                <div class="row">
-                                   
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    @endforeach
-
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab7">
-                                <div class="row">
-
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    @endforeach
-
-
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab8">
-                                <div class="row">
-                                    @foreach ($products as $product)
-                                        <div class="col-4">
-                                            <div class="single-product">
-                                                <div class="level-pro-new">
-                                                    <span>new</span>
-                                                </div>
-                                                <div class="product-img">
-                                                    <a href="{{ route('detail.index', $product->slug) }}">
-                                                        <img src="img/product/1.png" alt=""
-                                                            class="primary-img">
-                                                        <img src="img/product/2.png" alt=""
-                                                            class="secondary-img">
-                                                    </a>
-                                                </div>
-                                                <div class="product-name">
-                                                    <a href="{{ route('detail.index', $product->slug) }}"
-                                                        title="Fusce aliquam">{{ $product->name }}</a>
-                                                </div>
-                                                <div class="price-rating">
-                                                    <span>{{ $product->price }}</span>
-                                                    <div class="ratings">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-half-o"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="actions">
-                                                    <button type="submit" class="cart-btn" title="Add to cart">Thêm
-                                                        vào giỏ hàng</button>
-                                                    <ul class="add-to-link">
-                                                        <li><a class="modal-view" data-target="#productModal"
-                                                                data-bs-toggle="modal" href="#"> <i
-                                                                    class="fa fa-search"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-heart-o"></i></a></li>
-                                                        <li><a href="#"> <i class="fa fa-refresh"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -450,5 +142,3 @@
         </div>
     </div>
 </div>
-
-<!-- products area end -->

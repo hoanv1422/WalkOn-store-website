@@ -33,14 +33,16 @@
                                 <div class="col-xl-4 col-md-8 mx-auto">
                                     <div class="product-img-slider sticky-side-div">
                                         <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
-                                            <div class="swiper-wrapper" style="height: 490px">
+                                            <div class="swiper-wrapper">
                                                 <div class="swiper-slide overflow-hidden">
-                                                    <img src="{{ Storage::url($product->image) }}" alt=""
+                                                    <img src="{{ Storage::url($product->image) }}"
+                                                        alt="{{ $product->name }}"
                                                         class="img-fluid d-block object-fit-cover" />
                                                 </div>
                                                 @foreach ($product->galleries as $item)
                                                     <div class="swiper-slide overflow-hidden">
-                                                        <img src="{{ Storage::url($item->image) }}" alt=""
+                                                        <img src="{{ Storage::url($item->image) }}"
+                                                            alt="{{ $product->name }}"
                                                             class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 @endforeach
@@ -50,17 +52,19 @@
                                         </div>
                                         <!-- end swiper thumbnail slide -->
                                         <div class="swiper product-nav-slider mt-2">
-                                            <div class="swiper-wrapper" style="height: 101px">
+                                            <div class="swiper-wrapper">
                                                 <div class="swiper-slide">
                                                     <div class="nav-slide-item overflow-hidden">
-                                                        <img src="{{ Storage::url($product->image) }}" alt=""
+                                                        <img src="{{ Storage::url($product->image) }}"
+                                                            alt="{{ $product->name }}"
                                                             class="img-fluid d-block object-fit-cover" />
                                                     </div>
                                                 </div>
                                                 @foreach ($product->galleries as $item)
                                                     <div class="swiper-slide">
                                                         <div class="nav-slide-item overflow-hidden">
-                                                            <img src="{{ Storage::url($item->image) }}" alt=""
+                                                            <img src="{{ Storage::url($item->image) }}"
+                                                                alt="{{ $product->name }}"
                                                                 class="img-fluid d-block object-fit-cover" />
                                                         </div>
                                                     </div>
@@ -101,14 +105,9 @@
                                         </div>
 
                                         <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
-                                            <div class="text-muted fs-16">
-                                                <span class="mdi mdi-star text-warning"></span>
-                                                <span class="mdi mdi-star text-warning"></span>
-                                                <span class="mdi mdi-star text-warning"></span>
-                                                <span class="mdi mdi-star text-warning"></span>
-                                                <span class="mdi mdi-star text-warning"></span>
+                                            <div class="text-muted fs-16 rating-stars">
                                             </div>
-                                            <div class="text-muted">( 5.50k Khách hàng đánh giá )</div>
+                                            <div class="text-muted">( {{ $comments->count() }} Khách hàng đánh giá )</div>
                                         </div>
 
                                         <div class="row mt-4">
@@ -223,8 +222,9 @@
                                                                     id="productcolor-radio{{ $loop->index }}"
                                                                     @if ($color->total_quantity == 0) disabled @endif>
                                                                 <label
-                                                                    class="btn btn-soft-primary p-2 d-flex justify-content-center align-items-center"
-                                                                    for="productcolor-radio{{ $loop->index }}">{{ $color->color->color }}</label>
+                                                                    class="btn btn-soft-primary p-3 d-flex justify-content-center align-items-center"
+                                                                    for="productcolor-radio{{ $loop->index }}"
+                                                                    style="background: {{ $color->color->code }}"></label>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -277,21 +277,13 @@
                                                                 <tr>
                                                                     <th scope="row">Kích cỡ</th>
                                                                     <td>
-                                                                        @foreach ($product->variants as $variant)
-                                                                            {{ $variant->size->size }}@if (!$loop->last)
-                                                                                ,
-                                                                            @endif
-                                                                        @endforeach
+                                                                        {{ $product->sizes->pluck('size')->implode(', ') }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Màu</th>
                                                                     <td>
-                                                                        @foreach ($product->variants as $variant)
-                                                                            {{ $variant->color->color }}@if (!$loop->last)
-                                                                                ,
-                                                                            @endif
-                                                                        @endforeach
+                                                                        {{ $product->colors->pluck('color')->implode(', ') }}
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -320,152 +312,72 @@
                                                             <div class="bg-light px-3 py-2 rounded-2 mb-2">
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-grow-1">
-                                                                        <div class="fs-16 align-middle text-warning">
-                                                                            <i class="ri-star-fill"></i>
-                                                                            <i class="ri-star-fill"></i>
-                                                                            <i class="ri-star-fill"></i>
-                                                                            <i class="ri-star-fill"></i>
-                                                                            <i class="ri-star-half-fill"></i>
+                                                                        <div
+                                                                            class="fs-16 align-middle text-warning rating-stars">
                                                                         </div>
                                                                     </div>
                                                                     <div class="flex-shrink-0">
-                                                                        <h6 class="mb-0">4.5 trên 5</h6>
+                                                                        <h6 class="mb-0">{{ $product->average_rating }}
+                                                                            trên 5</h6>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="text-center">
                                                                 <div class="text-muted">Tổng <span
-                                                                        class="fw-medium">5.50k</span> phản hồi
+                                                                        class="fw-medium">{{ $comments->count() }}</span>
+                                                                    phản hồi
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="mt-3">
-                                                            <div class="row align-items-center g-2">
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0">5 sao</h6>
+                                                            @php
+                                                                $totalComments = $comments->count();
+                                                            @endphp
+                                                            @foreach (range(5, 1) as $rating)
+                                                                @php
+                                                                    $ratingCount = $comments
+                                                                        ->where('rating', $rating)
+                                                                        ->count();
+                                                                    $percentage =
+                                                                        $totalComments > 0
+                                                                            ? ($ratingCount / $totalComments) * 100
+                                                                            : 0;
+                                                                    $barColor =
+                                                                        $rating >= 3
+                                                                            ? 'bg-success'
+                                                                            : ($rating == 2
+                                                                                ? 'bg-warning'
+                                                                                : 'bg-danger');
+                                                                @endphp
+                                                                <div class="row align-items-center g-2">
+                                                                    <div class="col-auto">
+                                                                        <div class="p-2">
+                                                                            <h6 class="mb-0">{{ $rating }} sao
+                                                                            </h6>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="p-2">
-                                                                        <div
-                                                                            class="progress animated-progress progress-sm">
-                                                                            <div class="progress-bar bg-success"
-                                                                                role="progressbar" style="width: 50.16%"
-                                                                                aria-valuenow="50.16" aria-valuemin="0"
-                                                                                aria-valuemax="100"></div>
+                                                                    <div class="col">
+                                                                        <div class="p-2">
+                                                                            <div
+                                                                                class="progress animated-progress progress-sm">
+                                                                                <div class="progress-bar {{ $barColor }}"
+                                                                                    role="progressbar"
+                                                                                    style="width: {{ $percentage }}%"
+                                                                                    aria-valuenow="{{ $percentage }}"
+                                                                                    aria-valuemin="0" aria-valuemax="100">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <div class="p-2">
+                                                                            <h6 class="mb-0 text-muted">
+                                                                                {{ $ratingCount }}</h6>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0 text-muted">2758</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
-
-                                                            <div class="row align-items-center g-2">
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0">4 sao</h6>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="p-2">
-                                                                        <div
-                                                                            class="progress animated-progress progress-sm">
-                                                                            <div class="progress-bar bg-success"
-                                                                                role="progressbar" style="width: 19.32%"
-                                                                                aria-valuenow="19.32" aria-valuemin="0"
-                                                                                aria-valuemax="100"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0 text-muted">1063</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
-
-                                                            <div class="row align-items-center g-2">
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0">3 sao</h6>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="p-2">
-                                                                        <div
-                                                                            class="progress animated-progress progress-sm">
-                                                                            <div class="progress-bar bg-success"
-                                                                                role="progressbar" style="width: 18.12%"
-                                                                                aria-valuenow="18.12" aria-valuemin="0"
-                                                                                aria-valuemax="100"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0 text-muted">997</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
-
-                                                            <div class="row align-items-center g-2">
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0">2 sao</h6>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="p-2">
-                                                                        <div
-                                                                            class="progress animated-progress progress-sm">
-                                                                            <div class="progress-bar bg-warning"
-                                                                                role="progressbar" style="width: 7.42%"
-                                                                                aria-valuenow="7.42" aria-valuemin="0"
-                                                                                aria-valuemax="100"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0 text-muted">408</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
-
-                                                            <div class="row align-items-center g-2">
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0">1 sao</h6>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="p-2">
-                                                                        <div
-                                                                            class="progress animated-progress progress-sm">
-                                                                            <div class="progress-bar bg-danger"
-                                                                                role="progressbar" style="width: 4.98%"
-                                                                                aria-valuenow="4.98" aria-valuemin="0"
-                                                                                aria-valuemax="100"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-auto">
-                                                                    <div class="p-2">
-                                                                        <h6 class="mb-0 text-muted">274</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- end row -->
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>
@@ -480,138 +392,54 @@
                                                         <div class="me-lg-n3 pe-lg-4" data-simplebar
                                                             style="max-height: 225px;">
                                                             <ul class="list-unstyled mb-0">
-                                                                <li class="py-2">
-                                                                    <div class="border border-dashed rounded p-3">
-                                                                        <div class="d-flex align-items-start mb-3">
-                                                                            <div class="hstack gap-3">
-                                                                                <div
-                                                                                    class="badge rounded-pill bg-success mb-0">
-                                                                                    <i class="mdi mdi-star"></i> 4.2
+                                                                @foreach ($comments as $comment)
+                                                                    <li class="py-2">
+                                                                        <div class="border border-dashed rounded p-3">
+                                                                            <div class="d-flex align-items-start mb-3">
+                                                                                <div class="hstack gap-3">
+                                                                                    <div
+                                                                                        class="badge rounded-pill bg-success mb-0">
+                                                                                        <i class="mdi mdi-star"></i>
+                                                                                        {{ floor($comment->rating) }}
+                                                                                    </div>
+                                                                                    <div class="vr"></div>
+                                                                                    <div class="flex-grow-1" style="max-width: 370px;">
+                                                                                        <p class="text-muted mb-0">
+                                                                                            {{ $comment->content }}</p>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div class="vr"></div>
+                                                                            </div>
+
+                                                                            @if (!empty($comment->galleries))
+                                                                                <div class="d-flex flex-grow-1 gap-2 mb-3">
+                                                                                    @foreach ($comment->galleries as $item)
+                                                                                        <a href="#" class="d-block">
+                                                                                            <img src="{{ Storage::url($item->image) }}"
+                                                                                                alt=""
+                                                                                                class="avatar-sm rounded object-fit-cover material-shadow">
+                                                                                        </a>
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            @endif
+                                                                            <div class="d-flex align-items-end">
                                                                                 <div class="flex-grow-1">
-                                                                                    <p class="text-muted mb-0"> Superb
-                                                                                        sweatshirt. I loved it. It is for
-                                                                                        winter.</p>
+                                                                                    <h5 class="fs-14 mb-0">
+                                                                                        {{ $comment->user->name }}</h5>
+                                                                                </div>
+
+                                                                                <div class="flex-shrink-0">
+                                                                                    <p class="text-muted fs-13 mb-0">
+                                                                                        {{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
+                                                                                        <span
+                                                                                            class="fs-11 text-secondary">{{ \Carbon\Carbon::parse($comment->created_at)->format('H:i') }}</span>
+                                                                                    </p>
+
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <div class="d-flex flex-grow-1 gap-2 mb-3">
-                                                                            <a href="#" class="d-block">
-                                                                                <img src="{{ asset('templates/admin/assets/images/small/img-12.jpg') }}"
-                                                                                    alt=""
-                                                                                    class="avatar-sm rounded object-fit-cover material-shadow">
-                                                                            </a>
-                                                                            <a href="#" class="d-block">
-                                                                                <img src="{{ asset('templates/admin/assets/images/small/img-11.jpg') }}"
-                                                                                    alt=""
-                                                                                    class="avatar-sm rounded object-fit-cover material-shadow">
-                                                                            </a>
-                                                                            <a href="#" class="d-block">
-                                                                                <img src="{{ asset('templates/admin/assets/images/small/img-10.jpg') }}"
-                                                                                    alt=""
-                                                                                    class="avatar-sm rounded object-fit-cover material-shadow">
-                                                                            </a>
-                                                                        </div>
-
-                                                                        <div class="d-flex align-items-end">
-                                                                            <div class="flex-grow-1">
-                                                                                <h5 class="fs-14 mb-0">Henry</h5>
-                                                                            </div>
-
-                                                                            <div class="flex-shrink-0">
-                                                                                <p class="text-muted fs-13 mb-0">12 Jul, 21
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                                <li class="py-2">
-                                                                    <div class="border border-dashed rounded p-3">
-                                                                        <div class="d-flex align-items-start mb-3">
-                                                                            <div class="hstack gap-3">
-                                                                                <div
-                                                                                    class="badge rounded-pill bg-success mb-0">
-                                                                                    <i class="mdi mdi-star"></i> 4.0
-                                                                                </div>
-                                                                                <div class="vr"></div>
-                                                                                <div class="flex-grow-1">
-                                                                                    <p class="text-muted mb-0"> Great at
-                                                                                        this price, Product quality and look
-                                                                                        is awesome.</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex align-items-end">
-                                                                            <div class="flex-grow-1">
-                                                                                <h5 class="fs-14 mb-0">Nancy</h5>
-                                                                            </div>
-
-                                                                            <div class="flex-shrink-0">
-                                                                                <p class="text-muted fs-13 mb-0">06 Jul, 21
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-
-                                                                <li class="py-2">
-                                                                    <div class="border border-dashed rounded p-3">
-                                                                        <div class="d-flex align-items-start mb-3">
-                                                                            <div class="hstack gap-3">
-                                                                                <div
-                                                                                    class="badge rounded-pill bg-success mb-0">
-                                                                                    <i class="mdi mdi-star"></i> 4.2
-                                                                                </div>
-                                                                                <div class="vr"></div>
-                                                                                <div class="flex-grow-1">
-                                                                                    <p class="text-muted mb-0">Good
-                                                                                        product. I am so happy.</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex align-items-end">
-                                                                            <div class="flex-grow-1">
-                                                                                <h5 class="fs-14 mb-0">Joseph</h5>
-                                                                            </div>
-
-                                                                            <div class="flex-shrink-0">
-                                                                                <p class="text-muted fs-13 mb-0">06 Jul, 21
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-
-                                                                <li class="py-2">
-                                                                    <div class="border border-dashed rounded p-3">
-                                                                        <div class="d-flex align-items-start mb-3">
-                                                                            <div class="hstack gap-3">
-                                                                                <div
-                                                                                    class="badge rounded-pill bg-success mb-0">
-                                                                                    <i class="mdi mdi-star"></i> 4.1
-                                                                                </div>
-                                                                                <div class="vr"></div>
-                                                                                <div class="flex-grow-1">
-                                                                                    <p class="text-muted mb-0">Nice
-                                                                                        Product, Good Quality.</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex align-items-end">
-                                                                            <div class="flex-grow-1">
-                                                                                <h5 class="fs-14 mb-0">Jimmy</h5>
-                                                                            </div>
-
-                                                                            <div class="flex-shrink-0">
-                                                                                <p class="text-muted fs-13 mb-0">24 Jun, 21
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-
+                                                                    </li>
+                                                                @endforeach
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -642,6 +470,31 @@
 @endsection
 
 @section('script')
+    <script>
+        let productRating = {{ $product->average_rating ?? 0 }};
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".rating-stars").forEach(element => {
+                let rating = parseFloat(productRating) || 0; // Dùng chung một giá trị từ Laravel
+                let starsHtml = "";
+                let fullStars = Math.floor(rating);
+                let halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
+                let emptyStars = 5 - (fullStars + halfStar);
+
+                for (let i = 0; i < fullStars; i++) {
+                    starsHtml += `<span class="mdi mdi-star text-warning"></span>`;
+                }
+                if (halfStar) {
+                    starsHtml += `<span class="mdi mdi-star-half-full text-warning"></span>`;
+                }
+                for (let i = 0; i < emptyStars; i++) {
+                    starsHtml += `<span class="mdi mdi-star-outline text-warning"></span>`;
+                }
+
+                element.innerHTML = starsHtml;
+            });
+        });
+    </script>
+
     <!--Swiper slider js-->
     <script src="{{ asset('templates/admin/assets/libs/swiper/swiper-bundle.min.js') }}"></script>
 

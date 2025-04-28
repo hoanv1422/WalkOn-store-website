@@ -1,6 +1,8 @@
 @extends('client.layouts.app')
 
 @section('title', 'Liên Hệ')
+@section('breadcrumb', 'Liên Hệ')
+
 
 @section('content')
     @include('client.components.breadcrumb')

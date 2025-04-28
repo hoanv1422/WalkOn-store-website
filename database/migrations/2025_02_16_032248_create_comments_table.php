@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade')->index();
             $table->text('content');
-            $table->decimal('rating', 2, 1)->nullable()->check('rating BETWEEN 1.0 AND 5.0'); 
+            $table->decimal('rating', 2, 1)->nullable()->check('rating BETWEEN 1.0 AND 5.0');
+            $table->boolean('hidden_comment')->default(false);
+            $table->string('last_admin_username')->nullable();
             $table->timestamps();
             $table->softDeletes(); 
         });
