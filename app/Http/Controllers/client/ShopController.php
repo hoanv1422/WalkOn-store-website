@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
@@ -66,9 +67,11 @@ class ShopController extends Controller
         $products = $query->paginate(9);
         $categories = Category::all();
         $colors = Color::all();
-        $brand = Brand::all();
+        $brand = Brand::all(); 
         $sizes = Size::all();
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','sizes'));
+        $banners = Banner::orderBy('position')->get();
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brand','banners','sizes'));
+       
     }
 
     public function listProducts(Request $request)

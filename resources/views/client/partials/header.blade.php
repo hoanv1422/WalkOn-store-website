@@ -86,7 +86,7 @@
                 <div class="col-lg-3">
                     <div class="logo">
                         <a href="{{ route('home.index') }}">
-                            <img src="{{ asset('img/logo.png') }}" alt="">
+                            <img src="{{ asset('img/logoWalkOn.png') }}" alt="">
                         </a>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\FooterController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostCommentController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PostController;
@@ -22,13 +24,16 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
-
+    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
     Route::resource('coupons', CouponController::class);
-
+   
+    
     // Kho hàng
     Route::resource('inventory', InventoryController::class)->only(['index']);
     Route::get('/inventory/variant/{id}', [InventoryController::class, 'show'])->name('inventory.show');
@@ -55,6 +60,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('color', [ColorController::class, 'store'])->name('colors.store');
         Route::put('color/{color}', [ColorController::class, 'update'])->name('colors.update');
         Route::delete('color/{color}', [ColorController::class, 'destroy']);
+
     });
 
     Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
@@ -72,6 +78,15 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::put('order-backups/restore/{backupId}', [OrderController::class, 'restoreBackup'])
         ->name('orders.restoreBackup');
         Route::put('order-backups/restore-by-date', [OrderController::class, 'restoreBackupsByDate'])->name('orders.restoreBackupsByDate');
+
+});
+Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('index');
+
+    // Chỉ sửa phần Banner - Đảm bảo tạo đầy đủ các route
+    Route::resource('banners', BannerController::class)->except(['show']);
 });
 
 

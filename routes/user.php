@@ -13,6 +13,7 @@ use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Client\CommentController;
+use App\Models\Banner;
 use Illuminate\Support\Facades\Route;
 
 /*

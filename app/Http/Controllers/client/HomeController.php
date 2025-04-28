@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Client\DetailController;
+use App\Models\Banner;
 use App\Models\Product;
 use App\Models\Brand;
 use Carbon\Carbon;
