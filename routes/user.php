@@ -90,7 +90,7 @@ Route::middleware('client')->group(function () {
 
 
 
-
+Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
 
 

@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('shipper.layouts.app')
 @section('title', 'Giao Hàng')
 @section('content')
 <style>

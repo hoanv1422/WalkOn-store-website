@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\shipper;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -44,7 +44,7 @@ class ShipperController extends Controller
             ->get();
         $count_shipped = DB::table('orders')->where('order_status', 'shipped')->count();
         $count_delivered = DB::table('orders')->where('order_status', 'delivered')->count();
-        return view('admin.shippers.index', compact('orders_shipped', 'orders_delivered', 'count_shipped', 'count_delivered'));
+        return view('shipper.index', compact('orders_shipped', 'orders_delivered', 'count_shipped', 'count_delivered'));
     }
     public function delivered($id)
     {
