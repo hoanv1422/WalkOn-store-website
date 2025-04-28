@@ -18,11 +18,11 @@
                             <img src="{{asset('templates/admin/assets/images/logo-sm.png')}}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{asset('templates/admin/assets/images/logo-light.png')}}" alt="" height="17">
+                            <img src="{{asset('templates/admin/assets/images/image-Photoroom.png')}}" alt="" height="17">
                         </span>
                     </a>
                 </div>
-
+c:\Users\Admin\Documents\Zalo Received Files\image-Photoroom.png
                 <button type="button"
                     class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none"
                     id="topnav-hamburger-icon">

@@ -20,7 +20,6 @@ class DetailController extends Controller
            // Lấy số sao từ request nếu có
         $rating = $request->query('rating'); // Đọc giá trị rating từ query string
         $comments = Comment::where('product_id', $product->id)
-
         ->with('user')
         ->where('hidden_comment', 0) // Lọc các bình luận không bị ẩn (giá trị 0)
         ->latest()
