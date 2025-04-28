@@ -36,6 +36,7 @@ return new class extends Migration
             $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
+            $table->json('cart_item_ids')->nullable();
             
             $table->timestamp('payment_date')->nullable();
             $table->timestamp('delivered_at')->nullable();

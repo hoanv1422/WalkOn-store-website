@@ -84,7 +84,7 @@
             emailError.style.display = "none";
 
             const submitButton = MailResetPasswordForm.querySelector("button");
-
+            
             try {
                 submitButton.disabled = true;
                 submitButton.textContent = "Đang gửi...";

@@ -29,11 +29,11 @@ class OrderController extends Controller
 
         $cartItemIds = explode(',', $cartItems);
 
-        foreach ($cartItemIds as $cartItemId) {
-            if (!is_numeric($cartItemId) || (int)$cartItemId <= 0) {
-                return redirect()->route('cart.index')->withErrors(['cart' => 'Một hoặc nhiều ID sản phẩm không hợp lệ.']);
-            }
-        }
+        // foreach ($cartItemIds as $cartItemId) {
+        //     if (!is_numeric($cartItemId) || (int)$cartItemId <= 0) {
+        //         return redirect()->route('cart.index')->withErrors(['cart' => 'Một hoặc nhiều ID sản phẩm không hợp lệ.']);
+        //     }
+        // }
 
         $userId = Auth::id();
         $cart = Cart::where('user_id', $userId)->first();
@@ -223,7 +223,7 @@ class OrderController extends Controller
         $orders = $query->paginate(15)->appends(['status' => $status]);
         $categories = Category::all();
         $colors = Color::all();
-        $cancellationReasons = OrderCancellationReason::all(); // Lấy danh sách lý do hủy
+        $cancellationReasons = OrderCancellationReason::all();
 
         return view('client.pages.profile.orders', compact('user', 'orders', 'categories', 'colors', 'cancellationReasons'));
     }

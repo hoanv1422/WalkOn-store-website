@@ -26,7 +26,7 @@
                             {{-- Địa chỉ  --}}
                         </div>
                         <button type="button" class="btn change-address-btn" data-bs-toggle="modal"
-                            data-bs-target="#addressModal">
+                            data-bs-target="#addressModalList">
                             Thay đổi
                         </button>
                     </div>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <button class="btn checkout-btn w-100 text-white">ĐẶT HÀNG NGAY</button>
+                <button class="btn checkout-btn w-100 text-white" id="submit-checkout-button">ĐẶT HÀNG NGAY</button>
             </div>
         </div>
     </form>
@@ -117,7 +117,7 @@
 </div>
 
 <!-- Modal chọn địa chỉ -->
-<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+<div class="modal fade" id="addressModalList" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header-1">
@@ -131,38 +131,37 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#addAddressModal" onclick="hideAddressModal()">Thêm mới</button>
+                <button type="button" class="btn btn-success" id="btn-create-address">Thêm mới</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary" onclick="confirmAddress()">Xác nhận</button>
+                <button type="button" class="btn btn-primary" id="btn-confirm-address">Xác nhận</button>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Modal thêm địa chỉ mới -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="address-modal" tabindex="-1" aria-labelledby="AddressModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <form action="{{ route('create.address') }}" method="POST" id="formAddress">
+        <form action="" id="address-form">
             @csrf
             <div class="modal-content">
-                <div class="modal-header-1">
-                    <h5 class="modal-title" id="addAddressModalLabel">Thêm Địa Chỉ Mới</h5>
+                <div class="d-flex justify-content-between m-3">
+                    <h5 class="modal-title" id="AddressModalLabel">Thêm Địa Chỉ Mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="address-error" class="alert alert-danger d-none" role="alert"></div>
+                    <input type="hidden" id="address-id" name="address_id">
                     <div class="d-flex gap-2">
-                        <select id="province" class="form-control"
-                            onchange="loadDistricts(); updateHiddenInputs();">
+                        <select id="province" class="form-control" name="city_code"
+                           >
                             <option value="">-- Chọn Tỉnh/Thành --</option>
                         </select>
-                        <select id="district" class="form-control" onchange="loadWards(); updateHiddenInputs();"
-                            disabled>
+                        <select id="district" class="form-control"
+                            name="district_code" disabled>
                             <option value="">-- Chọn Quận/Huyện --</option>
                         </select>
                         <select id="ward" class="form-control"
-                            onchange="getCoordinates(); updateHiddenInputs();" disabled>
+                             name="ward_code" disabled>
                             <option value="">-- Chọn Phường/Xã --</option>
                         </select>
                     </div>
@@ -170,8 +169,8 @@
                     <input type="hidden" id="districtName" name="district_name">
                     <input type="hidden" id="wardName" name="ward_name">
                     <div class="mb-3 mt-3">
-                        <input type="hidden" name="latitude" id="latitude">
-                        <input type="hidden" name="longitude" id="longitude">
+                        <input type="text" name="latitude" id="latitude">
+                        <input type="text" name="longitude" id="longitude">
                     </div>
                     <div class="mb-3">
                         <textarea class="form-control" id="newAddressDetail" name="address_line" rows="2"
@@ -183,7 +182,7 @@
                         <label class="btn btn-outline-primary" for="typeOfAddress1">Nhà Riêng</label>
                         <input type="radio" class="btn-check" name="addressType" id="typeOfAddress2"
                             value="OFFICE" autocomplete="off">
-                        <label class="btn btn-outline-success" for="typeOfAddress2">Văn Phòng</label>
+                        <label class="btn btn-outline-success" for="typeOfAddress2">Cơ Quan</label>
                         <input type="radio" class="btn-check" name="addressType" id="typeOfAddress3"
                             value="OTHER" autocomplete="off">
                         <label class="btn btn-outline-warning" for="typeOfAddress3">Khác</label>
@@ -196,9 +195,33 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal"
-                        data-bs-target="#addressModal">Quay lại</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="submit" class="btn btn-success">Lưu địa chỉ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form>
+            @csrf
+            <div class="modal-content">
+                <div class="d-flex justify-content-between m-3">
+                    <h5 class="modal-title" id="deleteAddressModalLabel">Xác nhận xóa địa chỉ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger">Bạn có chắc muốn xóa địa chỉ này?</p>
+                    <p class="small text-muted">Hành động này không thể hoàn tác.</p>
+                    <input type="hidden" id="delete-address-id" name="address_id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
                 </div>
             </div>
         </form>
