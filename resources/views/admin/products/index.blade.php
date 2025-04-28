@@ -694,7 +694,7 @@
                                                         <th data-column-id="action"
                                                             class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
                                                             style="width: 80px;">
-                                                            <div class="gridjs-th-content">Hành động</div>
+                                                            <div class="gridjs-th-content">Hành độn</div>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -860,5 +860,40 @@
             // $('#deleteItemId').val(itemId); 
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/api/list-product') // thay đường dẫn đúng nếu bạn có prefix hoặc middleware
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi gọi API: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('Tất cả sản phẩm:', data.data.all_products);
+                        console.log('Sản phẩm đang hoạt động:', data.data.active_products);
+                        console.log('Sản phẩm không hoạt động:', data.data.non_active_products);
+    
+                        // Ví dụ: Gắn danh sách sản phẩm vào HTML
+                        const list = document.getElementById('product-list');
+                        data.data.all_products.forEach(product => {
+                            const li = document.createElement('li');
+                            li.textContent = product.name;
+                            list.appendChild(li);
+                        });
+                    } else {
+                        alert('Không lấy được dữ liệu sản phẩm!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Đã xảy ra lỗi khi gọi API.');
+                });
+        });
+    </script>
+    
+    <ul id="product-list"></ul>
+    
     {{-- <script src="{{ asset('templates/admin/assets/js/pages/ecommerce-product-list.init.js') }}"></script> --}}
 @endsection
