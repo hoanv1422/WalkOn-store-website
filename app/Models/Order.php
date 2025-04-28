@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\OrderAudit;
 
-class Order extends Model
+class Order extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
 
     protected $fillable = [
@@ -38,6 +41,11 @@ class Order extends Model
     /**
      * Get the user that owns the order.
      */
+    public function getRouteKeyName()
+{
+    return 'order_code';
+}
+
     public function user()
     {
         return $this->belongsTo(User::class);
