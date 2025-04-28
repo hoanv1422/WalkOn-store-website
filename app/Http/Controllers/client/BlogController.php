@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
 use App\Models\Post;
-use App\Models\PostCategories;
 use App\Models\PostComments;
 use Illuminate\Http\Request;
+use App\Models\PostCategories;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class BlogController extends Controller
 {
@@ -94,20 +95,18 @@ class BlogController extends Controller
 
     public function details(Request $request, $slug)
     {
-        // Lấy bài viết chi tiết với các quan hệ cần thiết
+     
         $post = Post::with([
             'category',
             'user',
-            // Lọc bình luận gốc: chỉ lấy bình luận có trạng thái published hoặc pending 
             'comments' => function ($query) {
                 $query->whereIn('status', ['published'])
-                    ->orderBy('created_at', 'asc');
+                    ->orderBy('created_at', 'desc');
             },
             'comments.user',
-            // Lọc bình luận trả lời theo trạng thái
             'comments.replies' => function ($query) {
                 $query->whereIn('status', ['published'])
-                    ->orderBy('created_at', 'asc');
+                    ->orderBy('created_at', 'desc');
             },
             'comments.replies.user'
         ])
@@ -130,29 +129,72 @@ class BlogController extends Controller
 
     public function storeComment(Request $request, $slug)
     {
-        $userId = auth()->check() ? auth()->id() : 1;
+        try {
+            
+            $userId = auth()->id() ;
 
-        $validatedData = $request->validate([
-            'content'   => 'required|min:3',
-            'parent_id' => 'nullable|exists:post_comments,id'
-        ]);
+            $validatedData = $request->validate([
+                'content' => 'required|min:3',
+                'parent_id' => 'nullable|exists:post_comments,id'
+            ]);
 
-        $post = Post::where('slug', $slug)
-            ->where('status', 'published')
-            ->firstOrFail();
+            $post = Post::where('slug', $slug)
+                ->where('status', 'published')
+                ->firstOrFail();
 
-        $comment = PostComments::create([
-            'post_id'   => $post->id,
-            'user_id'   => $userId,
-            'content'   => $validatedData['content'],
-            'status'    => 'published', // Mặc định là published cho bình luận
-            'parent_id' => $validatedData['parent_id'] ?? null,
-        ]);
+            $comment = PostComments::create([
+                'post_id' => $post->id,
+                'user_id' => $userId,
+                'content' => $validatedData['content'],
+                'status' => 'published',
+                'parent_id' => $validatedData['parent_id'] ?? null,
+            ]);
 
-        $comment->load('user');
+            $comment->load('user');
 
-        $html = view('client.pages.blog-detail.comment', compact('comment', 'post'))->render();
+            $html = view('client.pages.blog-detail.comment', compact('comment', 'post'))->render();
 
-        return response()->json(['success' => true, 'html' => $html]);
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'comment' => [
+                    'id' => $comment->id,
+                    'parent_id' => $comment->parent_id
+                ],
+                'message' => 'Bình luận đã được gửi thành công'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyComment(PostComments $comment)
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+
+            if (Gate::denies('delete-comment', $comment)) {
+                return response()->json(['message' => 'Forbidden'], 403);
+            }
+
+            $isParent = is_null($comment->parent_id);
+            $comment->delete();
+
+            return response()->json([
+                'success' => true,
+                'is_parent' => $isParent, 
+                'message' => 'Xóa bình luận thành công!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi server: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

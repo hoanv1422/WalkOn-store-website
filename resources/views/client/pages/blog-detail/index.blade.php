@@ -1,5 +1,4 @@
 @extends('client.layouts.app')
-
 @section('title', 'Chi Tiết Bài Viết')
 @section('breadcrumb', 'Chi Tiết Bài Viết')
 

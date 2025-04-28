@@ -5,19 +5,19 @@
         <!-- Dark Logo-->
         <a href="{{ route('admin.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="50">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset('templates/admin/assets/images/logo-dark.png') }}" alt="" height="17">
+                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="40">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="{{ route('admin.index') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset('templates/admin/assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="50">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset('templates/admin/assets/images/logo-light.png') }}" alt="" height="17">
+                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="40">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -78,318 +78,357 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-    <!-- Tiêu đề Menu: Bảng Điều Khiển -->
-    <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-    <li class="nav-item">
-        <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarDashboards">
-            <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Bảng Điều Khiển</span>
-        </a>
-        <div class="collapse menu-dropdown" id="sidebarDashboards">
-            <ul class="nav nav-sm flex-column">
+                <!-- Tiêu đề Menu: Bảng Điều Khiển -->
+                <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics">Phân Tích</a>
                     <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Bảng Điều Khiển</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics"> Analytics
+                                <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics">Phân
+                                    Tích</a>
+                                <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                                    <i class="ri-dashboard-2-line"></i> <span
+                                        data-key="t-dashboards">Dashboards</span>
                                 </a>
-                            </li>
+                                <div class="collapse menu-dropdown" id="sidebarDashboards">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="dashboard-analytics.html" class="nav-link"
+                                                data-key="t-analytics"> Analytics
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto">
+                                                Crypto </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="dashboard-projects.html" class="nav-link" data-key="t-projects">
+                                                Projects
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li> <!-- end Dashboard Menu -->
                             <li class="nav-item">
-                                <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects.html" class="nav-link" data-key="t-projects"> Projects
+                                <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="sidebarApps">
+                                    <i class="ri-apps-2-line"></i> <span data-key="t-apps">Apps</span>
                                 </a>
+                                <div class="collapse menu-dropdown" id="sidebarApps">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ route('categories.index') }}" class="nav-link"
+                                                data-key="t-category"> Danh Mục </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="{{ route('brands.index') }}" class="nav-link"
+                                                data-key="t-brand"> Thương Hiệu </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="{{ route('attributes.index') }}" class="nav-link"
+                                                data-key="t-attributes"> Thuộc Tính </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="{{ route('users.index') }}" class="nav-link" data-key="t-user">
+                                                Người Dùng </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse"
+                                                role="button" aria-expanded="false" aria-controls="sidebarEmail"
+                                                data-key="t-email">
+                                                Email
+                                            </a>
+                                            <div class="collapse menu-dropdown" id="sidebarEmail">
+                                                <ul class="nav nav-sm flex-column">
+                                                    <li class="nav-item">
+                                                        <a href="apps-mailbox.html" class="nav-link"
+                                                            data-key="t-mailbox">
+                                                            Mailbox </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#sidebaremailTemplates" class="nav-link"
+                                                            data-bs-toggle="collapse" role="button"
+                                                            aria-expanded="false"
+                                                            aria-controls="sidebaremailTemplates"
+                                                            data-key="t-email-templates">
+                                                            Email Templates
+                                                        </a>
+                                                        <div class="collapse menu-dropdown"
+                                                            id="sidebaremailTemplates">
+                                                            <ul class="nav nav-sm flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="apps-email-basic.html" class="nav-link"
+                                                                        data-key="t-basic-action"> Basic Action </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="apps-email-ecommerce.html"
+                                                                        class="nav-link"
+                                                                        data-key="t-ecommerce-action"> Ecommerce Action
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse"
+                                                role="button" aria-expanded="false" aria-controls="sidebarEcommerce"
+                                                data-key="t-ecommerce">
+                                                Sản Phẩm
+                                            </a>
+                                            <div class="collapse menu-dropdown" id="sidebarEcommerce">
+                                                <ul class="nav nav-sm flex-column">
+                                                    <li class="nav-item">
+                                                        <a href="{{ route('products.index') }}" class="nav-link"
+                                                            data-key="t-products"> Danh Sách Sản Phẩm </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="{{ route('products.create') }}" class="nav-link"
+                                                            data-key="t-product-create"> Tạo Sản Phẩm </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('coupons.index') }}" class="nav-link"> <span
+                                                    data-key="t-to-do">Mã Giảm Giá</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('shippers.index') }}" class="nav-link"> <span
+                                                    data-key="t-to-do">Shipper</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('inventories.index') }}" class="nav-link"> <span
+                                                    data-key="t-to-do">Kho Hàng</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('orders.index') }}" class="nav-link"> <span
+                                                    data-key="t-to-do">Đơn Hàng</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse"
+                                                role="button" aria-expanded="false" aria-controls="sidebarjobs"
+                                                data-key="t-jobs"> Jobs</a>
+                                            <div class="collapse menu-dropdown" id="sidebarjobs">
+                                                <ul class="nav nav-sm flex-column">
+                                                    <li class="nav-item">
+                                                        <a href="apps-job-statistics.html" class="nav-link"
+                                                            data-key="t-statistics"> Statistics </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#sidebarJoblists" class="nav-link"
+                                                            data-bs-toggle="collapse" role="button"
+                                                            aria-expanded="false" aria-controls="sidebarJoblists"
+                                                            data-key="t-job-lists">
+                                                            Job Lists
+                                                        </a>
+                                                        <div class="collapse menu-dropdown" id="sidebarJoblists">
+                                                            <ul class="nav nav-sm flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="apps-job-lists.html" class="nav-link"
+                                                                        data-key="t-list"> List
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="apps-job-grid-lists.html"
+                                                                        class="nav-link" data-key="t-grid"> Grid </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="apps-job-details.html" class="nav-link"
+                                                                        data-key="t-overview"> Overview</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#sidebarCandidatelists" class="nav-link"
+                                                            data-bs-toggle="collapse" role="button"
+                                                            aria-expanded="false"
+                                                            aria-controls="sidebarCandidatelists"
+                                                            data-key="t-candidate-lists">
+                                                            Candidate Lists
+                                                        </a>
+                                                        <div class="collapse menu-dropdown"
+                                                            id="sidebarCandidatelists">
+                                                            <ul class="nav nav-sm flex-column">
+                                                                <li class="nav-item">
+                                                                    <a href="apps-job-candidate-lists.html"
+                                                                        class="nav-link" data-key="t-list-view"> List
+                                                                        View
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="apps-job-candidate-grid.html"
+                                                                        class="nav-link" data-key="t-grid-view"> Grid
+                                                                        View</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="apps-job-application.html" class="nav-link"
+                                                            data-key="t-application"> Application </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="apps-job-new.html" class="nav-link"
+                                                            data-key="t-new-job"> New
+                                                            Job </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="apps-job-companies-lists.html" class="nav-link"
+                                                            data-key="t-companies-list"> Companies List </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="apps-job-categories.html" class="nav-link"
+                                                            data-key="t-job-categories"> Job Categories</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="apps-api-key.html" class="nav-link" data-key="t-api-key">API
+                                                Key</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
+                                <a href="dashboard-crm.html" class="nav-link" data-key="t-crm">Quản Lý Khách Hàng</a>
                             </li>
                             <li class="nav-item">
-                                <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
+                                <a href="index.html" class="nav-link" data-key="t-ecommerce">Thương Mại Điện Tử</a>
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li>
+
+                <!-- Tiêu đề Menu: Thương Mại Điện Tử -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Apps</span>
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thương Mại Điện Tử</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('categories.index')}}" class="nav-link" data-key="t-category"> Danh Mục </a>
-                            </li>
-
-                             <li class="nav-item">
-                                <a href="{{route('brands.index')}}" class="nav-link" data-key="t-brand"> Thương Hiệu </a>
-                            </li>
-
-                             <li class="nav-item">
-                                <a href="{{route('attributes.index')}}" class="nav-link" data-key="t-attributes"> Thuộc Tính </a>
-                            </li>
-
-                             <li class="nav-item">
-                                <a href="{{route('users.index')}}" class="nav-link" data-key="t-user"> Người Dùng </a>
+                                <a href="{{ route('categories.index') }}" class="nav-link"
+                                    data-key="t-category">Danh Mục</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarEmail" data-key="t-email">
-                                    Email
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarEmail">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="apps-mailbox.html" class="nav-link" data-key="t-mailbox">
-                                                Mailbox </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebaremailTemplates" class="nav-link"
-                                                data-bs-toggle="collapse" role="button" aria-expanded="false"
-                                                aria-controls="sidebaremailTemplates" data-key="t-email-templates">
-                                                Email Templates
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebaremailTemplates">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="apps-email-basic.html" class="nav-link"
-                                                            data-key="t-basic-action"> Basic Action </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="apps-email-ecommerce.html" class="nav-link"
-                                                            data-key="t-ecommerce-action"> Ecommerce Action </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a href="{{ route('brands.index') }}" class="nav-link" data-key="t-brand">Thương
+                                    Hiệu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('attributes.index') }}" class="nav-link"
+                                    data-key="t-attributes">Thuộc Tính</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse"
                                     role="button" aria-expanded="false" aria-controls="sidebarEcommerce"
-                                    data-key="t-ecommerce">
-                                    Sản Phẩm
-                                </a>
+                                    data-key="t-ecommerce">Sản Phẩm</a>
                                 <div class="collapse menu-dropdown" id="sidebarEcommerce">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{route('products.index')}}" class="nav-link"
-                                                data-key="t-products"> Danh Sách Sản Phẩm </a>
+                                            <a href="{{ route('products.index') }}" class="nav-link"
+                                                data-key="t-products">Danh Sách Sản Phẩm</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{route('products.create')}}" class="nav-link"
-                                                data-key="t-product-create"> Tạo Sản Phẩm </a>
+                                            <a href="{{ route('products.create') }}" class="nav-link"
+                                                data-key="t-product-create">Tạo Sản Phẩm</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('coupons.index')}}" class="nav-link"> <span data-key="t-to-do">Mã Giảm Giá</span></a>
+                                <a href="{{ route('coupons.index') }}" class="nav-link" data-key="t-coupons">Mã Giảm
+                                    Giá</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('shippers.index')}}" class="nav-link"> <span data-key="t-to-do">Shipper</span></a>
-                            </li>
-                             <li class="nav-item">
-                                <a href="{{route('inventories.index')}}" class="nav-link"> <span data-key="t-to-do">Kho Hàng</span></a>
+                                <a href="{{ route('inventory.index') }}" class="nav-link"
+                                    data-key="t-inventories">Kho Hàng</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('orders.index')}}" class="nav-link"> <span data-key="t-to-do">Đơn Hàng</span></a>
+                                <a href="{{ route('orders.index') }}" class="nav-link" data-key="t-orders">Đơn
+                                    Hàng</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('footers.index')}}" class="nav-link"> <span data-key="t-to-do">Footer</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarjobs" data-key="t-jobs"> Jobs</a>
-                                <div class="collapse menu-dropdown" id="sidebarjobs">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="apps-job-statistics.html" class="nav-link"
-                                                data-key="t-statistics"> Statistics </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarJoblists" class="nav-link" data-bs-toggle="collapse"
-                                                role="button" aria-expanded="false" aria-controls="sidebarJoblists"
-                                                data-key="t-job-lists">
-                                                Job Lists
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarJoblists">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="apps-job-lists.html" class="nav-link"
-                                                            data-key="t-list"> List
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="apps-job-grid-lists.html" class="nav-link"
-                                                            data-key="t-grid"> Grid </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="apps-job-details.html" class="nav-link"
-                                                            data-key="t-overview"> Overview</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#sidebarCandidatelists" class="nav-link"
-                                                data-bs-toggle="collapse" role="button" aria-expanded="false"
-                                                aria-controls="sidebarCandidatelists" data-key="t-candidate-lists">
-                                                Candidate Lists
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebarCandidatelists">
-                                                <ul class="nav nav-sm flex-column">
-                                                    <li class="nav-item">
-                                                        <a href="apps-job-candidate-lists.html" class="nav-link"
-                                                            data-key="t-list-view"> List View
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a href="apps-job-candidate-grid.html" class="nav-link"
-                                                            data-key="t-grid-view"> Grid View</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-job-application.html" class="nav-link"
-                                                data-key="t-application"> Application </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-job-new.html" class="nav-link" data-key="t-new-job"> New
-                                                Job </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-job-companies-lists.html" class="nav-link"
-                                                data-key="t-companies-list"> Companies List </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="apps-job-categories.html" class="nav-link"
-                                                data-key="t-job-categories"> Job Categories</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="apps-api-key.html" class="nav-link" data-key="t-api-key">API Key</a>
+                                <a href="{{ route('users.index') }}" class="nav-link" data-key="t-user">Người
+                                    Dùng</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a href="dashboard-crm.html" class="nav-link" data-key="t-crm">Quản Lý Khách Hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link" data-key="t-ecommerce">Thương Mại Điện Tử</a>
-                </li>
-            </ul>
-        </div>
-    </li>
 
-    <!-- Tiêu đề Menu: Thương Mại Điện Tử -->
-    <li class="nav-item">
-        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarApps">
-            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Thương Mại Điện Tử</span>
-        </a>
-        <div class="collapse menu-dropdown" id="sidebarApps">
-            <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                    <a href="{{route('categories.index')}}" class="nav-link" data-key="t-category">Danh Mục</a>
+                <!-- Tiêu đề Menu: Quản Lý Trang -->
+                <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Quản Lý Trang</span>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('brands.index')}}" class="nav-link" data-key="t-brand">Thương Hiệu</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('attributes.index')}}" class="nav-link" data-key="t-attributes">Thuộc Tính</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">Sản Phẩm</a>
-                    <div class="collapse menu-dropdown" id="sidebarEcommerce">
+                    <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Xác Thực</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('products.index')}}" class="nav-link" data-key="t-products">Danh Sách Sản Phẩm</a>
+                                <a href="auth-signin-basic.html" class="nav-link" data-key="t-signin">Đăng Nhập</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('products.create')}}" class="nav-link" data-key="t-product-create">Tạo Sản Phẩm</a>
+                                <a href="auth-signup-basic.html" class="nav-link" data-key="t-signup">Đăng Ký</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-password-reset">Đặt
+                                    Lại Mật Khẩu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="auth-logout-basic.html" class="nav-link" data-key="t-logout">Đăng Xuất</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a href="{{route('coupons.index')}}" class="nav-link" data-key="t-coupons">Mã Giảm Giá</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('inventory.index')}}" class="nav-link" data-key="t-inventories">Kho Hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('orders.index')}}" class="nav-link" data-key="t-orders">Đơn Hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('users.index')}}" class="nav-link" data-key="t-user">Người Dùng</a>
-                </li>
-            </ul>
-        </div>
-    </li>
 
-    <!-- Tiêu đề Menu: Quản Lý Trang -->
-    <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Quản Lý Trang</span></li>
-    <li class="nav-item">
-        <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarAuth">
-            <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Xác Thực</span>
-        </a>
-        <div class="collapse menu-dropdown" id="sidebarAuth">
-            <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                    <a href="auth-signin-basic.html" class="nav-link" data-key="t-signin">Đăng Nhập</a>
-                </li>
-                <li class="nav-item">
-                    <a href="auth-signup-basic.html" class="nav-link" data-key="t-signup">Đăng Ký</a>
-                </li>
-                <li class="nav-item">
-                    <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-password-reset">Đặt Lại Mật Khẩu</a>
-                </li>
-                <li class="nav-item">
-                    <a href="auth-logout-basic.html" class="nav-link" data-key="t-logout">Đăng Xuất</a>
+                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="ri-pages-line"></i> <span data-key="t-pages">Trang</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarPages">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="pages-profile.html" class="nav-link" data-key="t-profile">Hồ Sơ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages-faqs.html" class="nav-link" data-key="t-faqs">Câu Hỏi Thường Gặp</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages-pricing.html" class="nav-link" data-key="t-pricing">Bảng Giá</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
-        </div>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-            aria-expanded="false" aria-controls="sidebarPages">
-            <i class="ri-pages-line"></i> <span data-key="t-pages">Trang</span>
-        </a>
-        <div class="collapse menu-dropdown" id="sidebarPages">
-            <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                    <a href="pages-profile.html" class="nav-link" data-key="t-profile">Hồ Sơ</a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages-faqs.html" class="nav-link" data-key="t-faqs">Câu Hỏi Thường Gặp</a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages-pricing.html" class="nav-link" data-key="t-pricing">Bảng Giá</a>
-                </li>
-            </ul>
-        </div>
-    </li>
-</ul>
         </div>
         <!-- Sidebar -->
     </div>

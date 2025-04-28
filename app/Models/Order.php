@@ -33,14 +33,24 @@ class Order extends Model
         'delivered_at',
         'tracking_code',
     ];
-
+    const ORDER_STATUS_MAPPING = [
+        'pending'    => 'Chờ xử lý',
+        'confirmed'  => 'Đã xác nhận',
+        'processing' => 'Đang xử lý',
+        'ready'      => 'Đã chuẩn bị xong',
+        'shipped'    => 'Đang giao',
+        'delivered'  => 'Đã giao',
+        'cancelled'  => 'Đã hủy',
+        'returned'   => 'Hoàn hàng',
+        'completed'  => 'Hoàn tất trả hàng',
+    ];
     /**
      * Get the user that owns the order.
      */
     public function getRouteKeyName()
-{
-    return 'order_code';
-}
+    {
+        return 'order_code';
+    }
 
     public function user()
     {

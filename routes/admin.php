@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     Route::resource('products', ProductController::class);
+    Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
     Route::resource('brands', BrandController::class)->except(['create', 'edit', 'show']);
@@ -64,29 +65,18 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     });
 
     Route::resource('post-categories', PostCategoryController::class)->except(['create', 'edit', 'show']);
+    Route::get('post-categories/filter', [PostCategoryController::class, 'filter'])
+        ->name('post-categories.filter');
     Route::resource('post-comments', PostCommentController::class)->except(['create', 'edit', 'show']);
+    Route::get('post-comments/filter', [PostCommentController::class, 'filter'])
+    ->name('post-comments.filter');
     Route::resource('posts', PostController::class)->except(['create', 'edit', 'show']);
 
-    
     Route::resource('orders', OrderController::class);
     Route::put('orders/{order}/updateStatus', [OrderController::class, 'updateStatus'])
         ->name('orders.updateStatus');
     Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
-        Route::get('order-backups', [OrderController::class, 'showBackups'])
-        ->name('orders.backups');
-    Route::put('order-backups/restore/{backupId}', [OrderController::class, 'restoreBackup'])
-        ->name('orders.restoreBackup');
-        Route::put('order-backups/restore-by-date', [OrderController::class, 'restoreBackupsByDate'])->name('orders.restoreBackupsByDate');
-
-});
-Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.index');
-    })->name('index');
-
-    // Chỉ sửa phần Banner - Đảm bảo tạo đầy đủ các route
-    Route::resource('banners', BannerController::class)->except(['show']);
 });
 
 

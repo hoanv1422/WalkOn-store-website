@@ -47,12 +47,22 @@
                         <td class="status">
                             @if ($order->order_status == 'pending')
                                 <span class="badge bg-warning-subtle text-warning">Chờ xử lý</span>
-                            @elseif($order->order_status == 'processing')
+                            @elseif ($order->order_status == 'confirmed')
+                                <span class="badge bg-primary-subtle text-primary">Đã xác nhận</span>
+                            @elseif ($order->order_status == 'processing')
                                 <span class="badge bg-info-subtle text-info">Đang xử lý</span>
-                            @elseif($order->order_status == 'cancelled')
-                                <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
-                            @elseif($order->order_status == 'delivered')
+                            @elseif ($order->order_status == 'ready')
+                                <span class="badge bg-secondary-subtle text-secondary">Đã chuẩn bị xong</span>
+                            @elseif ($order->order_status == 'shipped')
+                                <span class="badge bg-secondary-subtle text-secondary">Đang giao</span>
+                            @elseif ($order->order_status == 'delivered')
                                 <span class="badge bg-success-subtle text-success">Đã giao</span>
+                            @elseif ($order->order_status == 'cancelled')
+                                <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
+                            @elseif ($order->order_status == 'returned')
+                                <span class="badge bg-dark-subtle text-dark">Đã hoàn</span>
+                            @elseif ($order->order_status == 'completed')
+                                <span class="badge bg-success-subtle text-success">Hoàn tất</span>
                             @else
                                 <span class="badge bg-secondary-subtle text-secondary">{{ $order->order_status }}</span>
                             @endif

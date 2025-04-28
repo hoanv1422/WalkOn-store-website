@@ -1,4 +1,4 @@
-<!-- single product tab start -->
+<!-- Bắt đầu tab sản phẩm đơn -->
 <div class="single-product-tab-area">
     <div class="container">
         <div class="row">
@@ -13,11 +13,11 @@
                             <a href="#tab2" aria-controls="tab2" role="tab" data-bs-toggle="tab">GHI CHÚ</a>
                         </li>
                         <li role="presentation">
-                            <a href="#tab3" aria-controls="tab3" role="tab" data-bs-toggle="tab">product tag</a>
+                            <a href="#tab3" aria-controls="tab3" role="tab" data-bs-toggle="tab">Thẻ sản phẩm</a>
                         </li>
                     </ul>
 
-                    <!-- Tab panes -->
+                    <!-- Nội dung tab -->
                     <div class="tab-content single-product-page">
                         <div role="tabpanel" class="tab-pane fade show active" id="tab1">
                             <div class="single-p-tab-content">
@@ -35,7 +35,7 @@
                                             </div>
                                             
                                             <div class="review-date">
-                                                <p>plaza <em> (Posted on 8/27/2015)</em></p>
+                                                <p>plaza <em> (Đăng vào ngày 8/27/2015)</em></p>
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th>Price</th>
+                                                            <th>Giá cả</th>
                                                             <td> <input type="radio" class="radio" name="ratings[1]">
                                                             </td>
                                                             <td> <input type="radio" class="radio" name="ratings[1]">
@@ -97,22 +97,22 @@
                         <div role="tabpanel" class="tab-pane fade" id="tab3">
                             <div class="single-p-tab-content">
                                 <div class="add-tab-title">
-                                    <p> add your tag </p>
+                                    <p> Thêm thẻ của bạn </p>
                                 </div>
                                 <div class="add-tag">
                                     <form action="#">
                                         <input type="text">
-                                        <button type="submit">add tags</button>
+                                        <button type="submit">Thêm thẻ</button>
                                     </form>
                                 </div>
-                                <p class="tag-rules">Use spaces to separate tags. Use single quotes (') for phrases.
-                                </p>
+                                <p class="tag-rules">Sử dụng dấu cách để tách các thẻ. Dùng dấu nháy đơn (') cho cụm từ.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
-<!-- single product tab end -->
+<!-- Kết thúc tab sản phẩm đơn -->
+

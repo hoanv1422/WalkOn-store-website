@@ -29,7 +29,6 @@ class CheckoutController extends Controller
 
         try {
             $user = Auth::user();
-
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -84,7 +83,6 @@ class CheckoutController extends Controller
             ], 500);
         }
     }
-
 
     private function vnpay_payment($amount, $orderCode)
     {

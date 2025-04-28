@@ -179,7 +179,8 @@
                                     'shipped' => 'Đang giao',
                                     'delivered' => 'Đã giao',
                                     'cancelled' => 'Đã hủy',
-                                    'returned' => 'Trả hàng',
+                                    'returned' => 'Hoàn hàng',
+                                    'completed' => 'Hoàn tất',
                                 ];
 
                                 $statusAudits = $order->auditsCustom
@@ -312,7 +313,8 @@
                                                 <option value="shipped">Đang giao</option>
                                                 <option value="delivered">Đã giao</option>
                                                 <option value="cancelled">Đã hủy</option>
-                                                <option value="returned">Trả hàng</option>
+                                                <option value="returned">Hoàn hàng</option>
+                                                <option value="completed">Hoàn tất</option>
                                             </select>
                                         </div>
                                     </div>
