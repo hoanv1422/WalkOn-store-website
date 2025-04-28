@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cart;
-use App\Models\Order;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Color;
@@ -15,13 +14,11 @@ use App\Models\OrderCancellation;
 use App\Models\OrderCancellationReason;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    
     public function index(Request $request)
     {
         $cartItems = $request->input('cartItems');
@@ -329,27 +326,5 @@ class OrderController extends Controller
             DB::rollBack();
             return back()->with('error', 'Có lỗi khi thêm');
         }
-    }
-    public function update(Request $request, Order $order)
-    {
-        // Validate dữ liệu từ form
-        $validated = $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'order_date' => 'required|date',
-            'total_price' => 'required|numeric',
-            'payment_method' => 'required|string',
-            'order_status' => 'required|string',
-        ]);
-
-        // Cập nhật thông tin đơn hàng
-        $order->update([
-            'user_name' => $validated['customer_name'], // Map form field 'customer_name' vào cột 'user_name'
-            'created_at' => $validated['order_date'],
-            'total_price' => $validated['total_price'],
-            'payment_method' => $validated['payment_method'],
-            'order_status' => $validated['order_status'],
-        ]);
-
-        return redirect()->back()->with('success', 'Cập nhật đơn hàng thành công!');
     }
 }
