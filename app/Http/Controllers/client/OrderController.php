@@ -12,7 +12,7 @@ use App\Models\Order;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use App\Http\Contr                                                                                                                                                                                                                                                                                                                                                                                                           ollers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -132,7 +132,7 @@ class OrderController extends Controller
 
         // Cập nhật thông tin đơn hàng
         $order->update([
-            'user_name' => $validated['customer_name'], // Map form field 'customer_name' vào cột 'user_name'
+            'user_name' => $validated['customer_name'], 
             'created_at' => $validated['order_date'],
             'total_price' => $validated['total_price'],
             'payment_method' => $validated['payment_method'],
