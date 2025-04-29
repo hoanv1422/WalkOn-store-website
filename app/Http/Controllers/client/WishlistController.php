@@ -14,29 +14,46 @@ class WishlistController extends Controller
         $wishlistItems = Wishlist::where('user_id', Auth::id())->with('product')->get();
         return view('client.pages.wishlist.index', compact('wishlistItems'));
     }
-    
-    public function destroy($id)
-{
-    $wishlistItem = Wishlist::where('user_id', Auth::id())->where('id', $id)->first();
 
-    if (!$wishlistItem) {
-        return redirect()->route('wishlist.index')->with('error', 'Sản phẩm không tồn tại hoặc không thuộc về bạn.');
+    public function destroy(Request $request, $id)
+    {
+        $wishlistItem = Wishlist::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->first();
+
+        if (!$wishlistItem) {
+            // If AJAX request, return JSON
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'error'   => 'Sản phẩm không tồn tại hoặc không thuộc về bạn.'
+                ], 404);
+            }
+            return redirect()
+                ->route('wishlist.index')
+                ->with('error', 'Sản phẩm không tồn tại hoặc không thuộc về bạn.');
+        }
+
+        $wishlistItem->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()
+            ->route('wishlist.index')
+            ->with('success', 'Xóa sản phẩm khỏi Wishlist thành công!');
     }
 
-    $wishlistItem->delete();
 
-    return redirect()->route('wishlist.index')->with('success', 'Xóa sản phẩm khỏi Wishlist thành công!');
-}
-
-    
     public function toggle(Request $request)
     {
         if (!Auth::check()) {
             return response()->json(['error' => 'Bạn cần đăng nhập để sử dụng wishlist'], 401);
         }
-    
+
         $wishlistItem = Wishlist::where('user_id', Auth::id())->where('product_id', $request->product_id)->first();
-    
+
         if ($wishlistItem) {
             return response()->json(['redirect' => route('wishlist.index')]);
         } else {
@@ -47,7 +64,4 @@ class WishlistController extends Controller
             return response()->json(['message' => 'Đã thêm vào Wishlist']);
         }
     }
-    
-
-
 }

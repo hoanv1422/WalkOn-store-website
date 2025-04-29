@@ -43,7 +43,8 @@ class ColorController extends Controller
         }
         try {
             DB::beginTransaction();
-
+        }
+    }
     /**
      * Display the specified resource.
      */
