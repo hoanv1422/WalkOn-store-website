@@ -643,17 +643,17 @@
                                     {{ Auth::user()->name }}
                                 </span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">
-                                    {{ Auth::user()->role  }}
+                                    {{ Auth::user()->role ?? 'Admin' }}
                                 </span>
                             </span>
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome Anna!</h6>
-                        <a class="dropdown-item" href="pages-profile.html"><i
+                        <h6 class="dropdown-header">Xin chào   {{ Auth::user()->name }}</h6>
+                        <a class="dropdown-item" href="{{route('admin.profile')}}"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Profile</span></a>
+                                class="align-middle">Thông tin cá nhân</span></a>
                         <a class="dropdown-item" href="apps-chat.html"><i
                                 class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Messages</span></a>

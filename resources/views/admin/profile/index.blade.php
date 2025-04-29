@@ -14,18 +14,18 @@
             <div class="row g-4">
                 <div class="col-auto">
                     <div class="avatar-lg">
-                        <img src="assets/images/users/avatar-1.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
+                        <img src="/public/img/about/4.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
                     </div>
                 </div>
                 <!--end col-->
                 <div class="col">
                     <div class="p-2">
-                        <h3 class="text-white mb-1">Tên </h3>
-                        <p class="text-white text-opacity-75">Owner & Founder</p>
+                        <h3 class="text-white mb-1">{{ $admin->name }}</h3>
+                        <p class="text-white text-opacity-75" style="text-transform:capitalize">Vai trò: {{ $admin->role }}</p>
                         <div class="hstack text-white-50 gap-1">
-                            <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>California, United States</div>
+                            <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>{{$admin->address}}</div>
                             <div>
-                                <i class="ri-building-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>Themesbrand
+                                <i class="ri-building-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>{{$admin->email}}
                             </div>
                         </div>
                     </div>
@@ -35,14 +35,14 @@
                     <div class="row text text-white-50 text-center">
                         <div class="col-lg-6 col-4">
                             <div class="p-2">
-                                <h4 class="text-white mb-1">24.3K</h4>
-                                <p class="fs-14 mb-0">Followers</p>
+                                {{-- <h4 class="text-white mb-1">24.3K</h4>
+                                <p class="fs-14 mb-0">Followers</p> --}}
                             </div>
                         </div>
                         <div class="col-lg-6 col-4">
                             <div class="p-2">
-                                <h4 class="text-white mb-1">1.3K</h4>
-                                <p class="fs-14 mb-0">Following</p>
+                                {{-- <h4 class="text-white mb-1">1.3K</h4>
+                                <p class="fs-14 mb-0">Following</p> --}}
                             </div>
                         </div>
                     </div>
@@ -61,35 +61,35 @@
                         <ul class="nav nav-pills animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link fs-14 active" data-bs-toggle="tab" href="#overview-tab" role="tab">
-                                    <i class="ri-airplay-fill d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Overview</span>
+                                    <i class="ri-airplay-fill d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Tổng quan</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link fs-14" data-bs-toggle="tab" href="#activities" role="tab">
-                                    <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Activities</span>
+                                    <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Hoạt động</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link fs-14" data-bs-toggle="tab" href="#projects" role="tab">
-                                    <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Projects</span>
+                                    <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Dự án</span>
                                 </a>
-                            </li>
-                            <li class="nav-item">
+                            </li> --}}
+                            {{-- <li class="nav-item">
                                 <a class="nav-link fs-14" data-bs-toggle="tab" href="#documents" role="tab">
-                                    <i class="ri-folder-4-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Documents</span>
+                                    <i class="ri-folder-4-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Tài liệu</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="flex-shrink-0">
-                            <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
+                            <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Sửa hồ sơ</a>
                         </div>
                     </div>
                     <!-- Tab panes -->
                     <div class="tab-content pt-4 text-muted">
                         <div class="tab-pane active" id="overview-tab" role="tabpanel">
                             <div class="row">
-                                <div class="col-xxl-3">
-                                    <div class="card">
+                                <div class="col-xxl-12">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-5">Complete Your Profile</h5>
                                             <div class="progress animated-progress custom-progress progress-label">
@@ -98,34 +98,34 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5 class="card-title mb-3">Info</h5>
+                                            <h5 class="card-title mb-3">Thông tin</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-borderless mb-0">
                                                     <tbody>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Full Name :</th>
-                                                            <td class="text-muted">Anna Adame</td>
+                                                            <th class="ps-0" scope="row">Họ và tên :</th>
+                                                            <td class="text-muted"> {{ $admin->name }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Mobile :</th>
-                                                            <td class="text-muted">+(1) 987 6543</td>
+                                                            <th class="ps-0" scope="row">Số điện thoại:</th>
+                                                            <td class="text-muted"> {{ $admin->phone }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">E-mail :</th>
-                                                            <td class="text-muted">daveadame@velzon.com</td>
+                                                            <td class="text-muted"> {{ $admin->email }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Location :</th>
-                                                            <td class="text-muted">California, United States
+                                                            <th class="ps-0" scope="row">Địa chỉ :</th>
+                                                            <td class="text-muted"> {{ $admin->address }}
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Joining Date</th>
-                                                            <td class="text-muted">24 Nov 2021</td>
+                                                            <th class="ps-0" scope="row">Ngày tham gia</th>
+                                                            <td class="text-muted"> {{ $admin->created_at }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -133,7 +133,7 @@
                                         </div><!-- end card body -->
                                     </div><!-- end card -->
 
-                                    <div class="card">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-4">Portfolio</h5>
                                             <div class="d-flex flex-wrap gap-2">
@@ -167,9 +167,9 @@
                                                 </div>
                                             </div>
                                         </div><!-- end card body -->
-                                    </div><!-- end card -->
+                                    </div><!-- end card --> --}}
 
-                                    <div class="card">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-4">Skills</h5>
                                             <div class="d-flex flex-wrap gap-2 fs-15">
@@ -182,9 +182,9 @@
                                                 <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Python</a>
                                             </div>
                                         </div><!-- end card body -->
-                                    </div><!-- end card -->
+                                    </div><!-- end card --> --}}
 
-                                    <div class="card">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center mb-4">
                                                 <div class="flex-grow-1">
@@ -249,10 +249,10 @@
                                                 </div>
                                             </div>
                                         </div><!-- end card body -->
-                                    </div>
+                                    </div> --}}
                                     <!--end card-->
 
-                                    <div class="card">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center mb-4">
                                                 <div class="flex-grow-1">
@@ -307,11 +307,11 @@
                                             </div>
                                         </div>
                                         <!--end card-body-->
-                                    </div>
+                                    </div> --}}
                                     <!--end card-->
                                 </div>
                                 <!--end col-->
-                                <div class="col-xxl-9">
+                                {{-- <div class="col-xxl-3">
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-3">About</h5>
@@ -1170,12 +1170,12 @@
                                         <!-- end card body -->
                                     </div><!-- end card -->
 
-                                </div>
+                                </div> --}}
                                 <!--end col-->
                             </div>
                             <!--end row-->
                         </div>
-                        <div class="tab-pane fade" id="activities" role="tabpanel">
+                        {{-- <div class="tab-pane fade" id="activities" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">Activities</h5>
@@ -2112,7 +2112,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end tab-pane-->
                     </div>
                     <!--end tab-content-->
