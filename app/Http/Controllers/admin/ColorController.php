@@ -41,9 +41,9 @@ class ColorController extends Controller
         if ($existingColor) {
             return back()->with('error', 'Mã màu đã tồn tại.');
         }
-        try {
-            DB::beginTransaction();
-
+        // try {
+        //     DB::beginTransaction();
+    }
     /**
      * Display the specified resource.
      */
