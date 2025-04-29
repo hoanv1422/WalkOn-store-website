@@ -10,7 +10,7 @@
                     <div class="login-form-container">
                         <div class="login-text">
                             <h2>Đặt lại mật khẩu</h2>
-                            <span>Bạn hãy nhập mật khẩu mới và xác nhận mật khẩu vừa nhập </span>
+                            <span>Bạn hãy nhập mật khẩu mới và xác nhận mật khẩu mới vừa nhập </span>
                         </div>
                         <div class="login-form">
                             <form action="{{ route('password.update') }}" method="POST">
@@ -29,7 +29,7 @@
                                     </span>
                                 </div>
                                 <div class="password-wrapper">
-                                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu" required>
+                                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Xác nhận mật khẩu mới" required>
                                     <span class="toggle-password" onclick="togglePassword('password_confirmation')">
                                         <i class="fa fa-eye" style="margin-bottom:25px"></i>
                                     </span>

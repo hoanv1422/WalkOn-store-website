@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Order extends Model 
 {
-    use HasFactory;
-
+   
     protected $fillable = [
         'user_id',
         'order_code',
@@ -29,14 +28,30 @@ class Order extends Model
         'order_status',
         'payment_status',
         'payment_method',
+        'cart_item_ids',
         'payment_date',
         'delivered_at',
         'tracking_code',
     ];
-
+    const ORDER_STATUS_MAPPING = [
+        'pending'    => 'Chờ xử lý',
+        'confirmed'  => 'Đã xác nhận',
+        'processing' => 'Đang xử lý',
+        'ready'      => 'Đã chuẩn bị xong',
+        'shipped'    => 'Đang giao',
+        'delivered'  => 'Đã giao',
+        'cancelled'  => 'Đã hủy',
+        'returned'   => 'Hoàn hàng',
+        'completed'  => 'Hoàn tất trả hàng',
+    ];
     /**
      * Get the user that owns the order.
      */
+    public function getRouteKeyName()
+    {
+        return 'order_code';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

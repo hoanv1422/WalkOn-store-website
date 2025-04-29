@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 
 class SizeController extends Controller
 {
+    const PATH_VIEW = 'admin.sizes.';
     /**
      * Display a listing of the resource.
      */

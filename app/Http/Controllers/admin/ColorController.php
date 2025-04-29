@@ -9,8 +9,27 @@ use App\Http\Requests\UpdateColorRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ColorController extends Controller
+
+class ColorController extends Controller 
 {
+    const PATH_VIEW = 'admin.colors.';
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
+        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view(self::PATH_VIEW.__FUNCTION__);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -25,15 +44,20 @@ class ColorController extends Controller
         try {
             DB::beginTransaction();
 
-            Color::query()->create($data);
+    /**
+     * Display the specified resource.
+     */
+    public function show(Color $color)
+    {
+        
+    }
 
-            DB::Commit();
-            return redirect()->route('attributes.index')->with('success', 'Thêm màu sắc thành công');
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            dd($exception);
-            return back()->with('error', 'Có lỗi khi thêm');
-        }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Color $color)
+    {
+        return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
     }
 
     /**

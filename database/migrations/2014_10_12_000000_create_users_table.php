@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('avatar')->nullable()->comment('Ảnh đại diện');
             $table->string('phone')->nullable()->comment('Số điện thoại');
             $table->timestamp('email_verified_at')->nullable()->comment('Thời gian xác nhận email');
-            $table->string('role')->comment('Vai trò');
+            $table->enum('role', ['admin', 'user', 'shipper']);
             $table->boolean('is_active')->default(true)->comment('Trạng thái');
             $table->timestamps();
         });

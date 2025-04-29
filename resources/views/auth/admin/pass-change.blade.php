@@ -31,51 +31,33 @@
                             </div>
 
                             <div class="p-2">
-                                <form action="https://themesbrand.com/velzon/html/master/auth-signin-basic.html">
+                                <form id="change-password-admin-form" action="{{ route('api.change.password.admin') }}"
+                                    method="POST">
+                                    @csrf
                                     <div class="mb-3">
                                         <label class="form-label" for="password-input">Mật Khẩu</label>
                                         <div class="position-relative auth-pass-inputgroup">
                                             <input type="password" class="form-control pe-5 password-input"
-                                                onpaste="return false" placeholder="Nhập mật khẩu" id="password-input"
-                                                aria-describedby="passwordInput"
-                                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                placeholder="Nhập mật khẩu" id="new-password-admin">
                                             <button
                                                 class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none"
                                                 type="button" id="password-addon"><i
                                                     class="ri-eye-fill align-middle"></i></button>
                                         </div>
-                                        <div id="passwordInput" class="form-text">Phải có ít nhất 8 ký tự.</div>
+                                        <div id="passwordInput" class="form-text">Mật khẩu phải có ít nhất 8 ký tự, tối đa
+                                            20 ký tự, bao gồm chữ hoa, số và ký tự đặc biệt.</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label" for="confirm-password-input">Xác Nhận Mật Khẩu</label>
                                         <div class="position-relative auth-pass-inputgroup mb-3">
                                             <input type="password" class="form-control pe-5 password-input"
-                                                onpaste="return false" placeholder="Xác nhận mật khẩu"
-                                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" id="confirm-password-input"
-                                                required>
+                                                placeholder="Xác nhận mật khẩu" id="confirm-password-admin">
                                             <button
                                                 class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none"
-                                                type="button" id="confirm-password-input"><i
-                                                    class="ri-eye-fill align-middle"></i></button>
+                                                type="button"><i class="ri-eye-fill align-middle"></i></button>
                                         </div>
                                     </div>
-
-                                    <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                        <h5 class="fs-13">Password must contain:</h5>
-                                        <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                        <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                        <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)
-                                        </p>
-                                        <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="auth-remember-check">
-                                        <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
-                                    </div>
-
                                     <div class="mt-4">
                                         <button class="btn btn-success w-100" type="submit">Tạo Mới Mật Khẩu</button>
                                     </div>
@@ -88,7 +70,7 @@
                     <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Đợi đã, tôi nhớ mật khẩu của mình... <a href="auth-signin-basic.html"
+                        <p class="mb-0">Đợi đã, tôi nhớ mật khẩu của mình... <a href="{{ route('admin.login.index') }}"
                                 class="fw-semibold text-primary text-decoration-underline"> Nhấn vào đây </a> </p>
                     </div>
 
@@ -99,4 +81,90 @@
         <!-- end container -->
     </div>
     <!-- end auth page content -->
+@endsection
+
+@section('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const message = sessionStorage.getItem('message');
+            const color = sessionStorage.getItem('messageColor');
+            if (message && color) {
+                showMessage(message, color);
+                // Xóa thông báo sau khi hiển thị để tránh hiển thị lại khi tải lại trang
+                sessionStorage.removeItem('message');
+                sessionStorage.removeItem('messageColor');
+            }
+
+            const changePasswordForm = document.getElementById('change-password-admin-form');
+            const newPassword = document.getElementById('new-password-admin');
+            const confirmPassword = document.getElementById('confirm-password-admin');
+            const token1 = '{{ $token }}';
+
+            changePasswordForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                clearAllErrors();
+                const submitButton = changePasswordForm.querySelector('button[type="submit"]');
+
+                try {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Đang xử lý...';
+                    const response = await fetch('/admin/api/change-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            token: token1,
+                            password: newPassword.value,
+                            password_confirmation: confirmPassword.value
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        sessionStorage.setItem('message', 'Đổi mật khẩu thành công. Hãy đăng nhập!');
+                        sessionStorage.setItem('messageColor', '#4CAF50');
+                        window.location.href = '/admin/login';
+                    } else if (response.status === 422) {
+                        if (data.errors) {
+                            if (data.errors.password) {
+                                showError('new-password-admin', data.errors.password[0]);
+                            }
+                        }
+                    } else {
+                        alert(data.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Tạo Mới Mật Khẩu';
+                }
+            });
+
+            function showError(fieldId, errorMessage) {
+                const field = document.getElementById(fieldId);
+                if (!field) return;
+
+                // Thêm class is-invalid cho input
+                // Tạo phần tử thông báo lỗi
+                const errorDiv = document.createElement('span');
+                errorDiv.className = 'invalid-feedback d-block';
+                errorDiv.textContent = errorMessage;
+
+                // Thêm thông báo lỗi vào sau input (hoặc input-group nếu có)
+                const parentElement = field.closest('.input-group') || field;
+                parentElement.parentNode.appendChild(errorDiv);
+            }
+
+            function clearAllErrors() {
+                const errorElements = document.querySelectorAll('.invalid-feedback');
+                errorElements.forEach(element => element.remove());
+            }
+        });
+    </script>
 @endsection

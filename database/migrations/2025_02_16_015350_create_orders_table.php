@@ -28,19 +28,20 @@ return new class extends Migration
             $table->string('note')->nullable();
             $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
             $table->string('coupon')->nullable();
-            $table->decimal('total_price', 15, 2);            
+            $table->decimal('total_price', 15, 2);
             $table->decimal('discount_amount', 15, 2)->default(0);
             $table->decimal('shipping_fee', 15, 2)->default(0);
             $table->decimal('final_price', 15, 2);
 
-            $table->enum('order_status', ['pending', 'confirmed' ,'processing', 'shipped', 'delivered', 'cancelled', 'returned'])->default('pending');
+            $table->enum('order_status', ['pending', 'confirmed', 'processing',   'ready',  'shipped', 'delivered', 'cancelled', 'returned', 'completed'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
+            $table->json('cart_item_ids')->nullable();
             
             $table->timestamp('payment_date')->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->string('tracking_code')->nullable();
-            
+
             $table->timestamps();
         });
     }

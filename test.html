@@ -1,50 +1,339 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xác nhận đơn hàng</title>
+    <title>Chọn Địa Chỉ Giao Hàng</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        
+        .address-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .address-item:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .address-item.selected {
+            border-color: #3498db;
+            background: #eef5ff;
+        }
+
+        .address-content {
+            flex: 1;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .address-actions button {
+            padding: 4px 12px;
+            font-size: 0.85rem;
+        }
+        
+        .modal-header-1 {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        
+        .btn-close {
+            background-color: transparent;
+            border: none;
+            opacity: 0.7;
+            transition: opacity 0.2s ease-in-out;
+        }
+        
+        .btn-close:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; max-width: 600px; margin: auto; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <tr>
-            <td style="background-color: #4a6fa5; padding: 20px; text-align: center; color: white; font-size: 24px; font-weight: bold;">
-                <img src="LOGO_URL" alt="Logo cửa hàng" style="max-width: 150px; display: block; margin: 0 auto 10px;">
-                Xác nhận đơn hàng
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 30px 20px;">
-                <p style="color: #333333; margin-top: 0;">Chào quý khách,</p>
-                <p style="color: #333333;">Cảm ơn bạn đã đặt hàng! Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="5" border="0" style="border-collapse: collapse; text-align: left; width: 100%; margin: 20px 0; border-radius: 6px; overflow: hidden;">
-                    <tr>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px; border-top-left-radius: 6px;">Sản phẩm</th>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px;">Số lượng</th>
-                        <th style="background-color: #4a6fa5; color: white; padding: 12px; border-top-right-radius: 6px;">Giá</th>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0;">Tên sản phẩm</td>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0; text-align: center;">1</td>
-                        <td style="padding: 12px; background-color: #f2f6fc; border-bottom: 1px solid #e1e8f0; text-align: right;">99.99$</td>
-                    </tr>
-                </table>
-                <p style="margin-top: 20px; color: #333333; font-size: 18px; text-align: right;"><strong>Tổng cộng: <span style="color: #4a6fa5;">99.99$</span></strong></p>
-                <div style="background-color: #f2f6fc; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                    <p style="margin-top: 0; color: #333333;"><strong>Đơn hàng của bạn sẽ được giao đến:</strong></p>
-                    <p style="margin-bottom: 0; color: #555555;"><strong>John Doe</strong><br>123 Đường Chính, Thành phố, Quốc gia</p>
+<body>
+    <!-- Button to trigger modal -->
+    <div class="container">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
+            Chọn Địa Chỉ Giao Hàng
+        </button>
+    </div>
+    
+    <!-- Address Modal -->
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-1">
+                    <h5 class="modal-title" id="addressModalLabel">Chọn Địa Chỉ Giao Hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <p style="color: #333333;">Chúng tôi rất trân trọng sự ủng hộ của bạn và mong được phục vụ bạn trong tương lai!</p>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="#" style="background-color: #4a6fa5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Theo dõi đơn hàng</a>
+                <div class="modal-body">
+                    <div class="address-list" id="address-list">
+                        <!-- Address 1 -->
+                        <div class="address-item" data-address="123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM" 
+                             data-lat="10.7756587" data-lon="106.7004238"
+                             onclick="selectAddress(this)">
+                            <div class="address-content">
+                                <strong>Nhà Riêng</strong><br>
+                                <span>123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM</span>
+                            </div>
+                            <div class="address-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-btn" onclick="editAddress(this.parentNode.parentNode, event)">Sửa</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" onclick="deleteAddress(this.parentNode.parentNode, event)">Xóa</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Address 2 -->
+                        <div class="address-item" data-address="456 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM" 
+                             data-lat="10.7738504" data-lon="106.7032936"
+                             onclick="selectAddress(this)">
+                            <div class="address-content">
+                                <strong>Công Ty</strong><br>
+                                <span>456 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM</span>
+                            </div>
+                            <div class="address-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-btn" onclick="editAddress(this.parentNode.parentNode, event)">Sửa</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" onclick="deleteAddress(this.parentNode.parentNode, event)">Xóa</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Address 3 -->
+                        <div class="address-item" data-address="789 Đường Võ Văn Tần, Phường 6, Quận 3, TP.HCM" 
+                             data-lat="10.7788395" data-lon="106.6899898"
+                             onclick="selectAddress(this)">
+                            <div class="address-content">
+                                <strong>Văn Phòng</strong><br>
+                                <span>789 Đường Võ Văn Tần, Phường 6, Quận 3, TP.HCM</span>
+                            </div>
+                            <div class="address-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-btn" onclick="editAddress(this.parentNode.parentNode, event)">Sửa</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" onclick="deleteAddress(this.parentNode.parentNode, event)">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td style="background-color: #4a6fa5; padding: 15px; text-align: center; color: white;">
-                &copy; 2025 Công ty của bạn. Mọi quyền được bảo lưu.
-            </td>
-        </tr>
-    </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" 
+                            data-bs-target="#addAddressModal" onclick="hideAddressModal()">Thêm mới</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmAddress()">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Address Modal (placeholder) -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-1">
+                    <h5 class="modal-title" id="addAddressModalLabel">Thêm Địa Chỉ Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAddressForm">
+                        <div class="mb-3">
+                            <label for="addressType" class="form-label">Loại địa chỉ</label>
+                            <select class="form-select" id="addressType" required>
+                                <option value="">Chọn loại địa chỉ</option>
+                                <option value="Nhà Riêng">Nhà Riêng</option>
+                                <option value="Công Ty">Công Ty</option>
+                                <option value="Văn Phòng">Văn Phòng</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullAddress" class="form-label">Địa chỉ đầy đủ</label>
+                            <textarea class="form-control" id="fullAddress" rows="3" required></textarea>
+                        </div>
+                        <!-- Hidden fields for coordinates -->
+                        <input type="hidden" id="latitude" value="">
+                        <input type="hidden" id="longitude" value="">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAddress()">Lưu địa chỉ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let addressModal, addAddressModal;
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get modal instances
+            addressModal = new bootstrap.Modal(document.getElementById('addressModal'));
+            addAddressModal = new bootstrap.Modal(document.getElementById('addAddressModal'));
+        });
+        
+        // Function to select an address
+        function selectAddress(element) {
+            // Remove 'selected' class from all address items
+            document.querySelectorAll('.address-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add 'selected' class to the clicked item
+            element.classList.add('selected');
+            
+            // Store selected address data for later use
+            const selectedAddress = element.dataset.address;
+            const selectedLat = element.dataset.lat;
+            const selectedLon = element.dataset.lon;
+            
+            console.log("Address selected:", selectedAddress);
+        }
+        
+        // Function to edit an address
+        function editAddress(addressElement, event) {
+            // Prevent the address selection when clicking the edit button
+            event.stopPropagation();
+            
+            // Get address data from the element's data attributes
+            const address = addressElement.dataset.address;
+            const lat = addressElement.dataset.lat;
+            const lon = addressElement.dataset.lon;
+            
+            // For demo purposes, just log the action
+            console.log("Editing address:", address);
+            alert("Đang chỉnh sửa địa chỉ: " + address);
+            
+            // In a real application, you would show a form to edit the address
+            // For example:
+            // document.getElementById('fullAddress').value = address;
+            // document.getElementById('latitude').value = lat;
+            // document.getElementById('longitude').value = lon;
+            // addAddressModal.show();
+            // addressModal.hide();
+        }
+        
+        // Function to delete an address
+        function deleteAddress(addressElement, event) {
+            // Prevent the address selection when clicking the delete button
+            event.stopPropagation();
+            
+            // Get the address for confirmation message
+            const address = addressElement.dataset.address;
+            
+            // Show confirmation dialog
+            if (confirm("Bạn có chắc chắn muốn xóa địa chỉ này không?")) {
+                // In a real application, you would send an AJAX request to delete from server
+                // For demo purposes, just remove from DOM
+                addressElement.remove();
+                console.log("Address deleted:", address);
+            }
+        }
+        
+        // Function to confirm address selection
+        function confirmAddress() {
+            const selectedItem = document.querySelector('.address-item.selected');
+            
+            if (!selectedItem) {
+                alert("Vui lòng chọn một địa chỉ giao hàng");
+                return;
+            }
+            
+            // Get selected address data
+            const address = selectedItem.dataset.address;
+            
+            // In a real application, you would use this address for checkout
+            alert("Đã chọn địa chỉ: " + address);
+            
+            // Close the modal
+            addressModal.hide();
+        }
+        
+        // Function to hide address modal when opening add address modal
+        function hideAddressModal() {
+            // addressModal.hide() is handled by Bootstrap's data-bs-toggle
+        }
+        
+        // Function to save a new address
+        function saveAddress() {
+            const addressType = document.getElementById('addressType').value;
+            const fullAddress = document.getElementById('fullAddress').value;
+            
+            // Validate form
+            if (!addressType || !fullAddress) {
+                alert("Vui lòng điền đầy đủ thông tin");
+                return;
+            }
+            
+            // In a real application, you would send an AJAX request to save to server
+            // For demo purposes, just add to DOM
+            const addressList = document.getElementById('address-list');
+            
+            // Create new address item with random coordinates
+            const lat = 10.77 + Math.random() * 0.02;
+            const lon = 106.69 + Math.random() * 0.02;
+            
+            const newAddressItem = `
+            <div class="address-item" data-address="${fullAddress}" 
+                 data-lat="${lat}" data-lon="${lon}"
+                 onclick="selectAddress(this)">
+                <div class="address-content">
+                    <strong>${addressType}</strong><br>
+                    <span>${fullAddress}</span>
+                </div>
+                <div class="address-actions">
+                    <button type="button" class="btn btn-sm btn-outline-primary edit-btn" onclick="editAddress(this.parentNode.parentNode, event)">Sửa</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn" onclick="deleteAddress(this.parentNode.parentNode, event)">Xóa</button>
+                </div>
+            </div>
+            `;
+            
+            addressList.insertAdjacentHTML('beforeend', newAddressItem);
+            
+            // Reset form and close modal
+            document.getElementById('addAddressForm').reset();
+            addAddressModal.hide();
+            addressModal.show();
+            
+            console.log("New address saved:", fullAddress);
+        }
+    </script>
 </body>
 </html>

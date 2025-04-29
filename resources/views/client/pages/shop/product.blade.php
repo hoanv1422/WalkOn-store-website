@@ -232,14 +232,14 @@
                                     <!-- Chọn màu sắc -->
                                     <label class="form-label fw-medium">Màu sắc:</label>
                                     <input type="hidden" id="color-for-cart" name="color" value="">
-                                    <div class="d-flex gap-3 mb-3" id="color-options">
+                                    <div class="d-flex flex-wrap gap-3 mb-3" id="color-options">
 
                                     </div>
 
                                     <!-- Chọn kích cỡ -->
                                     <label class="form-label fw-medium">Kích cỡ:</label>
                                     <input type="hidden" id="size-for-cart" name="size" value="">
-                                    <div class="d-flex gap-3" id="size-options">
+                                    <div class="d-flex flex-wrap gap-3" id="size-options">
 
                                     </div>
                                 </div>
@@ -473,7 +473,6 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                console.log('Thành công:', data);
                                 document.getElementById('product-id-modal').value = data.data
                                     .id;
                                 document.getElementById('product-name-modal').textContent = data
@@ -508,7 +507,7 @@
                                 data.data.colors.forEach((color, index) => {
                                     const active = index === 0 ? 'active' : '';
                                     colorOptions.innerHTML += `
-                            <button type="button" name="color" class="btn btn-outline-secondary color-btn" data-value="${color.id}" value="${color.id}">${color.color}</button>
+                            <button type="button" name="color" style="background-color: ${color.code};" class=" color-btn" data-value="${color.id}" value="${color.id}"></button>
                         `;
                                 });
 

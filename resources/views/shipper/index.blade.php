@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('shipper.layouts.app')
 @section('title', 'Giao Hàng')
 @section('content')
 <style>
@@ -338,8 +338,7 @@
                   <p>SĐT: {{ $order_delivered->receiver_phone }}</p>
                   <p>Giá: {{ number_format($order_delivered->final_price, 0, ',', '.') }} VND</p>
                   <p style="color: #007bff;font-size:18px">Đã giao</p>
-                
-                
+                  
               </div>
           </div>
           @endforeach

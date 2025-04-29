@@ -102,6 +102,26 @@
         margin-bottom: 0.3rem;
         color: #555;
     }
+
+    .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            margin: 4px;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.2s ease;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            border-color: #999;
+        }
+
+        .color-btn.active {
+            border: 2px solid #000;
+        }
 </style>
 
 

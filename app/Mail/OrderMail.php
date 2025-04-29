@@ -16,13 +16,19 @@ class OrderMail extends Mailable
     /**
      * Create a new message instance.
      */
+    public $order;
+    public $orderItems;
+    public $username;
+    public $token;
 
 
 
-
-    public function __construct()
+    public function __construct($order, $orderItems, $username, $token)
     {
-
+        $this->order = $order;
+        $this->orderItems = $orderItems;
+        $this->username = $username;
+        $this->token = $token;
     }
 
     /**
@@ -41,9 +47,14 @@ class OrderMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.OrderMail',
-            // with: [
-            // ]
+            view: 'mail.orderMail',
+            with: [
+                'order' => $this->order,
+                'orderItems' => $this->orderItems,
+                'username' => $this->username,
+                'token' => $this->token
+                
+            ]
         );
     }
 

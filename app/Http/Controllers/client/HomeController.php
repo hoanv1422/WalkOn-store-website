@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Client\DetailController;
+use App\Models\Banner;
 use App\Models\Product;
 use App\Models\Brand;
 use Carbon\Carbon;
@@ -43,7 +44,7 @@ class HomeController extends Controller
         });
 
         // 1. Lấy top 20 sản phẩm mới nhất (trong 7 ngày gần nhất)
-        $newProducts = Product::where('created_at', '>=', Carbon::now()->subWeek())
+        $newProducts = Product::where('created_at', '>=', Carbon::now()->subYear())
             ->orderByDesc('created_at')
             ->take(20)
             ->get();
@@ -60,9 +61,9 @@ class HomeController extends Controller
             ->orderByDesc('average_rating')
             ->take(20)
             ->get();
+        $banners = Banner::orderBy('position')->get();
 
-
-        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts'));
+        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts', 'banners'));
     }
 
     public function getProductById(Request $request)
