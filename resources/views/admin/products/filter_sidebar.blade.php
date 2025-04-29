@@ -221,16 +221,16 @@
         {{-- SIZE --}}
         <div class="card-body border-bottom">
             <div>
-                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Màu Sắc</p>
                 <ul class="list-unstyled mb-0 filter-list">
-                    @foreach ($categories as $category)
+                    @foreach ($colors as $colors)
                         <li>
                             <div class="form-check">
                                 <input class="form-check-input category-filter" type="checkbox"
-                                    value="{{ $category->id }}" id="category-{{ $category->id }}">
-                                <label class="form-check-label" for="category-{{ $category->id }}">
-                                    {{ $category->name }}
-                                    <span class="badge bg-light text-muted ms-2">{{ $category->products_count }}</span>
+                                    value="{{ $colors->id }}" id="colors-{{ $colors->id }}">
+                                <label class="form-check-label" for="colors-{{ $colors->id }}">
+                                    {{ $colors->color }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $colors->products_count }}</span>
                                 </label>
                             </div>
                         </li>
@@ -241,16 +241,16 @@
         {{-- COLOR --}}
         <div class="card-body border-bottom">
             <div>
-                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Size </p>
                 <ul class="list-unstyled mb-0 filter-list">
-                    @foreach ($categories as $category)
+                    @foreach ($sizes as $sizes)
                         <li>
                             <div class="form-check">
                                 <input class="form-check-input category-filter" type="checkbox"
-                                    value="{{ $category->id }}" id="category-{{ $category->id }}">
-                                <label class="form-check-label" for="category-{{ $category->id }}">
-                                    {{ $category->name }}
-                                    <span class="badge bg-light text-muted ms-2">{{ $category->products_count }}</span>
+                                    value="{{ $sizes->id }}" id="sizes-{{ $sizes->id }}">
+                                <label class="form-check-label" for="sizes-{{ $sizes->id }}">
+                                    {{ $sizes->size }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $sizes->products_count }}</span>
                                 </label>
                             </div>
                         </li>
