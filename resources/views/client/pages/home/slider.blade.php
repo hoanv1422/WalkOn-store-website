@@ -2,8 +2,14 @@
         <div class="slider-area home1">
             <div class="bend niceties preview-2">
                 <div id="nivoslider" class="slides">
-                    <img src="img/slider/slider-1.jpg" alt="" title="#slider-direction-1" />
-                    <img src="img/slider/slider-2.jpg" alt="" title="#slider-direction-2" />
+                    @foreach ($banners as $banner)
+                    @if ($banner->position == 10)
+                    <img src="{{ asset('storage/' . $banner->image_url) }}" alt="slider-10" title="#slider-direction-1" />
+                        
+                    @elseif ($banner->position == 11)
+                    <img src="{{ asset('storage/' . $banner->image_url) }}" alt="slider-11" title="#slider-direction-2" />
+                    @endif
+                    @endforeach
                 </div>
                 <!-- direction 1 -->
                 <div id="slider-direction-1" class="t-cn slider-direction">

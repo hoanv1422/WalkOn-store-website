@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\shipper\ShipperController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ShipperController;
 
-Route::middleware(['auth', 'shipper'])->group(function () {});
-//Attempt to read property "headers" on null , cho vào middleware bị vậy
+Route::middleware('shipper')->group(function () {
+    // Route::resource('shippers', ShipperController::class);
+    Route::get('shippers', [ShipperController::class, 'index'])->name('shippers.index');
+    Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
+});
 
-Route::get('/shipper', [ShipperController::class, 'index'])->name('shipper.dashboard');
-Route::post('/shipper/logout', [ShipperController::class, 'logout'])->name('shipper.logout');
+

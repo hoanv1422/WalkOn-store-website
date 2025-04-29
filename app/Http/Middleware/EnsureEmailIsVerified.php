@@ -11,15 +11,13 @@ class EnsureEmailIsVerified
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login');
+        if (!$user) { 
+            return redirect()->route('login.form');
         }
 
-        if (!$user->hasVerifiedEmail() && !$request->routeIs('verification.notice')) {
-            return redirect()->route('verification.notice');
-        }
-        if ($user->hasVerifiedEmail() && $request->routeIs('verification.notice')) {
-            return redirect('/');
+
+        if (!$user || !$user->is_verified) {
+            return back()->with('verify', true);
         }
         return $next($request);
     }

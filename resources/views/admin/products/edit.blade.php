@@ -126,7 +126,12 @@
                                                             <div class="pt-1">
                                                                 <h5 class="fs-14 mb-1">{{ basename($item->image) }}</h5>
                                                                 <p class="fs-13 text-muted mb-0">
-                                                                    {{ round(Storage::size($item->image) / 1024, 2) }} KB
+                                                                    @if ($item->image && Storage::url($item->image))
+                                                                        {{-- {{ round(Storage::size($item->image) / 1024, 2) }} --}}
+                                                                        KB
+                                                                    @else
+                                                                        0 KB   
+                                                                    @endif
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -296,7 +301,7 @@
                                                         ? $product_variants->count()
                                                         : array_key_last($productVariants);
                                                 @endphp
-                                                <input type="hidden" id="lastIndex" value="{{ $lastIndex - 1}}">
+                                                <input type="hidden" id="lastIndex" value="{{ $lastIndex - 1 }}">
                                                 @if (old('product_variant'))
                                                     @foreach ($productVariants as $index => $product_variant)
                                                         <tr class="variant">

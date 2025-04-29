@@ -29,4 +29,8 @@ class Post extends Model
     {
         return $this->hasMany(PostComments::class, 'post_id');
     }
+    public function images()
+    {
+        return $this->hasMany(PostImage::class);
+    }
 }

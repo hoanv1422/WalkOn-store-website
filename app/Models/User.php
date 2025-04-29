@@ -27,7 +27,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'avatar',
         'phone',
-        'address',
         'email_verified_at',
         'role',
         'is_active',
@@ -60,5 +59,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
     }
 }

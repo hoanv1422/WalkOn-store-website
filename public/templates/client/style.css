@@ -967,8 +967,8 @@ body {
     position: relative;
     margin-top: 30px;
 }
-.level-pro-new , .level-pro-sale {
-    background-color: #5eb4c1;
+.level-pro-new , .level-pro-sale, .level-pro-hot {
+    background-color: #52C41A;
     color: #fff;
     font-family: "Montserrat",sans-serif;
     min-width: 78px;
@@ -980,9 +980,17 @@ body {
     top: 0;
     z-index: 5;
 }
+
+
+
 .level-pro-sale {
-    background-color: #333333;
+    background-color: #FF4D4F;
 }
+
+.level-pro-hot {
+    background-color: #FA8C16;
+}
+
 .product-img a {
     display: block;
     position: relative;
@@ -1185,7 +1193,7 @@ body {
     color: #fff;
     float: left;
     height: 35px;
-    padding: 0px 20px;
+    padding: 0px 10px;
     transition: all 0.3s ease 0s;
 }
 .sell-area.home2 .single-product button.cart-btn {
@@ -1207,7 +1215,7 @@ body {
     height: 35px;
     line-height: 35px;
     position: relative;
-    width: 35px;
+    width: 60px;
     z-index: 1;
 }
 .home2 .single-product .add-to-link li a::after {
@@ -1222,6 +1230,12 @@ body {
     width: 100%;
     z-index: -1;
 }
+
+.home2 .single-product .add-to-link li.active a {
+    background-color: #E03550;
+}
+
+
 .home2 .single-product .add-to-link li a:hover:after {
     transform: translate3d(0px, 0px, 0px);
 }
@@ -2188,6 +2202,42 @@ ul.address li span {
 .toolbar-bottom ul li.current a {
     background-color: #333;
     color: #fff;
+}
+
+.pagination-container {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    margin-top     : 20px;
+    gap            : 5px;
+}
+
+.pagination-container button {
+    background-color: #f8f9fa;
+    border          : 1px solid #ddd;
+    padding         : 8px 12px;
+    cursor          : pointer;
+    font-size       : 14px;
+    transition      : 0.3s;
+    border-radius   : 5px;
+}
+
+.pagination-container button:hover {
+    background-color: #007bff;
+    color           : white;
+}
+
+.pagination-container button.active {
+    background-color: #007bff;
+    color           : white;
+    font-weight     : bold;
+    border-color    : #007bff;
+}
+
+.pagination-container button:disabled {
+    background-color: #ddd;
+    color           : #888;
+    cursor          : not-allowed;
 }
 
 /*----------------------------------------*/
@@ -3327,7 +3377,7 @@ button.check-button:hover,
     background: #ffffff none repeat scroll 0 0;
     border-radius: 3px;
     color: #666666;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 14px;
     height: 40px;
     padding-left: 10px;
