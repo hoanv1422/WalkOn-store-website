@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderStatusChanged;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Product;
@@ -185,6 +186,10 @@ class OrderController extends Controller
     
         // Cập nhật trạng thái đơn hàng
         $order->update(['order_status' => $newStatus]);
+
+        event(new OrderStatusChanged($order));
+
+        
     
         return $request->ajax()
             ? response()->json(['success' => 'Đơn hàng đã được cập nhật thành công.'])

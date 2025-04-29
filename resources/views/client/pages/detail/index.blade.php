@@ -241,7 +241,7 @@
     @include('client.pages.detail.product-tab')
     @include('client.pages.detail.upsell-product')
     @include('client.pages.detail.related-product')
-  
+
 @endsection
 
 @section('script')
@@ -705,6 +705,20 @@
             } else {
                 loadDummyData();
             }
+
+            fetchComments(slug);
+
+            const ratingSelect = document.getElementById('rating');
+            if (ratingSelect) {
+                ratingSelect.addEventListener('change', () => {
+                    const selectedRating = ratingSelect.value;
+                    fetchComments(slug, selectedRating);
+                });
+            }
+            const form = document.getElementById('comment-form');
+            form.addEventListener('submit', function(event) {
+                storeComment(event, slug);
+            });
         });
 
 
@@ -832,37 +846,6 @@
             }
         }
 
-        // For demo purposes - create dummy data if API is not available
-        // function loadDummyData() {
-        //     const relatedProductsDisplay = document.getElementById('related-products');
-        //     relatedProductsDisplay.innerHTML = '';
-
-        //     // Generate 8 dummy products
-        //     for (let i = 0; i < 8; i++) {
-        //         relatedProductsDisplay.innerHTML += `
-    //             <div class="single-product">
-    //                 <div class="product-img">
-    //                     <a href="single-product.html">
-    //                         <img src="/api/placeholder/250/200" alt="" class="primary-img">
-    //                         <img src="/api/placeholder/250/200" alt="" class="secondary-img">
-    //                     </a>
-    //                 </div>
-    //                 <div class="product-price">
-    //                     <div class="product-name">
-    //                         <a href="single-product.html" title="Product ${i+1}">Product ${i+1}</a>
-    //                     </div>
-    //                     <div class="price-rating">
-    //                         <span>$${(150 + i * 10).toFixed(2)}</span>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         `;
-        //     }
-
-        //     // Initialize slider after loading dummy data
-        //     initSlider();
-        // }
-
         function initSlider(containerSelector) {
             const container = document.querySelector(containerSelector);
             if (!container) return;
@@ -939,6 +922,307 @@
                 goToSlide(slideIndex);
                 updateActiveDot(slideIndex);
             });
+        }
+
+
+        function fetchComments(slug, star) {
+            // Construct the API URL
+            let url = `/api/products/${slug}/comments`;
+
+            // Add rating parameter if star is provided
+            if (star !== undefined && star !== null && star !== '') {
+                url += `?rating=${star}`;
+            }
+
+            // Show loading state
+            const commentsContainer = document.getElementById('comments-container');
+            if (commentsContainer) {
+                commentsContainer.innerHTML = `
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
+            </div>
+            <p class="text-center mt-2">Đang tải bình luận...</p>
+            `;
+            }
+
+            // Fetch comments from API
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the response
+                    if (data.success) {
+                        displayComments(data.data);
+                        updateAverageRating(data.data);
+                        return data.data;
+                    } else {
+                        // If no comments but success is false
+                        if (commentsContainer) {
+                            commentsContainer.innerHTML = `
+                        <div class="alert alert-info text-center" role="alert">
+                            ${data.message || 'Không có bình luận nào.'}
+                        </div>
+                    `;
+                        }
+                        // Reset average rating display
+                        updateAverageRating([]);
+                        return [];
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching comments:', error);
+                    if (commentsContainer) {
+                        commentsContainer.innerHTML = `
+                    <div class="alert alert-danger text-center" role="alert">
+                        <i class="fa fa-exclamation-circle me-2"></i>
+                        Có lỗi xảy ra khi tải bình luận.
+                    </div>
+                `;
+                    }
+                    return [];
+                });
+        }
+
+        function updateAverageRating(comments) {
+            const avgRatingElement = document.querySelector('.avg_rating');
+            if (!avgRatingElement) return;
+
+            if (!comments || comments.length === 0) {
+                avgRatingElement.innerHTML =
+                    '<span class="badge bg-secondary">Đánh giá trung bình: <i class="fa fa-star"></i> 0</span>';
+                return;
+            }
+
+            // Calculate average rating
+            const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+            const avgRating = (totalRating / comments.length).toFixed(1);
+
+            // Determine badge color based on rating
+            let badgeClass = 'bg-warning text-dark';
+            if (avgRating >= 4.5) badgeClass = 'bg-success';
+            else if (avgRating >= 3.5) badgeClass = 'bg-primary';
+            else if (avgRating >= 2.5) badgeClass = 'bg-info text-dark';
+            else if (avgRating >= 1.5) badgeClass = 'bg-warning text-dark';
+            else badgeClass = 'bg-danger';
+
+            // Update the average rating display with Bootstrap badge
+            avgRatingElement.innerHTML =
+                `<span class="badge ${badgeClass}">Đánh giá trung bình: <i class="fa fa-star"></i> ${avgRating}</span>`;
+        }
+
+        function displayComments(comments) {
+            const commentsContainer = document.getElementById('comments-container');
+            if (!commentsContainer) return;
+
+            if (!comments || comments.length === 0) {
+                commentsContainer.innerHTML = '<p class="text-center">Không có bình luận nào.</p>';
+                return;
+            }
+
+            // Clear previous comments
+            commentsContainer.innerHTML = '';
+
+            // Loop through comments and create HTML elements
+            comments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'card mb-3';
+
+                // Generate stars based on rating
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= comment.rating) {
+                        stars += '<i class="fa fa-star text-warning"></i>';
+                    } else {
+                        stars += '<i class="far fa-star text-warning"></i>';
+                    }
+                }
+
+                // Format date
+                const date = new Date(comment.created_at);
+                const formattedDate = date.toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                // Create comment HTML
+                commentEl.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="user-info">
+                                <h6 class="card-subtitle mb-1">${comment.user?.name || 'Người dùng'}</h6>
+                                <p class="card-text"><small class="text-muted">${formattedDate}</small></p>
+                            </div>
+                            <div class="rating">
+                                ${stars}
+                            </div>
+                        </div>
+                        <p class="card-text mt-2">${comment.content}</p>
+
+                        <div>
+                            ${
+                                comment.galleries && comment.galleries.length > 0
+                                    ? comment.galleries
+                                        .map(
+                                            (gallery) =>
+                                                `<img src="${
+                                                                                    gallery.image || gallery
+                                                                                }" alt="Comment image" class="img-fluid mt-2" />`
+                                        )
+                                        .join('')
+                                    : ''
+                            } 
+                        </div>
+                    </div>
+                    `;
+
+                commentsContainer.appendChild(commentEl);
+            });
+        }
+
+
+
+        async function storeComment(event, slug) {
+            try {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                let url = `/api/products/${slug}/comments`;
+                const commentData = {
+                    content: formData.get('content'),
+                    rating: formData.get('rating'),
+                    image: formData.get('image')
+                };
+
+                console.log(commentData);
+
+
+                // Gửi yêu cầu POST đến API
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Lưu bình luận thất bại');
+                }
+
+                const result = await response.json();
+                console.log('Bình luận đã được lưu:', result);
+
+                // Reset form sau khi lưu thành công
+                form.reset();
+
+                // Cập nhật giao diện (ví dụ: thêm bình luận mới vào danh sách)
+                renderNewComment(result.comment);
+
+            } catch (error) {
+                console.error('Lỗi:', error.message);
+                alert('Đã có lỗi xảy ra khi lưu bình luận');
+            }
+        }
+
+        // Hàm giả lập để render bình luận mới (tùy thuộc vào code trước đó của bạn)
+        function renderNewComment(comment) {
+            const commentEl = document.createElement('div');
+            const formattedDate = new Date(comment.created_at).toLocaleDateString();
+            const stars = '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating);
+
+            commentEl.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="user-info">
+                            <h6 class="card-subtitle mb-1">${comment.user?.name || 'Người dùng'}</h6>
+                            <p class="card-text"><small class="text-muted">${formattedDate}</small></p>
+                        </div>
+                        <div class="rating">
+                            ${stars}
+                        </div>
+                    </div>
+                    <p class="card-text mt-2">${comment.content}</p>
+                    <div>
+                        ${
+                            comment.galleries && comment.galleries.length > 0
+                                ? comment.galleries
+                                    .map(
+                                        (gallery) =>
+                                            `<img src="${gallery.image_url}" alt="Comment image" class="img-fluid mt-2" />`
+                                    )
+                                    .join('')
+                                : ''
+                        }
+                    </div>
+                </div>
+            `;
+
+            // Thêm bình luận mới vào danh sách (giả sử có container với id="comments-list")
+            document.getElementById('comments-list').prepend(commentEl);
+        }
+
+        const imageInput = document.querySelector('input[name="image[]"]');
+        const previewContainer = document.getElementById('image-preview');
+        let selectedFiles = [];
+
+        imageInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+
+            // Gộp file mới vào danh sách tạm thời
+            selectedFiles = files;
+
+            // Xóa phần hiển thị cũ
+            previewContainer.innerHTML = '';
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.classList.add('position-relative');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.classList.add('rounded');
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0';
+                    removeBtn.type = 'button';
+
+                    removeBtn.addEventListener('click', function() {
+                        selectedFiles.splice(index, 1);
+                        updateFileInput();
+                        div.remove();
+                    });
+
+                    div.appendChild(img);
+                    div.appendChild(removeBtn);
+                    previewContainer.appendChild(div);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function updateFileInput() {
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            imageInput.files = dataTransfer.files;
         }
     </script>
 

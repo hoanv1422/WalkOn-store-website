@@ -29,6 +29,7 @@ class Order extends Model
         'payment_status',
         'payment_method',
         'cart_item_ids',
+        'courier_id',
         'payment_date',
         'delivered_at',
         'tracking_code',
@@ -72,4 +73,13 @@ class Order extends Model
     {
         return $this->hasOne(OrderCancellation::class, 'order_id');
     }
+
+    public function courier()
+    {
+        return $this->hasOne(Courier::class, 'courier_id');
+    }
+
+    protected $dispatchesEvents = [
+        'updated' => \App\Events\OrderStatusChanged::class,
+    ];
 }
