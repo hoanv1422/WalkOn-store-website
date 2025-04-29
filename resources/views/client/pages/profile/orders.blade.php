@@ -229,7 +229,6 @@
                                                                 @endswitch
                                                             </div>
                                                         </div>
-
                                                         <div class="col-md-7 mb-3 mb-md-0">
                                                             <div class="d-flex flex-wrap">
                                                                 @foreach ($order->orderItems->take(3) as $item)
