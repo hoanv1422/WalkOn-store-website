@@ -44,14 +44,29 @@ class ProductController extends Controller
             'products_active',
             'products_non_active',
             'categories',
-            'brands'
+            'brands',
+            'colors',
+            'sizes'
+
         ));
     }
 
     public function filter(Request $request)
     {
         $query = Product::with(['category', 'brand']);
-      
+        // Lọc theo màu sắc
+        if ($request->colors) {
+            $query->whereHas('variants', function ($q) use ($request) {
+                $q->whereIn('color_id', $request->colors);
+            });
+        }
+        // Lọc theo kích thước
+        if ($request->sizes) {
+            $query->whereHas('variants', function ($q) use ($request) {
+                $q->whereIn('size_id', $request->sizes);
+            });
+        }
+
         // Lọc theo danh mục
         if ($request->categories) {
             $query->whereIn('category_id', $request->categories);
