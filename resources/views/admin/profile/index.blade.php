@@ -81,7 +81,7 @@
                             </li> --}}
                         </ul>
                         <div class="flex-shrink-0">
-                            <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Sửa hồ sơ</a>
+                            <a href="{{route('admin.profile.edit')}}" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Sửa hồ sơ</a>
                         </div>
                     </div>
                     <!-- Tab panes -->

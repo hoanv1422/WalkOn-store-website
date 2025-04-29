@@ -39,6 +39,10 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
+
+    // Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 
     Route::resource('products', ProductController::class);
 
