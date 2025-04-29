@@ -218,6 +218,46 @@
                 </div>
             </div>
         </div>
+        {{-- SIZE --}}
+        <div class="card-body border-bottom">
+            <div>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
+                <ul class="list-unstyled mb-0 filter-list">
+                    @foreach ($categories as $category)
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input category-filter" type="checkbox"
+                                    value="{{ $category->id }}" id="category-{{ $category->id }}">
+                                <label class="form-check-label" for="category-{{ $category->id }}">
+                                    {{ $category->name }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $category->products_count }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        {{-- COLOR --}}
+        <div class="card-body border-bottom">
+            <div>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Sản Phẩm</p>
+                <ul class="list-unstyled mb-0 filter-list">
+                    @foreach ($categories as $category)
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input category-filter" type="checkbox"
+                                    value="{{ $category->id }}" id="category-{{ $category->id }}">
+                                <label class="form-check-label" for="category-{{ $category->id }}">
+                                    {{ $category->name }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $category->products_count }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
         <!-- end accordion-item -->
     </div>
 </div>

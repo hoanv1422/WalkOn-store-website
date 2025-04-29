@@ -10,7 +10,7 @@
          </div>
          <div class="row">
              <div class="new-product-slider carousel-margin">
-                 @foreach ($topRatedProducts as $topRatedProduct)
+                 {{-- @foreach ($topRatedProducts as $topRatedProduct)
                      <div class="col">
                          <div class="single-product">
                              <div class="level-pro-hot">
@@ -71,7 +71,7 @@
                              </div>
                          </div>
                      </div>
-                 @endforeach
+                 @endforeach --}}
              </div>
          </div>
      </div>

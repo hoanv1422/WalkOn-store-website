@@ -49,7 +49,7 @@ class ProductController extends Controller
     public function filter(Request $request)
     {
         $query = Product::with(['category', 'brand']);
-
+      
         // Lọc theo danh mục
         if ($request->categories) {
             $query->whereIn('category_id', $request->categories);
