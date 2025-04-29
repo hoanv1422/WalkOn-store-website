@@ -36,6 +36,8 @@ class ProductController extends Controller
         $products_non_active = Product::where('is_active', false)->get();
         $categories = Category::withCount('products')->where('is_active', true)->get();
         $brands = Brand::all();
+        $colors = Color::all();
+        $sizes = Size::all();
 
         return view('admin.products.index', compact(
             'allProducts',
@@ -60,7 +62,7 @@ class ProductController extends Controller
             $request->minPrice ?? 0,
             $request->maxPrice ?? 100000000
         ]);
-
+        
         // Lọc theo thương hiệu
         if ($request->brands) {
             $query->whereIn('brand_id', $request->brands);
