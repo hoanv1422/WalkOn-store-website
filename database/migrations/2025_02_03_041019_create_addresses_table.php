@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('city');
+            $table->integer('city_code')->nullable();
             $table->string('district');
+            $table->integer('district_code')->nullable();
             $table->string('ward');
+            $table->integer('ward_code')->nullable();
             $table->string('address_line');
+            $table->enum('type', ['HOME', 'OFFICE', 'OTHER'])->default('HOME');
             $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable(); 
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

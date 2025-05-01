@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Models\Size;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Color;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\ProductGallery;
 use App\Models\ProductVariant;
-use App\Models\Size;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 
 class ProductController extends Controller
@@ -29,13 +31,110 @@ class ProductController extends Controller
 
     public function index()
     {
-        // Giả sử bạn có model Product, lấy tất cả sản phẩm
-        $products = Product::all();
-        $products_active = Product::query()->where('is_active', true)->get();
-        $products_non_active = Product::query()->where('is_active', false)->get();
+        $allProducts = Product::with('category')->get();
+        $products_active = Product::where('is_active', true)->get();
+        $products_non_active = Product::where('is_active', false)->get();
+        $categories = Category::withCount('products')->where('is_active', true)->get();
+        $brands = Brand::all();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('products', 'products_active', 'products_non_active'));
+        return view('admin.products.index', compact(
+            'allProducts',
+            'products_active',
+            'products_non_active',
+            'categories',
+            'brands'
+        ));
     }
+
+    public function filter(Request $request)
+    {
+        $query = Product::with(['category', 'brand']);
+
+        // Lọc theo danh mục
+        if ($request->categories) {
+            $query->whereIn('category_id', $request->categories);
+        }
+
+        // Lọc theo giá
+        $query->whereBetween('price', [
+            $request->minPrice ?? 0,
+            $request->maxPrice ?? 100000000
+        ]);
+
+        // Lọc theo thương hiệu
+        if ($request->brands) {
+            $query->whereIn('brand_id', $request->brands);
+        }
+
+        // Tìm kiếm sản phẩm
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Tìm kiếm thương hiệu
+        if ($request->searchBrands) {
+            $query->whereHas('brand', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->searchBrands . '%');
+            });
+        }
+
+        // Lọc theo đánh giá
+        if ($request->ratings) {
+            $query->where(function ($q) use ($request) {
+                foreach ($request->ratings as $rating) {
+                    if (str_contains($rating, 'Above')) {
+                        $minRating = (float)explode(' ', $rating)[0];
+                        $q->orWhere('average_rating', '>=', $minRating);
+                    } elseif ($rating === 'Below 1 Star') {
+                        $q->orWhere('average_rating', '<', 1);
+                    }
+                }
+            });
+        }
+
+        // Lọc theo giảm giá
+        if ($request->discounts) {
+            $query->where(function ($q) use ($request) {
+                foreach ($request->discounts as $discount) {
+                    if (str_contains($discount, 'Less than')) {
+                        $q->orWhereRaw('
+                                CASE 
+                                    WHEN price > 0 THEN ROUND(((price - COALESCE(price_sale, price)) / price * 100)
+                                    ELSE 0 
+                                END < 10
+                            ');
+                    } else {
+                        preg_match('/(\d+)%/', $discount, $matches);
+                        $minDiscount = (int)($matches[1] ?? 0);
+                        $q->orWhereRaw('
+                                CASE 
+                                    WHEN price > 0 THEN ROUND(((price - COALESCE(price_sale, price)) / price * 100)
+                                    ELSE 0 
+                                END >= ?
+                            ', [$minDiscount]);
+                    }
+                }
+            });
+        }
+
+        $baseQuery = clone $query;
+
+        return response()->json([
+            'html' => view('admin.products.product_lists', [
+                'all' => $query->get(),
+                'active' => (clone $baseQuery)->where('is_active', true)->get(),
+                'nonActive' => (clone $baseQuery)->where('is_active', false)->get()
+            ])->render(),
+            'counts' => [
+                'all' => $query->count(),
+                'active' => (clone $baseQuery)->where('is_active', true)->count(),
+                'nonActive' => (clone $baseQuery)->where('is_active', false)->count()
+            ]
+        ]);
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,7 +156,7 @@ class ProductController extends Controller
         // Data Product
         // dd($request->all());
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
-        
+
 
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
@@ -152,8 +251,8 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function show(Product $product)
+
     {
-        // Lấy danh sách kích cỡ duy nhất và tổng số lượng của từng kích cỡ
         $sizes = $product->variants()
             ->select('size_id')
             ->selectRaw('SUM(quantity) as total_quantity')
@@ -161,7 +260,6 @@ class ProductController extends Controller
             ->with('size')
             ->get();
 
-        // Lấy danh sách màu sắc duy nhất và tổng số lượng của từng màu sắc
         $colors = $product->variants()
             ->select('color_id')
             ->selectRaw('SUM(quantity) as total_quantity')
@@ -169,7 +267,12 @@ class ProductController extends Controller
             ->with('color')
             ->get();
 
-        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'sizes', 'colors'));
+
+        $comments = $product->comments()->get();
+
+        // dd($comments);
+
+        return view(self::PATH_VIEW . __FUNCTION__, compact('product', 'sizes', 'colors', 'comments'));
     }
 
 
@@ -196,7 +299,6 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         // dd($request->all());
-        // Data Product
         $data = $request->except(['product_variant', 'product_galleries', 'image']);
         if ($request->hasFile('image')) {
             $data['image'] = Storage::put(self::PATH_UPLOAD, $request->file('image'));
@@ -210,17 +312,15 @@ class ProductController extends Controller
         $data['slug'] = Str::slug($data['name']) . '-' . $product->sku;
         $data['quantity'] = 1;
 
-        // Data Biến thể
         $listProVariants = $request->product_variant ?: [];
         $dataProVariants = [];
         $totalQuantity = 0;
         $groupedVariants = [];
 
         foreach ($listProVariants as $item) {
-            $key = $item['size'] . '-' . $item['color']; // Tạo key duy nhất dựa trên size và color
+            $key = $item['size'] . '-' . $item['color'];
 
             if (!isset($groupedVariants[$key])) {
-                // Nếu chưa tồn tại, thêm vào danh sách với giá trị mặc định
                 $groupedVariants[$key] = [
                     'id' => $item['id'] ?? null,
                     'size_id' => $item['size'],
@@ -232,20 +332,16 @@ class ProductController extends Controller
 
                 ];
             } else {
-                // Nếu đã tồn tại, chỉ cộng dồn số lượng
                 $groupedVariants[$key]['quantity'] += $item['quantity'];
             }
 
-            // Tăng tổng số lượng
             $totalQuantity += $item['quantity'];
         }
 
-        // Chuyển kết quả về dạng mảng mong muốn
         $dataProVariants = array_values($groupedVariants);
         $data['quantity'] = $totalQuantity;
 
 
-        // Data Thư viện ảnh
         $listProGalleries = $request->product_galleries ?: [];
         $dataProGalleries = [];
         foreach ($listProGalleries as $item) {
@@ -256,13 +352,10 @@ class ProductController extends Controller
             }
         }
 
-
         try {
             DB::beginTransaction();
-            // Update Product 
             $product->update($data);
 
-            // Insert ProductVariant
             $deletedVariants = json_decode($request->input('deleted_variants'), true);
             if (!empty($deletedVariants)) {
                 foreach ($deletedVariants as $id) {
@@ -284,7 +377,6 @@ class ProductController extends Controller
                             if (!empty($variant->image)) {
                                 Storage::delete($variant->image);
                             }
-                            $item['image'] = Storage::put('product_variant', $item['image']);
                         } else {
                             $item['image'] = $variant->image;
                         }
@@ -318,10 +410,9 @@ class ProductController extends Controller
             }
 
             DB::Commit();
-            return redirect()->route('products.edit', $product)->with('success', 'Cập nhật sản phẩm thành công');
+            return redirect()->route('products.index', $product)->with('success', 'Cập nhật sản phẩm thành công');
         } catch (\Exception $exception) {
             DB::rollBack();
-            // DELETE IMAGE in STORAGE
 
             if (isset($data['image'])) {
                 Storage::delete($data['image']);

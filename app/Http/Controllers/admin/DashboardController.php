@@ -48,7 +48,6 @@ class DashboardController extends Controller
         // Biến: $revenue - Tổng doanh thu từ các đơn hàng đã giao (shipped)
         // Cột trong DB: final_price (giá cuối cùng), order_status, created_at
         $revenue = Order::where('order_status', 'delivered')
-                       ->whereBetween('created_at', [$startDate, $endDate])
                        ->sum('final_price');
        // Thống kê chi phí (dùng selectRaw thay vì DB::raw)
        $cost = Order::where('order_status', 'delivered')

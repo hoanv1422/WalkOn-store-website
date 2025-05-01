@@ -34,14 +34,14 @@
 
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
-                                            <input type="email" class="form-control" name="mail" id="useremail" placeholder="Nhập địa chỉ email" required>
+                                            <input type="email" class="form-control" name="email" id="useremail" placeholder="Nhập địa chỉ email" required>
                                             <div class="invalid-feedback">
                                                 Please enter email
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="username" class="form-label">Tên Đăng Nhập <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Nhập tên của bạn" required>
                                             <div class="invalid-feedback">
                                                 Please enter username
                                             </div>
@@ -106,7 +106,7 @@
                         <!-- end card -->
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Đã có tài khoản ? <a href="{{route('signin.index')}}" class="fw-semibold text-primary text-decoration-underline"> Đăng Nhập </a> </p>
+                            <p class="mb-0">Đã có tài khoản ? <a href="{{route('admin.login')}}" class="fw-semibold text-primary text-decoration-underline"> Đăng Nhập </a> </p>
                         </div>
 
                     </div>

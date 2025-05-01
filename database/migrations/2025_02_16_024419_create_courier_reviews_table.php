@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('courier_id')->constrained('couriers')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
-            $table->decimal('rating', 2, 1); // Thang điểm từ 0.0 - 5.0
-            $table->text('comment')->nullable(); // Nhận xét từ khách hàng
+            $table->decimal('rating', 2, 1); 
+            $table->text('comment')->nullable(); 
             $table->timestamps();
         });
     }
