@@ -31,7 +31,7 @@
                                                 </div>
                                             </div> --}}
                                             <!--end col-->
-                                            <div class="col-auto">
+                                            {{-- <div class="col-auto">
                                                 <button type="button"
                                                     class="btn btn-soft-success material-shadow-none"><i
                                                         class="ri-add-circle-line align-middle me-1"></i> Add
@@ -42,7 +42,7 @@
                                                 <button type="button"
                                                     class="btn btn-soft-info btn-icon waves-effect material-shadow-none waves-light layout-rightside-btn"><i
                                                         class="ri-pulse-line"></i></button>
-                                            </div>
+                                            </div> --}}
                                             <!--end col-->
                                         </div>
                                         <!--end row-->
@@ -65,7 +65,6 @@
                                         </div>
                                         <div class="flex-shrink-0">
                                             <h5 class="text-success fs-14 mb-0">
-                                                <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +16.24 %
                                             </h5>
                                         </div>
                                     </div>
@@ -96,7 +95,7 @@
                                         </div>
                                         <div class="flex-shrink-0">
                                             <h5 class="text-danger fs-14 mb-0">
-                                                <i class="ri-arrow-right-down-line fs-13 align-middle"></i> -3.57 %
+                                                {{-- <i class="ri-arrow-right-down-line fs-13 align-middle"></i> -3.57 % --}}
                                             </h5>
                                         </div>
                                     </div>
@@ -128,7 +127,7 @@
                                         </div>
                                         <div class="flex-shrink-0">
                                             <h5 class="text-success fs-14 mb-0">
-                                                <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +29.08 %
+                                                {{-- <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +29.08 % --}}
                                             </h5>
                                         </div>
                                     </div>
@@ -157,14 +156,13 @@
                                         </div>
                                         <div class="flex-shrink-0">
                                             <h5 class="text-muted fs-14 mb-0">
-                                                +0.00 %
                                             </h5>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
-                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                    data-target="165.89">0</span>k </h4>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                                    data-target=""></span> </h4>
                                             <a href="#" class="text-decoration-underline">Chi tiết</a>
                                         </div>
                                         <div class="avatar-sm flex-shrink-0">
@@ -300,7 +298,7 @@
                                     </div>
                                 </div><!-- end card header -->
 
-                                <div class="card-body">
+                                <div class="card-body ">
                                     @if($topSellingVariants->isEmpty())
                                         <p class="text-muted">Hiện tại chưa có dữ liệu sản phẩm biến thể bán chạy.</p>
                                     @else
@@ -323,15 +321,15 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
+                                                        {{-- <td>
                                                             <h5 class="fs-14 my-1 fw-normal">${{ number_format($variant->price, 2) }}</h5>
                                                             <span class="text-muted">Price</span>
-                                                        </td>
+                                                        </td> --}}
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $variant->order_count }}</h5>
-                                                            <span class="text-muted">Orders</span>
+                                                            <span class="text-muted">Đơn hàng</span>
                                                         </td>
-                                                        <td>
+                                                        {{-- <td>
                                                             <h5 class="fs-14 my-1 fw-normal">
                                                                 @if($variant->stock > 0)
                                                                     {{ $variant->stock }}
@@ -340,10 +338,10 @@
                                                                 @endif
                                                             </h5>
                                                             <span class="text-muted">Stock</span>
-                                                        </td>
+                                                        </td> --}}
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">${{ number_format(($variant->total_sold * $variant->price)  / 1000, 2) }}</h5>
-                                                            <span class="text-muted">Amount</span>
+                                                            <span class="text-muted">Giá trị</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach

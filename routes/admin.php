@@ -39,6 +39,11 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
 
     // Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::get('/banners', [BannerController::class, 'index'])->name('admin.banners.index');
+Route::post('/banners', [BannerController::class, 'store'])->name('admin.banners.store');
+Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('admin.banners.edit');
+Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('admin.banners.update');
+Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('admin.banners.destroy');
 
     Route::resource('products', ProductController::class);
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
