@@ -178,52 +178,52 @@
 
                     <div class="row">
                         <!-- Biểu đồ cột (Tổng đơn hàng, Doanh thu, Đơn hàng hủy) -->
-                        <div class="col-xl-8">
+                        <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-header border-0 align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thống kê Tổng đơn hàng, Doanh thu, Đơn hàng hủy</h4>
-                                    <div>
-                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                            ALL
-                                        </button>
-                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                            1M
-                                        </button>
-                                        <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">
-                                            6M
-                                        </button>
-                                        <button type="button" class="btn btn-soft-primary material-shadow-none btn-sm">
-                                            1Y
-                                        </button>
+                                    <div class="d-flex gap-2">
+                                        <!-- Dropdown cho năm -->
+                                        <select id="revenueYearFilter" class="form-select form-select-sm" style="width: 120px;">
+                                            @for ($y = Carbon\Carbon::now()->year - 5; $y <= Carbon\Carbon::now()->year + 5; $y++)
+                                                <option value="{{ $y }}" {{ $y == $revenueYear ? 'selected' : '' }}>{{ $y }}</option>
+                                            @endfor
+                                        </select>
+                                        <!-- Dropdown cho tháng -->
+                                        <select id="revenueMonthFilter" class="form-select form-select-sm" style="width: 120px;">
+                                            @for ($m = 1; $m <= 12; $m++)
+                                                <option value="{{ $m }}" {{ $m == $revenueMonth ? 'selected' : '' }}>{{ sprintf('%02d', $m) }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div><!-- end card header -->
-                
+                        
                                 <div class="card-header p-0 border-0 bg-light-subtle">
                                     <div class="row g-0 text-center">
                                         <div class="col-6 col-sm-3">
                                             <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1">{{ $totalOrdersForChart }}</h5>
+                                                <h5 class="mb-1" id="totalOrders">{{ $totalOrdersForChart }}</h5>
                                                 <p class="text-muted mb-0">Tổng đơn hàng</p>
                                             </div>
                                         </div>
                                         <!--end col-->
                                         <div class="col-6 col-sm-3">
                                             <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1">${{ number_format($revenueForChart / 1000, 2) }}k</h5>
+                                                <h5 class="mb-1" id="revenue">${{ number_format($revenueForChart / 1000, 2) }}k</h5>
                                                 <p class="text-muted mb-0">Doanh thu</p>
                                             </div>
                                         </div>
                                         <!--end col-->
                                         <div class="col-6 col-sm-3">
                                             <div class="p-3 border border-dashed border-start-0">
-                                                <h5 class="mb-1">{{ $cancelledOrdersForChart }}</h5>
+                                                <h5 class="mb-1" id="cancelledOrders">{{ $cancelledOrdersForChart }}</h5>
                                                 <p class="text-muted mb-0">Đơn hàng hủy</p>
                                             </div>
                                         </div>
                                         <!--end col-->
                                         <div class="col-6 col-sm-3">
                                             <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                                <h5 class="mb-1 text-success">
+                                                <h5 class="mb-1 text-success" id="completionRate">
                                                     {{ $totalOrdersForChart > 0 ? number_format(($completedOrders / $totalOrdersForChart) * 100, 2) : 0 }}%
                                                 </h5>
                                                 <p class="text-muted mb-0">Tỷ lệ hoàn thành</p>
@@ -232,44 +232,19 @@
                                         <!--end col-->
                                     </div>
                                 </div><!-- end card header -->
-                
+                        
                                 <div class="card-body p-0 pb-2">
-                                    {{-- <div class="w-100">
-                                        <div id="combined_chart" class="apex-charts" dir="ltr"></div>
-                                    </div> --}}
                                     <div class="w-100">
                                         <h2>Tổng quan tài chính</h2>
-                                        <div id="financial_chart" class="apex-charts" dir="ltr"></div>
+                                        <canvas id="financialChartCanvas"></canvas>
+                                        {{-- <div id="financial_chart" class="apex-charts" dir="ltr"></div> --}}
                                     </div>
-
                                 </div><!-- end card body -->
                             </div><!-- end card -->
                         </div><!-- end col -->
                 
                         <!-- Biểu đồ tròn (Trạng thái đơn hàng) -->
-                        <div class="col-xl-4">
-                            <div class="card card-height-100">
-                                <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">Trạng thái đơn hàng</h4>
-                                    <div class="flex-shrink-0">
-                                        <div class="dropdown card-header-dropdown">
-                                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span class="text-muted">Báo cáo<i class="mdi mdi-chevron-down ms-1"></i></span>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Tải báo cáo</a>
-                                                <a class="dropdown-item" href="#">Xuất dữ liệu</a>
-                                                <a class="dropdown-item" href="#">Nhập dữ liệu</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- end card header -->
-                
-                                <div class="card-body">
-                                    <div id="status_chart" class="apex-charts" dir="ltr"></div>
-                                </div>
-                            </div> <!-- .card-->
-                        </div> 
+                        
                         <!-- end col -->
                     </div>
 
@@ -437,7 +412,8 @@
                                 </div><!-- end card header -->
                 
                                 <div class="card-body">
-                                    <div id="products_by_category_chart" class="apex-charts" dir="ltr"></div>
+                                    <canvas id="productsByCategoryChartCanvas"></canvas>
+                                    {{-- <div id="products_by_category_chart" class="apex-charts" dir="ltr"></div> --}}
                                 </div>
                             </div> <!-- .card-->
                         </div> <!-- .col-->
@@ -987,176 +963,209 @@
 
 
 <!-- Thêm Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    // Biểu đồ cột (Tổng đơn hàng, Doanh thu, Đơn hàng hủy)
-    var combinedChartData = @json($combinedChartData);
-    var combinedOptions = {
-        chart: {
-            type: 'bar',
-            height: 350
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '55%',
-                endingShape: 'rounded'
-            },
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-        },
-        series: [{
-            name: 'Giá trị',
-            data: Object.values(combinedChartData)
-        }],
-        xaxis: {
-            categories: Object.keys(combinedChartData),
-            title: {
-                text: 'Danh mục'
-            }
-        },
-        yaxis: {
-            title: {
-                text: 'Giá trị (Doanh thu: k)'
-            }
-        },
-        fill: {
-            opacity: 1
-        },
-        colors: ['#3b82f6', '#10b981', '#ef4444'], // Màu cho Tổng đơn hàng, Doanh thu, Đơn hàng hủy
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return val;
-                }
-            }
-        }
-    };
-    
-    var combinedChart = new ApexCharts(document.querySelector("#combined_chart"), combinedOptions);
-    combinedChart.render();
-    
-       // Script cho Financial Chart
-       var financialChartData = @json($financialChartData);
-        var financialOptions = {
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            series: [{
-                name: 'Số tiền',
-                data: Object.values(financialChartData)
-            }],
-            xaxis: {
-                categories: Object.keys(financialChartData),
-                title: {
-                    text: 'Danh mục'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Số tiền (VND)'
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            colors: ['#3b82f6', '#ef4444', '#10b981'], // Màu cho Doanh thu, Chi phí, Lợi nhuận
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + ' VND';
-                    }
-                }
-            }
-        };
-        var financialChart = new ApexCharts(document.querySelector("#financial_chart"), financialOptions);
-        financialChart.render();
-    // Biểu đồ tròn (Trạng thái đơn hàng)
-    var statusChartData = @json($statusChartData);
-    var statusOptions = {
-        chart: {
-            type: 'pie',
-            height: 350
-        },
-        series: Object.values(statusChartData),
-        labels: Object.keys(statusChartData),
-        colors: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#6b7280'], // Màu cho các trạng thái
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        legend: {
-            position: 'bottom'
-        }
-    };
-    
-    var statusChart = new ApexCharts(document.querySelector("#status_chart"), statusOptions);
-    statusChart.render();
-    // Biểu đồ tròn (Số lượng sản phẩm theo danh mục)
-    var productsByCategoryData = @json($productsByCategory);
-    if (Object.keys(productsByCategoryData).length > 0) {
-        var productsByCategoryOptions = {
-            chart: {
-                type: 'pie',
-                height: 350
-            },
-            series: Object.values(productsByCategoryData),
-            labels: Object.keys(productsByCategoryData),
-            colors: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#6b7280'], // Màu cho các danh mục
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }],
-            legend: {
-                position: 'bottom'
-            }
-        };
-
-        var productsByCategoryChartElement = document.querySelector("#products_by_category_chart");
-        if (productsByCategoryChartElement) {
-            var productsByCategoryChart = new ApexCharts(productsByCategoryChartElement, productsByCategoryOptions);
-            productsByCategoryChart.render();
-        } else {
-            console.error("Không tìm thấy phần tử #products_by_category_chart");
-        }
-    } else {
-        console.warn("Dữ liệu productsByCategoryData rỗng:", productsByCategoryData);
+<style>
+    #financial_chart {
+        min-height: 350px !important;
+        width: 100% !important;
+        border: 1px solid #ddd;
     }
-    </script>
+    canvas#financialChartCanvas {
+        max-height: 350px;
+        width: 100%;
+    }
+    #products_by_category_chart {
+        min-height: 350px !important;
+        width: 100% !important;
+        border: 1px solid #ddd;
+    }
+    canvas#productsByCategoryChartCanvas {
+        max-height: 350px;
+        width: 100%;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    // --- Biểu đồ cột: Tổng đơn hàng, Doanh thu, Đơn hàng hủy ---
+    var initialTotalOrders = {{ $totalOrdersForChart }};
+    var initialRevenue = {{ $revenueForChart ?: 0 }};
+    var initialCancelledOrders = {{ $cancelledOrdersForChart }};
+
+    var financialChartElement = document.querySelector("#financialChartCanvas");
+    if (financialChartElement) {
+        var financialChart = new Chart(financialChartElement, {
+            type: 'bar',
+            data: {
+                labels: ['Thống kê'],
+                datasets: [
+                    {
+                        label: 'Tổng đơn hàng',
+                        data: [initialTotalOrders],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Doanh thu (triệu VND)',
+                        data: [initialRevenue / 1000000],
+                        backgroundColor: '#10b981',
+                        borderColor: '#10b981',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Đơn hàng hủy',
+                        data: [initialCancelledOrders],
+                        backgroundColor: '#ef4444',
+                        borderColor: '#ef4444',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.dataset.label || '';
+                                var value = context.parsed.y;
+                                if (label === 'Doanh thu (triệu VND)') {
+                                    return label + ': ' + (value * 1000000).toLocaleString('vi-VN') + ' VND';
+                                }
+                                return label + ': ' + value.toLocaleString('vi-VN');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Danh mục'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Giá trị'
+                        },
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                return value.toLocaleString('vi-VN');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        console.log('Biểu đồ financialChart đã khởi tạo:', financialChart);
+    } else {
+        console.error('Không tìm thấy canvas #financialChartCanvas');
+    }
+
+    // --- Biểu đồ tròn: Số lượng sản phẩm theo danh mục ---
+    var productsByCategoryData = @json($productsByCategory);
+    console.log('Initial productsByCategoryData:', productsByCategoryData);
+
+    var seriesData = Object.values(productsByCategoryData).map(value => Number(value) || 0);
+    var labelsData = Object.keys(productsByCategoryData);
+
+    var productsByCategoryChartElement = document.querySelector("#productsByCategoryChartCanvas");
+    if (productsByCategoryChartElement && labelsData.length > 0 && seriesData.every(value => !isNaN(value))) {
+        var total = seriesData.reduce((sum, value) => sum + value, 0); // Tính tổng
+        var productsByCategoryChart = new Chart(productsByCategoryChartElement, {
+            type: 'pie',
+            data: {
+                labels: labelsData,
+                datasets: [{
+                    label: 'Số lượng sản phẩm',
+                    data: seriesData,
+                    backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#6b7280'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.parsed;
+                                var percentage = ((value / total) * 100).toFixed(2); // Tính phần trăm
+                                return label + ': ' + value.toLocaleString('vi-VN') + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        console.log('Biểu đồ productsByCategoryChart đã khởi tạo:', productsByCategoryChart);
+    } else {
+        console.warn('Không thể khởi tạo productsByCategoryChart: Dữ liệu không hợp lệ hoặc canvas không tồn tại');
+    }
+
+    // --- Xử lý sự kiện thay đổi bộ lọc ---
+    document.addEventListener('DOMContentLoaded', function () {
+        const revenueYearFilter = document.getElementById('revenueYearFilter');
+        const revenueMonthFilter = document.getElementById('revenueMonthFilter');
+
+        function updateFinancialChartAndStats() {
+            const revenue_year = revenueYearFilter.value;
+            const revenue_month = revenueMonthFilter.value;
+
+            fetch('{{ route("admin.dashboard") }}?revenue_year=' + revenue_year + '&revenue_month=' + revenue_month, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('AJAX response:', data);
+
+                // Cập nhật biểu đồ financial_chart
+                if (financialChart) {
+                    financialChart.data.datasets[0].data = [Number(data.totalOrdersForChart || 0)];
+                    financialChart.data.datasets[1].data = [Number(data.revenueForChart || 0) / 1000000];
+                    financialChart.data.datasets[2].data = [Number(data.cancelledOrdersForChart || 0)];
+                    financialChart.update();
+                } else {
+                    console.error('financialChart không tồn tại để cập nhật');
+                }
+
+                // Cập nhật thống kê
+                document.getElementById('totalOrders').textContent = data.totalOrdersForChart || 0;
+                document.getElementById('revenue').textContent = '$' + (data.revenueForChart ? (data.revenueForChart / 1000).toFixed(2) : '0.00') + 'k';
+                document.getElementById('cancelledOrders').textContent = data.cancelledOrdersForChart || 0;
+                document.getElementById('completionRate').textContent = 
+                    (data.totalOrdersForChart > 0 ? 
+                        ((data.completedOrders / data.totalOrdersForChart) * 100).toFixed(2) : 0) + '%';
+            })
+            .catch(error => console.error('Error fetching financial data:', error));
+        }
+
+        if (revenueYearFilter && revenueMonthFilter) {
+            revenueYearFilter.addEventListener('change', updateFinancialChartAndStats);
+            revenueMonthFilter.addEventListener('change', updateFinancialChartAndStats);
+        } else {
+            console.error('Không tìm thấy revenueYearFilter hoặc revenueMonthFilter');
+        }
+    });
+</script>
 @endsection
