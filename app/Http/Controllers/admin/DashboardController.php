@@ -20,19 +20,31 @@ class DashboardController extends Controller
         $revenueMonth = $request->input('revenue_month', Carbon::now()->month);
 
         // Đảm bảo revenueYear và revenueMonth là số hợp lệ
-        $revenueYear = (int) $revenueYear;
-        $revenueMonth = (int) $revenueMonth;
-        if ($revenueMonth < 1 || $revenueMonth > 12) {
-            $revenueMonth = Carbon::now()->month;
-        }
-        if ($revenueYear < 2000 || $revenueYear > 2100) {
-            $revenueYear = Carbon::now()->year;
-        }
+       // Đảm bảo revenueYear là số hợp lệ
+       $revenueYear = (int) $revenueYear;
+       if ($revenueYear < 2000 || $revenueYear > 2100) {
+           $revenueYear = Carbon::now()->year;
+       }
 
-        // Xác định ngày đầu và cuối của tháng
-        $revenueStartDate = Carbon::create($revenueYear, $revenueMonth, 1)->startOfDay();
-        $revenueEndDate = $revenueStartDate->copy()->endOfMonth()->endOfDay();
+       // Xử lý revenueMonth: Nếu là "all", không giới hạn tháng
+       $isAllMonths = $revenueMonth === 'all';
+       if (!$isAllMonths) {
+           $revenueMonth = (int) $revenueMonth;
+           if ($revenueMonth < 1 || $revenueMonth > 12) {
+               $revenueMonth = Carbon::now()->month;
+           }
+       }
 
+       // Xác định khoảng thời gian lọc
+       if ($isAllMonths) {
+           // Lọc cả năm
+           $revenueStartDate = Carbon::create($revenueYear, 1, 1)->startOfDay();
+           $revenueEndDate = Carbon::create($revenueYear, 12, 31)->endOfDay();
+       } else {
+           // Lọc theo tháng cụ thể
+           $revenueStartDate = Carbon::create($revenueYear, $revenueMonth, 1)->startOfDay();
+           $revenueEndDate = $revenueStartDate->copy()->endOfMonth()->endOfDay();
+       }
         // Thống kê tổng số đơn hàng (không lọc thời gian)
         $totalOrders = Order::count();
 

@@ -190,9 +190,12 @@
                                             @endfor
                                         </select>
                                         <!-- Dropdown cho tháng -->
-                                        <select id="revenueMonthFilter" class="form-select form-select-sm" style="width: 120px;">
-                                            @for ($m = 1; $m <= 12; $m++)
-                                                <option value="{{ $m }}" {{ $m == $revenueMonth ? 'selected' : '' }}>{{ sprintf('%02d', $m) }}</option>
+                                        <select id="revenueMonthFilter" class="form-select form-select-sm"style="width: 120px;">
+                                            <option value="all" {{ $revenueMonth === 'all' ? 'selected' : '' }}>Tất cả</option>
+                                            @for ($month = 1; $month <= 12; $month++)
+                                                <option value="{{ $month }}" {{ $revenueMonth == $month && $revenueMonth !== 'all' ? 'selected' : '' }}>
+                                                    {{ $month }}
+                                                </option>
                                             @endfor
                                         </select>
                                     </div>
