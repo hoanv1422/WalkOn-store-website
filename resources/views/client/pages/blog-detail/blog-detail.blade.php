@@ -141,8 +141,7 @@
                                     {{-- <!-- Danh sách bình luận --!> --}}
                                     <div class="comment-box">
                                         <div class="comment-title">
-                                            <h3 id="comment-count">
-                                                {{ $post->comments()->count() }} Bình Luận</h3>
+                                            <h3 id="comment-count">{{ $post->comments()->count() }} Bình Luận</h3>
                                         </div>
                                         <div class="comment-list">
                                             <ul id="comment-list">
@@ -151,6 +150,7 @@
                                                     @include('client.pages.blog-detail.comment', [
                                                         'comment' => $comment,
                                                         'post' => $post,
+                                                        'depth' => 1,
                                                     ])
                                                 @endforeach
                                             </ul>
@@ -177,163 +177,90 @@
 
 @section('script')
 <script>
-    $(document).ready(function() {
-        // Gửi bình luận chính
+    $(function() {
+        // Gửi bình luận gốc
         $('#comment-form').submit(function(e) {
             e.preventDefault();
-            var formData = new FormData(this);
-            var url = $(this).attr('action');
-
+            let form = this;
             $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        $('#comment-list').prepend(response.html);
-                        $('#comment-form')[0].reset();
-                        var count = parseInt($('#comment-count').text());
-                        $('#comment-count').text((count + 1) + ' bình luận');
-                        // toastr.success(response.message);
-                          showMessage(response.message, '#4CAF50');
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: $(form).serialize(),
+                success(resp) {
+                    if (resp.success) {
+                        $('#comment-list').prepend(resp.html);
+                        form.reset();
+                        $('#comment-count').text(resp.count + ' Bình Luận');
+                        toastr.success(resp.message);
                     }
                 },
-                error: function(xhr) {
-                    if (xhr.status === 422) {
-                        var errors = xhr.responseJSON.errors;
-                        for (var error in errors) {
-                            // toastr.error();
-                             showMessage(errors[error][0], '#dc3545');
-                        }
-                    } else if (xhr.status === 401) {
-                        // toastr.error();
-                           showMessage('Vui lòng đăng nhập để thực hiện chức năng này', '#dc3545');
-                        setTimeout(function() {
-                            window.location.href = "{{ route('login.form') }}";
-                        }, 2000);
-                    } else {
-                        // toastr.error();
-                         showMessage('Có lỗi xảy ra, vui lòng thử lại', '#dc3545');
-                    }
+                error(err) {
+                    let msg = err.responseJSON?.message || 'Lỗi, thử lại';
+                    toastr.error(msg);
                 }
             });
         });
 
-        // Hiển thị/ẩn form trả lời
+        // Toggle reply form
         $(document).on('click', '.reply-btn', function() {
-            var commentId = $(this).data('comment-id');
-            $('#reply-form-' + commentId).slideToggle();
+            let id = $(this).data('comment-id');
+            $('#reply-form-' + id).slideToggle();
         });
 
-        // Hủy trả lời bình luận
+        // Hủy trả lời
         $(document).on('click', '.cancel-reply', function() {
-            var commentId = $(this).data('comment-id');
-            $('#reply-form-' + commentId).slideUp();
+            let id = $(this).data('comment-id');
+            $('#reply-form-' + id).slideUp();
         });
 
-        // Gửi trả lời bình luận
+        // Gửi bình luận con
         $(document).on('submit', '.reply-comment-form', function(e) {
             e.preventDefault();
-            var formData = new FormData(this);
-            var url = $(this).attr('action');
-
+            let form = this;
             $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        $(e.target).closest('.reply-form-container').after(response.html);
-                        $(e.target)[0].reset();
-                        $(e.target).closest('.reply-form-container').slideUp();
-                        // toastr.success(response.message);
-                         showMessage(response.message, '#4CAF50');
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: $(form).serialize(),
+                success(resp) {
+                    if (resp.success) {
+                        $(form).closest('.reply-form-container').after(resp.html);
+                        form.reset();
+                        $('#reply-form-' + resp.comment.parent_id).slideUp();
+                        $('#comment-count').text(resp.count + ' Bình Luận');
+                        toastr.success(resp.message);
                     }
                 },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        alert('Bạn cần đăng nhập để bình luận.');
-                        setTimeout(function() {
-                            window.location.href = "{{ route('login.form') }}";
-                        }, 2000);
-                    } else {
-                        alert('Có lỗi xảy ra. Vui lòng thử lại.');
-                    }
+                error(err) {
+                    let msg = err.responseJSON?.message || 'Lỗi, thử lại';
+                    toastr.error(msg);
                 }
             });
         });
-    });
 
-    // Xử lý xóa bình luận
-    $(document).on('click', '.delete-btn', function() {
-        if (!confirm('Bạn chắc chắn muốn xóa bình luận này?')) return;
-
-        var commentId = $(this).data('comment-id');
-        var url = "{{ route('blog.comment.delete', ':id') }}".replace(':id', commentId);
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {
-                _method: 'DELETE'
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('#comment-' + commentId).closest('.comment-item').remove();
-                    // Cập nhật count nếu là comment gốc
-                    if (response.is_parent) {
-                        const countElement = $('#comment-count');
-                        const currentCount = parseInt(countElement.text().match(/\d+/)[0]);
-                        countElement.text((currentCount - 1) + ' comments');
+        $(document).on('click', '.delete-btn-comment-post', function() {
+            if (!confirm('Bạn chắc chắn muốn xóa?')) return;
+            let id = $(this).data('comment-id');
+            let url = `{{ route('blog.comment.delete', ':id') }}`.replace(':id', id);
+            $.ajax({
+                url,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    _method: 'DELETE'
+                },
+                success(resp) {
+                    if (resp.success) {
+                        $('#comment-' + id).remove();
+                        $('#comment-count').text(resp.count + ' Bình Luận');
+                        toastr.success(resp.message);
                     }
-                    // toastr.success(response.message);
-                     showMessage(response.message, '#4CAF50');
+                },
+                error() {
+                    toastr.error('Xóa thất bại');
                 }
-            },
-            error: function(xhr) {
-                const errorMsg = xhr.responseJSON?.message || 'Lỗi không xác định';
-                // toastr.error(errorMsg);
-                showMessage(errorMsg, '#dc3545');
-                console.error(xhr);
-            }
+            });
         });
-    });
-
-    // Cấu hình Lightbox
-    lightbox.option({
-        'resizeDuration': 200,
-        'wrapAround': true,
-        'showImageNumberLabel': true,
-        'disableScrolling': true,
-        'albumLabel': "Ảnh %1 của %2"
-    });
-
-    // Lazy loading cho hình ảnh
-    document.addEventListener("DOMContentLoaded", function() {
-        const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
-
-        if ("IntersectionObserver" in window) {
-            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        let lazyImage = entry.target;
-                        lazyImage.src = lazyImage.dataset.src;
-                        lazyImage.classList.remove("lazy");
-                        lazyImageObserver.unobserve(lazyImage);
-                    }
-                });
-            });
-
-            lazyImages.forEach(function(lazyImage) {
-                lazyImageObserver.observe(lazyImage);
-            });
-        }
     });
 </script>
