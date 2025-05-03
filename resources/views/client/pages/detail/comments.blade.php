@@ -1,149 +1,105 @@
-<div class="max-w-2xl mx-auto bg-white p-6 shadow-md rounded-lg">
-    <script src="{{ asset('public/resources/js/rating.js') }}"></script>
-    <h2 class="text-xl font-bold mb-4">Bình luận sản phẩm</h2>
-
-    @if(session('success'))
-        <div class="p-3 mb-4 bg-green-200 text-green-700 rounded">{{ session('success') }}</div>
-    @endif
-
-    @if(session('error'))
-        <div class="p-3 mb-4 bg-red-200 text-red-700 rounded">{{ session('error') }}</div>
-    @endif
-
-    {{-- <div>
-        <p class="avg_rating">Đánh giá trung bình: {{ number_format($averageRating, 1) }}  <i class="fa fa-star"></i> </p>
-    </div>
-
-    <form method="GET" action="{{ route('product.detail', $product->slug) }}">
-        <label for="rating" class="filler_avg">Lọc theo đánh giá:</label>
-        <select name="rating" id="rating" class="select_avg">
-            <option value="">Tất cả</option>
-            <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 sao</option>
-            <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 sao</option>
-            <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3 sao</option>
-            <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 sao</option>
-            <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 sao</option>
-        </select>
-        <button type="submit" class="muathemewpgiare muathemewpgiare-4">Lọc</button> 
-    </form> --}}
-    
-
-    <!-- Danh sách bình luận -->
-    <div class="space-y-4">
-        @isset($comments)
-        @foreach ($comments as $comment)
-            <div class="p-3 border rounded-lg ">
-                <p class="user_name">{{ $comment->user ? $comment->user->name : 'Tên người dùng không xác định' }}</p>
-                <div class="product-rating-info">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <img src="{{ $i <= $comment->rating ? asset('img/comment/star-filled.png') : asset('img/comment/star-empty.png') }}" alt="star" class="star" width="25px" height="25px">
-                    @endfor
-                </div>
-                <p></p>
-
-                <p class="comment_ct">{{ $comment->content }}</p>
-                
-                
-                <!-- Hiển thị ảnh bình luận (nếu có) -->
-                <div class="mt-2">
-                    @foreach ($comment->galleries as $gallery)
-                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="Image" class="w-full h-auto rounded-lg mb-2" width="150px" height="150px">
-                    @endforeach
-                </div>
-
-
-                {{-- <span class="text-green-600 flex items-center text-sm mt-1">
-                    ✅ Đã mua hàng
-                </span> --}}
+<!-- Updated Comment Section with Bootstrap -->
+<div class="card-body">
+    <!-- Add New Comment Form -->
+    @auth
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="m-2">Viết đánh giá của bạn</h5>
             </div>
-        @endforeach
-        @else
-            <p>Không có bình luận nào cho sản phẩm này.</p>
-        @endisset
+            <div class="card-body">
+                <form enctype="multipart/form-data" id="comment-form">
+                    @csrf
+                    <input type="hidden" value="" id="slug-comment">
+                    <div id="form-errors" class="alert alert-danger d-none mb-3">
+                        <ul class="mb-0 ps-3"></ul>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Đánh giá</label>
+                        <div class="rating-input">
+                            <div class="btn-group" role="group">
+                                <input type="radio" class="btn-check" name="rating" id="rating1" value="1"
+                                    required>
+                                <label class="btn btn-outline-warning" for="rating1"><i class="fa fa-star"></i>
+                                    1</label>
+
+                                <input type="radio" class="btn-check" name="rating" id="rating2" value="2">
+                                <label class="btn btn-outline-warning" for="rating2"><i class="fa fa-star"></i>
+                                    2</label>
+
+                                <input type="radio" class="btn-check" name="rating" id="rating3" value="3">
+                                <label class="btn btn-outline-warning" for="rating3"><i class="fa fa-star"></i>
+                                    3</label>
+
+                                <input type="radio" class="btn-check" name="rating" id="rating4" value="4">
+                                <label class="btn btn-outline-warning" for="rating4"><i class="fa fa-star"></i>
+                                    4</label>
+
+                                <input type="radio" class="btn-check" name="rating" id="rating5" value="5">
+                                <label class="btn btn-outline-warning" for="rating5"><i class="fa fa-star"></i>
+                                    5</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment-content" class="form-label">Nội dung đánh giá</label>
+                        <textarea class="form-control" id="comment-content" name="content" rows="3"></textarea>
+                        <input type="file" name="image[]" class="form-control mt-2" style="width: 119px" multiple>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="image-preview" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                </form>
+                <div id="form-message" class="mt-3"></div>
+
+            </div>
+        </div>
+    @else
+        <div class="text-center">
+            <a class=" btn btn-danger" href="{{ route('login.form') }}">Bạn phải đăng nhập mới được bình luận</a>
+        </div>
+    @endauth
+
+    <!-- Average Rating Display -->
+    <div class="m-3 avg_rating">
+        <div class="product-average-rating d-flex gap-2">
+            <div class="product-rating-stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <span class="product-rating-value">0</span>
+            (<span class="product-review-count">0</span>đánh giá)
+        </div>
     </div>
 
-    <!-- Ô nhập bình luận - Chỉ hiển thị nếu người dùng đã mua hàng -->
-    @isset($user)
-        @if ($user)
-            @if ($hasPurchased)
-                @if ($existingComment == null)
-                    <div class="mt-4">
-                        <form method="POST" action="{{ route('comments.store') }}" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <textarea name="content" class="content_cm" placeholder="Viết bình luận của bạn..." required></textarea>
-                            <div class="stars">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <img src="{{ asset('img/comment/star-empty.png') }}" alt="star" class="star" data-value="{{ $i }}"width="25px" height="25px">
-                                @endfor
-                            </div>
-                            <input type="hidden" name="rating" id="rating-input">
+    <!-- Filter Form -->
+    <form class="row g-3 align-items-center mb-4">
+        <div class="col-auto">
+            <label for="rating" class="col-form-label">Lọc theo đánh giá:</label>
+        </div>
+        <div class="col-auto">
+            <select name="rating" id="rating" class="form-select form-select-sm">
+                <option value="">Tất cả</option>
+                <option value="1">1 sao</option>
+                <option value="2">2 sao</option>
+                <option value="3">3 sao</option>
+                <option value="4">4 sao</option>
+                <option value="5">5 sao</option>
+            </select>
+        </div>
+    </form>
 
-                            <!-- Thêm phần upload ảnh -->
-                            <div class="mt-4">
-                                <input type="file" name="images[]" multiple class="border p-2 rounded-lg">
-                            </div>
-                              
-                            <p></p>
-                            <button type="submit" class="btn btn-primary">Gửi bình luận</button>
-                        </form>
-                    </div>
-                @else
-                    {{-- <p class="text-red-500 mt-4">Bạn đã bình luận sản phẩm này rồi.</p> --}}
-                @endif
-            @else
-                <p class="text-red-500 mt-4">Bạn cần mua sản phẩm để có thể bình luận.</p>
-            @endif
-        @else
-            <p class="text-gray-600 mt-4">Vui lòng <a href="{{ route('login') }}" class="text-blue-600">đăng nhập</a> để bình luận.</p>
-        @endif
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const stars = document.querySelectorAll('.star');
-                const ratingInput = document.getElementById('rating-input');
-        
-                stars.forEach(star => {
-                    star.addEventListener('click', function() {
-                        const rating = this.getAttribute('data-value');
-                        ratingInput.value = rating;
-        
-                        // Thay đổi hình ảnh của các sao
-                        stars.forEach(star => {
-                            if (star.getAttribute('data-value') <= rating) {
-                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng
-                            } else {
-                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
-                            }
-                        });
-                    });
-        
-                    // Thêm hiệu ứng hover để người dùng có thể thấy sao vàng khi di chuột
-                    star.addEventListener('mouseenter', function() {
-                        const rating = this.getAttribute('data-value');
-                        stars.forEach(star => {
-                            if (star.getAttribute('data-value') <= rating) {
-                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng khi hover
-                            } else {
-                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
-                            }
-                        });
-                    });
-        
-                    // Reset khi rời chuột
-                    star.addEventListener('mouseleave', function() {
-                        const rating = ratingInput.value;
-                        stars.forEach(star => {
-                            if (star.getAttribute('data-value') <= rating) {
-                                star.src = '{{ asset("img/comment/star-filled.png") }}'; // Sao vàng khi đã chọn
-                            } else {
-                                star.src = '{{ asset("img/comment/star-empty.png") }}'; // Sao trống
-                            }
-                        });
-                    });
-                });
-            });
-        </script>
-        
-    @endisset
-    
+
+    <!-- Comments Container -->
+    <div id="comments-container" class="mt-3">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Đang tải...</span>
+            </div>
+        </div>
+        <p class="text-center mt-2">Đang tải bình luận...</p>
+    </div>
 </div>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade')->index();
             $table->text('content');
             $table->decimal('rating', 2, 1)->nullable()->check('rating BETWEEN 1.0 AND 5.0');

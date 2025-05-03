@@ -90,6 +90,8 @@ Route::middleware('client')->group(function () {
 
 
 
+Route::get('/api/products/{slug}/comments', [CommentController::class, 'comments'])->name('detail.comments');
+Route::post('/products/{slug}/comments', [CommentController::class, 'storeComment'])->name('detail.comments.store');
 
 Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
 

@@ -32,12 +32,13 @@ return new class extends Migration
             $table->decimal('discount_amount', 15, 2)->default(0);
             $table->decimal('shipping_fee', 15, 2)->default(0);
             $table->decimal('final_price', 15, 2);
-
-            $table->enum('order_status', ['pending', 'confirmed', 'processing',   'ready',  'shipped', 'delivered', 'cancelled', 'returned', 'completed'])->default('pending');
+            $table->enum('order_status', ['pending', 'confirmed', 'processing', 'ready', 'picking_up' ,'shipping', 'delivered', 'cancelled', 'returned', 'completed'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
             $table->json('cart_item_ids')->nullable();
-            
+
+
+            $table->foreignId('courier_id')->nullable()->constrained('couriers')->nullOnDelete();
             $table->timestamp('payment_date')->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->string('tracking_code')->nullable();

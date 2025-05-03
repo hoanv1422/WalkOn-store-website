@@ -10,7 +10,8 @@
                         style="height: 555px; width: 555px;" id="pro-large-img-1">
                         <a href="#">
                             <img class="optima_zoom " id="main-image-product-detail" src=""
-                                alt="Hình ảnh sản phẩm" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px">
+                                alt="Hình ảnh sản phẩm"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px">
                         </a>
                     </div>
                 </div>
@@ -28,8 +29,18 @@
             </div>
             <div class="col-lg-6">
                 <div class="single-product-details">
-
                     <a href="#" class="product-name" id="product-name-detail"></a>
+                    <div class="product-average-rating d-flex gap-2">
+                        <div class="product-rating-stars">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <span class="product-rating-value">0</span>
+                        <span class="product-review-count">0</span> đánh giá
+                    </div>
                     <div class="list-product-info">
                         <div class="price-rating">
 
@@ -73,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Số lượng và nút thêm vào giỏ -->
                         <div class="row g-3 align-items-center mt-3">
                             <div class="col-md-3">

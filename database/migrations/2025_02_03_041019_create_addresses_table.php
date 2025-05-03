@@ -22,9 +22,9 @@ return new class extends Migration
             $table->integer('ward_code')->nullable();
             $table->string('address_line');
             $table->enum('type', ['HOME', 'OFFICE', 'OTHER'])->default('HOME');
-            // Đã xóa dòng trùng lặp ở đây
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

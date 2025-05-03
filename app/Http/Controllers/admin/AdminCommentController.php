@@ -114,13 +114,13 @@ class AdminCommentController extends Controller
     
 
     // Xem các bình luận đã ẩn
-    public function hiddenComments()
-    {
-        $hiddenCommentIds = CommentHidden::pluck('comment_id')->toArray();
-        $comments = Comment::whereIn('id', $hiddenCommentIds)->get();
+    // public function hiddenComments()
+    // {
+    //     $hiddenCommentIds = CommentHidden::pluck('comment_id')->toArray();
+    //     $comments = Comment::whereIn('id', $hiddenCommentIds)->get();
 
-        return view('admin.comments.hidden', compact('comments'));
-    }
+    //     return view('admin.comments.hidden', compact('comments'));
+    // }
     
     // Hiện lại bình luận đã ẩn
     public function unhide($id)
