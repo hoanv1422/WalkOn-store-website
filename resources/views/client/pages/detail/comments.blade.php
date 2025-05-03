@@ -10,7 +10,7 @@
         <div class="p-3 mb-4 bg-red-200 text-red-700 rounded">{{ session('error') }}</div>
     @endif
 
-    <div>
+    {{-- <div>
         <p class="avg_rating">Đánh giá trung bình: {{ number_format($averageRating, 1) }}  <i class="fa fa-star"></i> </p>
     </div>
 
@@ -25,7 +25,7 @@
             <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 sao</option>
         </select>
         <button type="submit" class="muathemewpgiare muathemewpgiare-4">Lọc</button> 
-    </form>
+    </form> --}}
     
 
     <!-- Danh sách bình luận -->

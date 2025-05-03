@@ -42,7 +42,7 @@
             <div class="formCost d-flex gap-2 align-items-center mt-3">
                 <input class="form-control form-control-sm" type="text" id="minCost" value="0" />
                 <span class="fw-semibold text-muted">to</span>
-                <input class="form-control form-control-sm" type="text" id="maxCost" value="100000000" />
+                <input class="form-control form-control-sm" type="text" id="maxCost" value="5000000" /> 
             </div>
         </div>
         <!-- Brands -->

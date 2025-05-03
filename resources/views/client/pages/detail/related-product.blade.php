@@ -31,7 +31,7 @@
             let action = $icon.hasClass('fa-heart-o') ? 'add' : 'remove';
 
             $.ajax({
-                url: "{{ route('wishlist.store') }}",
+                url: "{{ route('wishlist.toggle') }}",
                 method: "POST",
                 data: {
                     _token: "{{ csrf_token() }}",

@@ -47,7 +47,6 @@ class ProductController extends Controller
             'brands',
             'colors',
             'sizes'
-
         ));
     }
 
@@ -60,7 +59,7 @@ class ProductController extends Controller
                 $q->whereIn('color_id', $request->colors);
             });
         }
-        
+
         // Lọc theo kích thước
         if ($request->sizes) {
             $query->whereHas('variants', function ($q) use ($request) {
