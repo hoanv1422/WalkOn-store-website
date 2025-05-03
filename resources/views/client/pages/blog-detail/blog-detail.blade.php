@@ -197,7 +197,7 @@
                         var count = parseInt($('#comment-count').text());
                         $('#comment-count').text((count + 1) + ' bình luận');
                         // toastr.success(response.message);
-                          showMessage(response.message, '#4CAF50');
+                        showMessage(response.message, '#4CAF50');
                     }
                 },
                 error: function(xhr) {
@@ -205,17 +205,18 @@
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
                             // toastr.error();
-                             showMessage(errors[error][0], '#dc3545');
+                            showMessage(errors[error][0], '#dc3545');
                         }
                     } else if (xhr.status === 401) {
                         // toastr.error();
-                           showMessage('Vui lòng đăng nhập để thực hiện chức năng này', '#dc3545');
+                        showMessage('Vui lòng đăng nhập để thực hiện chức năng này',
+                            '#dc3545');
                         setTimeout(function() {
                             window.location.href = "{{ route('login.form') }}";
                         }, 2000);
                     } else {
                         // toastr.error();
-                         showMessage('Có lỗi xảy ra, vui lòng thử lại', '#dc3545');
+                        showMessage('Có lỗi xảy ra, vui lòng thử lại', '#dc3545');
                     }
                 }
             });
@@ -251,7 +252,7 @@
                         $(e.target)[0].reset();
                         $(e.target).closest('.reply-form-container').slideUp();
                         // toastr.success(response.message);
-                         showMessage(response.message, '#4CAF50');
+                        showMessage(response.message, '#4CAF50');
                     }
                 },
                 error: function(xhr) {
@@ -269,42 +270,46 @@
     });
 
     // Xử lý xóa bình luận
-    $(document).on('click', '.delete-btn', function() {
+    $(document).on('click', '.delete-btn-comment-post', function() {
         if (!confirm('Bạn chắc chắn muốn xóa bình luận này?')) return;
 
         var commentId = $(this).data('comment-id');
+        console.log(commentId);
+
+        // Tạo URL xóa bình luận
         var url = "{{ route('blog.comment.delete', ':id') }}".replace(':id', commentId);
+        console.log(url);
 
         $.ajax({
             url: url,
-            type: 'POST',
+            type: 'DELETE', // Sử dụng DELETE thay vì POST
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: {
-                _method: 'DELETE'
-            },
             success: function(response) {
-                if (response.success) {
+                if (response.success == true) {
+                    // Xóa phần tử bình luận khỏi DOM
                     $('#comment-' + commentId).closest('.comment-item').remove();
+
                     // Cập nhật count nếu là comment gốc
                     if (response.is_parent) {
                         const countElement = $('#comment-count');
                         const currentCount = parseInt(countElement.text().match(/\d+/)[0]);
-                        countElement.text((currentCount - 1) + ' comments');
+                        countElement.text((currentCount - 1) + ' Bình Luận');
                     }
-                    // toastr.success(response.message);
-                     showMessage(response.message, '#4CAF50');
+
+                    console.log(response.data);
+                    showMessage(response.message, '#4CAF50');
                 }
             },
             error: function(xhr) {
                 const errorMsg = xhr.responseJSON?.message || 'Lỗi không xác định';
-                // toastr.error(errorMsg);
                 showMessage(errorMsg, '#dc3545');
                 console.error(xhr);
             }
         });
     });
+
 
     // Cấu hình Lightbox
     lightbox.option({

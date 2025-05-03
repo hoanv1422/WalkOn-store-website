@@ -115,6 +115,3 @@ Route::delete('/blog/delete-comment/{id}', [BlogController::class, 'destroyComme
 // Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
 // //commment
-
-
-

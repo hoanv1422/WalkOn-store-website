@@ -13,9 +13,9 @@
         
             <div class="btn-group">
                 @auth
-                    @if(auth()->id() == $comment->user_id || auth()->user()->is_admin)
+                    @if(auth()->id() == $comment->user_id)
                         <button type="button" 
-                            class="delete-btn btn btn-danger btn-sm"
+                            class="delete-btn-comment-post btn btn-danger btn-sm"
                             data-comment-id="{{ $comment->id }}" 
                             title="Xóa bình luận">
                             <i class="fas fa-trash"></i>
