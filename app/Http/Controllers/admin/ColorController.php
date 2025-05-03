@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 
-class ColorController extends Controller 
+class ColorController extends Controller
 {
     const PATH_VIEW = 'admin.colors.';
     /**
@@ -19,7 +19,7 @@ class ColorController extends Controller
     public function index()
     {
         $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
-        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
+        return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
     }
 
     /**
@@ -27,7 +27,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -35,30 +35,43 @@ class ColorController extends Controller
      */
     public function store(StoreColorRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['slug'] = Str::slug($data['color']);
-        $existingColor = Color::where('code', $data['code'])->first();
-        if ($existingColor) {
+
+        // Kiểm tra trùng code
+        if (Color::where('code', $data['code'])->exists()) {
             return back()->with('error', 'Mã màu đã tồn tại.');
         }
+
         try {
             DB::beginTransaction();
+
+            Color::create([
+                'color' => $data['color'],
+                'code'  => $data['code'],
+                'slug'  => $data['slug'],
+            ]);
+
+            DB::commit();
+            return redirect()->route('colors.index')
+                ->with('success', 'Thêm màu thành công!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            // Ghi log nếu cần: Log::error($e);
+            return back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage());
         }
     }
     /**
      * Display the specified resource.
      */
-    public function show(Color $color)
-    {
-        
-    }
+    public function show(Color $color) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Color $color)
     {
-        return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
+        return view(self::PATH_VIEW . __FUNCTION__, compact('color'));
     }
 
     /**

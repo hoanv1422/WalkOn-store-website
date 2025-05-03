@@ -219,9 +219,8 @@
         </div>
 
         <div class="stats-container">
-            <!-- Delivering -->
-
-            <div class="stat-card" data-bs-toggle="modal" data-bs-target="#shipperOrdersModal">
+            <!-- Chờ xác nhận -->
+            <div class="stat-card" data-bs-toggle="modal" data-bs-target="#shipperOrdersModal" data-status="ready">
                 <div class="stat-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fd7e14"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -233,9 +232,25 @@
                     </svg>
                 </div>
                 <div class="stat-title">Chờ xác nhận</div>
-                <div class="stat-value" id="count-order-ready"></div>
+                <div class="stat-value" id="count-order-ready">0</div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat-card" data-bs-toggle="modal" data-bs-target="#shipperOrdersModal" data-status="picking_up">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fd7e14"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="stat-title">Đang nhận hàng</div>
+                <div class="stat-value" id="count-order-picking-up">0</div>
+            </div>
+            <!-- Đang giao -->
+            <div class="stat-card" data-bs-toggle="modal" data-bs-target="#shipperOrdersModal" data-status="shipping">
                 <div class="stat-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fd7e14"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -246,11 +261,10 @@
                     </svg>
                 </div>
                 <div class="stat-title">Đang giao</div>
-                <div class="stat-value" id="count-order-shipping"></div>
+                <div class="stat-value" id="count-order-shipping">0</div>
             </div>
-
-            <!-- Completed -->
-            <div class="stat-card">
+            <!-- Đã hoàn thành -->
+            <div class="stat-card" data-bs-toggle="modal" data-bs-target="#shipperOrdersModal" data-status="delivered">
                 <div class="stat-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#20c997"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -259,10 +273,9 @@
                     </svg>
                 </div>
                 <div class="stat-title">Đã hoàn thành</div>
-                <div class="stat-value" id="count-order-deliveried"></div>
+                <div class="stat-value" id="count-order-delivered">0</div>
             </div>
         </div>
-
         <div class="tabs">
 
             <button class="tab" data-tab="delivering">
@@ -327,7 +340,7 @@
     <!-- Modal -->
     <div class="modal fade" id="shipperOrdersModal" tabindex="-1" aria-labelledby="shipperOrdersModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg"> <!-- modal-lg: Modal lớn hơn -->
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="shipperOrdersModalLabel">Danh sách đơn hàng cần giao</h5>
@@ -341,7 +354,6 @@
                                 <th>Khách hàng</th>
                                 <th>Địa chỉ giao</th>
                                 <th>Số điện thoại</th>
-                                <th>Trạng thái</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -356,7 +368,6 @@
             </div>
         </div>
     </div>
-
 
     {{-- <script>
         // Simple tab switching functionality
@@ -382,5 +393,157 @@
             });
         });
     </script> --}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function fetchOrdersForShipper(statusFilter = '') {
+                fetch('/api/order/shipper', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            console.error(data.message);
+                            return;
+                        }
+
+
+                        const dataOrder = data.data.orders;
+
+                        console.log(dataOrder);
+
+
+                        // Tính toán số lượng đơn hàng theo trạng thái
+                        const countReady = dataOrder.filter(order => order.order_status === 'ready').length;
+                        const countPickingUp = dataOrder.filter(order => order.order_status === 'picking_up')
+                            .length;
+                        const countShipping = dataOrder.filter(order => order.order_status === 'shipping')
+                            .length;
+                        const countDelivered = dataOrder.filter(order => order.order_status === 'delivered')
+                            .length;
+
+                        // Cập nhật số liệu vào stat-value
+                        document.getElementById('count-order-ready').textContent = countReady;
+                        document.getElementById('count-order-picking-up').textContent = countPickingUp;
+                        document.getElementById('count-order-shipping').textContent = countShipping;
+                        document.getElementById('count-order-delivered').textContent = countDelivered;
+
+                        // Lọc đơn hàng theo trạng thái (nếu có)
+                        const filteredOrders = statusFilter ?
+                            dataOrder.filter(order => order.order_status === statusFilter) :
+                            dataOrder;
+
+                        // Cập nhật bảng trong modal
+                        const tbody = document.getElementById('shipperOrdersList');
+                        tbody.innerHTML = '';
+                        if (filteredOrders.length === 0) {
+                            tbody.innerHTML =
+                                '<tr><td colspan="6" class="text-center">Không có đơn hàng phù hợp</td></tr>';
+                            return;
+                        }
+
+                        filteredOrders.forEach(order => {
+
+                            let actionButton = '';
+                            if (order.order_status === 'ready') {
+                                actionButton =
+                                    `<button class="btn btn-success btn-sm" onclick="updateOrderStatus('${order.id}', 'picking_up')">Xác nhận giao</button>`;
+                            } else if (order.order_status === 'picking_up') {
+                                actionButton =
+                                    `<button class="btn btn-success btn-sm" onclick="updateOrderStatus('${order.id}', 'shipping')">Bắt đầu giao hàng</button>`;
+                            } else if (order.order_status === 'shipping') {
+                                actionButton =
+                                    `<button class="btn btn-secondary btn-sm" onclick="updateOrderStatus('${order.id}', 'delivered')" >Đã hoàn thành</button>`;
+                            } else if (order.order_status === 'delivered') {
+                                actionButton =
+                                    `<button class="btn btn-secondary btn-sm" disabled>Đã hoàn thành</button>`;
+                            }
+                            tbody.innerHTML += `
+                            <tr>
+                                <td>${order.order_code}</td>
+                                <td>${order.receiver_name}</td>
+                                <td>${order.receiver_address}</td>
+                                <td>${order.receiver_phone}</td>
+                                <td>
+                                    ${actionButton}
+                                </td>
+                            </tr>
+                        `;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi lấy danh sách đơn hàng:', error);
+                    });
+            }
+
+            // Hàm cập nhật trạng thái đơn hàng
+            window.updateOrderStatus = async function(orderId, newStatus) {
+                try {
+                    console.log('Updating order:', orderId, 'to status:', newStatus);
+
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                    if (!csrfToken) {
+                        throw new Error('CSRF token not found');
+                    }
+
+                    // Show loading state (e.g., disable button or show spinner)
+                    const button = document.querySelector(`[data-order-id="${orderId}"]`);
+                    button?.setAttribute('disabled', 'true');
+
+                    const response = await fetch(`/api/order/${orderId}/update-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({
+                            status: newStatus
+                        }),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || `HTTP error! Status: ${response.status}`);
+                    }
+
+                    // Show success notification (replace alert with a better UI)
+                    showToast('Cập nhật trạng thái thành công!', 'success');
+
+                    // Refresh orders
+                    const statusFilter = document.querySelector('.modal.show')?.dataset?.status || '';
+                    await fetchOrdersForShipper(statusFilter);
+                } catch (error) {
+                    console.error('Error updating order status:', error);
+                    showToast(`Lỗi: ${error.message}`, 'error');
+                } finally {
+                    // Hide loading state
+                    const button = document.querySelector(`[data-order-id="${orderId}"]`);
+                    button?.removeAttribute('disabled');
+                }
+            };
+
+            // Example toast notification function (using a library like SweetAlert2)
+            function showToast(message, type) {
+                // Replace with your preferred notification library
+                alert(message); // Fallback for now
+            }
+
+            var shipperOrdersModal = document.getElementById('shipperOrdersModal');
+            shipperOrdersModal.addEventListener('show.bs.modal', function(event) {
+                const statusFilter = event.relatedTarget.dataset.status || '';
+                fetchOrdersForShipper(statusFilter);
+            });
+
+
+
+            fetchOrdersForShipper();
+        });
+    </script>
 
 @endsection

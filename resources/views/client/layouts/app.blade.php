@@ -424,12 +424,12 @@
             setTimeout(() => {
                 messageElement.classList.add('hide');
                 messageElement.classList.remove('show');
-            }, 1000000);
+            }, 3000);
 
             // Xóa sau 3s
             setTimeout(() => {
                 container.removeChild(messageElement);
-            }, 1000000);
+            }, 3000);
         }
 
         const routes = {

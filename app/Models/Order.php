@@ -79,6 +79,10 @@ class Order extends Model
         return $this->hasOne(Courier::class, 'courier_id');
     }
 
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
     protected $dispatchesEvents = [
         'updated' => \App\Events\OrderStatusChanged::class,
     ];
