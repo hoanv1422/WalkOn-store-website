@@ -43,9 +43,9 @@ class PostCommentPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, PostComments $comment)
+    public function delete(User $user, PostComments $postComment)
     {
-        return $user->id === $comment->user_id || $user->is_admin;
+        return $user->id === $postComment->user_id;
     }
 
     /**

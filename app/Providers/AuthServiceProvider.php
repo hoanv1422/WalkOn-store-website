@@ -33,9 +33,8 @@ class AuthServiceProvider extends ServiceProvider
         //
         $this->registerPolicies();
 
-        Gate::define('delete-comment', function ($user, PostComments $comment) {
-            // Cho phép user sở hữu comment hoặc admin xóa
-            return $user->id === $comment->user_id || $user->hasRole('admin');
+        Gate::define('delete-comment', function ($user, PostComments $postComment) {
+            return $user->id === $postComment->user_id;
         });
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {

@@ -225,7 +225,7 @@ class OrderController extends Controller
         $colors = Color::all();
         $cancellationReasons = OrderCancellationReason::all();
 
-        return view('client.pages.profile.orders', compact('user', 'orders', 'categories', 'colors', 'cancellationReasons'));
+        return view('client.pages.order.orders', compact('user', 'orders', 'categories', 'colors', 'cancellationReasons'));
     }
 
 
