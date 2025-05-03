@@ -276,6 +276,12 @@
                         const colors = product.colors;
                         const sizes = product.sizes;
 
+                        document.getElementById('description-product-tab').innerHTML = product.description;
+
+                        if (product.average_rating !== undefined) {
+                            updateProductRating(product.average_rating);
+                        }
+
                         document.getElementById('product-id-detail').value = product.id;
 
                         const imageSliders = document.getElementById('single-product-slider');
@@ -806,45 +812,40 @@
 
         async function fetchRecommendProducts(slug) {
             try {
-                const response = await fetch(
-                    `/api/get-recommend-products/${slug}`
-                );
+                const response = await fetch(`/api/get-recommend-products/${slug}`);
                 if (!response.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${response.status}`
-                    );
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
                 const data = await response.json();
                 const recommendedProducts = data.data.recommended_products;
 
+                const recommendedProductsDisplay = document.getElementById("recommended-products");
+                const upsellSection = document.querySelector(".upsell-product.home2");
 
-                const recommendedProductsDisplay =
-                    document.getElementById("recommended-products");
-
-                if (data.status === "success") {
+                if (data.status === "success" && recommendedProducts.length > 0) {
                     recommendedProductsDisplay.innerHTML = "";
 
                     recommendedProducts.forEach((product) => {
-
                         recommendedProductsDisplay.innerHTML += renderProductItem(product);
                     });
+
+                    // Hiển thị khối gợi ý
+                    upsellSection.style.display = "block";
 
                     // Initialize slider
                     initSlider('#commended-products-slider');
                 } else {
-                    console.error(
-                        "Failed to fetch related products:",
-                        data.message
-                    );
-                    document.getElementById("related-products").innerHTML =
-                        "<p>Không tìm thấy sản phẩm liên quan.</p>";
+                    // Ẩn khối gợi ý nếu không có sản phẩm
+                    upsellSection.style.display = "none";
+                    console.warn("Không có sản phẩm đề xuất.");
                 }
             } catch (error) {
                 console.error("Error fetching related products:", error);
-                document.getElementById("related-products").innerHTML =
-                    "<p>Lỗi khi tải sản phẩm liên quan.</p>";
+                document.querySelector(".upsell-product.home2").style.display = "none";
             }
         }
+
 
         function initSlider(containerSelector) {
             const container = document.querySelector(containerSelector);
@@ -925,6 +926,10 @@
         }
 
 
+        let allComments = [];
+        let currentPage = 1;
+        const COMMENTS_PER_PAGE = 3;
+
         function fetchComments(slug, star) {
             // Construct the API URL
             let url = `/api/products/${slug}/comments`;
@@ -934,17 +939,20 @@
                 url += `?rating=${star}`;
             }
 
+            // Reset pagination when fetching new comments
+            currentPage = 1;
+
             // Show loading state
             const commentsContainer = document.getElementById('comments-container');
             if (commentsContainer) {
                 commentsContainer.innerHTML = `
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
-            </div>
-            <p class="text-center mt-2">Đang tải bình luận...</p>
-            `;
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                    </div>
+                    <p class="text-center mt-2">Đang tải bình luận...</p>
+                `;
             }
 
             // Fetch comments from API
@@ -958,8 +966,11 @@
                 .then(data => {
                     // Handle the response
                     if (data.success) {
-                        displayComments(data.data);
-                        updateAverageRating(data.data);
+                        // Store all comments
+                        allComments = data.data;
+
+                        // Display only the first page
+                        displayComments(allComments, true);
                         return data.data;
                     } else {
                         // If no comments but success is false
@@ -970,177 +981,109 @@
                         </div>
                     `;
                         }
-                        // Reset average rating display
-                        updateAverageRating([]);
-                        return [];
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching comments:', error);
                     if (commentsContainer) {
                         commentsContainer.innerHTML = `
-                    <div class="alert alert-danger text-center" role="alert">
-                        <i class="fa fa-exclamation-circle me-2"></i>
-                        Có lỗi xảy ra khi tải bình luận.
-                    </div>
+                <div class="alert alert-danger text-center" role="alert">
+                    <i class="fa fa-exclamation-circle me-2"></i>
+                    Có lỗi xảy ra khi tải bình luận.
+                </div>
                 `;
                     }
                     return [];
                 });
         }
 
-        function updateAverageRating(comments) {
-            const avgRatingElement = document.querySelector('.avg_rating');
-            if (!avgRatingElement) return;
 
-            if (!comments || comments.length === 0) {
-                avgRatingElement.innerHTML =
-                    '<span class="badge bg-secondary">Đánh giá trung bình: <i class="fa fa-star"></i> 0</span>';
-                return;
-            }
 
-            // Calculate average rating
-            const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-            const avgRating = (totalRating / comments.length).toFixed(1);
-
-            // Determine badge color based on rating
-            let badgeClass = 'bg-warning text-dark';
-            if (avgRating >= 4.5) badgeClass = 'bg-success';
-            else if (avgRating >= 3.5) badgeClass = 'bg-primary';
-            else if (avgRating >= 2.5) badgeClass = 'bg-info text-dark';
-            else if (avgRating >= 1.5) badgeClass = 'bg-warning text-dark';
-            else badgeClass = 'bg-danger';
-
-            // Update the average rating display with Bootstrap badge
-            avgRatingElement.innerHTML =
-                `<span class="badge ${badgeClass}">Đánh giá trung bình: <i class="fa fa-star"></i> ${avgRating}</span>`;
-        }
-
-        function displayComments(comments) {
+        function displayComments(comments, isFirstLoad = false) {
             const commentsContainer = document.getElementById('comments-container');
             if (!commentsContainer) return;
 
+            // Clear container if this is the first load
+            if (isFirstLoad) {
+                commentsContainer.innerHTML = '';
+            }
+
+            // If no comments
             if (!comments || comments.length === 0) {
                 commentsContainer.innerHTML = '<p class="text-center">Không có bình luận nào.</p>';
                 return;
             }
 
-            // Clear previous comments
-            commentsContainer.innerHTML = '';
+            // Calculate which comments to display
+            const startIndex = 0;
+            const endIndex = currentPage * COMMENTS_PER_PAGE;
+            const commentsToDisplay = comments.slice(startIndex, endIndex);
 
-            // Loop through comments and create HTML elements
-            comments.forEach(comment => {
-                const commentEl = document.createElement('div');
-                commentEl.className = 'card mb-3';
-
-                // Generate stars based on rating
-                let stars = '';
-                for (let i = 1; i <= 5; i++) {
-                    if (i <= comment.rating) {
-                        stars += '<i class="fa fa-star text-warning"></i>';
-                    } else {
-                        stars += '<i class="far fa-star text-warning"></i>';
-                    }
-                }
-
-                // Format date
-                const date = new Date(comment.created_at);
-                const formattedDate = date.toLocaleDateString('vi-VN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+            // If first load, replace all content
+            if (isFirstLoad) {
+                commentsContainer.innerHTML = '';
+                commentsToDisplay.forEach(comment => {
+                    const commentEl = createCommentElement(comment);
+                    commentsContainer.appendChild(commentEl);
+                });
+            } else {
+                // Otherwise, just add the new comments
+                const newComments = comments.slice((currentPage - 1) * COMMENTS_PER_PAGE, endIndex);
+                newComments.forEach(comment => {
+                    const commentEl = createCommentElement(comment);
+                    commentsContainer.appendChild(commentEl);
                 });
 
-                // Create comment HTML
-                commentEl.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="user-info">
-                                <h6 class="card-subtitle mb-1">${comment.user?.name || 'Người dùng'}</h6>
-                                <p class="card-text"><small class="text-muted">${formattedDate}</small></p>
-                            </div>
-                            <div class="rating">
-                                ${stars}
-                            </div>
-                        </div>
-                        <p class="card-text mt-2">${comment.content}</p>
-
-                        <div>
-                            ${
-                                comment.galleries && comment.galleries.length > 0
-                                    ? comment.galleries
-                                        .map(
-                                            (gallery) =>
-                                                `<img src="${
-                                                                                    gallery.image || gallery
-                                                                                }" alt="Comment image" class="img-fluid mt-2" />`
-                                        )
-                                        .join('')
-                                    : ''
-                            } 
-                        </div>
-                    </div>
-                    `;
-
-                commentsContainer.appendChild(commentEl);
-            });
-        }
-
-
-
-        async function storeComment(event, slug) {
-            try {
-                event.preventDefault();
-                const form = event.target;
-                const formData = new FormData(form);
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                let url = `/api/products/${slug}/comments`;
-                const commentData = {
-                    content: formData.get('content'),
-                    rating: formData.get('rating'),
-                    image: formData.get('image')
-                };
-
-                console.log(commentData);
-
-
-                // Gửi yêu cầu POST đến API
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error('Lưu bình luận thất bại');
+                // Remove the existing load more button if it exists
+                const existingButton = document.getElementById('load-more-comments');
+                if (existingButton) {
+                    existingButton.remove();
                 }
+            }
 
-                const result = await response.json();
-                console.log('Bình luận đã được lưu:', result);
+            // Add "Load More" button if there are more comments to load
+            if (endIndex < comments.length) {
+                const loadMoreButton = document.createElement('div');
+                loadMoreButton.className = 'text-center mt-4';
+                loadMoreButton.innerHTML = `
+            <button id="load-more-comments" class="btn btn-outline-primary">
+                <i class="fa fa-refresh me-2"></i>Xem thêm bình luận
+            </button>
+            `;
+                commentsContainer.appendChild(loadMoreButton);
 
-                // Reset form sau khi lưu thành công
-                form.reset();
-
-                // Cập nhật giao diện (ví dụ: thêm bình luận mới vào danh sách)
-                renderNewComment(result.comment);
-
-            } catch (error) {
-                console.error('Lỗi:', error.message);
-                alert('Đã có lỗi xảy ra khi lưu bình luận');
+                // Add event listener to the load more button
+                document.getElementById('load-more-comments').addEventListener('click', function() {
+                    currentPage++;
+                    displayComments(allComments, false);
+                });
             }
         }
 
-        // Hàm giả lập để render bình luận mới (tùy thuộc vào code trước đó của bạn)
-        function renderNewComment(comment) {
+        // Function to create comment element
+        function createCommentElement(comment) {
             const commentEl = document.createElement('div');
-            const formattedDate = new Date(comment.created_at).toLocaleDateString();
-            const stars = '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating);
+            commentEl.className = 'card mb-3';
 
+            // Generate stars based on rating
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= comment.rating) {
+                    stars += '<i class="fa fa-star text-warning"></i>';
+                } else {
+                    stars += '<i class="fa fa-star-o text-warning"></i>';
+                }
+            }
+
+            // Format date
+            const date = new Date(comment.created_at);
+            const formattedDate = date.toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Create comment HTML
             commentEl.innerHTML = `
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -1153,23 +1096,199 @@
                         </div>
                     </div>
                     <p class="card-text mt-2">${comment.content}</p>
-                    <div>
+                    
+                    <div class="comment-images d-flex flex-wrap gap-2 mt-2">
                         ${
                             comment.galleries && comment.galleries.length > 0
                                 ? comment.galleries
                                     .map(
                                         (gallery) =>
-                                            `<img src="${gallery.image_url}" alt="Comment image" class="img-fluid mt-2" />`
+                                            `<img src="http://127.0.0.1:8000/storage/${gallery.image || gallery}"
+                                                        alt="Comment image"
+                                                        class="img-thumbnail"
+                                                        style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;" />`
                                     )
                                     .join('')
                                 : ''
                         }
                     </div>
                 </div>
-            `;
+                `;
 
-            // Thêm bình luận mới vào danh sách (giả sử có container với id="comments-list")
-            document.getElementById('comments-list').prepend(commentEl);
+            return commentEl;
+        }
+
+        async function storeComment(event, slug) {
+            event.preventDefault();
+
+            // Ẩn thông báo lỗi cũ nếu có
+            const formErrors = document.getElementById('form-errors');
+            const formErrorsList = formErrors.querySelector('ul');
+            formErrors.classList.add('d-none');
+            formErrorsList.innerHTML = '';
+
+            const formMessage = document.getElementById('form-message');
+            formMessage.innerHTML = '';
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `/products/${slug}/comments`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                // Xử lý phản hồi không thành công với trạng thái mã HTTP
+                if (!response.ok) {
+                    console.error('Lỗi từ server:', data);
+
+                    // Xử lý các loại phản hồi lỗi khác nhau
+                    if (response.status === 422 && data.errors) {
+                        // Lỗi validation
+                        formErrors.classList.remove('d-none');
+                        Object.keys(data.errors).forEach(key => {
+                            const errorMessages = data.errors[key];
+                            errorMessages.forEach(errorMessage => {
+                                const li = document.createElement('li');
+                                li.textContent = errorMessage;
+                                formErrorsList.appendChild(li);
+                            });
+                        });
+                    } else if (response.status === 401) {
+                        // Lỗi chưa đăng nhập
+                        formErrors.classList.remove('d-none');
+                        const li = document.createElement('li');
+                        li.textContent = data.message || 'Bạn cần đăng nhập để bình luận.';
+                        formErrorsList.appendChild(li);
+
+                        // Optional: Redirect to login page after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    } else if (response.status === 403) {
+                        // Lỗi không có quyền hoặc chưa mua sản phẩm
+                        formErrors.classList.remove('d-none');
+                        const li = document.createElement('li');
+                        li.textContent = data.message;
+                        formErrorsList.appendChild(li);
+                    } else if (response.status === 404) {
+                        // Lỗi không tìm thấy sản phẩm
+                        formErrors.classList.remove('d-none');
+                        const li = document.createElement('li');
+                        li.textContent = data.message || 'Sản phẩm không tồn tại.';
+                        formErrorsList.appendChild(li);
+                    } else {
+                        // Các lỗi khác
+                        formErrors.classList.remove('d-none');
+                        const li = document.createElement('li');
+                        li.textContent = data.message || 'Đã xảy ra lỗi khi gửi bình luận';
+                        formErrorsList.appendChild(li);
+                    }
+
+                    return;
+                }
+
+                // Xử lý phản hồi thành công
+                if (data.success) {
+                    showMessage('Bình luận thành công', '#4CAF50');
+
+                    // Reset image preview
+                    document.getElementById('image-preview').innerHTML = '';
+                    selectedFiles = [];
+                    form.reset();
+
+                    if (data.average_rating !== undefined) {
+                        updateProductRating(data.average_rating);
+                    }
+
+                    // Refresh comments để hiển thị bình luận mới
+                    fetchComments(slug);
+                } else {
+                    // Trường hợp hiếm: thành công HTTP nhưng JSON có success = false
+                    formErrors.classList.remove('d-none');
+                    const li = document.createElement('li');
+                    li.textContent = data.message || 'Đã xảy ra lỗi không xác định khi gửi bình luận';
+                    formErrorsList.appendChild(li);
+                }
+
+            } catch (error) {
+                console.error('Lỗi kết nối:', error);
+
+                // Hiển thị lỗi kết nối
+                formErrors.classList.remove('d-none');
+                const li = document.createElement('li');
+                li.textContent = 'Không thể gửi bình luận. Vui lòng thử lại sau.';
+                formErrorsList.appendChild(li);
+            }
+        }
+
+
+        function updateProductRating(averageRating) {
+            // Tìm tất cả các phần tử hiển thị đánh giá trung bình
+            const ratingElements = document.querySelectorAll('.product-average-rating');
+            const ratingValueElements = document.querySelectorAll('.product-rating-value');
+            const ratingStarsContainers = document.querySelectorAll('.product-rating-stars');
+
+
+            // Cập nhật giá trị số
+            ratingValueElements.forEach(element => {
+                element.textContent = averageRating;
+            });
+
+            // Cập nhật hiển thị sao
+            ratingStarsContainers.forEach(container => {
+                // Xóa tất cả sao hiện tại
+                container.innerHTML = '';
+
+                // Thêm sao mới dựa trên giá trị average_rating
+                const fullStars = Math.floor(averageRating);
+                const hasHalfStar = averageRating % 1 >= 0.5;
+
+                // Thêm sao đầy
+                for (let i = 0; i < fullStars; i++) {
+                    const star = document.createElement('i');
+                    star.className = 'fa fa-star text-warning';
+                    container.appendChild(star);
+                }
+
+                // Thêm nửa sao nếu cần
+                if (hasHalfStar) {
+                    const halfStar = document.createElement('i');
+                    halfStar.className = 'fa fa-star-half-o text-warning'; // Font Awesome half star
+                    container.appendChild(halfStar);
+                }
+
+                // Thêm sao rỗng cho phần còn lại
+                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                for (let i = 0; i < emptyStars; i++) {
+                    const emptyStar = document.createElement('i');
+                    emptyStar.className = 'fa fa-star-o text-warning'; // Font Awesome empty star
+                    container.appendChild(emptyStar);
+                }
+            });
+
+            // Cập nhật số lượng đánh giá (nếu hiển thị)
+            // Giả sử chúng ta đang lấy số lượng đánh giá từ server response
+            const reviewCountElements = document.querySelectorAll('.product-review-count');
+            if (reviewCountElements.length > 0) {
+                // Nếu chúng ta không có số lượng đánh giá từ server, chúng ta có thể cập nhật bằng cách tăng thêm 1
+                const currentCount = parseInt(reviewCountElements[0].textContent, 10) || 0;
+                const newCount = currentCount + 1;
+
+                reviewCountElements.forEach(element => {
+                    element.textContent = newCount;
+                });
+            }
         }
 
         const imageInput = document.querySelector('input[name="image[]"]');
@@ -1179,6 +1298,11 @@
         imageInput.addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
 
+            if (files.length > 3) {
+                alert('Chỉ được chọn tối đa 3 ảnh.');
+                imageInput.value = ''; // Reset input
+                return;
+            }
             // Gộp file mới vào danh sách tạm thời
             selectedFiles = files;
 
@@ -1197,6 +1321,7 @@
                     img.style.width = '100px';
                     img.style.height = '100px';
                     img.style.objectFit = 'cover';
+                    img.style.marginBottom = '10px';
                     img.classList.add('rounded');
 
                     const removeBtn = document.createElement('button');

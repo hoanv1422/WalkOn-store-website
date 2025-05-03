@@ -91,7 +91,7 @@ Route::middleware('client')->group(function () {
 
 
 Route::get('/api/products/{slug}/comments', [CommentController::class, 'comments'])->name('detail.comments');
-Route::post('/api/products/ao-thun-adidas-originals/comments', [CommentController::class, 'storeComment'])->name('detail.comments.store');
+Route::post('/products/{slug}/comments', [CommentController::class, 'storeComment'])->name('detail.comments.store');
 
 Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
@@ -106,23 +106,15 @@ Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\Ord
 // Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
 
 // // Blog
-// Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-// Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
-// Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
+Route::delete('/blog/delete-comment/{id}', [BlogController::class, 'destroyComment'])->name('blog.comment.delete');
 
 // // Contact
 // Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
 // //commment
 
-// // Tuyến đường hiển thị trang bình luận của sản phẩm
-// Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
-
-// // Tuyến đường xử lý thêm bình luận
-// Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-
-
-
-// Route::get('/product/{slug}', [DetailController::class, 'productDetail'])->name('product.detail');
 
 

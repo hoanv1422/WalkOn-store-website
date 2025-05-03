@@ -171,19 +171,22 @@ class BlogController extends Controller
         }
     }
 
-    public function destroyComment(PostComments $comment)
+    public function destroyComment(PostComments $postComment)
     {
+
+        // dd($comment);
+        // return response()->json(['message' => $comment]);
         try {
             if (!auth()->check()) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
 
-            if (Gate::denies('delete-comment', $comment)) {
+            if (Gate::denies('delete-comment', $postComment)) {
                 return response()->json(['message' => 'Forbidden'], 403);
             }
 
-            $isParent = is_null($comment->parent_id);
-            $comment->delete();
+            $isParent = is_null($postComment->parent_id);
+            $postComment->delete();
 
             return response()->json([
                 'success' => true,

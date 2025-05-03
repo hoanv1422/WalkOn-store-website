@@ -18,9 +18,10 @@ class ShipperController extends Controller
 
     public function loadOrderForShipper()
     {
-        $userId = Auth::id();
 
+        $userId = Auth::id();
         $courier = Courier::where('user_id', $userId)->first();
+
 
         if (!$courier) {
             return response()->json([
@@ -30,7 +31,6 @@ class ShipperController extends Controller
         }
 
         $orders = Order::where('courier_id', $courier->id)
-            ->with('customer:name,email')
             ->get();
 
         return response()->json([
@@ -51,5 +51,54 @@ class ShipperController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Đơn hàng đã được hoàn thành.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $id,
+        // ], 404);
+
+        $request->validate([
+            'status' => 'required|in:ready,picking_up,shipping,delivered',
+        ]);
+
+        $userId = Auth::id();
+        $courier = Courier::where('user_id', $userId)->first();
+
+       
+        if (!$courier) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy thông tin courier',
+            ], 404);
+        }
+
+        $order = Order::where('id', $id)
+            ->where('courier_id', $courier->id)
+            ->first();
+      
+
+    
+
+
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy đơn hàng',
+            ], 404);
+        }
+
+
+        $order->order_status = $request->status;
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật trạng thái thành công',
+        ], 200);
     }
 }

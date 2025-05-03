@@ -349,34 +349,34 @@
                 }).format(amount) + ' VND';
             }
 
-            function showMessage(message, color) {
-                let toastContainer = document.getElementById('toast-container');
-                if (!toastContainer) {
-                    toastContainer = document.createElement('div');
-                    toastContainer.id = 'toast-container';
-                    toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
-                    document.body.appendChild(toastContainer);
-                }
+            // function showMessage(message, color) {
+            //     let toastContainer = document.getElementById('toast-container');
+            //     if (!toastContainer) {
+            //         toastContainer = document.createElement('div');
+            //         toastContainer.id = 'toast-container';
+            //         toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+            //         document.body.appendChild(toastContainer);
+            //     }
 
-                const toastId = 'toast-' + Date.now();
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.id = toastId;
-                toast.setAttribute('role', 'alert');
-                toast.setAttribute('aria-live', 'assertive');
-                toast.setAttribute('aria-atomic', 'true');
-                toast.innerHTML = `
-                        <div class="toast-header" style="background-color: ${color}; color: white;">
-                            <strong class="me-auto">Thông báo</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">${message}</div>
-                    `;
-                toastContainer.appendChild(toast);
-                const bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-                toast.addEventListener('hidden.bs.toast', () => toast.remove());
-            }
+            //     const toastId = 'toast-' + Date.now();
+            //     const toast = document.createElement('div');
+            //     toast.className = 'toast';
+            //     toast.id = toastId;
+            //     toast.setAttribute('role', 'alert');
+            //     toast.setAttribute('aria-live', 'assertive');
+            //     toast.setAttribute('aria-atomic', 'true');
+            //     toast.innerHTML = `
+            //             <div class="toast-header" style="background-color: ${color}; color: white;">
+            //                 <strong class="me-auto">Thông báo</strong>
+            //                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            //             </div>
+            //             <div class="toast-body">${message}</div>
+            //         `;
+            //     toastContainer.appendChild(toast);
+            //     const bsToast = new bootstrap.Toast(toast);
+            //     bsToast.show();
+            //     toast.addEventListener('hidden.bs.toast', () => toast.remove());
+            // }
 
             function showError(fieldId, errorMessage) {
                 const field = document.getElementById(fieldId);

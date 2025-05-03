@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab2">
-                            <div class="single-p-tab-content">
+                            <div class="single-p-tab-content" id="description-product-tab">
                                 {{-- {!! $product->description !!} --}}
                             </div>
                             

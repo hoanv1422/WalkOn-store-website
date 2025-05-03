@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Client\WishlistController;
 use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Jobs\AutoAssignOrderJob;
+use App\Models\JobLog;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 
@@ -104,3 +107,66 @@ Route::controller(AuthController::class)->group(function () {
 
 // Tuyến đường xử lý thêm bình luận
 // Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+Route::get('/test-job/{order_id}', function ($orderId) {
+    $order = Order::find($orderId);
+
+    if (!$order) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Không tìm thấy đơn hàng với ID: ' . $orderId
+        ], 404);
+    }
+
+    // Tạo log trước khi dispatch job
+    JobLog::createLog(
+        'AutoAssignOrderJob',
+        $order->id,
+        'job_dispatched',
+        ['user_initiated' => true],
+        'pending'
+    );
+
+    // Dispatch job
+    dispatch(new AutoAssignOrderJob($order));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Job đã được gửi đi để xử lý đơn hàng ID: ' . $order->id,
+        'order' => $order
+    ]);
+});
+
+// Route để xem logs của job
+Route::get('/job-logs/{order_id?}', function ($orderId = null) {
+    $query = JobLog::query()->orderBy('created_at', 'desc');
+
+    if ($orderId) {
+        $query->where('related_id', $orderId);
+    }
+
+    $logs = $query->limit(50)->get();
+
+    return response()->json([
+        'success' => true,
+        'logs' => $logs
+    ]);
+});
+
+// Route để xóa job logs (thường dùng để test)
+Route::get('/clear-job-logs/{order_id?}', function ($orderId = null) {
+    $query = JobLog::query();
+
+    if ($orderId) {
+        $query->where('related_id', $orderId);
+    }
+
+    $count = $query->count();
+    $query->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Đã xóa ' . $count . ' job logs'
+    ]);
+});

@@ -7,7 +7,7 @@
             <div>
                 <a href="#">{{ $comment->user->name ?? 'Anonymous' }}</a>
                 <span class="text-muted small">
-                    {{ $comment->created_at->diffForHumans() }}
+                    {{ $comment->created_at }}
                 </span>
             </div>
         
@@ -40,17 +40,17 @@
             <form action="{{ route('blog.comment', $post->slug) }}" method="POST" class="reply-comment-form">
                 @csrf
                 <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                <textarea name="content" class="form-control" rows="3" placeholder="Your reply..." required></textarea>
+                <textarea name="content" class="form-control" rows="3" placeholder="Bình Luận Của Bạn..." required></textarea>
                 <div style="margin-top: 5px;">
-                    <button type="submit" class="btn btn-sm btn-primary">Submit Reply</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Đăng</button>
                     <button type="button" class="btn btn-sm btn-secondary cancel-reply"
-                        data-comment-id="{{ $comment->id }}">Cancel</button>
+                        data-comment-id="{{ $comment->id }}">Hủy</button>
                 </div>
             </form>
         </div>
         @else
     <div class="alert alert-info mt-3">
-        Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận
+        Vui lòng <a href="{{ route('login.form') }}">đăng nhập</a> để bình luận
     </div>
 @endauth
         <!-- Nếu có bình luận trả lời -->
