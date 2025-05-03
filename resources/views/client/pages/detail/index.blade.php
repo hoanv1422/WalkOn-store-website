@@ -812,45 +812,40 @@
 
         async function fetchRecommendProducts(slug) {
             try {
-                const response = await fetch(
-                    `/api/get-recommend-products/${slug}`
-                );
+                const response = await fetch(`/api/get-recommend-products/${slug}`);
                 if (!response.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${response.status}`
-                    );
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
                 const data = await response.json();
                 const recommendedProducts = data.data.recommended_products;
 
+                const recommendedProductsDisplay = document.getElementById("recommended-products");
+                const upsellSection = document.querySelector(".upsell-product.home2");
 
-                const recommendedProductsDisplay =
-                    document.getElementById("recommended-products");
-
-                if (data.status === "success") {
+                if (data.status === "success" && recommendedProducts.length > 0) {
                     recommendedProductsDisplay.innerHTML = "";
 
                     recommendedProducts.forEach((product) => {
-
                         recommendedProductsDisplay.innerHTML += renderProductItem(product);
                     });
+
+                    // Hiển thị khối gợi ý
+                    upsellSection.style.display = "block";
 
                     // Initialize slider
                     initSlider('#commended-products-slider');
                 } else {
-                    console.error(
-                        "Failed to fetch related products:",
-                        data.message
-                    );
-                    document.getElementById("related-products").innerHTML =
-                        "<p>Không tìm thấy sản phẩm liên quan.</p>";
+                    // Ẩn khối gợi ý nếu không có sản phẩm
+                    upsellSection.style.display = "none";
+                    console.warn("Không có sản phẩm đề xuất.");
                 }
             } catch (error) {
                 console.error("Error fetching related products:", error);
-                document.getElementById("related-products").innerHTML =
-                    "<p>Lỗi khi tải sản phẩm liên quan.</p>";
+                document.querySelector(".upsell-product.home2").style.display = "none";
             }
         }
+
 
         function initSlider(containerSelector) {
             const container = document.querySelector(containerSelector);
@@ -1054,7 +1049,7 @@
             <button id="load-more-comments" class="btn btn-outline-primary">
                 <i class="fa fa-refresh me-2"></i>Xem thêm bình luận
             </button>
-        `;
+            `;
                 commentsContainer.appendChild(loadMoreButton);
 
                 // Add event listener to the load more button
@@ -1109,9 +1104,9 @@
                                     .map(
                                         (gallery) =>
                                             `<img src="http://127.0.0.1:8000/storage/${gallery.image || gallery}"
-                                                    alt="Comment image"
-                                                    class="img-thumbnail"
-                                                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;" />`
+                                                        alt="Comment image"
+                                                        class="img-thumbnail"
+                                                        style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;" />`
                                     )
                                     .join('')
                                 : ''
