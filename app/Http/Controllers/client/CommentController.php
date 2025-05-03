@@ -10,7 +10,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -46,47 +46,60 @@ class CommentController extends Controller
         ]);
     }
     // Xử lý thêm bình luận
-    public function storeComment(Request $request)
+    public function storeComment(Request $request, $slug)
     {
 
-        dd($request->all());
-        // Validate request
-        // $validator = Validator::make($request->all(), [
-        //     'rating' => 'required|integer|min:1|max:5',
-        //     'content' => 'required|string|max:1000',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'rating' => 'required|integer|min:1|max:5',
+            'content' => 'required|string|max:1000',
+            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
+        ], [
+            'rating.required' => 'Vui lòng chọn số sao đánh giá.',
+            'rating.integer' => 'Số sao đánh giá không hợp lệ.',
+            'rating.min' => 'Số sao thấp nhất là 1.',
+            'rating.max' => 'Số sao cao nhất là 5.',
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Validation error',
-        //         'errors' => $validator->errors()
-        //     ], 422);
-        // }
+            'content.required' => 'Vui lòng nhập nội dung bình luận.',
+            'content.string' => 'Nội dung bình luận không hợp lệ.',
+            'content.max' => 'Nội dung bình luận không được vượt quá 1000 ký tự.',
 
-        // Find the product
+            'image.*.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image.*.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif hoặc webp.',
+        ]);
+
+
+        // Trả về lỗi nếu validate thất bại
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        // Bước 2: Tìm sản phẩm theo slug
         $product = Product::where('slug', $slug)->first();
         if (!$product) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product not found.'
+                'message' => 'Sản phẩm không tồn tại.',
             ], 404);
         }
 
-        // Get current authenticated user
+        // Bước 3: Kiểm tra người dùng đã đăng nhập chưa
         $user = auth()->user();
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bạn cần đăng nhập để bình luận.'
+                'message' => 'Bạn cần đăng nhập để bình luận.',
             ], 401);
         }
 
-        $productVariantIds = ProductVariant::where('product_id', $product->id)->pluck('id')->toArray();
+        // Bước 4: Lấy danh sách các biến thể của sản phẩm
+        $productVariantIds = ProductVariant::where('product_id', $product->id)->pluck('id');
 
-        // Check if user has any completed order containing any variant of this product
+        // Bước 5: Kiểm tra user đã mua sản phẩm và đơn hàng đã hoàn thành
         $completedOrder = Order::where('user_id', $user->id)
-            ->where('status', 'completed') // Assuming 'completed' is the status for completed orders
+            ->where('order_status', 'completed')
             ->whereHas('orderItems', function ($query) use ($productVariantIds) {
                 $query->whereIn('product_variant_id', $productVariantIds);
             })
@@ -95,11 +108,11 @@ class CommentController extends Controller
         if (!$completedOrder) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bạn cần mua và hoàn thành đơn hàng với sản phẩm này trước khi bình luận.'
+                'message' => 'Bạn cần hoàn tất đơn hàng chứa sản phẩm này trước khi bình luận.',
             ], 403);
         }
 
-        // Check if user has already commented on this product from this order
+        // Bước 6: Kiểm tra đã bình luận cho sản phẩm trong đơn hàng này chưa
         $existingComment = Comment::where('user_id', $user->id)
             ->where('product_id', $product->id)
             ->where('order_id', $completedOrder->id)
@@ -108,24 +121,57 @@ class CommentController extends Controller
         if ($existingComment) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bạn đã bình luận cho sản phẩm này với đơn hàng này rồi.'
+                'message' => 'Bạn đã bình luận cho sản phẩm này trong đơn hàng này.',
             ], 403);
         }
 
-        // Create the comment
+        // Bước 7: Tạo bình luận
         $comment = new Comment();
         $comment->user_id = $user->id;
         $comment->product_id = $product->id;
-        // $comment->order_id = $completedOrder->id;
+        $comment->order_id = $completedOrder->id;
         $comment->rating = $request->rating;
         $comment->content = $request->content;
+
         $comment->save();
+
+        // Nếu có hình ảnh, lưu vào bảng comment_galleries
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $file) {
+                $path = $file->store('comments', 'public');
+
+                $comment->galleries()->create([
+                    'image' => $path,
+                ]);
+            }
+        }
+
+        $this->updateProductAverageRating($product->id);
 
         return response()->json([
             'success' => true,
             'message' => 'Bình luận của bạn đã được ghi nhận.',
-            'data' => $comment
+            'data' => $comment,
         ], 201);
     }
-    
+
+    private function updateProductAverageRating($productId)
+    {
+        // Lấy tất cả các đánh giá của sản phẩm
+        $ratings = Comment::where('product_id', $productId)->pluck('rating');
+
+        // Tính trung bình đánh giá nếu có bình luận
+        if ($ratings->count() > 0) {
+            $averageRating = $ratings->avg();
+
+            // Làm tròn đến 1 chữ số thập phân
+            $averageRating = round($averageRating, 1);
+
+            // Cập nhật giá trị average_rating trong bảng product
+            Product::where('id', $productId)->update(['average_rating' => $averageRating]);
+        } else {
+            // Nếu không có bình luận nào, đặt average_rating = 0
+            Product::where('id', $productId)->update(['average_rating' => 0]);
+        }
+    }
 }

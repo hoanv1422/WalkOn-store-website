@@ -57,4 +57,11 @@ class Comment extends Model
     {
         return $this->hasMany(CommentGallery::class);
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+
 }
