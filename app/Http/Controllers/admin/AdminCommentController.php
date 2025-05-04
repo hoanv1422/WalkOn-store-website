@@ -17,7 +17,7 @@ class AdminCommentController extends Controller
     public function index(Request $request)
     {
         // Lấy các tham số từ bộ lọc (nếu có)
-        $query = Comment::with('user', 'product', 'replies')->orderBy('created_at', 'desc');
+        $query = Comment::with('user', 'product')->orderBy('created_at', 'desc');
     
         // Lọc theo sản phẩm (nếu có)
         if ($request->filled('product_id')) {
