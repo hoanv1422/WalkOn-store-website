@@ -4,83 +4,31 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-6">
                         <div class="footer-contact">
-                            <img src="img/logo-white.png" alt="">
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
-                                tincidunt.</p>
+                            <img src="http://127.0.0.1:8000/img/logoWalkOn.png" alt="">
+                            
                             <ul class="address">
-                                @foreach ($footer as $footers )
+                                {{-- @foreach ($footer as $footers ) --}}
                                     
                                
                                 <li>
                                     <span class="fa fa-fax"></span>
-                                    {{$footers->address}}
+                                    {{$footer->address}}
                                 </li>
                                 <li>
                                     <span class="fa fa-phone"></span>
-                                    {{$footers->phone_number}}
+                                    {{$footer->phone_number}}
                                 </li>
                                 <li>
                                     <span class="fa fa-envelope-o"></span>
-                                    {{$footers->email}}
+                                    {{$footer->email}}
                                 </li>
-                                @endforeach
+                                {{-- @endforeach --}}
                             </ul>
                         </div>
                     </div>
-                    {{-- <div class="col-lg-3 col-md-6">
-                        <div class="footer-tweets">
-                            <div class="footer-title">
-                                <h3>Latest tweets</h3>
-                            </div>
-                            <div class="twitter-feed">
-                                <div class="twitter-article">
-                                    <div class="twitter-img">
-                                        <a href="#">
-                                            <img src="img/twitter/twitter-1.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="twitter-text">
-                                        <p>Raboda Fashion #Magento #Theme comes up with pure white and grey, which great
-                                            show your products. Check it: </p>
-                                        <a href="#">https://t.co/iu0OYBwti8</a>
-                                        <div class="twitter-time">
-                                            <a href="#">16h</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="twitter-article">
-                                    <div class="twitter-img">
-                                        <a href="#">
-                                            <img src="img/twitter/twitter-1.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="twitter-text">
-                                        <p>Raboda Fashion #Magento #Theme comes up with pure white and grey, which great
-                                            show your products. Check it: </p>
-                                        <a href="#">https://t.co/iu0OYBwti8</a>
-                                        <div class="twitter-time">
-                                            <a href="#">16h</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
+                   
                     <div class="col-lg-3 col-md-6">
-                        {{-- <div class="footer-support">
-                            <div class="footer-title">
-                                <h3>Our support</h3>
-                            </div>
-                            <div class="footer-menu">
-                                <ul>
-                                    <li><a href="#">Sitemap</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Advanced Search</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div> --}}
+
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-info">
@@ -101,23 +49,9 @@
                 </div>
             </div>
         </div>
-        <!-- footer top area end -->
-        <!-- footer area start -->
+        
         <footer class="footer-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="footer-copyright">
-                            <p>Copyright &copy; 2022 <a href="#"> Bootexperts</a>. All Rights Reserved</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="payment-icon">
-                            <img src="img/payment.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <a href="#" id="scrollUp"><i class="fa fa fa-arrow-up"></i></a>
         </footer>
         <!-- footer area end -->

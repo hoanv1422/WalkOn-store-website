@@ -20,7 +20,7 @@ class HomeController extends Controller
     {
         $products = Product::orderBy('id', 'desc')->take(6)->get();
         $brands = Brand::with('products')->get();
-        $footer = website_information::get();
+        
         $topSellingProducts = Product::orderByDesc('sold_quantity')
             ->limit(20)
             ->pluck('id')
@@ -64,7 +64,7 @@ class HomeController extends Controller
             ->get();
         $banners = Banner::orderBy('position')->get();
 
-        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts', 'banners','footer'));
+        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts', 'banners'));
     }
 
     public function getProductById(Request $request)
