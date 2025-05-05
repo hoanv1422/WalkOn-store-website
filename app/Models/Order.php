@@ -43,7 +43,7 @@ class Order extends Model
         'shipping'     => 'Đang vận chuyển',
         'delivered'    => 'Đã giao',
         'cancelled'    => 'Đã hủy',
-        'refunded'     => 'đã hoàn đơn',
+        'returned'     => 'Hoàn đơn',
         'completed'    => 'Hoàn tất'
     ];
     /**

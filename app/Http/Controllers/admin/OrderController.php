@@ -135,71 +135,62 @@ class OrderController extends Controller
             'order_status' => 'required|string',
         ]);
 
-        $oldStatus = $order->order_status;
-        $newStatus = $data['order_status'];
+        $old = $order->order_status;
+        $new = $data['order_status'];
 
-        // Nếu đơn hàng đã bị hủy thì không cho phép chuyển sang trạng thái khác
-        if ($oldStatus === 'cancelled' && $newStatus !== 'cancelled') {
-            $errorMsg = 'Đơn hàng đã bị hủy, không thể thay đổi trạng thái sang "'
-                . Order::getStatusVn($newStatus) . '"!';
-            return $request->ajax()
-                ? response()->json(['error' => $errorMsg], 422)
-                : redirect()->back()->with('error', $errorMsg);
+        // 1) Đơn hàng đã hủy rồi thì không thay được sang khác
+        if ($old === 'cancelled' && $new !== 'cancelled') {
+            $payload = [
+                'code'  => 'already_cancelled',
+                'error' => 'Đơn hàng đã bị hủy trước đó, không thể chuyển trạng thái nữa.',
+            ];
+            return response()->json($payload, 422);
         }
 
-        // Chỉ cho phép huỷ đơn hàng nếu thanh toán bằng COD
-        if ($newStatus === 'cancelled' && strtolower($order->payment_method) !== 'cod') {
-            $errorMsg = 'Đơn hàng thanh toán online không được hủy.';
-            return $request->ajax()
-                ? response()->json(['error' => $errorMsg], 422)
-                : redirect()->back()->with('error', $errorMsg);
+        // 2) Chỉ cho phép huỷ nếu COD
+        if ($new === 'cancelled' && strtolower($order->payment_method) !== 'cod') {
+            $payload = [
+                'code'  => 'cancel_non_cod',
+                'error' => 'Chỉ có đơn COD mới được phép hủy.',
+            ];
+            return response()->json($payload, 422);
         }
 
-        // Định nghĩa các luồng chuyển trạng thái hợp lệ
-        $allowedTransitions = [
-
+        // 3) Kiểm tra luồng chuyển trạng thái hợp lệ
+        $allowed = [
             'pending'    => ['confirmed', 'processing', 'cancelled'],
             'confirmed'  => ['processing', 'cancelled'],
             'processing' => ['ready', 'cancelled'],
             'ready'      => ['picking_up', 'shipping', 'cancelled'],
             'picking_up' => ['shipping', 'cancelled'],
-            'shipping'   => ['delivered'],
-            'delivered'  => [ 'completed', 'returned'],
-            'returned'   => ['completed'],
+            'shipping'   => ['delivered', 'returned'],
+            'delivered'  => ['completed', 'returned'],
+            'returned'   => [],
             'cancelled'  => [],
             'completed'  => [],
-
         ];
-
-        // Kiểm tra chuyển trạng thái hợp lệ
-        if (! in_array($newStatus, $allowedTransitions[$oldStatus] ?? [])) {
-            $errorMsg = "Chuyển trạng thái từ '{$order->order_status_vn}' sang '"
-                . Order::getStatusVn($newStatus)
-                . "' không hợp lệ. Vui lòng kiểm tra lại quy trình chuyển trạng thái.";
-            return $request->ajax()
-                ? response()->json(['error' => $errorMsg], 422)
-                : redirect()->back()->with('error', $errorMsg);
+        if (! in_array($new, $allowed[$old] ?? [])) {
+            $payload = [
+                'code'  => 'invalid_transition',
+                'error' => "Không thể chuyển từ “{$order->order_status_vn}” sang “" . Order::getStatusVn($new) . "”.",
+            ];
+            return response()->json($payload, 422);
         }
 
-        // Kiểm tra nghiệp vụ: chỉ cho phép hoàn hàng khi đơn hàng thanh toán bằng COD
-        if ($newStatus === 'returned' && strtolower($order->payment_method) !== 'cod') {
-            $errorMsg = 'Chỉ cho phép hoàn hàng đối với đơn hàng thanh toán bằng COD.';
-            return $request->ajax()
-                ? response()->json(['error' => $errorMsg], 422)
-                : redirect()->back()->with('error', $errorMsg);
+        // 4) Chỉ cho phép hoàn hàng nếu COD
+        if ($new === 'returned' && strtolower($order->payment_method) !== 'cod') {
+            $payload = [
+                'code'  => 'return_non_cod',
+                'error' => 'Chỉ có đơn COD mới được phép hoàn hàng.',
+            ];
+            return response()->json($payload, 422);
         }
 
-        // Cập nhật trạng thái đơn hàng
-        $order->update(['order_status' => $newStatus]);
-
+        // Nếu qua hết, update bình thường
+        $order->update(['order_status' => $new]);
         event(new OrderStatusChanged($order));
 
-
-
-        return $request->ajax()
-            ? response()->json(['success' => 'Đơn hàng đã được cập nhật thành công.'])
-            : redirect()->route('orders.index')
-            ->with('success', 'Đơn hàng đã được cập nhật thành công.');
+        return response()->json(['success' => 'Cập nhật trạng thái thành công.']);
     }
 
 
@@ -249,7 +240,7 @@ class OrderController extends Controller
     //             'cancelled_by' => auth()->id()
     //         ]);
 
-          
+
     //         $this->handleOrderCancellation($order);
 
     //         DB::commit();

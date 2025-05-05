@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">Orders</h4>
+                        <h4 class="mb-sm-0">Danh sách đơn hàng</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Ecommerce</a></li>
-                                <li class="breadcrumb-item active">Orders</li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Thương mại điện tử</a></li>
+                                <li class="breadcrumb-item active">Đơn hàng</li> 
                             </ol>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="card-header border-0">
                             <div class="row align-items-center gy-3">
                                 <div class="col-sm">
-                                    <h5 class="card-title mb-0">Order History</h5>
+                                    <h5 class="card-title mb-0">Danh sách đơn hàng</h5>
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="d-flex gap-1 flex-wrap">
@@ -122,6 +122,7 @@
                                             <option value="Visa">Visa</option>
                                             <option value="COD">COD</option>
                                             <option value="Bank Card">Bank card</option>
+                                            <option value="VNPAY">VNPay</option>
                                         </select>
                                     </div>
                                     <div class="col-xxl-1 col-sm-4">
@@ -137,9 +138,7 @@
                             <div>
                                 @include('admin.orders._orderTable')
                             </div>
-                            <!-- Modal cập nhật đơn hàng -->
-                            @include('admin.orders._orderTableUpdate')
-                            <!-- Modal Xóa đơn hàng (nếu có) -->
+                         
                         </div>
                     </div>
                 </div>
@@ -265,7 +264,7 @@
             var form = $(this);
             $.ajax({
                 url: form.attr('action'),
-                type: 'PUT', // SỬA THÀNH PUT
+                type: 'PUT', 
                 data: form.serialize(),
                 dataType: 'json',
                 success: function(response) {
@@ -275,7 +274,7 @@
                     }
                 },
                 error: function(xhr) {
-                    var errorMsg = "Lỗi không xác định";
+                    var errorMsg = "Cập nhật đơn hàng thất bại vui lòng chọn đúng trạng thái ";
                     if (xhr.responseJSON && xhr.responseJSON.error) {
                         errorMsg = xhr.responseJSON.error;
                     }
@@ -283,6 +282,43 @@
                 }
             });
         });
+        $(document).on('change', '.status-select', function() {
+    var select = $(this);
+    var newStatus = select.val();
+    var oldStatus = select.data('old-status');
+    var orderCode = select.data('order-code');
+
+    // Khóa dropdown trong khi xử lý
+    select.prop('disabled', true);
+
+    $.ajax({
+        url: '/admin/orders/' + orderCode, 
+        type: 'PUT',
+        data: {
+            order_status: newStatus,
+            _token: '{{ csrf_token() }}'
+        },
+        dataType: 'json',
+        success: function(response) {
+            // Cập nhật data-old-status
+            select.data('old-status', newStatus);
+            showNotification(response.success, 'success');
+        },
+        error: function(xhr) {
+            var errorMsg = 'Cập nhật thất bại!';
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMsg = xhr.responseJSON.error;
+            }
+            // Khôi phục lại chọn cũ
+            select.val(oldStatus);
+            showNotification(errorMsg, 'error');
+        },
+        complete: function() {
+            select.prop('disabled', false);
+        }
+    });
+});
+
     </script>
 @endsection
 
