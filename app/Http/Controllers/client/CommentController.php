@@ -174,4 +174,8 @@ class CommentController extends Controller
             Product::where('id', $productId)->update(['average_rating' => 0]);
         }
     }
+    function deleteComment(Request $request, $id)
+    {
+       
+    }
 }
