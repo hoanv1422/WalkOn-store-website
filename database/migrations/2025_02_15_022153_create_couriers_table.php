@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('license_plate')->nullable();
             $table->string('delivery_area');
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
-            $table->decimal('rating', 2, 1)->nullable();
+            $table->decimal('rating', 2, 1)->default(0);
             $table->integer('total_orders')->default(0);
             $table->timestamps();
         });
