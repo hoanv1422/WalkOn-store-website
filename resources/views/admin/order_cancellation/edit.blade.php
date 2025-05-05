@@ -11,7 +11,7 @@
 <div class="page-content">
     <div class="container-fluid">
         <div class="container">
-            <h2 class="mb-4">Thêm lý do hủy đơn</h2>
+            <h2 class="mb-4">Sửa lý do hủy đơn</h2>
         
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -23,15 +23,16 @@
                 </div>
             @endif
         
-            <form action="{{ route('reasons.store') }}" method="POST">
+            <form action="{{ route('reasons.update', $reason->id) }}" method="POST">
                 @csrf
+                @method('PUT')
         
                 <div class="mb-3">
                     <label for="reason" class="form-label">Lý do</label>
-                    <input type="text" name="reason" class="form-control" id="reason" value="{{ old('reason') }}" required>
+                    <input type="text" name="reason" class="form-control" id="reason" value="{{ old('reason', $reason->reason) }}" required>
                 </div>
         
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
                 <a href="{{ route('reasons.index') }}" class="btn btn-secondary">Hủy</a>
             </form>
         </div>

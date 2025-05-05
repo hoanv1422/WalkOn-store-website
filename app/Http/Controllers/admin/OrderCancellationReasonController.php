@@ -19,7 +19,7 @@ class OrderCancellationReasonController extends Controller
 
     public function create()
     {
-        return view('reasons.create');
+        return view('admin.order_cancellation.create');
     }
 
     public function store(Request $request)
@@ -36,7 +36,7 @@ class OrderCancellationReasonController extends Controller
     public function edit($id)
     {
         $reason = OrderCancellationReason::findOrFail($id);
-        return view('reasons.edit', compact('reason'));
+        return view('admin.order_cancellation.edit', compact('reason'));
     }
 
     public function update(Request $request, $id)
