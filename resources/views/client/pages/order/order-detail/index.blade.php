@@ -664,32 +664,33 @@
                     const {
                         price,
                         price_sale,
-                        quantity
+                        quantity,
+                        product_name,
+                        product_sku,
+                        variant_size_name,
+                        variant_color_name,
+                        product_image,
                     } = item;
 
                     const {
                         image: variantImage,
-                        color,
-                        size,
                     } = item.product_variant || {};
 
                     const {
                         slug,
-                        name: productName,
-                        image: productImage,
                     } = item.product || {};
 
-                    const imageUrl = variantImage || productImage || 'default-image.jpg';
-                    const product_name = productName || 'Sản phẩm không tên';
-                    const variant_name = [color, size].filter(Boolean).join(' - ');
+                    const imageUrl = product_image || product_image || 'default-image.jpg';
+                    const productName = product_name || 'Sản phẩm không tên';
+                    const variant_name = [variant_color_name, variant_size_name].filter(Boolean).join(' - ');
 
                     // Create HTML for each product card
                     const productCardHTML = `
                         <div class="spee__product-card">
-                            <img src="${imageUrl}" alt="${product_name}" class="spee__product-thumbnail">
+                            <img src="${imageUrl}" alt="${productName}" class="spee__product-thumbnail">
                             <div class="spee__product-specs">
                                 <a href="/detail/${slug}">
-                                    <div class="spee__product-title">${product_name}${quantity > 1 ? ` - x${quantity}` : ''}</div>
+                                    <div class="spee__product-title">${productName}${quantity > 1 ? ` - x${quantity}` : ''}</div>
                                     ${variant_name ? `<div class="spee__product-options">Phân loại hàng: ${variant_name}</div>` : ''}
                                     </a>
                                 </div>

@@ -250,6 +250,22 @@
             cursor: pointer;
         }
 
+
+        .order-btn--evaluate {
+            background-color: #9E9E9E;
+            color: white;
+            outline: none;
+            border: none;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-btn--evaluate:hover {
+            background-color: #757575;
+            /* Màu xám đậm hơn khi hover */
+            cursor: pointer;
+        }
+
         .order-icon {
             margin-right: 5px;
         }
@@ -260,6 +276,7 @@
         }
 
 
+        /* Styles chung cho cả hai modal */
         .modal {
             display: none;
             position: fixed;
@@ -274,19 +291,19 @@
 
         .modal-content {
             background-color: #fff;
-            margin: 10% auto;
+            margin: 5% auto;
             padding: 0;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             animation: modalFadeIn 0.3s;
         }
 
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-20px);
             }
 
             to {
@@ -295,122 +312,252 @@
             }
         }
 
+        /* Header modal */
         .modal-header {
             padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            position: relative;
             background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 8px 8px 0 0;
         }
 
         .modal-header h2 {
             margin: 0;
-            font-size: 18px;
+            font-size: 1.2rem;
             color: #333;
         }
 
         .close-modal {
-            color: #aaa;
+            position: absolute;
+            right: 20px;
+            top: 15px;
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
+            color: #888;
             transition: color 0.2s;
         }
 
         .close-modal:hover {
-            color: #555;
+            color: #000;
         }
 
+        /* Body modal */
         .modal-body {
             padding: 20px;
         }
 
-        .cancel-reason-options {
+        .modal-body p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        /* Forms */
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .cancel-reason-item {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
         }
 
-        .cancel-reason-item:last-child {
-            border-bottom: none;
-        }
-
-        .cancel-reason-item input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        .cancel-reason-item label {
-            margin: 0;
-            cursor: pointer;
-            flex: 1;
-            font-size: 14px;
-        }
-
-        #otherReasonGroup {
-            margin-top: 15px;
-            padding: 0 15px;
-        }
-
-        #otherReason {
+        .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            min-height: 80px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        select.form-control {
+            height: 42px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8.825L1.175 4 2.238 2.938 6 6.7 9.763 2.938 10.825 4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px;
+            padding-right: 30px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
             resize: vertical;
         }
 
+        /* Nút */
         .button-group {
             display: flex;
-            justify-content: flex-end;
             gap: 10px;
+            justify-content: flex-end;
             margin-top: 20px;
-        }
-
-        .loading-reasons {
-            text-align: center;
-            padding: 20px;
-            color: #666;
         }
 
         .order-btn {
             padding: 10px 20px;
-            border: none;
             border-radius: 4px;
-            cursor: pointer;
+            font-size: 14px;
             font-weight: 500;
+            cursor: pointer;
             transition: all 0.2s;
+            border: none;
         }
 
         .order-btn--primary {
-            background-color: #f25862;
+            background-color: #4a90e2;
             color: white;
         }
 
         .order-btn--primary:hover {
-            background-color: #e74c3c;
+            background-color: #3a7bca;
         }
 
         .order-btn--cancel {
-            background-color: #e9ecef;
+            background-color: #f5f5f5;
             color: #333;
         }
 
         .order-btn--cancel:hover {
-            background-color: #dee2e6;
+            background-color: #e8e8e8;
         }
 
-        .order-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        /* Thông báo lỗi */
+        .error-message {
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            color: #d32f2f;
+            font-size: 14px;
+        }
+
+        /* Styles dành riêng cho modal hủy đơn hàng */
+        .cancel-reason-options {
+            margin-bottom: 20px;
+        }
+
+        .reason-option {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .reason-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .reason-option label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .loading-reasons {
+            padding: 10px;
+            color: #666;
+        }
+
+        .error-loading {
+            padding: 10px;
+            color: #d32f2f;
+        }
+
+        /* Styles dành riêng cho modal đánh giá */
+        .rating-container {
+            margin-bottom: 20px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .star-rating i {
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating i:hover,
+        .star-rating i.active {
+            color: #ffcc00;
+        }
+
+        /* Xem trước hình ảnh */
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #f44336;
+        }
+
+        /* Trạng thái đơn hàng */
+        .status-cancelled {
+            color: #f44336;
+            font-weight: 500;
+        }
+
+        .status-reviewed {
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .order-btn {
+                width: 100%;
+            }
         }
     </style>
 @endsection
@@ -454,6 +601,82 @@
                     <div class="button-group">
                         <button type="button" id="confirmCancel" class="order-btn order-btn--primary">Xác nhận hủy</button>
                         <button type="button" id="closeModal" class="order-btn order-btn--cancel">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="reviewOrderModal" class="modal">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Đánh Giá Đơn Hàng</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng chia sẻ trải nghiệm của bạn về đơn hàng này:</p>
+                <form id="reviewOrderForm">
+                    @csrf
+                    <!-- Đánh giá sao -->
+                    <div class="rating-container">
+                        <label>Mức độ hài lòng:</label>
+                        <div class="star-rating">
+                            <i class="fa fa-star" data-rating="1"></i>
+                            <i class="fa fa-star" data-rating="2"></i>
+                            <i class="fa fa-star" data-rating="3"></i>
+                            <i class="fa fa-star" data-rating="4"></i>
+                            <i class="fa fa-star" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="ratingValue" name="rating" value="0">
+                    </div>
+
+                    <!-- Đánh giá chất lượng sản phẩm -->
+                    <div class="form-group">
+                        <label for="productQuality">Chất lượng sản phẩm:</label>
+                        <select id="productQuality" name="productQuality" class="form-control">
+                            <option value="">-- Chọn đánh giá --</option>
+                            <option value="5">Rất tốt</option>
+                            <option value="4">Tốt</option>
+                            <option value="3">Trung bình</option>
+                            <option value="2">Kém</option>
+                            <option value="1">Tệ</option>
+                        </select>
+                    </div>
+
+                    <!-- Đánh giá dịch vụ giao hàng -->
+                    <div class="form-group">
+                        <label for="deliveryService">Dịch vụ giao hàng:</label>
+                        <select id="deliveryService" name="deliveryService" class="form-control">
+                            <option value="">-- Chọn đánh giá --</option>
+                            <option value="5">Rất tốt</option>
+                            <option value="4">Tốt</option>
+                            <option value="3">Trung bình</option>
+                            <option value="2">Kém</option>
+                            <option value="1">Tệ</option>
+                        </select>
+                    </div>
+
+                    <!-- Nhận xét chi tiết -->
+                    <div class="form-group">
+                        <label for="reviewComment">Nhận xét của bạn:</label>
+                        <textarea id="reviewComment" name="comment" placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm và dịch vụ"
+                            class="form-control"></textarea>
+                    </div>
+
+                    <!-- Input ẩn để lưu ID đơn hàng -->
+                    <input type="hidden" id="orderIdToReview" value="">
+
+                    <!-- Thông báo lỗi -->
+                    <div id="reviewErrorMessage" class="error-message"
+                        style="display: none; color: red; margin: 10px 0;">
+                    </div>
+
+                    <!-- Nhóm nút -->
+                    <div class="button-group">
+                        <button type="button" id="submitReview" class="order-btn order-btn--primary">Gửi đánh
+                            giá</button>
+                        <button type="button" id="closeReviewModal" class="order-btn order-btn--cancel">Đóng</button>
                     </div>
                 </form>
             </div>
@@ -663,13 +886,13 @@
 
                             // Tạo các phần tử hiển thị thông tin sản phẩm
                             productContainer.innerHTML = `
-                                <a href="/order-detail/${order.order_code}">
-                                    <img src="${image}" alt="${name}" class="product-item-image">
+                                <a href="/order-detail/${item.order_code}">
+                                    <img src="${image}" alt="${item.product_name}" class="product-item-image">
                                     <div class="product-item-details">
-                                        <div class="product-item-name">${name}</div>
+                                        <div class="product-item-name">${item.product_name}</div>
                                         <div class="product-item-category">Phân loại hàng: 
-                                            <span>${variant.color || ''}</span>
-                                            ${variant.size ? `, <span>${variant.size}</span>` : ''}
+                                            <span>${item.variant_color_name || ''}</span>
+                                            ${item.variant_size_name ? `, <span>${item.variant_size_name}</span>` : ''}
                                         </div>
                                         <div class="product-item-quantity">x${quantity}</div>
                                     </div>
@@ -705,11 +928,18 @@
                     let buttons =
                         `<button class="order-btn order-btn--primary" data-order-id="${order.id}">Xem Chi Tiết</button>`;
 
+                    if (order.status === 'delivered') {
+                        buttons +=
+                            `<button class="order-btn order-btn--evaluate" data-order-id="${order.id}">Đánh Giá</button>`;
+                    }
+
                     // Thêm nút hủy đơn hàng nếu trạng thái là pending
                     if (order.status === 'pending') {
                         buttons +=
                             `<button class="order-btn order-btn--cancel" data-order-id="${order.id}">Hủy Đặt Hàng</button>`;
                     }
+
+
 
                     // Kết hợp các phần tử
                     actionSection.innerHTML = `
@@ -754,13 +984,24 @@
             }
 
             // Chọn các phần tử DOM
-            const modal = document.getElementById('cancelOrderModal');
-            const closeModalBtn = document.querySelector('.close-modal');
-            const closeModalBtnBottom = document.getElementById('closeModal');
+            // Modal hủy đơn hàng
+            const cancelModal = document.getElementById('cancelOrderModal');
+            const cancelCloseModalBtn = cancelModal.querySelector('.close-modal');
+            const cancelCloseModalBtnBottom = document.getElementById('closeModal');
             const confirmCancelBtn = document.getElementById('confirmCancel');
-            const orderIdInput = document.getElementById('orderIdToCancel');
+            const cancelOrderIdInput = document.getElementById('orderIdToCancel');
             const cancelReasonContainer = document.getElementById('cancelReasonContainer');
             const otherReasonGroup = document.getElementById('otherReasonGroup');
+            const cancelErrorMessage = document.getElementById('cancelErrorMessage');
+
+            // Modal đánh giá đơn hàng
+            const reviewModal = document.getElementById('reviewOrderModal');
+            const reviewCloseModalBtn = reviewModal.querySelector('.close-modal');
+            const reviewCloseModalBtnBottom = document.getElementById('closeReviewModal');
+            const submitReviewBtn = document.getElementById('submitReview');
+            const reviewOrderIdInput = document.getElementById('orderIdToReview');
+            const reviewErrorMessage = document.getElementById('reviewErrorMessage');
+            const ratingValue = document.getElementById('ratingValue');
 
             // Hàm tạo danh sách lí do hủy đơn
             function renderCancelReasons(reasons) {
@@ -827,9 +1068,64 @@
                 }
             });
 
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('order-btn--evaluate')) {
+                    const orderId = e.target.getAttribute('data-order-id');
+                    if (orderId) {
+                        openEvaluateModal(orderId);
+                    }
+                }
+            });
+
+            // Xử lý đánh giá sao
+            document.querySelectorAll('.star-rating .fa-star').forEach(function(star) {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    ratingValue.value = rating;
+
+                    // Cập nhật hiển thị sao
+                    document.querySelectorAll('.star-rating .fa-star').forEach(function(s, index) {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+
+                // Hiệu ứng hover
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    document.querySelectorAll('.star-rating .fa-star').forEach(function(s, index) {
+                        if (index < rating) {
+                            s.classList.add('hover');
+                        } else {
+                            s.classList.remove('hover');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseout', function() {
+                    document.querySelectorAll('.star-rating .fa-star').forEach(function(s) {
+                        s.classList.remove('hover');
+                    });
+                });
+            });
+
+
+            function openReviewModal(orderId) {
+                reviewOrderIdInput.value = orderId;
+                reviewModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+
+                // Reset form
+                resetReviewForm();
+            }
+
+
             // Hàm mở modal
             async function openCancelModal(orderId) {
-                orderIdInput.value = orderId;
+                cancelOrderIdInput.value = orderId;
 
                 // Tải lí do hủy đơn từ API (nếu chưa tải)
                 if (cancelReasons.length === 0) {
@@ -840,33 +1136,171 @@
                     renderCancelReasons(reasons);
                 }
 
-                modal.style.display = 'block';
+                cancelModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            async function openEvaluateModal(orderId) {
+                reviewOrderIdInput.value = orderId;
+
+                // Tải lí do hủy đơn từ API (nếu chưa tải)
+                if (cancelReasons.length === 0) {
+                    const reasons = await loadCancelReasons();
+                    console.log(reasons);
+
+
+                    renderCancelReasons(reasons);
+                }
+
+                reviewModal.style.display = 'block';
                 document.body.style.overflow = 'hidden';
             }
 
             // Đóng modal khi nhấp vào nút X
-            closeModalBtn.addEventListener('click', closeModal);
+            cancelCloseModalBtn.addEventListener('click', closeModal);
 
             // Đóng modal khi nhấp vào nút Đóng
-            closeModalBtnBottom.addEventListener('click', closeModal);
+            cancelCloseModalBtnBottom.addEventListener('click', closeModal);
+
+
+            // Đóng modal đánh giá đơn hàng
+            reviewCloseModalBtn.addEventListener('click', closeReviewModal);
+            reviewCloseModalBtnBottom.addEventListener('click', closeReviewModal);
 
             // Đóng modal khi nhấp bên ngoài modal
             window.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeModal();
+                if (e.target === cancelModal) {
+                    closeCancelModal();
+                }
+                if (e.target === reviewModal) {
+                    closeReviewModal();
                 }
             });
 
+            function closeReviewModal() {
+                reviewModal.style.display = 'none';
+                document.body.style.overflow = ''; // Khôi phục cuộn trang
+                resetReviewForm();
+            }
+
             // Hàm đóng modal
             function closeModal() {
-                modal.style.display = 'none';
+                cancelModal.style.display = 'none';
                 document.body.style.overflow = ''; // Khôi phục cuộn trang
                 resetForm();
             }
 
+            function resetReviewForm() {
+                document.getElementById('reviewComment').value = '';
+                document.getElementById('productQuality').selectedIndex = 0;
+                document.getElementById('deliveryService').selectedIndex = 0;
+                reviewErrorMessage.style.display = 'none';
+                reviewErrorMessage.textContent = '';
+
+                // Reset đánh giá sao
+                ratingValue.value = 0;
+                document.querySelectorAll('.star-rating .fa-star').forEach(function(star) {
+                    star.classList.remove('active');
+                });
+            }
+        
+            submitReviewBtn.addEventListener('click', async function() {
+
+
+                const orderId = reviewOrderIdInput.value;
+
+                if (!orderId) {
+                    showReviewError('Không tìm thấy mã đơn hàng');
+                    return;
+                }
+
+                // Lấy đánh giá sao
+                const rating = parseInt(ratingValue.value);
+                if (rating === 0) {
+                    showReviewError('Vui lòng đánh giá số sao');
+                    return;
+                }
+
+
+                // Lấy các giá trị đánh giá khác
+                const productQuality = document.getElementById('productQuality').value;
+
+                const deliveryService = document.getElementById('deliveryService').value;
+
+                const comment = document.getElementById('reviewComment').value.trim();
+
+
+
+
+                if (!productQuality) {
+                    showReviewError('Vui lòng đánh giá chất lượng sản phẩm');
+                    return;
+                }
+
+                if (!deliveryService) {
+                    showReviewError('Vui lòng đánh giá dịch vụ giao hàng');
+                    return;
+                }
+
+                if (!comment) {
+                    showReviewError('Vui lòng nhập nhận xét của bạn');
+                    return;
+                }
+
+                try {
+                    // Hiển thị thông báo đang xử lý
+                    submitReviewBtn.disabled = true;
+                    submitReviewBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
+
+                    // Tạo FormData để gửi file hình ảnh
+                    const formData = new FormData();
+                    formData.append('order_id', orderId);
+                    formData.append('rating', rating);
+                    formData.append('product_quality', productQuality);
+                    formData.append('delivery_service', deliveryService);
+                    formData.append('comment', comment);
+
+
+
+                    // Gọi API gửi đánh giá
+                    const response = await fetch('/api/review-order', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: formData
+                    });
+
+
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.message || 'Có lỗi xảy ra khi gửi đánh giá');
+                    }
+
+                    console.log(result.data);
+
+
+                    // Hiển thị thông báo thành công
+                    showMessage('Đánh giá thành công', '#4CAF50');
+                    closeReviewModal();
+                    loadOrders('all');
+
+                    // Làm mới trang để cập nhật trạng thái đơn hàng
+
+                } catch (error) {
+                    showReviewError(error.message || 'Có lỗi xảy ra khi gửi đánh giá');
+                } finally {
+                    submitReviewBtn.disabled = false;
+                    submitReviewBtn.textContent = 'Gửi đánh giá';
+                }
+            });
+
             // Xử lý khi nhấn nút xác nhận hủy
             confirmCancelBtn.addEventListener('click', function() {
-                const orderId = orderIdInput.value;
+                const orderId = cancelOrderIdInput.value;
                 const selectedReasonInput = document.querySelector('input[name="cancelReason"]:checked');
 
                 if (!selectedReasonInput) {
@@ -944,6 +1378,24 @@
                 confirmCancelBtn.disabled = false;
             }
 
+            function resetReviewForm() {
+                document.getElementById('reviewComment').value = '';
+                document.getElementById('productQuality').selectedIndex = 0;
+                document.getElementById('deliveryService').selectedIndex = 0;
+                reviewErrorMessage.style.display = 'none';
+                reviewErrorMessage.textContent = '';
+
+                // Reset đánh giá sao
+                ratingValue.value = 0;
+                document.querySelectorAll('.star-rating .fa-star').forEach(function(star) {
+                    star.classList.remove('active');
+                });
+            }
+
+            function showReviewError(message) {
+                reviewErrorMessage.textContent = message;
+                reviewErrorMessage.style.display = 'block';
+            }
             // Xử lý sự kiện click cho từng tab
             tabs.forEach(tab => {
                 tab.addEventListener('click', (e) => {
@@ -962,6 +1414,7 @@
                     loadOrders(status, currentSearch);
                 });
             });
+            
 
             // Tải danh sách "Tất cả" khi trang được load
             loadOrders('all');

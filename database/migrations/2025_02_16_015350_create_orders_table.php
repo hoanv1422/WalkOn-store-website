@@ -35,7 +35,9 @@ return new class extends Migration
             $table->enum('order_status', ['pending', 'confirmed', 'processing', 'ready', 'picking_up' ,'shipping', 'delivered', 'cancelled', 'returned', 'completed'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
             $table->string('payment_method');
+            $table->decimal('rating_order', 2, 1)->nullable()->check('rating BETWEEN 1.0 AND 5.0');
             $table->json('cart_item_ids')->nullable();
+
 
 
             $table->foreignId('courier_id')->nullable()->constrained('couriers')->nullOnDelete();

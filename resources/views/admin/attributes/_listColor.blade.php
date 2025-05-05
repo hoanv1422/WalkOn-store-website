@@ -1,4 +1,4 @@
-<table id="colorTable" class="table align-middle table-hover">
+<table id="colorTable" class="table align-middle table-hover dataTable">
     <thead class="table-light text-muted">
         <tr>
             <th scope="col" style="width: 40px;">

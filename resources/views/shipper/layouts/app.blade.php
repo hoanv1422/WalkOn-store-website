@@ -56,9 +56,7 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        @include('admin.layouts.partials.header')
-
-
+        @include('shipper.layouts.partials.header')
 
         <!-- removeNotificationModal -->
         <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
@@ -87,7 +85,7 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
         <!-- ========== App Menu ========== -->
-        @include('admin.layouts.partials.sidebar')
+        @include('shipper.layouts.partials.sidebar')
         <!-- Left Sidebar End -->
         <!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>
@@ -115,7 +113,7 @@
                 </div>
             @endif
 
-            @include('admin.layouts.partials.footer')
+            @include('shipper.layouts.partials.footer')
         </div>
         <!-- end main content-->
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -98,20 +99,24 @@ class Order extends Model
         parent::boot();
 
         static::updated(function ($order) {
-            $changes = $order->getDirty();
-            $user_id = auth()->check() ? auth()->id() : null;
-            foreach ($changes as $field => $newValue) {
-                if ($field === 'updated_at') continue;
-
-                OrderAudit::create([
-                    'order_id'   => $order->id,
-                    'field_name' => $field,
-                    'old_value'  => $order->getOriginal($field),
-                    'new_value'  => $newValue,
-                    'user_id'    => $user_id
-                ]);
+            // Nếu order_status không thay đổi, thoát ngay
+            if (! $order->isDirty('order_status')) {
+                return;
             }
+
+            // Lấy giá trị cũ và mới của order_status
+            $oldStatus = $order->getOriginal('order_status');
+            $newStatus = $order->order_status;
+            $userId    = auth()->check() ? auth()->id() : null;
+
+            // Ghi audit
+            OrderAudit::create([
+                'order_id'   => $order->id,
+                'field_name' => 'order_status',
+                'old_value'  => $oldStatus,
+                'new_value'  => $newStatus,
+                'user_id'    => $userId,
+            ]);
         });
     }
-    
 }

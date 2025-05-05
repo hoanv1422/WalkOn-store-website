@@ -22,29 +22,29 @@ class ColorController extends Controller
     //     $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
     //     return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
         // }
-    public function index(Request $request)
-    {
-        $query = Color::query();
+    // public function index(Request $request)
+    // {
+    //     $query = Color::query();
 
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('color', 'LIKE', "%{$keyword}%")
-                ->orWhere('slug', 'LIKE', "%{$keyword}%")
-                ->orWhere('code', 'LIKE', "%{$keyword}%");
-            });
-        }
+    //     if ($request->filled('keyword')) {
+    //         $keyword = $request->keyword;
+    //         $query->where(function ($q) use ($keyword) {
+    //             $q->where('color', 'LIKE', "%{$keyword}%")
+    //             ->orWhere('slug', 'LIKE', "%{$keyword}%")
+    //             ->orWhere('code', 'LIKE', "%{$keyword}%");
+    //         });
+    //     }
 
-        $colors = $query->orderBy('id', 'desc')->get();
+    //     $colors = $query->orderBy('id', 'desc')->get();
 
-        // Nếu là Ajax request (từ JS), trả về partial
-        if ($request->ajax()) {
-            return view('admin.attributes._listColor', compact('colors'));
-        }
+    //     // Nếu là Ajax request (từ JS), trả về partial
+    //     if ($request->ajax()) {
+    //         return view('admin.attributes._listColor', compact('colors'));
+    //     }
 
-        // Còn không thì trả về view gốc
-        return view('admin.attributes.index', compact('colors'));
-    }
+    //     // Còn không thì trả về view gốc
+    //     return view('admin.attributes.index', compact('colors'));
+    // }
     /**
      * Show the form for creating a new resource.
      */

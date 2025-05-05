@@ -14,6 +14,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderCancellation;
 use App\Models\OrderCancellationReason;
+use App\Models\OrderReview;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -229,7 +230,6 @@ class OrderController extends Controller
 
         $query = Order::with(['orderItems.product', 'orderItems.productVariant', 'cancellation'])
             ->where('user_id', $userId);
-
 
         // Filter by status
         if ($statuses !== 'all') {
@@ -454,5 +454,35 @@ class OrderController extends Controller
                 'errors' => ['server' => 'Internal server error.']
             ], 500);
         }
+    }
+
+    public function reviewOrder(Request $request)
+    {
+      
+        // Validate dữ liệu từ người dùng
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'rating' => 'required|integer|min:1|max:5',  // 1-5 sao
+            'comment' => 'nullable|string',
+            'product_quality' => 'nullable|string|in:1,2,3,4,5',
+            'delivery_service' => 'nullable|string|in:1,2,3,4,5',
+        ]);
+
+        // // Lưu đánh giá vào database
+        $review = OrderReview::create([
+            'order_id' => $request->order_id,
+            'user_id' => Auth::id(),  
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'product_quality' => $request->product_quality,
+            'delivery_service' => $request->delivery_service,
+        ]);
+
+        $review->order->order_status = 'completed';
+        $review->order->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Đánh giá đơn hàng đã được gửi thành công!',
+        ]);
     }
 }

@@ -67,7 +67,7 @@
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h5 class="fs-15">
-                                                                <a href="{{ route('products.show', $item->product_variant_id) }}"
+                                                                <a href=""
                                                                     class="link-primary">
                                                                     {{ $item->product_name }}
                                                                 </a>

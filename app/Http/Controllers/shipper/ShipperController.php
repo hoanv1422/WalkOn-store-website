@@ -5,9 +5,11 @@ namespace App\Http\Controllers\shipper;
 use App\Http\Controllers\Controller;
 use App\Models\Courier;
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ShipperController extends Controller
 {
@@ -65,6 +67,7 @@ class ShipperController extends Controller
             'status' => 'required|in:ready,picking_up,shipping,delivered',
         ]);
 
+
         $userId = Auth::id();
         $courier = Courier::where('user_id', $userId)->first();
 
@@ -80,11 +83,6 @@ class ShipperController extends Controller
             ->where('courier_id', $courier->id)
             ->first();
       
-
-    
-
-
-
         if (!$order) {
             return response()->json([
                 'success' => false,
@@ -93,8 +91,20 @@ class ShipperController extends Controller
         }
 
 
+        if($request->status === 'picking_up') {
+            $order->tracking_code = 'TRACK-' . strtoupper(Str::random(6));
+            $courier->total_orders += 1;
+        }
+
+        if ($request->status === 'delivered') {
+            $order->delivered_at = Carbon::now('Asia/Ho_Chi_Minh');
+        }
+
+
         $order->order_status = $request->status;
         $order->save();
+        $courier->save();
+
 
         return response()->json([
             'success' => true,

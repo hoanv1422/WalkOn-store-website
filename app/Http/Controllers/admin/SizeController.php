@@ -20,34 +20,35 @@ class SizeController extends Controller
     public function index(Request $request)
 
     {
-        $query = Size::query();
-        $query = Color::query();
+        $querySize = Size::query();
+        $queryColor = Color::query();
         $sizeSlug = Size::select('id', 'slug')->get();
         $colorSlug = Color::select('id', 'slug')->get();
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
+            $queryColor->where(function ($q) use ($keyword) {
                 $q->where('color', 'LIKE', "%{$keyword}%")
                 ->orWhere('slug', 'LIKE', "%{$keyword}%")
                 ->orWhere('code', 'LIKE', "%{$keyword}%");
             });
         }
 
-        $colors = $query->orderBy('id', 'desc')->get();
+        $colors = $queryColor->orderBy('id', 'desc')->get();
         if ($request->ajax()) {
             return view('admin.attributes._listColor', compact('colors'));
         }
 
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
-            $query->where('size', 'like', "%{$keyword}%");
+            $querySize->where('size', 'like', "%{$keyword}%");
         }
 
-        $sizes = $query->orderBy('id', 'desc')->get();
+        $sizes = $querySize->orderBy('id', 'desc')->get();
 
         if ($request->ajax()) {
-            return view('admin.attributes._listSize', compact('sizes',));
+            return view('admin.attributes._listSize', compact('sizes'));
         }
+
 
         return view('admin.attributes.index', compact('sizes','colors','sizeSlug','colorSlug'));
     }
