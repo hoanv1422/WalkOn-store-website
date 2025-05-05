@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\website_information;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Client\DetailController;
 use App\Models\Banner;
@@ -19,7 +20,7 @@ class HomeController extends Controller
     {
         $products = Product::orderBy('id', 'desc')->take(6)->get();
         $brands = Brand::with('products')->get();
-        // $banners=Banner
+        
         $topSellingProducts = Product::orderByDesc('sold_quantity')
             ->limit(20)
             ->pluck('id')
