@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model 
+class Order extends Model
 {
-   
+
     protected $fillable = [
         'user_id',
         'order_code',
@@ -35,15 +35,16 @@ class Order extends Model
         'tracking_code',
     ];
     const ORDER_STATUS_MAPPING = [
-        'pending'    => 'Chờ xử lý',
-        'confirmed'  => 'Đã xác nhận',
-        'processing' => 'Đang xử lý',
-        'ready'      => 'Đã chuẩn bị xong',
-        'shipped'    => 'Đang giao',
-        'delivered'  => 'Đã giao',
-        'cancelled'  => 'Đã hủy',
-        'returned'   => 'Hoàn hàng',
-        'completed'  => 'Hoàn tất trả hàng',
+        'pending'      => 'Chờ xử lý',
+        'confirmed'    => 'Đã xác nhận',
+        'processing'   => 'Đang xử lý',
+        'ready'        => 'Sẵn sàng',
+        'picking_up'   => 'Đang lấy hàng',
+        'shipping'     => 'Đang vận chuyển',
+        'delivered'    => 'Đã giao',
+        'cancelled'    => 'Đã hủy',
+        'returned'     => 'Hoàn đơn',
+        'completed'    => 'Hoàn tất'
     ];
     /**
      * Get the user that owns the order.
@@ -79,11 +80,38 @@ class Order extends Model
         return $this->hasOne(Courier::class, 'courier_id');
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
     protected $dispatchesEvents = [
         'updated' => \App\Events\OrderStatusChanged::class,
     ];
+    public function auditsCustom()
+    {
+        return $this->hasMany(OrderAudit::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($order) {
+            $changes = $order->getDirty();
+            $user_id = auth()->check() ? auth()->id() : null;
+            foreach ($changes as $field => $newValue) {
+                if ($field === 'updated_at') continue;
+
+                OrderAudit::create([
+                    'order_id'   => $order->id,
+                    'field_name' => $field,
+                    'old_value'  => $order->getOriginal($field),
+                    'new_value'  => $newValue,
+                    'user_id'    => $user_id
+                ]);
+            }
+        });
+    }
+    
 }

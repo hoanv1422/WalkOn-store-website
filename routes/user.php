@@ -117,7 +117,10 @@ Route::put('/api/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
-Route::delete('/blog/delete-comment/{id}', [BlogController::class, 'destroyComment'])->name('blog.comment.delete');
+Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])
+    ->name('blog.comment');
+Route::delete('/blog/delete-comment/{postComment}', [BlogController::class, 'destroyComment'])
+    ->name('blog.comment.delete');
 
 // // Contact
 // Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');

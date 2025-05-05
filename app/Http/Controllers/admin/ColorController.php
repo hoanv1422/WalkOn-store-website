@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 
-class ColorController extends Controller 
+class ColorController extends Controller
 {
     const PATH_VIEW = 'admin.colors.';
     /**
@@ -50,7 +50,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -58,12 +58,14 @@ class ColorController extends Controller
      */
     public function store(StoreColorRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['slug'] = Str::slug($data['color']);
-        $existingColor = Color::where('code', $data['code'])->first();
-        if ($existingColor) {
+
+        // Kiểm tra trùng code
+        if (Color::where('code', $data['code'])->exists()) {
             return back()->with('error', 'Mã màu đã tồn tại.');
         }
+
         try {
             DB::beginTransaction();
 
@@ -81,17 +83,14 @@ class ColorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Color $color)
-    {
-        
-    }
+    public function show(Color $color) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Color $color)
     {
-        return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
+        return view(self::PATH_VIEW . __FUNCTION__, compact('color'));
     }
 
     /**
