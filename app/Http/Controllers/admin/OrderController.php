@@ -155,15 +155,17 @@ class OrderController extends Controller
     
         // Định nghĩa các luồng chuyển trạng thái hợp lệ
         $allowedTransitions = [
-            'pending'    => ['confirmed', 'processing', 'cancelled'],
-            'confirmed'  => ['processing', 'cancelled'],
-            'processing' => ['ready', 'cancelled'],
-            'ready'      => ['shipping', 'cancelled'],
-            'shipping'    => ['delivered'],
-            'delivered'  => ['returned'],
-            'cancelled'  => [],
-            'returned'   => ['completed'],
-            'completed'  => [],
+          
+                'pending'    => ['confirmed', 'processing', 'cancelled'],
+                'confirmed'  => ['processing', 'cancelled'],
+                'processing' => ['ready', 'cancelled'],
+                'ready'      => ['picking_up','shipping', 'cancelled'],
+                'picking_up' => ['shipping', 'cancelled'],
+                'shipping'   => ['delivered', 'cancelled'],
+                'delivered'  => ['returned', 'completed'], 
+                'cancelled'  => [],
+                'completed'  => [],
+            
         ];
     
         // Kiểm tra chuyển trạng thái hợp lệ
@@ -230,15 +232,17 @@ class OrderController extends Controller
     
         // Định nghĩa các luồng chuyển trạng thái hợp lệ
         $allowedTransitions = [
-            'pending'    => ['confirmed', 'processing', 'cancelled'],
-            'confirmed'  => ['processing', 'cancelled'],
-            'processing' => ['ready', 'cancelled'],
-            'ready'      => ['shipping', 'cancelled'],
-            'shipping'    => ['delivered', 'cancelled'],
-            'delivered'  => ['returned'],
-            'cancelled'  => [],
-            'returned'   => ['completed'],
-            'completed'  => [],
+           
+                'pending'    => ['confirmed', 'processing', 'cancelled'],
+                'confirmed'  => ['processing', 'cancelled'],
+                'processing' => ['ready', 'cancelled'],
+                'ready'      => ['picking_up','shipping', 'cancelled'],
+                'picking_up' => ['shipping', 'cancelled'],
+                'shipping'   => ['delivered', 'cancelled' ], 
+                'delivered'  => ['returned', 'completed'], 
+                'cancelled'  => [],
+                'completed'  => [],
+            
         ];
     
         if (! in_array($newStatus, $allowedTransitions[$oldStatus] ?? [])) {

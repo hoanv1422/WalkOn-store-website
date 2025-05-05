@@ -52,15 +52,17 @@
                             @elseif ($order->order_status == 'processing')
                                 <span class="badge bg-info-subtle text-info">Đang xử lý</span>
                             @elseif ($order->order_status == 'ready')
-                                <span class="badge bg-secondary-subtle text-secondary">Đã chuẩn bị xong</span>
+                                <span class="badge badge bg-info-subtle text-info text-black">Sẵn sàng</span>
+                            @elseif ($order->order_status == 'picking_up')
+                                <span class="badge badge bg-info-subtle text-info ">Đang lấy hàng</span>
+                            @elseif ($order->order_status == 'shipping')
+                                <span class="badge badge bg-info-subtle text-info ">Đang vận chuyển</span>
                             @elseif ($order->order_status == 'shipped')
                                 <span class="badge bg-secondary-subtle text-secondary">Đang giao</span>
                             @elseif ($order->order_status == 'delivered')
                                 <span class="badge bg-success-subtle text-success">Đã giao</span>
                             @elseif ($order->order_status == 'cancelled')
                                 <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
-                            @elseif ($order->order_status == 'returned')
-                                <span class="badge bg-dark-subtle text-dark">Đã hoàn</span>
                             @elseif ($order->order_status == 'completed')
                                 <span class="badge bg-success-subtle text-success">Hoàn tất</span>
                             @else

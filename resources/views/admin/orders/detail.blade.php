@@ -176,10 +176,11 @@
                                     'pending' => 'Chờ xử lý',
                                     'confirmed' => 'Đã xác nhận',
                                     'processing' => 'Đang xử lý',
-                                    'shipped' => 'Đang giao',
+                                    'ready' => 'Sẵn sàng',
+                                    'picking_up' => 'Đang lấy hàng',
+                                    'shipping' => 'Đang vận chuyển',
                                     'delivered' => 'Đã giao',
                                     'cancelled' => 'Đã hủy',
-                                    'returned' => 'Hoàn hàng',
                                     'completed' => 'Hoàn tất',
                                 ];
 
@@ -313,7 +314,6 @@
                                                 <option value="shipped">Đang giao</option>
                                                 <option value="delivered">Đã giao</option>
                                                 <option value="cancelled">Đã hủy</option>
-                                                <option value="returned">Hoàn hàng</option>
                                                 <option value="completed">Hoàn tất</option>
                                             </select>
                                         </div>

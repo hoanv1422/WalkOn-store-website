@@ -54,13 +54,14 @@
                         <select class="form-control" data-trigger name="order_status" id="delivered-status" required>
                             <option value="">Chọn trạng thái giao hàng</option>
                             <option value="pending">Chờ xử lý</option>
+                            <option value="confirmed">Đã xác nhận</option>
                             <option value="processing">Đang xử lý</option>
-                            <option value="ready">Chuẩn bị xong</option>
+                            <option value="ready">Sẵn sàng</option>
+                            <option value="picking_up">Đang lấy hàng</option>
+                            <option value="shipping">Đang vận chuyển</option>
                             <option value="cancelled">Đã hủy</option>
-                            <option value="shipped">Đang giao</option>
                             <option value="delivered">Đã giao</option>
-                            <option value="returned">Hoàn Hàng</option>
-                            <option value="completed">Hoàn hàng thành công</option>
+                            <option value="completed">Hoàn tất</option>
                         </select>
                     </div>
                 </div>
