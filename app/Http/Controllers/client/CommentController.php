@@ -174,7 +174,7 @@ class CommentController extends Controller
             Product::where('id', $productId)->update(['average_rating' => 0]);
         }
     }
-    function deleteComment(Request $request, $id)
+    public function deleteComment($id)
     {
         $comment = Comment::find($id);
         if (!$comment) {
@@ -191,7 +191,7 @@ class CommentController extends Controller
                 'message' => 'Bạn không có quyền xóa bình luận này.',
             ], 403);
         }
-        
+
         // Xóa bình luận
         $comment->delete();
 
@@ -199,7 +199,5 @@ class CommentController extends Controller
             'success' => true,
             'message' => 'Bình luận đã được xóa thành công.',
         ]);
-
-
     }
 }

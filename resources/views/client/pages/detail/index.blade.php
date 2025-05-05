@@ -971,6 +971,7 @@
 
                         // Display only the first page
                         displayComments(allComments, true);
+                        setupDeleteCommentListeners(slug);
                         return data.data;
                     } else {
                         // If no comments but success is false
@@ -1094,6 +1095,7 @@
                         <div class="rating">
                             ${stars}
                         </div>
+                        <button type="submit" class="btn btn-danger btn-delete-comment" data-id=${comment.id}>Xoa</button>
                     </div>
                     <p class="card-text mt-2">${comment.content}</p>
                     
@@ -1112,10 +1114,7 @@
                                 : ''
                         }
                     </div>
-                    <div class="d-flex justify-content-end mt-2">
-                        <button class="btn btn-link text-danger" onclick="deleteComment(${comment.id})">
-                            <i class="fa fa-trash"></i> Xóa
-                        </button>
+                    
                 </div>
                 `;
 
@@ -1353,6 +1352,68 @@
             selectedFiles.forEach(file => dataTransfer.items.add(file));
             imageInput.files = dataTransfer.files;
         }
-    </script>
 
+
+        if (document.querySelectorAll('.btn-delete-comment').length > 0) {
+            document.querySelectorAll('.btn-delete-comment').forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentId = this.getAttribute('data-id');
+                    
+                    if (confirm('Bạn có chắc chắn muốn xóa bình luận này không?')) {
+                        deleteComment(commentId);
+                    }
+                });
+            });
+        }
+
+        // Function to delete a comment
+        function deleteComment(commentId, slug) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `/api/comments/${commentId}`;
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Bình luận đã được xóa thành công', '#4CAF50');
+                        fetchComments(slug); // Refresh comments after deletion
+                    } else {
+                        showMessage(data.message || 'Đã xảy ra lỗi khi xóa bình luận', '#f44336');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting comment:', error);
+                    showMessage('Đã xảy ra lỗi khi xóa bình luận', '#f44336');
+                });
+        }
+
+            // Function to set up event delegation for delete buttons
+            function setupDeleteCommentListeners(slug) {
+                const commentsContainer = document.getElementById('comments-container');
+                if (!commentsContainer) return;
+
+                // Remove existing listeners to prevent duplicates
+                commentsContainer.removeEventListener('click', handleDeleteCommentClick);
+
+                // Add new listener for event delegation
+                commentsContainer.addEventListener('click', handleDeleteCommentClick);
+
+                function handleDeleteCommentClick(event) {
+                    const button = event.target.closest('.btn-delete-comment');
+                    if (button) {
+                        const commentId = button.getAttribute('data-id');
+                        if (confirm('Bạn có chắc chắn muốn xóa bình luận này không?')) {
+                            deleteComment(commentId, slug);
+                        }
+                    }
+                }
+            }
+    </script>
 @endsection

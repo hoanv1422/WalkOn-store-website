@@ -103,6 +103,10 @@ Route::post('/products/{slug}/comments', [CommentController::class, 'storeCommen
 
 Route::put('/api/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
+Route::delete('/api/comments/{id}', [CommentController::class, 'deleteComment']);
+
+
+
 
 
 
