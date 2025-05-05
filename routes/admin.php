@@ -28,9 +28,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
     })->name('admin.index');
-    
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+
     Route::resource('products', ProductController::class);
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
@@ -62,10 +62,8 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // Route::resource('shippers',ShipperController::class);
     // Route::post('shippers/{id}/delivered', [ShipperController::class, 'delivered'])->name('shippers.delivered');
     Route::resource('footers',FooterController::class)->except(['create', 'edit', 'show']);
-    
-    Route::match(['put', 'patch'], 'admin/footers/{id}', [FooterController::class, 'update'])->name('footers.update');
 
-    
+    Route::match(['put', 'patch'], 'admin/footers/{id}', [FooterController::class, 'update'])->name('footers.update');
 
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);

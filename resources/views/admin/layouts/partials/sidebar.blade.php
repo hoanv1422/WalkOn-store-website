@@ -5,16 +5,16 @@
         <!-- Dark Logo-->
         <a href="{{ route('admin.index') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="50">
+                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="35">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="40">
+                <img src="{{ asset('img/image-2.png') }}" alt="" height="40">
             </span>
         </a>
         <!-- Light Logo-->
         <a href="{{ route('admin.index') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="50">
+                <img src="{{ asset('img/image-2.png') }}" alt="" height="35">
             </span>
             <span class="logo-lg">
                 <img src="{{ asset('img/image-Photoroom.png') }}" alt="" height="40">
@@ -377,6 +377,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('users.index') }}" class="nav-link" data-key="t-user">Người
                                     Dùng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('contacts.index') }}" class="nav-link" data-key="t-user">Tin Nhắn Liên Hệ Người Dùng</a>
                             </li>
                         </ul>
                     </div>

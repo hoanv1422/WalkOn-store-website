@@ -52,7 +52,7 @@
                                     <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
                                         >
                                     <span class="toggle-password" onclick="togglePassword('password')">
-                                        <i class="fa fa-eye" style="margin-bottom:25px"></i>
+                                        <i class="fa fa-eye" style="margin-bottom:15px"></i>
                                     </span>
                                 </div>
                                  <span class="alert" id="email-error"></span>

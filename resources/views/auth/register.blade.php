@@ -29,7 +29,7 @@
                                     <div class="password-wrapper">
                                         <input type="password" id="password" name="password" placeholder="Nhập mật khẩu">
                                         <span class="toggle-password" onclick="togglePassword('password')">
-                                            <i class="fa fa-eye" style="margin-bottom:20px"></i>
+                                            <i class="fa fa-eye" style="margin-bottom:15px"></i>
                                         </span>
                                     </div>
                                     <span class="error-message" id="password-error"></span>
@@ -39,7 +39,7 @@
                                             placeholder="Nhập lại mật khẩu">
 
                                         <span class="toggle-password" onclick="togglePassword('password_confirmation')">
-                                            <i class="fa fa-eye" style="margin-bottom:20px"></i>
+                                            <i class="fa fa-eye" style="margin-bottom:15px"></i>
                                         </span>
                                     </div>
                                     <span class="error-message" id="password_confirmation-error"></span>
