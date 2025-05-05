@@ -176,6 +176,13 @@ class CommentController extends Controller
     }
     function deleteComment(Request $request, $id)
     {
-       
+        $comment = Comment::find($id);
+        if (!$comment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bình luận không tồn tại.',
+            ], 404);
+        }
+
     }
 }
