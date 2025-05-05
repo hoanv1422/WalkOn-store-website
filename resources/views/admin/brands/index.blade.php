@@ -44,41 +44,34 @@
                             </div>
                         </div>
                         <div class="card-body border-bottom-dashed border-bottom">
-                            <form>
+                            {{-- <form>
                                 <div class="row g-3">
                                     <div class="col-xl-6">
                                         <div class="search-box">
                                             <input type="text" class="form-control search"
-                                                placeholder="Search for customer, email, phone, status or something...">
+                                                placeholder="Nhập tên thương hiệu">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-xl-6">
                                         <div class="row g-3">
-                                            <div class="col-sm-4">
-                                                <div class="">
-                                                    <input type="text" class="form-control" id="datepicker-range"
-                                                        data-provider="flatpickr" data-date-format="d M, Y"
-                                                        data-range-date="true" placeholder="Select date">
-                                                </div>
-                                            </div>
+                                            
                                             <!--end col-->
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div>
                                                     <select class="form-control" data-plugin="choices" data-choices
                                                         data-choices-search-false name="choices-single-default"
                                                         id="idStatus">
-                                                        <option value="">Status</option>
-                                                        <option value="all" selected>All</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Block">Block</option>
+                                                        <option value="">Tất cả</option>
+                                                        <option value="1" selected>Đang hoạt động</option>
+                                                        <option value="2" selected>Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <!--end col-->
 
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div>
                                                     <button type="button" class="btn btn-primary w-100"
                                                         onclick="SearchData();"> <i
@@ -90,12 +83,50 @@
                                     </div>
                                 </div>
                                 <!--end row-->
+                            </form> --}}
+                            <form id="filterForm">
+                                <div class="row g-3">
+                                    <div class="col-xl-6">
+                                        <div class="search-box">
+                                            <input type="text" class="form-control search" name="name" placeholder="Nhập tên thương hiệu">
+                                            <i class="ri-search-line search-icon"></i>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-xl-6">
+                                        <div class="row g-3">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <select class="form-control" name="status" id="idStatus">
+                                                        <option value="">Tất cả</option>
+                                                        <option value="1">Đang hoạt động</option>
+                                                        <option value="2">Ẩn</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <button type="button" class="btn btn-primary w-100" id="search-button" onclick="SearchData();">
+                                                        <i class="ri-equalizer-fill me-2 align-bottom"></i>Lọc
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end row-->
                             </form>
+                            
+                            <!-- Phần hiển thị danh sách brand -->
+                            <div id="brandList">
+                                @include('admin.brands._list', ['brands' => $brands])
+                            </div>
+                            
                         </div>
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-1">
-                                    <table id="categoryTable" class="table align-middle dataTable">
+                                    {{-- <table id="categoryTable" class="table align-middle dataTable">
                                         <thead class="table-light text-muted">
                                             <tr>
                                                 <th scope="col" style="width: 15px;">
@@ -166,7 +197,7 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                    </table>
+                                    </table> --}}
                                 </div>
                             </div>
 
@@ -384,9 +415,9 @@
 
 @section('script')
 
-    <script>
-        var brands = @json($brandSlug);
-    </script>
+    {{-- <script>
+        // var brands = @json($brandSlug);
+    </script> --}}
 
     <script src="{{ asset('templates/admin/assets/libs/gallery/gallery.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
@@ -413,4 +444,25 @@
             $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
         });
     </script>
+    
+
+    <script>
+        function SearchData() {
+            $.ajax({
+                url: "{{ route('brands.index') }}",
+                type: "GET",
+                data: $('#filterForm').serialize(),
+                beforeSend: function() {
+                    $('#brandList').html('<div class="text-center p-3">Đang tải dữ liệu...</div>');
+                },
+                success: function(data) {
+                    $('#brandList').html(data);
+                },
+                error: function(xhr) {
+                    alert('Lỗi khi tải dữ liệu!');
+                }
+            });
+        }
+    </script>
+    
 @endsection

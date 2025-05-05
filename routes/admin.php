@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CommentHiddenController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\admin\OrderCancellationReasonController;
 use Illuminate\Http\Request;
 
 
@@ -84,6 +85,7 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
 
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
+    
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
@@ -116,6 +118,7 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
     Route::post('comments/{id}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
     Route::post('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
     Route::put('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
+
+    Route::resource('reasons', OrderCancellationReasonController::class);
+
 });
-
-

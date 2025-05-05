@@ -48,7 +48,7 @@ class HomeController extends Controller
             ->orderByDesc('created_at')
             ->take(20)
             ->get();
-
+        
         // 2. Lấy top 20 sản phẩm giảm giá nhiều nhất
         $topDiscountedProducts = Product::where('price_sale', '>', 0)
             ->selectRaw('*, ((price - price_sale) / price * 100) as discount_percentage')
