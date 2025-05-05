@@ -8,18 +8,22 @@
                             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
                                 tincidunt.</p>
                             <ul class="address">
+                                @foreach ($footer as $footers )
+                                    
+                               
                                 <li>
                                     <span class="fa fa-fax"></span>
-                                    (800) 123 456 789
+                                    {{$footers->address}}
                                 </li>
                                 <li>
                                     <span class="fa fa-phone"></span>
-                                    (800) 123 456 789
+                                    {{$footers->phone_number}}
                                 </li>
                                 <li>
                                     <span class="fa fa-envelope-o"></span>
-                                    admin@bootexperts.com
+                                    {{$footers->email}}
                                 </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
