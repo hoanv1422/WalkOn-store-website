@@ -56,7 +56,7 @@ class BannerController extends Controller
         'title' => 'nullable|string|max:255',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'link' => 'nullable|url',
-        'position' => 'required|integer|unique:banners,position,' . $banner->id,
+        // 'position' => 'required|integer|unique:banners,position,' . $banner->id,
     ]);
 
     if ($request->hasFile('image')) {
@@ -68,14 +68,14 @@ class BannerController extends Controller
     $banner->update([
         'title' => $request->title,
         'link' => $request->link,
-        'position' => $request->position,
+        // 'position' => $request->position,
     ]);
 
     try {
         $banner->update([
             'title' => $request->title,
             'link' => $request->link,
-            'position' => $request->position,
+            // 'position' => $request->position,
         ]);
     
         return response()->json([

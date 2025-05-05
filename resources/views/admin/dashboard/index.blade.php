@@ -71,7 +71,7 @@
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
                                             <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                                $<span>{{ number_format($revenue) }}</span> VND
+                                                <span>{{ number_format($revenue) }}</span> VND
                                             </h4>
                                             <a href="{{route('orders.index')}}" class="text-decoration-underline">Chi tiết</a>
                                         </div>
@@ -238,7 +238,7 @@
                         
                                 <div class="card-body p-0 pb-2">
                                     <div class="w-100">
-                                        <h2>Tổng quan tài chính</h2>
+                                        {{-- <h2>Tổng quan tài chính</h2> --}}
                                         <canvas id="financialChartCanvas"></canvas>
                                         {{-- <div id="financial_chart" class="apex-charts" dir="ltr"></div> --}}
                                     </div>
@@ -256,24 +256,7 @@
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1"> Top Sản phẩm bán chạy nhất</h4>
-                                    <div class="flex-shrink-0">
-                                        <div class="dropdown card-header-dropdown">
-                                            <a class="text-reset dropdown-btn" href="#"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span class="fw-semibold text-uppercase fs-12">Sort by:
-                                                </span><span class="text-muted">Today<i
-                                                        class="mdi mdi-chevron-down ms-1"></i></span>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Today</a>
-                                                <a class="dropdown-item" href="#">Yesterday</a>
-                                                <a class="dropdown-item" href="#">Last 7 Days</a>
-                                                <a class="dropdown-item" href="#">Last 30 Days</a>
-                                                <a class="dropdown-item" href="#">This Month</a>
-                                                <a class="dropdown-item" href="#">Last Month</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                 </div><!-- end card header -->
 
                                 <div class="card-body ">
@@ -318,7 +301,7 @@
                                                             <span class="text-muted">Stock</span>
                                                         </td> --}}
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">${{ number_format(($variant->total_sold * $variant->price)  / 1000, 2) }}</h5>
+                                                            <h5 class="fs-14 my-1 fw-normal">{{ number_format(($variant->total_sold * $variant->price)  / 1000, 2) }} VNĐ</h5>
                                                             <span class="text-muted">Giá trị</span>
                                                         </td>
                                                     </tr>
@@ -335,18 +318,7 @@
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Top Mẫu sản phẩm</h4>
                                     <div class="flex-shrink-0">
-                                        <div class="dropdown card-header-dropdown">
-                                            <a class="text-reset dropdown-btn" href="#"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span class="text-muted">Report<i
-                                                        class="mdi mdi-chevron-down ms-1"></i></span>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Download Report</a>
-                                                <a class="dropdown-item" href="#">Export</a>
-                                                <a class="dropdown-item" href="#">Import</a>
-                                            </div>
-                                        </div>
+                                       
                                     </div>
                                 </div><!-- end card header -->
 
@@ -375,15 +347,15 @@
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $product->order_count }}</h5>
-                                                            <span class="text-muted">Orders</span>
+                                                            <span class="text-muted">Đơn hàng</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $product->total_sold }}</h5>
-                                                            <span class="text-muted">Total Sold</span>
+                                                            <span class="text-muted">Số lượng</span>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">${{ number_format($product->total_amount, 2) }}</h5>
-                                                            <span class="text-muted">Amount</span>
+                                                            <h5 class="fs-14 my-1 fw-normal">{{ number_format($product->total_amount /1000, 2) }} VND</h5>
+                                                            <span class="text-muted">Giá trị</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -426,9 +398,9 @@
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Thống kê sản phẩm theo thương hiệu</h4>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-soft-info btn-sm material-shadow-none">
+                                        {{-- <button type="button" class="btn btn-soft-info btn-sm material-shadow-none">
                                             <i class="ri-file-list-3-line align-middle"></i> Generate Report
-                                        </button>
+                                        </button> --}}
                                     </div>
                                 </div><!-- end card header -->
                 

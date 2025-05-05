@@ -37,9 +37,9 @@
                                     <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                         id="create-btn" data-bs-target="#showModalCreate"><i
                                             class="ri-add-line align-bottom me-1"></i> </button> --}}
-                                            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBannerModal">
+                                            {{-- <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBannerModal">
                                                 Thêm Banner
-                                            </a>
+                                            </a> --}}
 
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                                             <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa banner này?')">Xóa</button>
+                                                {{-- <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa banner này?')">Xóa</button> --}}
                                             </form>
                                         </td>
                                     </tr>
@@ -135,10 +135,10 @@
                         <input type="url" class="form-control" id="link-field" name="link">
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="position-field" class="form-label">Vị trí</label>
                         <input type="number" class="form-control" id="position-field" name="position" >
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3">
                         <label for="image-field" class="form-label">Hình ảnh</label>
