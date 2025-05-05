@@ -8,51 +8,59 @@
 @endsection
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Danh sách lý do hủy đơn</h2>
-
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="container">
+            <h2 class="mb-4">Danh sách lý do hủy đơn</h2>
+        
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+        
+            <a href="{{ route('reasons.create') }}" class="btn btn-primary mb-3">+ Thêm lý do</a>
+        
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Lý do</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($reasons as $reason)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $reason->reason }}</td>
+                            <td>{{ $reason->created_at->format('d/m/Y') }}</td>
+                            <td>
+                                <a href="{{ route('reasons.edit', $reason->id) }}" class="btn btn-sm btn-warning">Sửa</a>
+        
+                                <form action="{{ route('reasons.destroy', $reason->id) }}" method="POST" style="display:inline-block;" 
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4">Chưa có lý do hủy đơn nào.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @endif
+       
 
-    <a href="{{ route('reasons.create') }}" class="btn btn-primary mb-3">+ Thêm lý do</a>
+    </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Lý do</th>
-                <th>Ngày tạo</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($reasons as $reason)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $reason->reason }}</td>
-                    <td>{{ $reason->created_at->format('d/m/Y') }}</td>
-                    <td>
-                        <a href="{{ route('reasons.edit', $reason->id) }}" class="btn btn-sm btn-warning">Sửa</a>
-
-                        <form action="{{ route('reasons.destroy', $reason->id) }}" method="POST" style="display:inline-block;" 
-                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-danger">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4">Chưa có lý do hủy đơn nào.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
 </div>
+
 @endsection
 <!-- Bao gồm flatpickr CSS và JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
