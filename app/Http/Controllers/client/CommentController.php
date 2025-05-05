@@ -191,6 +191,14 @@ class CommentController extends Controller
                 'message' => 'Bạn không có quyền xóa bình luận này.',
             ], 403);
         }
+        
+        // Xóa bình luận
+        $comment->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Bình luận đã được xóa thành công.',
+        ]);
 
 
     }
