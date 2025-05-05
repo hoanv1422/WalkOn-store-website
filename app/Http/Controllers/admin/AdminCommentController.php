@@ -16,15 +16,15 @@ class AdminCommentController extends Controller
      */
     public function index(Request $request)
     {
-        // Lấy các tham số từ bộ lọc (nếu có)
-        $query = Comment::with('user', 'product', 'replies')->orderBy('created_at', 'desc');
+        // Lấy các tham số từ bộ lọc 
+        $query = Comment::with('user', 'product')->orderBy('created_at', 'desc');
     
-        // Lọc theo sản phẩm (nếu có)
+        // Lọc theo sản phẩm 
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->product_id);
         }
     
-        // Lọc theo người dùng (nếu có)
+        // Lọc theo người dùng 
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
         }
@@ -34,7 +34,7 @@ class AdminCommentController extends Controller
             $query->where('hidden_comment', $request->hidden_comment);
         }
     
-        // Lọc theo đánh giá(nếu có)
+        // Lọc theo đánh giá
         if ($request->filled('rating')) {
             $query->where('rating', $request->rating);
         }
@@ -114,13 +114,13 @@ class AdminCommentController extends Controller
     
 
     // Xem các bình luận đã ẩn
-    public function hiddenComments()
-    {
-        $hiddenCommentIds = CommentHidden::pluck('comment_id')->toArray();
-        $comments = Comment::whereIn('id', $hiddenCommentIds)->get();
+    // public function hiddenComments()
+    // {
+    //     $hiddenCommentIds = CommentHidden::pluck('comment_id')->toArray();
+    //     $comments = Comment::whereIn('id', $hiddenCommentIds)->get();
 
-        return view('admin.comments.hidden', compact('comments'));
-    }
+    //     return view('admin.comments.hidden', compact('comments'));
+    // }
     
     // Hiện lại bình luận đã ẩn
     public function unhide($id)

@@ -1,5 +1,5 @@
 <!-- slider area start -->
-        <div class="slider-area home1">
+        {{-- <div class="slider-area home1">
             <div class="bend niceties preview-2">
                 <div id="nivoslider" class="slides">
                     @foreach ($banners as $banner)
@@ -36,5 +36,5 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!-- slider area end -->

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCommentController;
 use App\Http\Controllers\admin\FooterController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostCategoryController;
@@ -110,6 +111,11 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
         ->name('orders.updateStatus');
     Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
+    Route::resource('admincomments', AdminCommentController::class)->only(['index', 'destroy','hide','unhide']);
+
+    Route::post('comments/{id}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
+    Route::post('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
+    Route::put('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
 });
 
 

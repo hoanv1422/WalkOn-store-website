@@ -42,7 +42,7 @@
             <div class="formCost d-flex gap-2 align-items-center mt-3">
                 <input class="form-control form-control-sm" type="text" id="minCost" value="0" />
                 <span class="fw-semibold text-muted">to</span>
-                <input class="form-control form-control-sm" type="text" id="maxCost" value="100000000" />
+                <input class="form-control form-control-sm" type="text" id="maxCost" value="5000000" /> 
             </div>
         </div>
         <!-- Brands -->
@@ -216,6 +216,46 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        {{-- SIZE --}}
+        <div class="card-body border-bottom">
+            <div>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Màu Sắc</p>
+                <ul class="list-unstyled mb-0 filter-list">
+                    @foreach ($colors as $colors)
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input category-filter" type="checkbox"
+                                    value="{{ $colors->id }}" id="colors-{{ $colors->id }}">
+                                <label class="form-check-label" for="colors-{{ $colors->id }}">
+                                    {{ $colors->color }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $colors->products_count }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        {{-- COLOR --}}
+        <div class="card-body border-bottom">
+            <div>
+                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Size </p>
+                <ul class="list-unstyled mb-0 filter-list">
+                    @foreach ($sizes as $sizes)
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input category-filter" type="checkbox"
+                                    value="{{ $sizes->id }}" id="sizes-{{ $sizes->id }}">
+                                <label class="form-check-label" for="sizes-{{ $sizes->id }}">
+                                    {{ $sizes->size }}
+                                    <span class="badge bg-light text-muted ms-2">{{ $sizes->products_count }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
         <!-- end accordion-item -->

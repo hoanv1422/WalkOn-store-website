@@ -229,6 +229,10 @@
                                                     data-key="t-to-do">Đơn Hàng</span></a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="{{ route('admincomments.index') }}" class="nav-link"> <span
+                                                    data-key="t-to-do">Bình Luận </span></a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="#sidebarjobs" class="nav-link" data-bs-toggle="collapse"
                                                 role="button" aria-expanded="false" aria-controls="sidebarjobs"
                                                 data-key="t-jobs"> Jobs</a>
@@ -377,6 +381,10 @@
                             <li class="nav-item">
                                 <a href="{{ route('users.index') }}" class="nav-link" data-key="t-user">Người
                                     Dùng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admincomments.index') }}" class="nav-link"> <span
+                                        data-key="t-to-do">Bình Luận </span></a>
                             </li>
                         </ul>
                     </div>

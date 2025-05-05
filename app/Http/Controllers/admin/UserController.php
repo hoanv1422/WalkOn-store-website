@@ -26,7 +26,7 @@ class UserController extends Controller
 
         $title = "Người Dùng";
         $users = User::all();
-        $validateUser = User::select('id', 'email', 'username')->get();
+        $validateUser = User::select('id', 'email', 'username')->get(); 
         return view(self::PATH_VIEW . __FUNCTION__, compact('users', 'validateUser', 'title'));
     }
 
