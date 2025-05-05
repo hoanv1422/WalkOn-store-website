@@ -188,7 +188,7 @@
                         <label class="btn btn-outline-warning" for="typeOfAddress3">Khác</label>
                     </div>
                     <div class="mt-3">
-                        <input type="checkbox" id="check-default" name="default_address" class="form-check-input">
+                        <input type="checkbox" id="check-default" name="is_default" class="form-check-input">
                         <label class="form-check-label" for="check-default">
                             Đặt làm mặc định
                         </label>

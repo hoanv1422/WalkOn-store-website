@@ -95,7 +95,7 @@ class BlogController extends Controller
 
     public function details(Request $request, $slug)
     {
-     
+
         $post = Post::with([
             'category',
             'user',
@@ -130,8 +130,8 @@ class BlogController extends Controller
     public function storeComment(Request $request, $slug)
     {
         try {
-            
-            $userId = auth()->id() ;
+
+            $userId = auth()->id();
 
             $validatedData = $request->validate([
                 'content' => 'required|min:3',
@@ -171,26 +171,40 @@ class BlogController extends Controller
         }
     }
 
-    public function destroyComment(PostComments $comment)
+    public function destroyComment($id)
     {
         try {
+            // Kiểm tra nếu người dùng chưa đăng nhập
             if (!auth()->check()) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
 
-            if (Gate::denies('delete-comment', $comment)) {
+            // Lấy bình luận từ ID
+            $postComment = PostComments::find($id);
+
+            if (!$postComment) {
+                return response()->json(['message' => 'Bình luận không tồn tại'], 404);
+            }
+
+            // Kiểm tra quyền xóa bình luận thông qua Gate
+            if (Gate::denies('delete-comment', $postComment)) {
                 return response()->json(['message' => 'Forbidden'], 403);
             }
 
-            $isParent = is_null($comment->parent_id);
-            $comment->delete();
+            // Kiểm tra xem đây có phải bình luận gốc hay không
+            $isParent = is_null($postComment->parent_id);
 
+            // Xóa bình luận
+            $postComment->delete();
+
+            // Trả về kết quả thành công
             return response()->json([
                 'success' => true,
-                'is_parent' => $isParent, 
+                'is_parent' => $isParent,
                 'message' => 'Xóa bình luận thành công!'
             ]);
         } catch (\Exception $e) {
+            // Xử lý lỗi server
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi server: ' . $e->getMessage()

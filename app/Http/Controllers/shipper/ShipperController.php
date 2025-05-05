@@ -3,57 +3,102 @@
 namespace App\Http\Controllers\shipper;
 
 use App\Http\Controllers\Controller;
+use App\Models\Courier;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ShipperController extends Controller
 {
-    public function index(){
-        $orders_shipped = DB::table('order_items as oi')
-            ->join('orders as o', 'oi.order_id', '=', 'o.id')
-            ->select(
-                'oi.product_name',
-                'oi.product_image',
-                'oi.variant_size_name',
-                'oi.variant_color_name',
-                'oi.quantity',
-                'o.id',
-                'o.order_code',
-                'o.receiver_address',
-                'o.receiver_phone',
-                'o.final_price'
-            )
-            ->where('o.order_status', 'shipped')
-            ->get();
-        $orders_delivered = DB::table('order_items as oi')
-            ->join('orders as o', 'oi.order_id', '=', 'o.id')
-            ->select(
-                'oi.product_name',
-                'oi.product_image',
-                'oi.variant_size_name',
-                'oi.variant_color_name',
-                'oi.quantity',
-                'o.id',
-                'o.order_code',
-                'o.receiver_address',
-                'o.receiver_phone',
-                'o.final_price'
-            )
-            ->where('o.order_status', 'delivered')
-            ->get();
-        $count_shipped = DB::table('orders')->where('order_status', 'shipped')->count();
-        $count_delivered = DB::table('orders')->where('order_status', 'delivered')->count();
-        return view('shipper.index', compact('orders_shipped', 'orders_delivered', 'count_shipped', 'count_delivered'));
+    public function index() {
+        return view('shipper.index');
     }
+
+
+    public function loadOrderForShipper()
+    {
+
+        $userId = Auth::id();
+        $courier = Courier::where('user_id', $userId)->first();
+
+
+        if (!$courier) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy thông tin courier cho người dùng này',
+            ], 404);
+        }
+
+        $orders = Order::where('courier_id', $courier->id)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'courier' => $courier,
+                'orders' => $orders,
+            ],
+        ], 200);
+    }
+
+
     public function delivered($id)
     {
         $order = Order::find($id);
-        
+
         $order->order_status = 'delivered';
         $order->save();
-     
-        return redirect()->back()->with('success', 'Đơn hàng đã được hoàn thành.');
 
+        return redirect()->back()->with('success', 'Đơn hàng đã được hoàn thành.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $id,
+        // ], 404);
+
+        $request->validate([
+            'status' => 'required|in:ready,picking_up,shipping,delivered',
+        ]);
+
+        $userId = Auth::id();
+        $courier = Courier::where('user_id', $userId)->first();
+
+       
+        if (!$courier) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy thông tin courier',
+            ], 404);
+        }
+
+        $order = Order::where('id', $id)
+            ->where('courier_id', $courier->id)
+            ->first();
+      
+
+    
+
+
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy đơn hàng',
+            ], 404);
+        }
+
+
+        $order->order_status = $request->status;
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật trạng thái thành công',
+        ], 200);
     }
 }

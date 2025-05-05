@@ -11,11 +11,11 @@
             <div class="col-lg-3">
                 <div class="product-sidebar">
                     <div class="sidebar-title">
-                        <h2>Post Categories</h2>
+                        <h2>Danh Mục Bài Viết</h2>
                     </div>
                     <div class="single-sidebar">
                         <div class="single-sidebar-title">
-                            <h3>Category</h3>
+                            <h3>Danh Mục</h3>
                         </div>
                         <div class="single-sidebar-content">
                             <ul>
@@ -84,52 +84,37 @@
                                 <div class="blog-content">
                                     <span>
                                         <a href="#">{{ $post->user->name ?? 'Admin' }} - </a>
-                                        {{ $post->created_at->format('d M, Y') }} ({{ $post->comments()->count() }}
-                                        comments)
+                                        {{ $post->created_at->format('d/m/Y') }} ({{ $post->comments()->count() }}
+                                        Bình Luận)
                                     </span>
 
                                     <div>
                                         {!! $post->content !!}
                                     </div>
 
-                                    <div class="share-post">
-                                        <div class="share-title">
-                                            <h3>Share this post</h3>
-                                        </div>
-                                        <div class="share-social">
-                                            <ul class="share-social">
-                                                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                                <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
-                                                <li><a href="#"><i class="fab fa-google"></i></a></li>
-                                                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
+
                                     <div class="about-author">
                                         <div class="author-img">
                                             <img src="{{ asset('img/blog/admin.jpg') }}" alt="">
                                         </div>
                                         <div class="author-content">
-                                            <h3>About the Author: <a
-                                                    href="#">{{ $post->user->name ?? 'Admin' }}</a></h3>
+                                            <h3>Tác Giả: <a
+                                                    href="#">{{ $post->user->name ?? 'Quản Trị Viên' }}</a></h3>
                                         </div>
                                     </div>
                                     <!-- Form gửi bình luận chính -->
                                     <div class="leave-reply">
                                         <div class="reply-title">
-                                            <h3>Leave a Reply</h3>
+                                            <h3>Bình Luận</h3>
                                         </div>
                                         <div class="reply-form">
-                                            <p>Your email address will not be published. Required fields are marked *
-                                            </p>
                                             @auth
                                                 <form id="comment-form" action="{{ route('blog.comment', $post->slug) }}"
                                                     method="POST">
                                                     @csrf
                                                     <div class="row">
                                                         <div class="col-md-12 text-area">
-                                                            <label>Comment *</label>
+                                                            <label>Nội Dung</label>
                                                             <textarea name="content" cols="30" rows="10" class="form-control" required>{{ old('content') }}</textarea>
                                                             @error('content')
                                                                 <div class="text-danger">{{ $message }}</div>
@@ -139,15 +124,15 @@
                                                     <div class="row mt-3">
                                                         <div class="col-md-12">
                                                             <div class="post-comment">
-                                                                <button type="submit" class="btn btn-primary">Post a
-                                                                    Comment</button>
+                                                                <button type="submit" class="btn">Đăng Bình
+                                                                    Luận</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </form>
                                             @else
                                                 <div class="alert alert-info mt-3">
-                                                    Vui lòng <a href="{{ route('login') }}">Đăng Nhập</a> để bình luận
+                                                    Vui lòng <a href="{{ route('login.form') }}">Đăng Nhập</a> để bình luận
                                                 </div>
                                             @endauth
                                         </div>
@@ -157,7 +142,7 @@
                                     <div class="comment-box">
                                         <div class="comment-title">
                                             <h3 id="comment-count">
-                                                {{ $post->comments()->count() }} comments</h3>
+                                                {{ $post->comments()->count() }} Bình Luận</h3>
                                         </div>
                                         <div class="comment-list">
                                             <ul id="comment-list">
@@ -187,130 +172,7 @@
 @endsection
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<style>
-#toast-container {
-    top: auto !important;
-    bottom: 12%;
-    right: 1%;
-}
 
-.toast {
-    background: #000;
-    color: #fff;
-}
-
-.toast-success {
-    background: #28a745;
-}
-
-.toast-error {
-    background: #dc3545;
-}
-
-.toast-warning {
-    background: #ffc107;
-}
-
-.toast-info {
-    background: #17a2b8;
-}
-
-.toast-default {
-    background: #6c757d;
-}
-
-.comment-item .btn-group {
-    margin-left: auto;
-}
-
-.comment-item .btn {
-    padding: 5px 10px;
-    font-size: 0.875rem;
-}
-
-.comment-item .btn i {
-    margin-right: 3px;
-}
-
-/* Gallery styles */
-.post-gallery {
-    position: relative;
-    margin: 2rem 0;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-    background: #f8f9fa;
-}
-
-.gallery-item:hover {
-    transform: translateY(-5px);
-}
-
-.gallery-item img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    cursor: zoom-in;
-    border-radius: 8px;
-    transition: opacity 0.3s ease;
-}
-
-.gallery-item:hover img {
-    opacity: 0.9;
-}
-
-.gallery-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 0.8rem;
-    font-size: 0.9rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gallery-item:hover .gallery-caption {
-    opacity: 1;
-}
-
-/* Main image */
-.blog-img {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin: 2rem 0;
-}
-
-.blog-img img {
-    width: 100%;
-    height: 500px;
-    object-fit: cover;
-}
-
-@media (max-width: 768px) {
-    .blog-img img {
-        height: 300px;
-    }
-
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
 
 
 @section('script')
@@ -321,7 +183,7 @@
             e.preventDefault();
             var formData = new FormData(this);
             var url = $(this).attr('action');
-    
+
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -334,45 +196,50 @@
                         $('#comment-form')[0].reset();
                         var count = parseInt($('#comment-count').text());
                         $('#comment-count').text((count + 1) + ' bình luận');
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
+                        showMessage(response.message, '#4CAF50');
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         var errors = xhr.responseJSON.errors;
                         for (var error in errors) {
-                            toastr.error(errors[error][0]);
+                            // toastr.error();
+                            showMessage(errors[error][0], '#dc3545');
                         }
                     } else if (xhr.status === 401) {
-                        toastr.error('Vui lòng đăng nhập để thực hiện chức năng này');
+                        // toastr.error();
+                        showMessage('Vui lòng đăng nhập để thực hiện chức năng này',
+                            '#dc3545');
                         setTimeout(function() {
-                            window.location.href = "{{ route('login') }}";
+                            window.location.href = "{{ route('login.form') }}";
                         }, 2000);
                     } else {
-                        toastr.error('Có lỗi xảy ra, vui lòng thử lại');
+                        // toastr.error();
+                        showMessage('Có lỗi xảy ra, vui lòng thử lại', '#dc3545');
                     }
                 }
             });
         });
-    
+
         // Hiển thị/ẩn form trả lời
         $(document).on('click', '.reply-btn', function() {
             var commentId = $(this).data('comment-id');
             $('#reply-form-' + commentId).slideToggle();
         });
-    
+
         // Hủy trả lời bình luận
         $(document).on('click', '.cancel-reply', function() {
             var commentId = $(this).data('comment-id');
             $('#reply-form-' + commentId).slideUp();
         });
-    
+
         // Gửi trả lời bình luận
         $(document).on('submit', '.reply-comment-form', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             var url = $(this).attr('action');
-    
+
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -384,14 +251,15 @@
                         $(e.target).closest('.reply-form-container').after(response.html);
                         $(e.target)[0].reset();
                         $(e.target).closest('.reply-form-container').slideUp();
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
+                        showMessage(response.message, '#4CAF50');
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 401) {
                         alert('Bạn cần đăng nhập để bình luận.');
                         setTimeout(function() {
-                            window.location.href = "{{ route('login') }}";
+                            window.location.href = "{{ route('login.form') }}";
                         }, 2000);
                     } else {
                         alert('Có lỗi xảy ra. Vui lòng thử lại.');
@@ -400,43 +268,49 @@
             });
         });
     });
-    
+
     // Xử lý xóa bình luận
-    $(document).on('click', '.delete-btn', function() {
+    $(document).on('click', '.delete-btn-comment-post', function() {
         if (!confirm('Bạn chắc chắn muốn xóa bình luận này?')) return;
-    
+
         var commentId = $(this).data('comment-id');
+        console.log(commentId);
+
+        // Tạo URL xóa bình luận
         var url = "{{ route('blog.comment.delete', ':id') }}".replace(':id', commentId);
-    
+        console.log(url);
+
         $.ajax({
             url: url,
-            type: 'POST',
+            type: 'DELETE', // Sử dụng DELETE thay vì POST
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: {
-                _method: 'DELETE'
-            },
             success: function(response) {
-                if (response.success) {
+                if (response.success == true) {
+                    // Xóa phần tử bình luận khỏi DOM
                     $('#comment-' + commentId).closest('.comment-item').remove();
+
                     // Cập nhật count nếu là comment gốc
                     if (response.is_parent) {
                         const countElement = $('#comment-count');
                         const currentCount = parseInt(countElement.text().match(/\d+/)[0]);
-                        countElement.text((currentCount - 1) + ' comments');
+                        countElement.text((currentCount - 1) + ' Bình Luận');
                     }
-                    toastr.success(response.message);
+
+                    console.log(response.data);
+                    showMessage(response.message, '#4CAF50');
                 }
             },
             error: function(xhr) {
                 const errorMsg = xhr.responseJSON?.message || 'Lỗi không xác định';
-                toastr.error(errorMsg);
+                showMessage(errorMsg, '#dc3545');
                 console.error(xhr);
             }
         });
     });
-    
+
+
     // Cấu hình Lightbox
     lightbox.option({
         'resizeDuration': 200,
@@ -445,11 +319,11 @@
         'disableScrolling': true,
         'albumLabel': "Ảnh %1 của %2"
     });
-    
+
     // Lazy loading cho hình ảnh
     document.addEventListener("DOMContentLoaded", function() {
         const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
-    
+
         if ("IntersectionObserver" in window) {
             let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(function(entry) {
@@ -461,11 +335,10 @@
                     }
                 });
             });
-    
+
             lazyImages.forEach(function(lazyImage) {
                 lazyImageObserver.observe(lazyImage);
             });
         }
     });
-    </script>
-    
+</script>

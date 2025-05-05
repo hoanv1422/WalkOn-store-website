@@ -27,10 +27,9 @@ class PostComments extends Model
     {
         return $this->belongsTo(Post::class);
     }
-   
-public function replies()
-{
-    return $this->hasMany(PostComments::class, 'parent_id');
-}
 
+    public function replies()
+    {
+        return $this->hasMany(PostComments::class, 'parent_id');
+    }
 }
