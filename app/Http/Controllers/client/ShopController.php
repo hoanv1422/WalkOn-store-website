@@ -25,7 +25,9 @@ class ShopController extends Controller
         $colors = Color::all();
         $brands = Brand::all();
         $sizes = Size::all();
-        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brands','sizes'));
+        $banners = Banner::orderBy('position')->get();
+
+        return view('client.pages.shop.index', compact('products', 'categories', 'colors','brands','sizes','banners'));
     }
 
     // Lọc Sản phần theo danh mục

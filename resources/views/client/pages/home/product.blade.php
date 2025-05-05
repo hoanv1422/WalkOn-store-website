@@ -30,12 +30,12 @@
                                         data-bs-toggle="tab">Footwear</a>
                                 </li> --}}
                                 
-                                {{-- @foreach ($banners as $banner)
-                                @if ($banner->position == 8) --}}
+                                 @foreach ($banners as $banner)
+                                @if ($banner->position == 8) 
                                     
-                                {{-- <li><img src="{{ asset('storage/' . $banner->image_url) }}" alt="banner8" width="262.5px" style="height: 280px"></li> --}}
-                                {{-- @endif --}}
-                            {{-- @endforeach --}}
+                                <li><img src="{{ asset('storage/' . $banner->image_url) }}" alt="banner8" width="262.5px" style="height: 280px"></li> --}}
+                                 @endif
+                             @endforeach 
                             </ul>
                         </div>
                     </div>
