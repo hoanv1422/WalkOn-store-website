@@ -1112,6 +1112,10 @@
                                 : ''
                         }
                     </div>
+                    <div class="d-flex justify-content-end mt-2">
+                        <button class="btn btn-link text-danger" onclick="deleteComment(${comment.id})">
+                            <i class="fa fa-trash"></i> Xóa
+                        </button>
                 </div>
                 `;
 
