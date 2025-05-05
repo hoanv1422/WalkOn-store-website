@@ -184,5 +184,14 @@ class CommentController extends Controller
             ], 404);
         }
 
+        // Kiểm tra xem người dùng có quyền xóa bình luận này không
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn không có quyền xóa bình luận này.',
+            ], 403);
+        }
+
+
     }
 }
