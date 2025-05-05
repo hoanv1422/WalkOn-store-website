@@ -490,7 +490,6 @@
                         const orderStatusDisplay = document.getElementById('order-detail-status');
                         const vietnameseStatus = getStatusInVietnamese(order.status);
 
-                        console.log('Order Details:', order);
                         activeVisualizer(order.status);
                         renderShipmentDetail(order);
                         renderCartItems(order);
@@ -763,8 +762,6 @@
                     status,
                 } = orderData || {};
 
-                // Check if the order is cancelled
-                console.log(orderData.cancellation.reason);
 
                 if (status === 'cancelled') {
                     // Check if there's a custom reason first

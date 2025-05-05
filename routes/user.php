@@ -42,7 +42,7 @@ Route::get('/api/get-related-products/{slug}', [DetailController::class, 'relate
 Route::get('/api/get-recommend-products/{slug}', [DetailController::class, 'show']);
 
 
-Route::middleware('client')->group(function () {
+Route::middleware('client', 'checkBanUser')->group(function () {
     Route::get('/cart', [CartController::class, 'indexPage'])->name('cart.index');
     Route::get('/api/cart', [CartController::class, 'index'])->name('api.cart.index');
     Route::put('/api/cart/update', [CartController::class, 'update'])->name('api.cart.update');

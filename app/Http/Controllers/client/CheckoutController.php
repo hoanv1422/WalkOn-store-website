@@ -56,8 +56,15 @@ class CheckoutController extends Controller
             ->with(['productVariant.product', 'productVariant.size', 'productVariant.color'])
             ->get();
 
+            if ($cartItems->count() !== count($request->cartItemIds)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Một hoặc nhiều sản phẩm trong giỏ hàng không tồn tại'
+                ],404);
+            }
 
-            
+
+
             $this->validateStock($cartItems);
 
             $coupon_id = null;
@@ -292,14 +299,15 @@ class CheckoutController extends Controller
     {
         try {
             DB::beginTransaction();
+            $cartItemIds = $cartItems->pluck('id')->toArray();
 
-            $order = $this->createCodOrder($user, $request, $coupon_id);
+            $order = $this->createCodOrder($user, $request, $coupon_id, $cartItemIds);
 
             $orderItems = $this->createOrderItems($order, $cartItems);
 
             $this->updateInventoryForCod($cartItems);
 
-            // CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
+            CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
 
             $this->sendCodOrderConfirmationEmail($user, $order, $orderItems);
 
@@ -318,7 +326,7 @@ class CheckoutController extends Controller
     }
 
     // Create Orders
-    private function createCodOrder($user, $request, $coupon_id = null)
+    private function createCodOrder($user, $request, $coupon_id = null, $cartItemIds)
     {
         return Order::create([
             'order_code' => 'COD' . date('Ymd') . strtoupper(Str::random(4)),
@@ -341,6 +349,7 @@ class CheckoutController extends Controller
             'order_status' => 'pending', // Đơn hàng COD được xác nhận ngay
             'payment_status' => 'unpaid',   // COD chưa thanh toán
             'payment_method' => 'COD',
+            'cart_item_ids' => json_encode($cartItemIds),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -417,7 +426,7 @@ class CheckoutController extends Controller
             $orderItems = $this->createOrderItems($order, $cartItems);
 
             // Xóa các sản phẩm đã đặt khỏi giỏ hàng
-            // CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
+            CartItem::where('cart_id', $cart->id)->whereIn('id', $request->cartItemIds)->delete();
 
             DB::commit();
 
@@ -435,10 +444,6 @@ class CheckoutController extends Controller
             throw $e;
         }
     }
-
-
-
-
 
     public function updateQuantityProduct($productId)
     {

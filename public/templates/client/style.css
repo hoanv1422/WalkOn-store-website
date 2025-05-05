@@ -1032,11 +1032,16 @@ body {
     margin-bottom: 5px;
 }
 .product-name a {
-    font-size: 14px;
-    font-weight: 500;
+    font-size     : 14px;
+    font-weight   : 500;
     text-transform: uppercase;
-    font-family: "Montserrat",sans-serif;
-}
+    font-family   : "Montserrat", sans-serif;
+    display       : inline-block;
+    max-width     : 250px;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+    white-space   : nowrap;
+} 
 .price-rating span.old-price {
     font-size: 12px;
     margin-right: 5px;

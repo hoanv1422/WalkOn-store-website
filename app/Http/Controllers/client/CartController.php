@@ -159,7 +159,7 @@ class CartController extends Controller
         if (!Auth::check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-        
+
         try {
             $cartItem = CartItem::query()->where('id', $cartItemId)->first();
 
@@ -206,6 +206,13 @@ class CartController extends Controller
                 'success' => false,
                 'message' => 'Không tìm thấy biến thể sản phẩm.'
             ], 404);
+        }
+
+        if ($request->quantity > $productVariant->quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng yêu cầu vượt quá tồn kho. Còn lại: ' . $productVariant->quantity . ' sản phẩm.'
+            ], 422);
         }
 
         $cartItem->update([
