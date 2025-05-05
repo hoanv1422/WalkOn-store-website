@@ -5,24 +5,21 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="about-page-content">
-                        <h3>The standard lorem ipsum passage</h3>
-                        <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
-                            sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat
-                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit
-                            laboriosam, nisi ut aliquid ex ea commodi consequatur?</p>
-                        <blockquote>
-                            <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
-                                consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur</p>
-                        </blockquote>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu nisi ac mi malesuada
-                            vestibulum. Phasellus tempor nunc eleifend cursus molestie. Mauris lectus arcu, pellentesque
-                            at sodales sit amet, condimentum id nunc. Donec ornare mattis suscipit. Praesent fermentum
-                            accumsan vulputate.</p>
+                        <h3> Giới thiệu về WalkOn</h3>
+                       
+
+
+
+<p>Ra đời từ năm 2025, WalkOn là thương hiệu giày thể thao mang sứ mệnh đồng hành cùng thế hệ trẻ trên hành trình chinh phục ước mơ và khẳng định phong cách sống năng động. Với tinh thần “Bước đi cùng đam mê”, WalkOn tập trung vào việc mang đến những mẫu giày chất lượng, thiết kế hiện đại, phù hợp với xu hướng thời trang trẻ trung – mà vẫn giữ mức giá hợp lý, dễ tiếp cận.</p>
+                        
+                            <p>Chúng tôi tin rằng một đôi giày tốt không chỉ nâng bước chân, mà còn truyền cảm hứng cho từng bước tiến phía trước. Từng sản phẩm tại WalkOn là sự kết hợp hài hòa giữa công nghệ sản xuất tiên tiến và tư duy thẩm mỹ trẻ trung, đáp ứng nhu cầu từ đi học, đi làm, đến các hoạt động thể thao và dạo phố hằng ngày.</p>
+                                                <p>WalkOn – Không chỉ là giày, mà là phong cách sống.
+                            Hãy bước đi tự tin, vì phía trước là những điều tốt đẹp đang chờ đón bạn.</p>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="about-img">
-                        <img src="img/about/about.jpg" alt="" class="img-responsive">
+                        <img src="img/about/about-us.png" alt="" class="img-responsive">
                     </div>
                 </div>
             </div>
@@ -39,13 +36,13 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="single-member">
                         <div class="member-info">
-                            <img src="img/about/1.jpg" alt="">
+                            <img src="img/about/2.jpg" alt="">
                             <div class="member-social-profile">
                                 <a href="#"> <i class="fa fa-facebook"></i> </a>
                                 <a href="#"> <i class="fa fa-twitter"></i> </a>
                             </div>
                         </div>
-                        <h3>Havier Macherano</h3>
+                        <h3>MINH LE</h3>
                         <p>Developer</p>
                     </div>
                 </div>
@@ -58,33 +55,33 @@
                                 <a href="#"> <i class="fa fa-twitter"></i> </a>
                             </div>
                         </div>
-                        <h3>Luka Biglia</h3>
+                        <h3>VIET HOA</h3>
                         <p>Programmer</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="single-member">
                         <div class="member-info">
-                            <img src="img/about/3.jpg" alt="">
+                            <img src="img/about/2.jpg" alt="">
                             <div class="member-social-profile">
                                 <a href="#"> <i class="fa fa-facebook"></i> </a>
                                 <a href="#"> <i class="fa fa-twitter"></i> </a>
                             </div>
                         </div>
-                        <h3>Anzo Perez</h3>
+                        <h3>ANH DUC</h3>
                         <p>Designer</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="single-member">
                         <div class="member-info">
-                            <img src="img/about/4.jpg" alt="">
+                            <img src="img/about/2.jpg" alt="">
                             <div class="member-social-profile">
                                 <a href="#"> <i class="fa fa-facebook"></i> </a>
                                 <a href="#"> <i class="fa fa-twitter"></i> </a>
                             </div>
                         </div>
-                        <h3>Martin Demichelis</h3>
+                        <h3>ANH TU</h3>
                         <p>PHP Developer</p>
                     </div>
                 </div>

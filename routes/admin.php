@@ -22,7 +22,11 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CommentHiddenController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Http\Request;
+
+
+Route::get('/api/list-product', [ProductController::class, 'listProductApi'])->name('api.get.product');
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
@@ -30,7 +34,17 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     })->name('admin.index');
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+    Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
+
+    // Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::get('/banners', [BannerController::class, 'index'])->name('admin.banners.index');
+Route::post('/banners', [BannerController::class, 'store'])->name('admin.banners.store');
+Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('admin.banners.edit');
+Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('admin.banners.update');
+Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('admin.banners.destroy');
+
     Route::resource('products', ProductController::class);
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
