@@ -164,7 +164,8 @@ class OrderController extends Controller
             'ready'      => ['picking_up', 'shipping', 'cancelled'],
             'picking_up' => ['shipping', 'cancelled'],
             'shipping'   => ['delivered'],
-            'delivered'  => [ 'completed'],
+            'delivered'  => [ 'completed', 'returned'],
+            'returned'   => ['completed'],
             'cancelled'  => [],
             'completed'  => [],
 
@@ -217,99 +218,49 @@ class OrderController extends Controller
     //     return redirect()->route('orders.index')
     //         ->with('success', 'Đơn hàng đã được xóa thành công.');
     // }
-    public function updateStatus(Request $request, Order $order)
-    {
-        $data = $request->validate([
-            'order_status' => 'required|string',
-        ]);
-
-        $oldStatus = $order->order_status;
-        $newStatus = $data['order_status'];
-
-        // Chỉ cho phép huỷ đơn hàng nếu thanh toán bằng COD
-        if ($newStatus === 'cancelled' && strtolower($order->payment_method) !== 'cod') {
-            $errorMsg = 'Đơn hàng thanh toán online không được hủy.';
-            return redirect()->back()->with('error', $errorMsg);
-        }
-
-        // Định nghĩa các luồng chuyển trạng thái hợp lệ
-        $allowedTransitions = [
-
-            'pending'    => ['confirmed', 'processing', 'cancelled'],
-            'confirmed'  => ['processing', 'cancelled'],
-            'processing' => ['ready', 'cancelled'],
-            'ready'      => ['picking_up', 'shipping', 'cancelled'],
-            'picking_up' => ['shipping', 'cancelled'],
-            'shipping'   => ['delivered'],
-            'delivered'  => ['completed'],
-            'cancelled'  => [],
-            'completed'  => [],
-
-        ];
-
-        if (! in_array($newStatus, $allowedTransitions[$oldStatus] ?? [])) {
-            $errorMsg = "Chuyển trạng thái từ '{$order->order_status_vn}' sang '"
-                . Order::getStatusVn($newStatus)
-                . "' không hợp lệ. Vui lòng kiểm tra lại quy trình chuyển trạng thái.";
-            return redirect()->back()->with('error', $errorMsg);
-        }
-
-        // Kiểm tra nghiệp vụ: chỉ cho phép hoàn hàng khi đơn hàng thanh toán bằng COD
-        if ($newStatus === 'returned' && strtolower($order->payment_method) !== 'cod') {
-            $errorMsg = 'Chỉ cho phép hoàn hàng đối với đơn hàng thanh toán bằng COD.';
-            return redirect()->back()->with('error', $errorMsg);
-        }
-
-        // Cập nhật trạng thái đơn hàng
-        $order->update(['order_status' => $newStatus]);
-
-        return redirect()->route('orders.index')
-            ->with('success', 'Trạng thái đơn hàng đã được cập nhật thành công.');
-    }
 
 
+    // public function cancel(Request $request, Order $order)
+    // {
+    //     // Danh sách trạng thái không thể hủy
+    //     $nonCancellableStatuses = ['cancelled', 'completed', 'delivered'];
 
-    public function cancel(Request $request, Order $order)
-    {
-        // Danh sách trạng thái không thể hủy
-        $nonCancellableStatuses = ['cancelled', 'completed', 'delivered'];
+    //     // Kiểm tra điều kiện
+    //     if (in_array($order->order_status, $nonCancellableStatuses)) {
+    //         $message = match ($order->order_status) {
+    //             'cancelled' => 'Đơn hàng đã bị hủy trước đó',
+    //             'completed' => 'Đơn hàng đã hoàn tất không thể hủy',
+    //             'delivered' => $order->payment_status === 'COD'
+    //                 ? 'Đơn COD đã giao không thể hủy'
+    //                 : 'Đơn hàng đã giao không thể hủy',
+    //             default => 'Không thể hủy đơn hàng ở trạng thái này'
+    //         };
 
-        // Kiểm tra điều kiện
-        if (in_array($order->order_status, $nonCancellableStatuses)) {
-            $message = match ($order->order_status) {
-                'cancelled' => 'Đơn hàng đã bị hủy trước đó',
-                'completed' => 'Đơn hàng đã hoàn tất không thể hủy',
-                'delivered' => $order->payment_status === 'COD'
-                    ? 'Đơn COD đã giao không thể hủy'
-                    : 'Đơn hàng đã giao không thể hủy',
-                default => 'Không thể hủy đơn hàng ở trạng thái này'
-            };
+    //         return redirect()->back()->with('error', $message);
+    //     }
 
-            return redirect()->back()->with('error', $message);
-        }
+    //     try {
+    //         DB::beginTransaction();
 
-        try {
-            DB::beginTransaction();
+    //         // Cập nhật trạng thái
+    //         $order->update([
+    //             'order_status' => 'cancelled',
+    //             'cancelled_at' => now(),
+    //             'cancelled_by' => auth()->id()
+    //         ]);
 
-            // Cập nhật trạng thái
-            $order->update([
-                'order_status' => 'cancelled',
-                'cancelled_at' => now(),
-                'cancelled_by' => auth()->id()
-            ]);
+          
+    //         $this->handleOrderCancellation($order);
 
-            // Xử lý nghiệp vụ liên quan (hoàn tồn kho, thông báo...)
-            $this->handleOrderCancellation($order);
+    //         DB::commit();
 
-            DB::commit();
-
-            return redirect()->route('orders.index')
-                ->with('success', "Đã hủy đơn hàng #{$order->id} thành công");
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error("Lỗi hủy đơn {$order->id}: " . $e->getMessage());
-            return redirect()->back()
-                ->with('error', 'Lỗi hệ thống khi hủy đơn hàng');
-        }
-    }
+    //         return redirect()->route('orders.index')
+    //             ->with('success', "Đã hủy đơn hàng #{$order->id} thành công");
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         Log::error("Lỗi hủy đơn {$order->id}: " . $e->getMessage());
+    //         return redirect()->back()
+    //             ->with('error', 'Lỗi hệ thống khi hủy đơn hàng');
+    //     }
+    // }
 }

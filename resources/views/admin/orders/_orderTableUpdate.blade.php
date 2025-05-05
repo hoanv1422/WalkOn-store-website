@@ -62,6 +62,7 @@
                             <option value="cancelled">Đã hủy</option>
                             <option value="delivered">Đã giao</option>
                             <option value="completed">Hoàn tất</option>
+                            <option value="returned">Hoàn Đơn</option>
                         </select>
                     </div>
                 </div>
