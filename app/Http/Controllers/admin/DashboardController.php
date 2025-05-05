@@ -49,7 +49,7 @@ class DashboardController extends Controller
         $totalOrders = Order::count();
 
         // Thống kê đơn hàng hoàn thành (lọc theo năm/tháng)
-        $completedOrders = Order::where('order_status', 'delivered')
+        $completedOrders = Order::where('order_status', 'completed')
                                ->whereBetween('created_at', [$revenueStartDate, $revenueEndDate])
                                ->count();
 
@@ -65,11 +65,11 @@ class DashboardController extends Controller
         $totalUsers = User::count();
 
         // Thống kê doanh thu chung (không lọc thời gian)
-        $revenue = Order::where('order_status', 'delivered')
+        $revenue = Order::where('order_status', 'completed')
                        ->sum('final_price');
 
         // Thống kê doanh thu cho biểu đồ và card (lọc theo năm/tháng)
-        $revenueForChart = Order::where('order_status', 'delivered')
+        $revenueForChart = Order::where('order_status', 'completed')
                                ->whereBetween('created_at', [$revenueStartDate, $revenueEndDate])
                                ->sum('final_price');
 
@@ -120,7 +120,7 @@ class DashboardController extends Controller
             ->leftJoin('products', 'product_variants.product_id', '=', 'products.id')
             ->leftJoin('sizes', 'product_variants.size_id', '=', 'sizes.id')
             ->leftJoin('colors', 'product_variants.color_id', '=', 'colors.id')
-            ->where('orders.order_status', 'delivered')
+            ->where('orders.order_status', 'completed')
             ->selectRaw('TRIM(CONCAT(products.name, " - ", COALESCE(sizes.size, ""), " ", COALESCE(colors.color, ""))) as name')
             ->selectRaw('COUNT(DISTINCT orders.id) as order_count')
             ->selectRaw('SUM(order_items.quantity) as total_sold')
@@ -147,7 +147,7 @@ class DashboardController extends Controller
             ->leftJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->leftJoin('order_items', 'product_variants.id', '=', 'order_items.product_variant_id')
             ->leftJoin('orders', 'order_items.order_id', '=', 'orders.id')
-            ->where('orders.order_status', 'delivered')
+            ->where('orders.order_status', 'completed')
             ->selectRaw('COUNT(DISTINCT orders.id) as order_count')
             ->selectRaw('SUM(order_items.quantity) as total_sold')
             ->selectRaw('SUM(order_items.quantity * COALESCE(product_variants.price_sale, product_variants.price)) as total_amount')
@@ -168,7 +168,7 @@ class DashboardController extends Controller
             ->where('products.is_active', 1)
             ->selectRaw('COUNT(DISTINCT products.id) as product_count')
             ->selectRaw('SUM(product_variants.quantity) as total_stock')
-            ->selectRaw('SUM(CASE WHEN orders.order_status = "delivered" THEN order_items.quantity ELSE 0 END) as total_sold')
+            ->selectRaw('SUM(CASE WHEN orders.order_status = "completed" THEN order_items.quantity ELSE 0 END) as total_sold')
             ->groupBy('brands.id', 'brands.name')
             ->orderBy('total_sold', 'desc')
             ->get();
