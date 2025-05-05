@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderCollection;
+use App\Http\Resources\OrderResource;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -16,6 +18,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -68,8 +71,8 @@ class OrderController extends Controller
             if ($addressDefault) {
                 $addressDefault->append(['full_address', 'type_label']);
             }
-            
-            foreach($addresses as $address) {
+
+            foreach ($addresses as $address) {
                 $address->append(['full_address', 'type_label']);
             }
 
@@ -207,94 +210,51 @@ class OrderController extends Controller
     }
 
 
+    public function ordersListPage()
+    {
+        return view('client.pages.order.index');
+    }
+
+
     public function ordersList(Request $request)
     {
-        $user = Auth::user();
-        $query = Order::where('user_id', $user->id)
-            ->with(['orderItems' => fn($q) => $q->select('id', 'order_id', 'product_name', 'product_sku', 'product_image', 'product_price', 'product_price_sale', 'variant_size_name', 'variant_color_name', 'quantity')])
-            ->with('cancellation') // Load thông tin hủy đơn
-            ->select('id', 'order_code', 'user_id', 'user_name', 'user_address', 'user_phone', 'receiver_name', 'receiver_address', 'receiver_phone', 'note', 'coupon', 'order_status', 'payment_status', 'payment_method', 'total_price', 'created_at')
-            ->orderBy('created_at', 'desc');
+        $userId = Auth::id();
 
-        if ($status = $request->query('status')) {
-            $query->where('order_status', $status);
+        if (!$userId) {
+            return redirect()->route('login.form');
         }
 
-        $orders = $query->paginate(15)->appends(['status' => $status]);
-        $categories = Category::all();
-        $colors = Color::all();
-        $cancellationReasons = OrderCancellationReason::all();
+        $statuses = $request->query('status', 'all');
+        $search = $request->query('search', '');
 
-        return view('client.pages.order.orders', compact('user', 'orders', 'categories', 'colors', 'cancellationReasons'));
+        $query = Order::with(['orderItems.product', 'orderItems.productVariant', 'cancellation'])
+            ->where('user_id', $userId);
+
+
+        // Filter by status
+        if ($statuses !== 'all') {
+            $statuses = is_array($statuses) ? $statuses : explode(',', $statuses);
+            $query->whereIn('order_status', $statuses);
+        }
+        // Search functionality
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('order_code', 'like', "%{$search}%")
+                    ->orWhereHas('orderItems', function ($subQuery) use ($search) {
+                        $subQuery->where('product_name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Order by latest
+        $query->latest();
+
+        $orders = $query->get();
+
+        return new OrderCollection($orders);
     }
 
 
-    // Hủy đơn hàng
-    public function cancelOrder(Request $request, $orderId)
-    {
-        $order = Order::where('id', $orderId)
-            ->where('user_id', Auth::id())
-            ->first();
-
-        if (!$order) {
-            return response()->json(['error' => 'Đơn hàng không tồn tại hoặc không thuộc về bạn.'], 404);
-        }
-
-        if ($order->order_status !== 'pending') {
-            return response()->json(['error' => 'Chỉ có thể hủy đơn hàng khi đang ở trạng thái chờ xử lý.'], 403);
-        }
-
-        $request->validate([
-            'reason' => 'required|string|max:255',
-            'custom_reason' => 'nullable|string|max:255|required_if:reason,other',
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            $order->order_status = 'cancelled';
-            $order->save();
-
-            // Kiểm tra lý do hủy và lưu vào bảng order_cancellations
-            $reason = $request->input('reason');
-            $reasonId = null;
-            $customReason = null;
-
-            if ($reason === 'other') {
-                $customReason = $request->input('custom_reason');
-            } else {
-                $reasonRecord = OrderCancellationReason::where('reason', $reason)->first();
-                if ($reasonRecord) {
-                    $reasonId = $reasonRecord->id;
-                }
-            }
-
-            OrderCancellation::create([
-                'order_id' => $order->id,
-                'reason_id' => $reasonId,
-                'custom_reason' => $customReason,
-                'cancelled_by_id' => Auth::id(),
-                'cancelled_at' => now(),
-            ]);
-
-            // Hoàn lại số lượng sản phẩm trong kho
-            foreach ($order->orderItems as $item) {
-                if ($item->product_variant_id) {
-                    $variant = \App\Models\ProductVariant::find($item->product_variant_id);
-                    if ($variant) {
-                        $variant->increment('quantity', $item->quantity);
-                        $variant->product->increment('quantity', $item->quantity);
-                    }
-                }
-            }
-
-            DB::commit();
-            return response()->json(['success' => "Đơn hàng #{$order->order_code} đã được hủy."]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
-        }
-    }
 
     public function createAddress(Request $request)
     {
@@ -325,6 +285,174 @@ class OrderController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
             return back()->with('error', 'Có lỗi khi thêm');
+        }
+    }
+
+    public function orderDetailPage()
+    {
+        return view('client.pages.order.order-detail.index');
+    }
+
+    public function orderDetail($orderCode)
+    {
+        try {
+            // Fetch the order with its order items using the orderCode
+            $order = Order::with('orderItems')
+                ->where('order_code', $orderCode)
+                ->first();
+
+            // Check if order exists
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order not found',
+                ], 404);
+            }
+            return new OrderResource($order);
+        } catch (\Exception $e) {
+            // Handle any errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while fetching order details',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function CancelReason()
+    {
+        try {
+            // Fetch the order with its order items using the orderCode
+            $cancelReason = OrderCancellationReason::all();
+            // Check if order exists
+            if (!$cancelReason) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order not found',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cancel Reason found',
+                'data' => $cancelReason
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle any errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while fetching order details',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function cancelOrder(Request $request, $orderId)
+    {
+        // return response()->json([
+        //     'message' => 'Order not found or does not belong to you.',
+        //     'errors' => ['order_id' => 'The specified order does not exist or is not accessible.'],
+        //     'data' => $request->all()
+        // ], 404);
+
+
+        // Find the order that belongs to the authenticated user
+        $order = Order::where('id', $orderId)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        // Check if order exists and belongs to the user
+        if (!$order) {
+            return response()->json([
+                'message' => 'Order not found or does not belong to you.',
+                'errors' => ['order_id' => 'The specified order does not exist or is not accessible.']
+            ], 404);
+        }
+
+        // Check if order is in a cancellable state
+        if ($order->order_status !== 'pending') {
+            return response()->json([
+                'message' => 'Order cannot be cancelled.',
+                'errors' => ['order_status' => 'Only orders in pending status can be cancelled.']
+            ], 403);
+        }
+
+        // Validate the request inputs
+        $validated = $request->validate([
+            'reason_code' => 'nullable|string|max:255',
+            'reason_text' => 'nullable|string|max:255|required_if:reason,other',
+        ]);
+
+        try {
+            // Begin transaction to ensure data integrity
+            DB::beginTransaction();
+
+            // Update order status
+            $order->order_status = 'cancelled';
+            $order->save();
+
+            // Handle reason for cancellation
+            $reason = $validated['reason_code'];
+            $customReason = null;
+
+            if ($reason === null) {
+                $customReason = $validated['reason_text'];
+            } else {
+                $reasonRecord = OrderCancellationReason::where('reason', $reason)->first();
+                $reasonId = $reasonRecord ? $reasonRecord->id : null;
+            }
+
+            // Create cancellation record
+
+            OrderCancellation::create([
+                'order_id' => $order->id,
+                'reason_id' => $reason,
+                'custom_reason' => $customReason,
+                'cancelled_by_id' => Auth::id(),
+                'cancelled_at' => now(),
+            ]);
+
+            // Restore product quantities to inventory
+            foreach ($order->orderItems as $item) {
+                if ($item->product_variant_id) {
+                    $variant = \App\Models\ProductVariant::findOrFail($item->product_variant_id);
+                    $variant->increment('quantity', $item->quantity);
+
+                    // Also update the parent product's quantity
+                    if ($variant->product) {
+                        $variant->product->increment('quantity', $item->quantity);
+                    }
+                }
+            }
+
+            // Commit all database changes
+            DB::commit();
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => "Order #{$order->order_code} has been cancelled successfully.",
+                'data' => [
+                    'order_id' => $order->id,
+                    'order_code' => $order->order_code,
+                    'status' => $order->order_status
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            // Roll back transaction if anything fails
+            DB::rollBack();
+
+            // Log the error for debugging
+            Log::error('Order cancellation failed: ' . $e->getMessage(), [
+                'order_id' => $orderId,
+                'user_id' => Auth::id(),
+                'exception' => $e
+            ]);
+
+            return response()->json([
+                'message' => 'An error occurred while cancelling the order.',
+                'errors' => ['server' => 'Internal server error.']
+            ], 500);
         }
     }
 }

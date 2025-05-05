@@ -65,8 +65,16 @@ Route::middleware('client')->group(function () {
 
 
 
-    Route::get('/order-list', [OrderController::class, 'ordersList'])->name('order.list');
+    Route::get('/order-list', [OrderController::class, 'ordersListPage'])->name('order.list');
+    Route::get('/api/orders', [OrderController::class, 'ordersList'])->name('order.list.test');
     Route::post('/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder'])->name('orders.cancel');
+
+    Route::get('/order-detail/{orderCode}', [OrderController::class, 'orderDetailPage']);
+    Route::get('/api/order-detail/{orderCode}', [OrderController::class, 'orderDetail']);
+    Route::get('/api/order-cancel-reasons', [OrderController::class, 'CancelReason']);
+
+
+
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
@@ -93,7 +101,7 @@ Route::middleware('client')->group(function () {
 Route::get('/api/products/{slug}/comments', [CommentController::class, 'comments'])->name('detail.comments');
 Route::post('/products/{slug}/comments', [CommentController::class, 'storeComment'])->name('detail.comments.store');
 
-Route::post('/profile/orders/{orderId}/cancel', [App\Http\Controllers\Client\OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
+Route::put('/api/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
 
 
