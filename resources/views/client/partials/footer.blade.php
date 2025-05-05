@@ -2,7 +2,7 @@
         <div class="footer-top-area">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-5 col-md-6">
                         <div class="footer-contact">
                             <img src="img/logo-white.png" alt="">
                             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
@@ -27,7 +27,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
+                    {{-- <div class="col-lg-3 col-md-6">
                         <div class="footer-tweets">
                             <div class="footer-title">
                                 <h3>Latest tweets</h3>
@@ -65,9 +65,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-lg-3 col-md-6">
-                        <div class="footer-support">
+                        {{-- <div class="footer-support">
                             <div class="footer-title">
                                 <h3>Our support</h3>
                             </div>
@@ -80,7 +80,7 @@
                                     <li><a href="contact.html">Contact Us</a></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-info">
