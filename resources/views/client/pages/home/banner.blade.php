@@ -1,5 +1,5 @@
 <!-- banner area start -->
-<div class="banner-area">
+{{-- <div class="banner-area">
     <div class="single-banner">
         <div class="part-1">
             @foreach ($banners as $banner)
@@ -64,5 +64,5 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> --}}
 <!-- banner area end -->

@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Http\Requests\StoreColorRequest;
 use App\Http\Requests\UpdateColorRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 
@@ -16,12 +17,34 @@ class ColorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
+    //     return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
+        // }
+    public function index(Request $request)
     {
-        $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
-        return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
-    }
+        $query = Color::query();
 
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('color', 'LIKE', "%{$keyword}%")
+                ->orWhere('slug', 'LIKE', "%{$keyword}%")
+                ->orWhere('code', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        $colors = $query->orderBy('id', 'desc')->get();
+
+        // Nếu là Ajax request (từ JS), trả về partial
+        if ($request->ajax()) {
+            return view('admin.attributes._listColor', compact('colors'));
+        }
+
+        // Còn không thì trả về view gốc
+        return view('admin.attributes.index', compact('colors'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -43,6 +66,17 @@ class ColorController extends Controller
         }
         try {
             DB::beginTransaction();
+
+            Color::query()->create($data);
+
+            DB::commit();
+            return redirect()->route('attributes.index')->with('success', 'Thêm màu sắc thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm');
+        }
+    }
 
     /**
      * Display the specified resource.

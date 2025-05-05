@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCommentController;
 use App\Http\Controllers\admin\FooterController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostCategoryController;
@@ -22,7 +23,12 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CommentHiddenController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\admin\OrderCancellationReasonController;
 use Illuminate\Http\Request;
+
+
+Route::get('/api/list-product', [ProductController::class, 'listProductApi'])->name('api.get.product');
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/', function () {
@@ -30,6 +36,16 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     })->name('admin.index');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
+
+    // Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::get('/banners', [BannerController::class, 'index'])->name('admin.banners.index');
+Route::post('/banners', [BannerController::class, 'store'])->name('admin.banners.store');
+Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('admin.banners.edit');
+Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('admin.banners.update');
+Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('admin.banners.destroy');
 
     Route::resource('products', ProductController::class);
     Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
@@ -68,6 +84,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
 
+
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
 
@@ -94,6 +111,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('orders.updateStatus');
     Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
+    Route::resource('admincomments', AdminCommentController::class)->only(['index', 'destroy','hide','unhide']);
+
+    Route::post('comments/{id}/hide', [AdminCommentController::class, 'hide'])->name('comments.hide');
+    Route::post('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
+    Route::put('comments/{id}/unhide', [AdminCommentController::class, 'unhide'])->name('admin.comments.unhide');
+
+    Route::resource('reasons', OrderCancellationReasonController::class);
+
 });
-
-

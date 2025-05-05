@@ -7,7 +7,6 @@
                 <div class="col-lg-12">
                     <div class="card" id="customerList">
                         <div class="card-header border-bottom-dashed">
-
                             <div class="row g-4 align-items-center">
                                 <div class="col-sm">
                                     <div>
@@ -21,18 +20,17 @@
                                         <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                             id="create-btn" data-bs-target="#showModalCreate"><i
                                                 class="ri-add-line align-bottom me-1"></i> Thêm Danh Mục</button>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body border-bottom-dashed border-bottom">
-                            <form>
+                            <form id="filterForm" method="GET" action="{{ route('categories.index') }}">
                                 <div class="row g-3">
                                     <div class="col-xl-6">
                                         <div class="search-box">
-                                            <input type="text" class="form-control search"
-                                                placeholder="Search for customer, email, phone, status or something...">
+                                            <input type="text" class="form-control" id="searchInput" name="search"
+                                                placeholder="Tìm kiếm theo tên danh mục..." value="{{ request('search') }}">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
@@ -40,32 +38,21 @@
                                     <div class="col-xl-6">
                                         <div class="row g-3">
                                             <div class="col-sm-4">
-                                                <div class="">
-                                                    <input type="text" class="form-control" id="datepicker-range"
-                                                        data-provider="flatpickr" data-date-format="d M, Y"
-                                                        data-range-date="true" placeholder="Select date">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-4">
                                                 <div>
                                                     <select class="form-control" data-plugin="choices" data-choices
-                                                        data-choices-search-false name="choices-single-default"
-                                                        id="idStatus">
-                                                        <option value="">Status</option>
-                                                        <option value="all" selected>All</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Block">Block</option>
+                                                        data-choices-search-false name="status" id="idStatus">
+                                                        <option value="all" {{ request('status', 'all') === 'all' ? 'selected' : '' }}>Tất cả</option>
+                                                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Hoạt Động</option>
+                                                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Ẩn</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <!--end col-->
-
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <button type="button" class="btn btn-primary w-100"
-                                                        onclick="SearchData();"> <i
-                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Lọc</button>
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        <i class="ri-equalizer-fill me-2 align-bottom"></i>Tìm kiếm
+                                                    </button>
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -91,8 +78,8 @@
                                                 <th class="sort" data-sort="action">Hành Động</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="list form-check-all">
-                                            @foreach ($categories as $item)
+                                        <tbody class="list form-check-all" id="categoryTableBody">
+                                            @forelse ($categories as $item)
                                                 <tr>
                                                     <th scope="row">
                                                         <div class="form-check">
@@ -100,7 +87,6 @@
                                                                 name="chk_child">
                                                         </div>
                                                     </th>
-
                                                     <td class="name">{{ $item->name }}</td>
                                                     <td class="status">
                                                         <span
@@ -133,9 +119,16 @@
                                                         </ul>
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Không có danh mục nào.</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
+                                </div>
+                                <div id="pagination">
+                                    {{ $categories->links() }}
                                 </div>
                             </div>
 
@@ -148,17 +141,16 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
                                         </div>
-                                        <form action="{{route('categories.store')}}" method="POST" 
+                                        <form action="{{ route('categories.store') }}" method="POST"
                                             class="tablelist-form" autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-3">
                                                     <input type="hidden" name="id" id="id-field" />
-                                                    <label for="name-field" class="form-label">
-                                                        Tên Danh Mục</label>
+                                                    <label for="name-field" class="form-label">Tên Danh Mục</label>
                                                     <input type="text" id="name-field" class="form-control"
                                                         placeholder="Nhập tên" name="name" />
-                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                    <div class="invalid-feedback">Vui lòng nhập tên danh mục.</div>
                                                 </div>
                                                 <div>
                                                     <label for="status-field" class="form-label">Trạng Thái</label>
@@ -182,12 +174,11 @@
                                 </div>
                             </div>
 
-
                             <div class="modal fade" id="showModalEdit" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header bg-light p-3">
-                                            <h4>Sửa </h4>
+                                            <h4>Sửa</h4>
                                             <h5 class="modal-title" id="exampleModalLabel"></h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close" id="close-modal"></button>
@@ -198,21 +189,17 @@
                                             @method('PATCH')
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" id="id-field-edit" />
-
                                                 <div class="mb-3" id="modal-id" style="display: none;">
                                                     <label for="id-field1" class="form-label">ID</label>
                                                     <input type="text" id="id-field1" class="form-control"
                                                         placeholder="ID" readonly />
                                                 </div>
-
                                                 <div class="mb-3">
-                                                    <label for="name-field-edit" class="form-label">
-                                                        Tên Danh Mục</label>
+                                                    <label for="name-field-edit" class="form-label">Tên Danh Mục</label>
                                                     <input type="text" id="name-field-edit" class="form-control"
-                                                        placeholder="Enter name" name="name" />
-                                                    <div class="invalid-feedback">Please enter a customer name.</div>
+                                                        placeholder="Nhập tên" name="name" />
+                                                    <div class="invalid-feedback">Vui lòng nhập tên danh mục.</div>
                                                 </div>
-
                                                 <div>
                                                     <label for="status-field-edit" class="form-label">Trạng Thái</label>
                                                     <select class="form-control" data-choices data-choices-search-false
@@ -232,13 +219,11 @@
                                             </div>
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
 
-                            <!-- Modal -->
                             <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog  modal-dialog-centered">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" id="deleteRecord-close"
@@ -250,9 +235,8 @@
                                                     colors="primary:#f7b84b,secondary:#f06548"
                                                     style="width:100px;height:100px"></lord-icon>
                                                 <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                    <h4>Bạn có chắc không ?</h4>
-                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa người dùng này không?
-                                                    </p>
+                                                    <h4>Bạn có chắc không?</h4>
+                                                    <p class="text-muted mx-4 mb-0">Bạn có muốn xóa danh mục này không?</p>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
@@ -272,45 +256,53 @@
                             <!--end modal -->
                         </div>
                     </div>
-
                 </div>
                 <!--end col-->
             </div>
             <!--end row-->
-
         </div>
         <!-- container-fluid -->
     </div>
-    <!-- End Page-content -->   
+    <!-- End Page-content -->
 @endsection
 
 @section('script')
-
     <script>
         var categories = @json($categorySlug);
     </script>
     <script src="{{ asset('templates/admin/assets/libs/validates/CreateSlug.js') }}"></script>
     <script src="{{ asset('templates/admin/assets/libs/validates/category.js') }}"></script>
-
     <script>
-        $(document).ready(function() {
-            $('table.dataTable').each(function() {
-                $(this).DataTable({
-                    "paging": true, // Hiển thị phân trang
-                    "searching": false, // Tắt tìm kiếm
-                    "ordering": true, // Bật sắp xếp
-                    "info": true, // Hiển thị thông tin tổng
-                    "pageLength": 10, // Giới hạn số lượng bản ghi mỗi trang
-                    "lengthChange": false
-                });
+        $(document).ready(function () {
+            // Khởi tạo DataTables
+            $('#categoryTable').DataTable({
+                paging: true,
+                searching: false,
+                ordering: true,
+                info: true,
+                pageLength: 10,
+                lengthChange: false
             });
-        });
 
-        $(document).on('click', '.remove-item-btn', function() {
-            let userId = $(this).data('id'); // Lấy ID người dùng
-            let actionUrl = "/admin/categories/" + userId; // Tạo URL xóa
+            // Xử lý sự kiện xóa
+            $(document).on('click', '.remove-item-btn', function () {
+                let userId = $(this).data('id');
+                let actionUrl = "/admin/categories/" + userId;
+                $('#deleteForm').attr('action', actionUrl);
+            });
 
-            $('#deleteForm').attr('action', actionUrl); // Cập nhật action của form
+            // Xử lý sự kiện chỉnh sửa
+            $(document).on('click', '.edit-item-btn', function () {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let status = $(this).data('status');
+                let actionUrl = "/admin/categories/" + id;
+
+                $('#id-field-edit').val(id);
+                $('#name-field-edit').val(name);
+                $('#status-field-edit').val(status);
+                $('.edit').attr('action', actionUrl);
+            });
         });
     </script>
 @endsection

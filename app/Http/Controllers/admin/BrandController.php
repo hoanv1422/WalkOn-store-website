@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use Illuminate\Database\QueryException;
@@ -21,11 +22,35 @@ class BrandController extends Controller
     const PATH_VIEW = 'admin.brands.';
     const PATH_UPLOAD = 'brands';
 
-    public function index()
+    // public function index()
+    // {
+    //     $brands = Brand::all();
+    //     $brandSlug = Brand::select('id', 'slug')->get();
+    //     return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug'));
+    // }
+    public function index(Request $request)
     {
-        $brands = Brand::all();
-        $brandSlug = Brand::select('id', 'slug')->get();
-        return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug'));
+        $query = Brand::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status == '1') {
+                $query->where('is_active', true);
+            } elseif ($request->status == '2') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $brands = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('admin.brands._list', compact('brands'))->render();
+        }
+        
+        return view('admin.brands.index', compact('brands'));
     }
 
     /**

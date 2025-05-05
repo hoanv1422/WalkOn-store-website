@@ -48,7 +48,7 @@ class HomeController extends Controller
             ->orderByDesc('created_at')
             ->take(20)
             ->get();
-
+        
         // 2. Lấy top 20 sản phẩm giảm giá nhiều nhất
         $topDiscountedProducts = Product::where('price_sale', '>', 0)
             ->selectRaw('*, ((price - price_sale) / price * 100) as discount_percentage')
@@ -57,13 +57,12 @@ class HomeController extends Controller
             ->get();
 
         // 3. Lấy top 20 sản phẩm được đánh giá cao nhất
-        $topRatedProducts = Product::whereNotNull('average_rating') // Đảm bảo không lấy sản phẩm chưa có đánh giá
-            ->orderByDesc('average_rating')
-            ->take(20)
-            ->get();
-        $banners = Banner::orderBy('position')->get();
-
-        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts', 'topRatedProducts', 'banners'));
+        // $topRatedProducts = Product::whereNotNull('average_rating') // Đảm bảo không lấy sản phẩm chưa có đánh giá
+        //     ->orderByDesc('average_rating')
+        //     ->take(20)
+        //     ->get();
+        // $banners = Banner::orderBy('position')->get();
+        return view('client.pages.home.index', compact('products', 'brands', 'newProducts', 'topDiscountedProducts'));
     }
 
     public function getProductById(Request $request)
