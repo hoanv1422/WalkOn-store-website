@@ -37,11 +37,11 @@
                             </div>
                             <div class="footer-menu">
                                 <ul>
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="#">Customer Service</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Orders and Returns</a></li>
-                                    <li><a href="#">Site Map</a></li>
+                                    <li><a href="{{ route('home.index') }}">Trang Chủ</a></li>
+                                    <li><a href="{{ route('shop.index') }}">Cửa hàng</a></li>
+                                    <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
+                                    <li><a href="{{ route('about-us.index') }}">Về Chúng Tôi</a></li>
+                                    <li><a href="{{ route('blog.index') }}">Bài Viết</a></li>
                                 </ul>
                             </div>
                         </div>
