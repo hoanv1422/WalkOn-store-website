@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 use App\Models\Color;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class SizeController extends Controller
@@ -16,13 +17,39 @@ class SizeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
+
     {
-        $sizes = Size::all();
-        $colors = Color::all();
+        $query = Size::query();
+        $query = Color::query();
         $sizeSlug = Size::select('id', 'slug')->get();
         $colorSlug = Color::select('id', 'slug')->get();
-        return view('admin.attributes.index', compact('sizes', 'colors', 'sizeSlug', 'colorSlug'));
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('color', 'LIKE', "%{$keyword}%")
+                ->orWhere('slug', 'LIKE', "%{$keyword}%")
+                ->orWhere('code', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        $colors = $query->orderBy('id', 'desc')->get();
+        if ($request->ajax()) {
+            return view('admin.attributes._listColor', compact('colors'));
+        }
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where('size', 'like', "%{$keyword}%");
+        }
+
+        $sizes = $query->orderBy('id', 'desc')->get();
+
+        if ($request->ajax()) {
+            return view('admin.attributes._listSize', compact('sizes',));
+        }
+
+        return view('admin.attributes.index', compact('sizes','colors','sizeSlug','colorSlug'));
     }
 
     /**

@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CommentHiddenController;
+use App\Http\Controllers\admin\OrderCancellationReasonController;
 use Illuminate\Http\Request;
 
 Route::prefix('admin')->middleware('admin')->group(function () {
@@ -69,6 +70,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
 
     //kho hàng
     Route::resource('inventories', InventoryController::class)->only(['index']);
+    
 
     Route::prefix('attributes')->group(function () {
         Route::get('/', [SizeController::class, 'index'])->name('attributes.index');
@@ -96,6 +98,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ->name('orders.updateStatus');
     Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
+    Route::resource('reasons', OrderCancellationReasonController::class);
+
 });
-
-

@@ -37,58 +37,33 @@
                             </div>
                         </div>
                         <div class="card-body border-bottom-dashed border-bottom">
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-xl-6">
+                            <form id="search-form-size">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-xl-9">
                                         <div class="search-box">
-                                            <input type="text" class="form-control search"
-                                                placeholder="Search for customer, email, phone, status or something...">
+                                            <input type="text" class="form-control search" id="keyword-size"
+                                                   placeholder="Search for size...">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
-                                    <!--end col-->
-                                    <div class="col-xl-6">
-                                        <div class="row g-3">
-                                            <div class="col-sm-4">
-                                                <div class="">
-                                                    <input type="text" class="form-control" id="datepicker-range"
-                                                        data-provider="flatpickr" data-date-format="d M, Y"
-                                                        data-range-date="true" placeholder="Select date">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <select class="form-control" data-plugin="choices" data-choices
-                                                        data-choices-search-false name="choices-single-default"
-                                                        id="idStatus">
-                                                        <option value="">Status</option>
-                                                        <option value="all" selected>All</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Block">Block</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <button type="button" class="btn btn-primary w-100"
-                                                        onclick="SearchData();"> <i
-                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
+                                    <div class="col-xl-3">
+                                        <button type="button" class="btn btn-primary w-100" onclick="SearchSize();">
+                                            <i class="ri-equalizer-fill me-2 align-bottom"></i>Lọc
+                                        </button>
                                     </div>
                                 </div>
-                                <!--end row-->
                             </form>
+                            
+                            <div id="size-list">
+                                @include('admin.attributes._listSize', ['sizes' => $sizes])
+                            </div>
+                           
+                            
                         </div>
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-1">
-                                    <table id="categoryTable" class="table align-middle dataTable">
+                                    {{-- <table id="categoryTable" class="table align-middle dataTable">
                                         <thead class="table-light text-muted">
                                             <tr>
                                                 <th scope="col" style="width: 15px;">
@@ -136,7 +111,7 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                    </table>
+                                    </table> --}}
                                 </div>
                             </div>
 
@@ -159,7 +134,7 @@
                                                 <input type="hidden" id="id-field" name="id" />
 
                                                 <div class="mb-3">
-                                                    <label for="size-field" class="form-label">Tên</label>
+                                                    <label for="size-field" class="form-label">Nhập size</label>
                                                     <input type="text" id="size-field" class="form-control"
                                                         placeholder="Nhập tên" name="size" />
                                                     <div class="invalid-feedback">Please enter a customer name.</div>
@@ -296,58 +271,34 @@
                             </div>
                         </div>
                         <div class="card-body border-bottom-dashed border-bottom">
-                            <form>
+                            <form id="search-form">
                                 <div class="row g-3">
-                                    <div class="col-xl-6">
+                                    <div class="col-xl-9">
                                         <div class="search-box">
-                                            <input type="text" class="form-control search"
-                                                placeholder="Search for customer, email, phone, status or something...">
+                                            <input type="text" class="form-control" name="keyword-color" id="keyword-color"
+                                                placeholder="Search for color name, slug, or code...">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
-                                    <!--end col-->
-                                    <div class="col-xl-6">
-                                        <div class="row g-3">
-                                            <div class="col-sm-4">
-                                                <div class="">
-                                                    <input type="text" class="form-control" id="datepicker-range"
-                                                        data-provider="flatpickr" data-date-format="d M, Y"
-                                                        data-range-date="true" placeholder="Select date">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <select class="form-control" data-plugin="choices" data-choices
-                                                        data-choices-search-false name="choices-single-default"
-                                                        id="idStatus">
-                                                        <option value="">Status</option>
-                                                        <option value="all" selected>All</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Block">Block</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <button type="button" class="btn btn-primary w-100"
-                                                        onclick="SearchData();"> <i
-                                                            class="ri-equalizer-fill me-2 align-bottom"></i>Lọc</button>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
+                                    <div class="col-xl-3">
+                                        <div>
+                                            <button type="button" class="btn btn-primary w-100" id="search-button" onclick="SearchData();">
+                                                <i class="ri-equalizer-fill me-2 align-bottom"></i>Lọc
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <!--end row-->
                             </form>
+                            
+                           
+                            <div id="color-list">
+                                @include('admin.attributes._listColor', ['colors' => $colors])
+                            </div>
                         </div>
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-1">
-                                    <table id="categoryTable" class="table align-middle dataTable">
+                                    {{-- <table id="categoryTable" class="table align-middle dataTable">
                                         <thead class="table-light text-muted">
                                             <tr>
                                                 <th scope="col" style="width: 15px;">
@@ -396,7 +347,7 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                    </table>
+                                    </table> --}}
                                 </div>
                             </div>
 
@@ -584,4 +535,66 @@
             }
         });
     </script>
+    <script>
+        document.getElementById('search-button').addEventListener('click', function () {
+            performSearch();
+        });
+    
+        // Optional: cho phép bấm Enter trong input
+        document.getElementById('keyword').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    
+        function performSearch() {
+            const keyword = document.getElementById('keyword-color').value;
+    
+            fetch("{{ route('attributes.index') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ keyword: keyword })
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('color-list').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Lỗi khi lọc:', error);
+            });
+        }
+    </script>
+    <script>
+        function SearchSize() {
+            const keyword = document.getElementById('keyword-size').value;
+    
+            fetch("{{ route('attributes.index') }}", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ keyword: keyword })
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('size-list').innerHTML = html;
+            })
+            .catch(error => console.error('Lỗi khi lọc size:', error));
+        }
+    
+        // Bấm Enter để tìm cũng được
+        document.getElementById('keyword-size').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                SearchSize();
+            }
+        });
+    </script>
+    
+    
 @endsection

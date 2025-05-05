@@ -275,4 +275,5 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Đơn hàng đã được hủy thành công.');
     }
+  
 }
