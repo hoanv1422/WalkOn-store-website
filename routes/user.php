@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Client\CommentController;
 use App\Models\Banner;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,7 +43,7 @@ Route::get('/api/get-related-products/{slug}', [DetailController::class, 'relate
 Route::get('/api/get-recommend-products/{slug}', [DetailController::class, 'show']);
 
 
-Route::middleware('client')->group(function () {
+Route::middleware('client', 'checkBanUser')->group(function () {
     Route::get('/cart', [CartController::class, 'indexPage'])->name('cart.index');
     Route::get('/api/cart', [CartController::class, 'index'])->name('api.cart.index');
     Route::put('/api/cart/update', [CartController::class, 'update'])->name('api.cart.update');
@@ -96,8 +97,6 @@ Route::middleware('client')->group(function () {
     });
 });
 
-
-
 Route::get('/api/products/{slug}/comments', [CommentController::class, 'comments'])->name('detail.comments');
 Route::post('/products/{slug}/comments', [CommentController::class, 'storeComment'])->name('detail.comments.store');
 
@@ -106,20 +105,15 @@ Route::put('/api/orders/{orderId}/cancel', [OrderController::class, 'cancelOrder
 
 
 
-// // checkout
-// Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
-
-// // about-us
-// Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us.index');
-
 // // Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/blog/{slug}', [BlogController::class, 'details'])->name('blog.details');
-Route::delete('/blog/delete-comment/{id}', [BlogController::class, 'destroyComment'])->name('blog.comment.delete');
+Route::post('/blog/{slug}/comment', [BlogController::class, 'storeComment'])
+    ->name('blog.comment');
+Route::delete('/blog/delete-comment/{postComment}', [BlogController::class, 'destroyComment'])
+    ->name('blog.comment.delete');
 
-// // Contact
-// Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
-// //commment
+Route::post('/api/review-order', [OrderController::class, 'reviewOrder']);    
+

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
-class Order extends Model 
+class Order extends Model
 {
-   
+
     protected $fillable = [
         'user_id',
         'order_code',
@@ -35,15 +36,16 @@ class Order extends Model
         'tracking_code',
     ];
     const ORDER_STATUS_MAPPING = [
-        'pending'    => 'Chờ xử lý',
-        'confirmed'  => 'Đã xác nhận',
-        'processing' => 'Đang xử lý',
-        'ready'      => 'Đã chuẩn bị xong',
-        'shipped'    => 'Đang giao',
-        'delivered'  => 'Đã giao',
-        'cancelled'  => 'Đã hủy',
-        'returned'   => 'Hoàn hàng',
-        'completed'  => 'Hoàn tất trả hàng',
+        'pending'      => 'Chờ xử lý',
+        'confirmed'    => 'Đã xác nhận',
+        'processing'   => 'Đang xử lý',
+        'ready'        => 'Sẵn sàng',
+        'picking_up'   => 'Đang lấy hàng',
+        'shipping'     => 'Đang vận chuyển',
+        'delivered'    => 'Đã giao',
+        'cancelled'    => 'Đã hủy',
+        'returned'     => 'Hoàn đơn',
+        'completed'    => 'Hoàn tất'
     ];
     /**
      * Get the user that owns the order.
@@ -79,11 +81,42 @@ class Order extends Model
         return $this->hasOne(Courier::class, 'courier_id');
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
     protected $dispatchesEvents = [
         'updated' => \App\Events\OrderStatusChanged::class,
     ];
+    public function auditsCustom()
+    {
+        return $this->hasMany(OrderAudit::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($order) {
+            // Nếu order_status không thay đổi, thoát ngay
+            if (! $order->isDirty('order_status')) {
+                return;
+            }
+
+            // Lấy giá trị cũ và mới của order_status
+            $oldStatus = $order->getOriginal('order_status');
+            $newStatus = $order->order_status;
+            $userId    = auth()->check() ? auth()->id() : null;
+
+            // Ghi audit
+            OrderAudit::create([
+                'order_id'   => $order->id,
+                'field_name' => 'order_status',
+                'old_value'  => $oldStatus,
+                'new_value'  => $newStatus,
+                'user_id'    => $userId,
+            ]);
+        });
+    }
 }

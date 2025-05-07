@@ -45,7 +45,9 @@ class PostCommentPolicy
      */
     public function delete(User $user, PostComments $postComment)
     {
-        return $user->id === $postComment->user_id;
+        return $user->id === $postComment->user_id || $user->role=== 'admin'
+            ? Response::allow()
+            : Response::deny('Bạn không có quyền xóa bình luận này.');
     }
 
     /**

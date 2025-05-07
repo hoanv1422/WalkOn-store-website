@@ -119,11 +119,11 @@
                                     <i class="fas fa-home"></i> Thay đổi thông tin
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
                                     <i class="far fa-user"></i> Thay đổi mật khẩu
                                 </a>
-                            </li>
+                            </li> --}}
                            
                         </ul>
                     </div>
@@ -180,7 +180,7 @@
                             
                             </div>
                             <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
+                            {{-- <div class="tab-pane" id="changePassword" role="tabpanel">
                                 <form action="javascript:void(0);">
                                     <div class="row g-2">
                                         <div class="col-lg-4">
@@ -281,7 +281,7 @@
                                         <a href="javascript:void(0);">Logout</a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!--end tab-pane-->
                            
                         </div>

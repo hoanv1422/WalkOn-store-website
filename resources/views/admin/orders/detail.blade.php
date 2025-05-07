@@ -67,7 +67,7 @@
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h5 class="fs-15">
-                                                                <a href="{{ route('products.show', $item->product_variant_id) }}"
+                                                                <a href=""
                                                                     class="link-primary">
                                                                     {{ $item->product_name }}
                                                                 </a>
@@ -156,7 +156,7 @@
                         <div class="card-header">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="card-title flex-grow-1 mb-0">Trạng thái đơn hàng</h5>
-                                <div class="flex-shrink-0 mt-2 mt-sm-0">
+                                {{-- <div class="flex-shrink-0 mt-2 mt-sm-0">
                                     <!-- Nút cập nhật trạng thái (mở modal Update Status) -->
                                     <a href="javascript:void(0);" class="btn btn-soft-info btn-sm" data-bs-toggle="modal"
                                         data-bs-target="#updateStatusModal">
@@ -167,7 +167,7 @@
                                         data-bs-target="#cancelOrderModal">
                                         <i class="mdi mdi-archive-remove-outline align-middle me-1"></i> Hủy đơn hàng
                                     </a>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -176,11 +176,13 @@
                                     'pending' => 'Chờ xử lý',
                                     'confirmed' => 'Đã xác nhận',
                                     'processing' => 'Đang xử lý',
-                                    'shipped' => 'Đang giao',
+                                    'ready' => 'Sẵn sàng',
+                                    'picking_up' => 'Đang lấy hàng',
+                                    'shipping' => 'Đang vận chuyển',
                                     'delivered' => 'Đã giao',
                                     'cancelled' => 'Đã hủy',
-                                    'returned' => 'Hoàn hàng',
                                     'completed' => 'Hoàn tất',
+                                    'refunded' => 'Hoàn Đơn',
                                 ];
 
                                 $statusAudits = $order->auditsCustom
@@ -292,7 +294,7 @@
                     <div class="modal fade" id="updateStatusModal" tabindex="-1"
                         aria-labelledby="updateStatusModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
+                            {{-- <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="updateStatusModalLabel">Cập nhật trạng thái đơn hàng</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -313,7 +315,6 @@
                                                 <option value="shipped">Đang giao</option>
                                                 <option value="delivered">Đã giao</option>
                                                 <option value="cancelled">Đã hủy</option>
-                                                <option value="returned">Hoàn hàng</option>
                                                 <option value="completed">Hoàn tất</option>
                                             </select>
                                         </div>
@@ -325,11 +326,11 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Modal hủy đơn hàng -->
-                    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
+                    {{-- <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -354,7 +355,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <!-- Card: Địa chỉ giao hàng -->

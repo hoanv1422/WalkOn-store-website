@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 
-class ColorController extends Controller 
+class ColorController extends Controller
 {
     const PATH_VIEW = 'admin.colors.';
     /**
@@ -22,35 +22,35 @@ class ColorController extends Controller
     //     $data = Color::query()->latest('id')->with(['productVariant'])->paginate();
     //     return view(self::PATH_VIEW.__FUNCTION__,compact('data'));
         // }
-    public function index(Request $request)
-    {
-        $query = Color::query();
+    // public function index(Request $request)
+    // {
+    //     $query = Color::query();
 
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('color', 'LIKE', "%{$keyword}%")
-                ->orWhere('slug', 'LIKE', "%{$keyword}%")
-                ->orWhere('code', 'LIKE', "%{$keyword}%");
-            });
-        }
+    //     if ($request->filled('keyword')) {
+    //         $keyword = $request->keyword;
+    //         $query->where(function ($q) use ($keyword) {
+    //             $q->where('color', 'LIKE', "%{$keyword}%")
+    //             ->orWhere('slug', 'LIKE', "%{$keyword}%")
+    //             ->orWhere('code', 'LIKE', "%{$keyword}%");
+    //         });
+    //     }
 
-        $colors = $query->orderBy('id', 'desc')->get();
+    //     $colors = $query->orderBy('id', 'desc')->get();
 
-        // Nếu là Ajax request (từ JS), trả về partial
-        if ($request->ajax()) {
-            return view('admin.attributes._listColor', compact('colors'));
-        }
+    //     // Nếu là Ajax request (từ JS), trả về partial
+    //     if ($request->ajax()) {
+    //         return view('admin.attributes._listColor', compact('colors'));
+    //     }
 
-        // Còn không thì trả về view gốc
-        return view('admin.attributes.index', compact('colors'));
-    }
+    //     // Còn không thì trả về view gốc
+    //     return view('admin.attributes.index', compact('colors'));
+    // }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view(self::PATH_VIEW.__FUNCTION__);
+        return view(self::PATH_VIEW . __FUNCTION__);
     }
 
     /**
@@ -58,12 +58,14 @@ class ColorController extends Controller
      */
     public function store(StoreColorRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['slug'] = Str::slug($data['color']);
-        $existingColor = Color::where('code', $data['code'])->first();
-        if ($existingColor) {
+
+        // Kiểm tra trùng code
+        if (Color::where('code', $data['code'])->exists()) {
             return back()->with('error', 'Mã màu đã tồn tại.');
         }
+
         try {
             DB::beginTransaction();
 
@@ -81,17 +83,14 @@ class ColorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Color $color)
-    {
-        
-    }
+    public function show(Color $color) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Color $color)
     {
-        return view(self::PATH_VIEW.__FUNCTION__,compact('color'));  
+        return view(self::PATH_VIEW . __FUNCTION__, compact('color'));
     }
 
     /**

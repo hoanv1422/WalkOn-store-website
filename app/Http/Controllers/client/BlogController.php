@@ -126,89 +126,104 @@ class BlogController extends Controller
 
         return view('client.pages.blog-detail.index', compact('post', 'categories'));
     }
-
     public function storeComment(Request $request, $slug)
     {
-        try {
+        $request->validate([
+            'content'   => 'required|min:3',
+            'parent_id' => 'nullable|exists:post_comments,id'
+        ]);
 
-            $userId = auth()->id();
+        $post = Post::where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
 
-            $validatedData = $request->validate([
-                'content' => 'required|min:3',
-                'parent_id' => 'nullable|exists:post_comments,id'
-            ]);
-
-            $post = Post::where('slug', $slug)
-                ->where('status', 'published')
-                ->firstOrFail();
-
-            $comment = PostComments::create([
-                'post_id' => $post->id,
-                'user_id' => $userId,
-                'content' => $validatedData['content'],
-                'status' => 'published',
-                'parent_id' => $validatedData['parent_id'] ?? null,
-            ]);
-
-            $comment->load('user');
-
-            $html = view('client.pages.blog-detail.comment', compact('comment', 'post'))->render();
-
-            return response()->json([
-                'success' => true,
-                'html' => $html,
-                'comment' => [
-                    'id' => $comment->id,
-                    'parent_id' => $comment->parent_id
-                ],
-                'message' => 'Bình luận đã được gửi thành công'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
-            ], 500);
+        // Xử lý giới hạn 3 cấp
+        $parentId = $request->parent_id;
+        if ($parentId) {
+            $parent = PostComments::with('parent')->find($parentId);
+            // Nếu parent depth ≥ 3 thì tìm ancestor cấp 2
+            if ($parent->getDepth() >= 3) {
+                $ancestor = $parent;
+                // leo lên đến khi ancestor ở cấp 2
+                while ($ancestor->parent && $ancestor->getDepth() > 2) {
+                    $ancestor = $ancestor->parent;
+                }
+                $parentId = $ancestor->id;
+            }
         }
+
+        $comment = PostComments::create([
+            'post_id'   => $post->id,
+            'user_id'   => auth()->id(),
+            'content'   => $request->content,
+            'status'    => 'published',
+            'parent_id' => $parentId,
+        ]);
+
+        $comment->load('user');
+
+        // Đếm lại tổng số comments
+        $count = $post->comments()->count();
+
+        // Render partial với đúng depth lần đầu
+        $depth = $parentId ? (PostComments::find($parentId)->getDepth() + 1) : 1;
+        if ($depth > 3) {
+            $depth = 3;
+        }
+
+        $html = view('client.pages.blog-detail.comment', [
+            'comment' => $comment,
+            'post'    => $post,
+            'depth'   => $depth,
+        ])->render();
+
+        return response()->json([
+            'success' => true,
+            'html'    => $html,
+            'count'   => $count,
+            'comment' => [
+                'id'        => $comment->id,
+                'parent_id' => $comment->parent_id,
+            ],
+            'message' => 'Bình luận của bạn đã được gửi'
+        ]);
     }
+
 
     public function destroyComment($id)
     {
-        try {
-            // Kiểm tra nếu người dùng chưa đăng nhập
-            if (!auth()->check()) {
-                return response()->json(['message' => 'Unauthorized'], 401);
-            }
-
-            // Lấy bình luận từ ID
-            $postComment = PostComments::find($id);
-
-            if (!$postComment) {
-                return response()->json(['message' => 'Bình luận không tồn tại'], 404);
-            }
-
-            // Kiểm tra quyền xóa bình luận thông qua Gate
-            if (Gate::denies('delete-comment', $postComment)) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
-
-            // Kiểm tra xem đây có phải bình luận gốc hay không
-            $isParent = is_null($postComment->parent_id);
-
-            // Xóa bình luận
-            $postComment->delete();
-
-            // Trả về kết quả thành công
-            return response()->json([
-                'success' => true,
-                'is_parent' => $isParent,
-                'message' => 'Xóa bình luận thành công!'
-            ]);
-        } catch (\Exception $e) {
-            // Xử lý lỗi server
-            return response()->json([
-                'success' => false,
-                'message' => 'Lỗi server: ' . $e->getMessage()
-            ], 500);
+        // Kiểm tra đăng nhập
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
+
+        $postComment = PostComments::find($id);
+        if (!$postComment) {
+            return response()->json(['message' => 'Bình luận không tồn tại'], 404);
+        }
+
+        // Phân quyền xóa
+        Gate::authorize('delete-comment', $postComment);
+
+        // Xác định đây có phải bình luận gốc không
+        $isParent = is_null($postComment->parent_id);
+
+        // Lấy Post qua relation, trước khi xóa
+        $post = $postComment->post;
+
+        // Nếu muốn xóa luôn replies phía dưới, dùng:
+        // $postComment->replies()->delete();
+
+        $postComment->delete();
+
+        // Đếm lại tổng số comment
+        $count = $post->comments()->count();
+
+        return response()->json([
+            'success'   => true,
+            'is_parent' => $isParent,
+            'count'     => $count,
+            'message'   => 'Xóa bình luận thành công!'
+        ]);
     }
 }

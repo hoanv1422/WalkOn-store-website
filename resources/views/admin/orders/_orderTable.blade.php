@@ -12,7 +12,8 @@
                     <th class="sort" data-sort="customer_name">Khách hàng</th>
                     <th class="sort" data-sort="date">Ngày đặt</th>
                     <th class="sort" data-sort="amount">Tổng tiền</th>
-                    <th class="sort" data-sort="payment">Phương thức thanh toán</th>
+                    <th class="sort" data-sort="payment">PTTT</th>
+                    <th class="sort" data-sort="payment_status">TT thanh toán</th>
                     <th class="sort" data-sort="status">Trạng thái giao hàng</th>
                     <th class="sort" data-sort="action">Hành động</th>
                 </tr>
@@ -44,29 +45,27 @@
                         <td class="payment">
                             {{ ucfirst($order->payment_method) }}
                         </td>
-                        <td class="status">
-                            @if ($order->order_status == 'pending')
-                                <span class="badge bg-warning-subtle text-warning">Chờ xử lý</span>
-                            @elseif ($order->order_status == 'confirmed')
-                                <span class="badge bg-primary-subtle text-primary">Đã xác nhận</span>
-                            @elseif ($order->order_status == 'processing')
-                                <span class="badge bg-info-subtle text-info">Đang xử lý</span>
-                            @elseif ($order->order_status == 'ready')
-                                <span class="badge bg-secondary-subtle text-secondary">Đã chuẩn bị xong</span>
-                            @elseif ($order->order_status == 'shipped')
-                                <span class="badge bg-secondary-subtle text-secondary">Đang giao</span>
-                            @elseif ($order->order_status == 'delivered')
-                                <span class="badge bg-success-subtle text-success">Đã giao</span>
-                            @elseif ($order->order_status == 'cancelled')
-                                <span class="badge bg-danger-subtle text-danger">Đã hủy</span>
-                            @elseif ($order->order_status == 'returned')
-                                <span class="badge bg-dark-subtle text-dark">Đã hoàn</span>
-                            @elseif ($order->order_status == 'completed')
-                                <span class="badge bg-success-subtle text-success">Hoàn tất</span>
-                            @else
-                                <span class="badge bg-secondary-subtle text-secondary">{{ $order->order_status }}</span>
-                            @endif
+                        <td class="payment_status">
+                            @if ($order->payment_status === 'paid')
+                            Đã thanh toán
+                        @else
+                            Chưa thanh toán
+                        @endif
+
                         </td>
+                        <td class="status">
+                            <select class="form-select status-select"
+                                    data-order-code="{{ $order->order_code }}"
+                                    data-old-status="{{ $order->order_status }}">
+                                @foreach(\App\Models\Order::ORDER_STATUS_MAPPING as $key => $label)
+                                    <option value="{{ $key }}"
+                                        {{ $order->order_status === $key ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        
                         <td class="action">
                             <ul class="list-inline hstack gap-2 mb-0">
                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -83,9 +82,7 @@
                                     data-total_price="{{ $order->total_price }}"
                                     data-payment_method="{{ $order->payment_method }}"
                                     data-order_status="{{ $order->order_status }}">
-                                    <a href="javascript:void(0);" class="text-primary d-inline-block" title="Chỉnh sửa">
-                                        <i class="ri-pencil-fill fs-16"></i>
-                                    </a>
+                                 
                                 </li>
                             </ul>
                         </td>

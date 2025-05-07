@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->comment('Email người dùng');
             $table->string('phone')->comment('Số điện thoại');
             $table->text('message')->comment('Nội dung tin nhắn');
-            $table->enum("status", ["UNREAD", "READ", "REPLIED"])->default("UNREAD");
+            $table->enum("status", ["UNREAD", "READ", "REPLIED"])->default("UNREAD")->change();
             $table->text('response_message')->nullable()->comment('Nội dung phản hồi');
             $table->foreignId('responded_by')->nullable()->constrained('users')->nullOnDelete()->comment('Người phản hồi');
 

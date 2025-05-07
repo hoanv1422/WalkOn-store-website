@@ -28,6 +28,7 @@ class OrderResource extends JsonResource
             'receiver_name' => $this->receiver_name,
             'payment_method' => $this->payment_method,
             'payment_status' => $this->payment_status,
+            'courier_id' => $this->courier_id, 
             'cancellation' => $this->cancellation ? [
                 'id' => $this->cancellation->id,
                 'order_id' => $this->cancellation->order_id,
@@ -40,28 +41,22 @@ class OrderResource extends JsonResource
                 ] : null,
             ] : null,
             'order_items' => $this->orderItems->map(function ($item) {
-        
-         
-       
-
-            
                 return [
                     'id' => $item->id,
-                    'price' => $item->product_price,
-                    'price_sale' => $item->product_price_sale,
-                    'product' => [
+                    'price' => $item->product_price ?? 0, // Thêm giá trị mặc định nếu null
+                    'price_sale' => $item->product_price_sale ?? null, // Giữ null nếu không có giá sale
+                    'product' => $item->productVariant && $item->productVariant->product ? [ // Kiểm tra productVariant và product tồn tại
                         'id' => $item->productVariant->product->id,
                         'slug' => $item->productVariant->product->slug,
                         'name' => $item->productVariant->product->name,
-                        'image' => $item->productVariant->product->image ?  Storage::url($item->productVariant->product->image) : null,
-                    ],
-                    'product_variant' => $item->productVariant ? [
-                        'id' => $item->productVariant->id,
-                        'image' => $item->productVariant->image ? Storage::url($item->productVariant->image) : null,
-                        'size' => $item->productVariant->size->size,
-                        'color' => $item->productVariant->color->color,
+                        'image' => $item->productVariant->product->image ? Storage::url($item->productVariant->product->image) : null,
                     ] : null,
-                    'quantity' => $item->quantity,
+                    'product_name' => $item->product_name,
+                    'product_sku' => $item->product_sku,
+                    'product_image' => $item->product_image ? Storage::url($item->product_image) : null,
+                    'variant_size_name' => $item->variant_size_name,
+                    'variant_color_name' => $item->variant_color_name,
+                    'quantity' => $item->quantity ?? 1, // Giá trị mặc định nếu quantity null
                 ];
             }),
             'created_at' => $this->created_at->toDateTimeString(),

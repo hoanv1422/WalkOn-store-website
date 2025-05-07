@@ -490,9 +490,10 @@
                         throw new Error('CSRF token not found');
                     }
 
-                    // Show loading state (e.g., disable button or show spinner)
-                    const button = document.querySelector(`[data-order-id="${orderId}"]`);
-                    button?.setAttribute('disabled', 'true');
+                    // Find the button that was clicked
+                    const button = event.target; // The button that triggered the click
+                    button.setAttribute('disabled',
+                    'true'); // Disable the button to prevent multiple clicks
 
                     const response = await fetch(`/api/order/${orderId}/update-status`, {
                         method: 'POST',
@@ -512,22 +513,24 @@
                         throw new Error(data.message || `HTTP error! Status: ${response.status}`);
                     }
 
-                    // Show success notification (replace alert with a better UI)
+                    // Show success notification
                     showToast('Cập nhật trạng thái thành công!', 'success');
 
-                    // Refresh orders
+                    // Remove the button after success
+                    button.remove();
+
+                    // Refresh orders to update the table
                     const statusFilter = document.querySelector('.modal.show')?.dataset?.status || '';
                     await fetchOrdersForShipper(statusFilter);
                 } catch (error) {
                     console.error('Error updating order status:', error);
                     showToast(`Lỗi: ${error.message}`, 'error');
                 } finally {
-                    // Hide loading state
-                    const button = document.querySelector(`[data-order-id="${orderId}"]`);
-                    button?.removeAttribute('disabled');
+                    // Re-enable the button if the request fails
+                    const button = event.target;
+                    button.removeAttribute('disabled');
                 }
             };
-
             // Example toast notification function (using a library like SweetAlert2)
             function showToast(message, type) {
                 // Replace with your preferred notification library

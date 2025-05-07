@@ -1350,5 +1350,4 @@
             imageInput.files = dataTransfer.files;
         }
     </script>
-
 @endsection

@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
+        'checkBanUser' => \App\Http\Middleware\CheckBanUser::class,
         'guest.to.home' => \App\Http\Middleware\RedirectIfAuthenticatedToHome::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,

@@ -37,22 +37,7 @@
                             </div>
                         </div>
                         <div class="card-body border-bottom-dashed border-bottom">
-                            <form id="search-form-size">
-                                <div class="row g-3 mb-3">
-                                    <div class="col-xl-9">
-                                        <div class="search-box">
-                                            <input type="text" class="form-control search" id="keyword-size"
-                                                   placeholder="Search for size...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3">
-                                        <button type="button" class="btn btn-primary w-100" onclick="SearchSize();">
-                                            <i class="ri-equalizer-fill me-2 align-bottom"></i>Lọc
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+
                             
                             <div id="size-list">
                                 @include('admin.attributes._listSize', ['sizes' => $sizes])
@@ -63,55 +48,7 @@
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-1">
-                                    {{-- <table id="categoryTable" class="table align-middle dataTable">
-                                        <thead class="table-light text-muted">
-                                            <tr>
-                                                <th scope="col" style="width: 15px;">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="checkAll">
-                                                    </div>
-                                                </th>
-                                                <th class="sort" data-sort="name">Tên Thuộc Tính</th>
-                                                <th class="sort" data-sort="action">Hành Động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="list form-check-all">
-                                            @foreach ($sizes as $item)
-                                                <tr>
-                                                    <th scope="row">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="chk_child">
-                                                        </div>
-                                                    </th>
-                                                    <td class="name">{{ $item->size }}</td>
-                                                    <td>
-                                                        <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top"
-                                                                title="Edit">
-                                                                <a href="#showModalEditSize" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn"
-                                                                    data-id="{{ $item->id }}" data-type="size"
-                                                                    data-size="{{ $item->size }}">
-                                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top"
-                                                                title="Remove">
-                                                                <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModalSize"
-                                                                    data-id="{{ $item->id }}" data-type="size">
-                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table> --}}
+                                    {{-- Bảng Size --}}
                                 </div>
                             </div>
 
@@ -270,27 +207,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body border-bottom-dashed border-bottom">
-                            <form id="search-form">
-                                <div class="row g-3">
-                                    <div class="col-xl-9">
-                                        <div class="search-box">
-                                            <input type="text" class="form-control" name="keyword-color" id="keyword-color"
-                                                placeholder="Search for color name, slug, or code...">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-3">
-                                        <div>
-                                            <button type="button" class="btn btn-primary w-100" id="search-button" onclick="SearchData();">
-                                                <i class="ri-equalizer-fill me-2 align-bottom"></i>Lọc
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            
-                           
+                        <div class="card-body border-bottom-dashed border-bottom">                           
                             <div id="color-list">
                                 @include('admin.attributes._listColor', ['colors' => $colors])
                             </div>
@@ -298,56 +215,7 @@
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-1">
-                                    {{-- <table id="categoryTable" class="table align-middle dataTable">
-                                        <thead class="table-light text-muted">
-                                            <tr>
-                                                <th scope="col" style="width: 15px;">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="checkAll">
-                                                    </div>
-                                                </th>
-                                                <th class="sort" data-sort="name">Tên Thuộc Tính</th>
-                                                <th class="sort" data-sort="action">Hành Động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="list form-check-all">
-                                            @foreach ($colors as $item)
-                                                <tr>
-                                                    <th scope="row">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="chk_child">
-                                                        </div>
-                                                    </th>
-
-                                                    <td class="name">{{ $item->color }}</td>
-                                                    <td>
-                                                        <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top"
-                                                                title="Edit">
-                                                                <a href="#showModalEditColor" data-bs-toggle="modal"
-                                                                    class="text-primary d-inline-block edit-item-btn"
-                                                                    data-id="{{ $item->id }}" data-type="color"
-                                                                    data-color="{{ $item->color }}">
-                                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top"
-                                                                title="Remove">
-                                                                <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteRecordModalColor"
-                                                                    data-id="{{ $item->id }}" data-type="color">
-                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table> --}}
+                                    {{-- Bảng color --}}
                                 </div>
                             </div>
 
@@ -534,67 +402,5 @@
                 $('#deleteFormColor').attr('action', actionUrl); // Cập nhật action form color
             }
         });
-    </script>
-    <script>
-        document.getElementById('search-button').addEventListener('click', function () {
-            performSearch();
-        });
-    
-        // Optional: cho phép bấm Enter trong input
-        document.getElementById('keyword').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                performSearch();
-            }
-        });
-    
-        function performSearch() {
-            const keyword = document.getElementById('keyword-color').value;
-    
-            fetch("{{ route('attributes.index') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ keyword: keyword })
-            })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('color-list').innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Lỗi khi lọc:', error);
-            });
-        }
-    </script>
-    <script>
-        function SearchSize() {
-            const keyword = document.getElementById('keyword-size').value;
-    
-            fetch("{{ route('attributes.index') }}", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({ keyword: keyword })
-            })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('size-list').innerHTML = html;
-            })
-            .catch(error => console.error('Lỗi khi lọc size:', error));
-        }
-    
-        // Bấm Enter để tìm cũng được
-        document.getElementById('keyword-size').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                SearchSize();
-            }
-        });
-    </script>
-    
-    
+    </script> 
 @endsection

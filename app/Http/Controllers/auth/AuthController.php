@@ -163,7 +163,7 @@ class AuthController extends Controller
                 ],
                 'token' => $token,
                 'verify' => $verify,
-                'redirect' => $user->role === 'shipper' ? '/shipper' : '/',
+                'redirect' => $user->role === 'shipper' ? '/shippers' : '/',
             ], 200);
         }
 

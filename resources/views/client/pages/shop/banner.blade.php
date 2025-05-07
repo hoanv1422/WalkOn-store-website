@@ -1,4 +1,4 @@
-{{-- <!-- product items banner start -->
+<!-- product items banner start -->
 @foreach ($banners as $banner)
 @if ($banner->position == 9)
    
@@ -6,6 +6,6 @@
     <img src="{{ asset('storage/' . $banner->image_url) }}" alt="">
 </div>
 @endif
-@endforeach --}}
+@endforeach 
 
 <!-- product items banner end -->
