@@ -3,7 +3,14 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Order;
+use App\Models\PostComments;
+use App\Policies\OrderPolicy;
+use App\Policies\PostCommentPolicy;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +21,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         //
+        Order::class => OrderPolicy::class,
+        PostComments::class => PostCommentPolicy::class,
     ];
 
     /**
@@ -22,5 +31,16 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        $this->registerPolicies();
+
+        Gate::define('delete-comment', function ($user, PostComments $postComment) {
+            return $user->id === $postComment->user_id;
+        });
+
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Xác thực email của bạn ')
+                ->view('emails.verify_email', ['verificationUrl' => $url]);
+        });
     }
 }

@@ -1,47 +1,103 @@
-<!DOCTYPE html>
-<html lang="zxx">
+<header id="page-topbar">
+    <div class="layout-width">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <!-- LOGO -->
+                <div class="navbar-brand-box horizontal-logo">
+                    <a href="index.html" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="{{ asset('img/image-Photoroom.png') }}" alt=""
+                                height="30">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{ asset('img/image-Photoroom.png')}}" alt=""
+                                height="25">
+                        </span>
+                    </a>
 
-<head>
-   <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/css/bootstrap1.min.css') }}" />
-<!-- themefy CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/themefy_icon/themify-icons.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/niceselect/css/nice-select.css') }}" />
-<!-- owl carousel CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/owl_carousel/css/owl.carousel.css') }}" />
-<!-- gijgo css -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/gijgo/gijgo.min.css') }}" />
-<!-- font awesome CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/font_awesome/css/all.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/tagsinput/tagsinput.css') }}" />
-<!-- date picker -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/datepicker/date-picker.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/vectormap-home/vectormap-2.0.2.css') }}" />
-<!-- scrollable  -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/scroll/scrollable.css') }}" />
-<!-- datatable CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/datatable/css/jquery.dataTables.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/datatable/css/responsive.dataTables.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/datatable/css/buttons.dataTables.min.css') }}" />
-<!-- text editor css -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/text_editor/summernote-bs4.css') }}" />
-<!-- morris css -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/morris/morris.css') }}" />
-<!-- material icon css -->
-<link rel="stylesheet" href="{{ asset('admin_views/vendors/material_icon/material-icons.css') }}" />
-<!-- menu css  -->
-<link rel="stylesheet" href="{{ asset('admin_views/css/metisMenu.css') }}" />
-<!-- style CSS -->
-<link rel="stylesheet" href="{{ asset('admin_views/css/style1.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin_views/css/colors/default.css') }}" id="colorSkinCSS">
+                    <a href="index.html" class="logo logo-light">
+                        <span class="logo-sm">
+                            <img src="{{ asset('img/image-Photoroom.png') }}" alt=""
+                                height="30">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{ asset('img/image-Photoroom.png') }}" alt=""
+                                height="25">
+                        </span>
+                    </a>
+                </div>
+                <button type="button"
+                    class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none"
+                    id="topnav-hamburger-icon">
+                    <span class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
 
-</head>
+            <div class="d-flex align-items-center">
 
-<body class="crm_body_bg">
-    <nav class="sidebar vertical-scroll  ps-container ps-theme-default ps-active-y">
-        <div class="logo d-flex justify-content-between">
-            <a href="{{url('/admin')}}"><img src="{{asset('admin_views/img/logo.png')}}" alt=""></a>
-            <div class="sidebar_close_icon d-lg-none">
-                <i class="ti-close"></i>
+               
+
+
+                
+
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <button type="button"
+                        class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
+                        data-toggle="fullscreen">
+                        <i class='bx bx-fullscreen fs-22'></i>
+                    </button>
+                </div>
+
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <button type="button"
+                        class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
+                        <i class='bx bx-moon fs-22'></i>
+                    </button>
+                </div>
+
+                
+                <div class="dropdown ms-sm-3 header-item topbar-user">
+                    <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="d-flex align-items-center">
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ asset('templates/admin/assets/images/users/avatar-1.jpg') }}"
+                                alt="Header Avatar">
+                            <span class="text-start ms-xl-2">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
+                                    {{ Auth::user()->name }}
+                                </span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">
+                                    {{ Auth::user()->role ?? 'Admin' }}
+                                </span>
+                            </span>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <h6 class="dropdown-header">Xin chào   {{ Auth::user()->name }}</h6>
+                        <a class="dropdown-item" href="{{route('admin.profile')}}"><i
+                                class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                class="align-middle">Thông tin cá nhân</span></a>
+                        
+                       
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+
+                        <a class="dropdown-item"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
+                            <span class="align-middle" data-key="t-logout">Đăng xuất</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</header>

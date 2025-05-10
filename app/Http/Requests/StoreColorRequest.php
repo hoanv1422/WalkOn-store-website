@@ -11,7 +11,7 @@ class StoreColorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,8 @@ class StoreColorRequest extends FormRequest
     {
         return [
             //
+            'color' => 'required|string|max:255|unique:colors,color',
+            'code'  => 'required|string|max:7|min:4|regex:/^#[0-9A-Fa-f]{3,6}$/',
         ];
     }
 }

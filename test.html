@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tiến trình trạng thái đơn hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    .spee__flow-visualizer {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 0;
+    }
+
+    .spee__progress-connector {
+      position: absolute;
+      top: 49px; /* căn giữa các bubble */
+      left: 0;
+      height: 4px;
+      background-color: #f60;
+      z-index: 0;
+      width: 0;
+      transition: width 0.5s ease;
+    }
+
+    .spee__flow-stages {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spee__milestone {
+      position: relative;
+      flex: 1;
+      text-align: center;
+    }
+
+    .spee__milestone-bubble {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ccc;
+      margin: 0 auto;
+    }
+
+    .spee__milestone-bubble.active {
+      background-color: #f60;
+    }
+
+    .spee__milestone-label {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spee__flow-visualizer">
+    <div class="spee__progress-connector"></div>
+    <div class="spee__flow-stages">
+      <div class="spee__milestone">
+        <div class="spee__milestone-bubble active"></div>
+        <div class="spee__milestone-label">Đã đặt</div>
+      </div>
+      <div class="spee__milestone">
+        <div class="spee__milestone-bubble active"></div>
+        <div class="spee__milestone-label">Đã xác nhận</div>
+      </div>
+      <div class="spee__milestone">
+        <div class="spee__milestone-bubble"></div>
+        <div class="spee__milestone-label">Đang giao</div>
+      </div>
+      <div class="spee__milestone">
+        <div class="spee__milestone-bubble"></div>
+        <div class="spee__milestone-label">Đã giao</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      const bubbles = document.querySelectorAll('.spee__milestone-bubble');
+      const connector = document.querySelector('.spee__progress-connector');
+      const container = document.querySelector('.spee__flow-visualizer');
+
+      const activeBubbles = Array.from(bubbles).filter(b => b.classList.contains('active'));
+
+      if (activeBubbles.length > 1) {
+        const lastActive = activeBubbles[activeBubbles.length - 1];
+        const containerRect = container.getBoundingClientRect();
+        const lastActiveRect = lastActive.getBoundingClientRect();
+
+        // Tính khoảng cách từ container đến bubble.active cuối
+        const distance = lastActiveRect.left + lastActiveRect.width / 2 - containerRect.left;
+        connector.style.width = distance + 'px';
+      }
+    });
+  </script>
+
+</body>
+</html>

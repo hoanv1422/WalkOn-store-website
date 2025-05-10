@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->string('size')->comment('Kích cỡ');
+            $table->string('slug')->unique()->comment('URL thân thiện');
             $table->timestamps();
         });
     }

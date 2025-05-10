@@ -1,27 +1,56 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    const PATH_VIEW = 'admin.brands.';
+    const PATH_UPLOAD = 'brands';
+
+    // public function index()
+    // {
+    //     $brands = Brand::all();
+    //     $brandSlug = Brand::select('id', 'slug')->get();
+    //     return view(self::PATH_VIEW . __FUNCTION__, compact('brands', 'brandSlug'));
+    // }
+    public function index(Request $request)
     {
-        //
+        $query = Brand::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status == '1') {
+                $query->where('is_active', true);
+            } elseif ($request->status == '2') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $brands = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('admin.brands._list', compact('brands'))->render();
+        }
+        
+        return view('admin.brands.index', compact('brands'));
     }
 
     /**
@@ -29,23 +58,33 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
-        //
-    }
+        // dd($request->all());
+        $data = $request->except('logo');
+        if ($request->hasFile('logo')) {
+            $data['logo'] = Storage::put(self::PATH_UPLOAD, $request->file('logo'));
+        } else {
+            $data['logo'] = '';
+        }
+        $data['is_active'] ??= 0;
+        $data['slug'] = Str::slug($data['name']);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Brand $brand)
-    {
-        //
-    }
+        try {
+            DB::beginTransaction();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Brand $brand)
-    {
-        //
+            Brand::query()->create($data);
+
+            DB::Commit();
+            return redirect()->route('brands.index')->with('success', 'Thêm thương hiệu thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // DELETE IMAGE in STORAGE
+
+            if (isset($data['logo'])) {
+                Storage::delete($data['logo']);
+            }
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi thêm ');
+        }
     }
 
     /**
@@ -53,7 +92,40 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
-        //
+        // dd($request->all());
+
+        // Data user
+        $data = $request->except('logo');
+        if ($request->hasFile('logo')) {
+            $data['logo'] = Storage::put(self::PATH_UPLOAD, $request->file('logo'));
+            if (!empty($brand->logo) && Storage::exists($brand->logo)) {
+                Storage::delete($brand->logo);
+            }
+        } else {
+            $data['logo'] = $brand->logo;
+        }
+        $data['is_active'] ??= 0;
+        $data['slug'] = Str::slug($data['name']);
+
+
+        try {
+            DB::beginTransaction();
+            // Update brand 
+            $brand->update($data);
+
+            DB::Commit();
+            return redirect()->route('brands.index')->with('success', 'Cập nhật thương hiệu thành công');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // DELETE IMAGE in STORAGE
+
+            if (isset($data['logo'])) {
+                Storage::delete($data['logo']);
+            }
+
+            dd($exception);
+            return back()->with('error', 'Có lỗi khi cập nhật');
+        }
     }
 
     /**
@@ -61,6 +133,32 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            if ($brand->products()->count() > 0) {
+                return back()->with('error', 'Không thể xóa thương hiệu vì có sản phẩm liên quan.');
+            }
+
+            if ($brand->logo) {
+                Storage::delete($brand->logo);
+            }
+
+            $brand->delete();
+
+            DB::commit();
+            return redirect()->route('brands.index')->with('success', 'Xóa thương hiệu thành công!');
+        } catch (QueryException $exception) {
+            DB::rollback();
+
+            if ($exception->getCode() == 23000) {
+                return back()->with('error', 'Không thể xóa thương hiệu vì có sản phẩm liên quan.');
+            }
+
+            return back()->with('error', 'Có lỗi xảy ra khi xóa thương hiệu.');
+        } catch (\Exception $exception) {
+            DB::rollback();
+            return back()->with('error', 'Có lỗi không xác định: ' . $exception->getMessage());
+        }
     }
 }
