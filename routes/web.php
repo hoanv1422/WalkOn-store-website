@@ -1,9 +1,22 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Client\WishlistController;
+use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Jobs\AutoAssignOrderJob;
+use App\Models\JobLog;
+use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,81 +29,144 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Nhóm các route liên quan đến authentication
+Route::controller(AuthController::class)->group(function () {
+    Route::view('/register', 'auth.register')->middleware('guest.to.home');
+    Route::view('/login', 'auth.login')->name('login.form')->middleware('guest.to.home');
+
+    Route::post('/clear-verify-session', [AuthController::class, 'clearVerifySession'])->name('clear.verify.session');
+
+    Route::view('/forgot_password', 'auth.forgot_password');
+
+    Route::post('/api/register', 'register')->name('api.register');
+    Route::post('/api/login', 'login')->name('api.login');
+    Route::post('/logout', 'logout')->name('logout')->middleware('client');
 
 
+    Route::get('/forgot-password', function () {
+        return view('auth.forgot_password');
+    })->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+    Route::get('/password-confirmation', function () {
+        return view('auth.confirmation_password');
+    })->name('confirmation.password')->middleware('password.reset.check');
+
+    Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail'])->name('verification.send');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->route('verified.email')->with('message', 'Email đã được xác thực thành công!');
+    })->middleware('signed')->name('verification.verify');
+
+    Route::get('/verified-email', function () {
+        return view('auth.verified_email');
+    })->name('verified.email')->middleware('verified');
+
+    Route::get('/email/verify', function () {
+        return view('auth.verified-email');
+    })->name('verification.notice');
+
+    Route::get('/email-sent', function () {
+        return view('auth.email_sent');
+    })->name('email.sent')->middleware('email.sent');
 
 
-Route::get('/', function () {
-    return view('client.index');
-})->name('client.index');
-
-Route::get('/register', function () {
-    return view('client.auth.register');
-})->name('client.register');
-
-Route::get('/login', function () {
-    return view('client.auth.login');
-})->name('client.login');
-
-Route::get('/forgot_password', function () {
-    return view('client.auth.forgot_password');
-})->name('client.forgot_password');
-
-// shop
-Route::get('/shop', function () {
-    return view('client.pages.shop.index1');
-})->name('shop.index');
-
-Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/product/{id}', [ShopController::class, 'show'])->name('product.show');
-// lọc sản phẩm theo danh mục
-Route::get('/shop/category/{categoryId}', [ShopController::class, 'filterByCategory'])->name('shop.filterByCategory');
-// ADD TO CART
-Route::post('/cart/add', [ShopController::class, 'addToCart'])->name('cart.add');
-Route::get('/cart', [ShopController::class, 'cart'])->name('cart.index');
+    Route::prefix('admin')->group(function () {
+        Route::get('login', function () {
+            return view('auth.admin.signin');
+        })->middleware('guest.to.home')->name('admin.login.index');
+        Route::post('api/login', [AuthController::class, 'signinAdmin'])->name('api.admin.signin');
 
 
-// admin
-Route::get('/admin', function () {
-    return view('admin.index');
+        Route::get('pass-reset', function () {
+            return view('auth.admin.pass-reset');
+        })->name('pass-reset.index');
+        Route::post('/api/mail-reset-password', [AuthController::class, 'sendResetCode'])->name('api.admin.sendResetCode');
+
+
+        Route::get('/pass-confirm/{token}', [AuthController::class, 'showConfirmForm'])
+            ->name('password.confirm.form');
+        Route::post('/api/confirm-code', [AuthController::class, 'confirmResetCode'])
+            ->name('api.password.confirm');
+        Route::post('/api/resend-code', [AuthController::class, 'resendCode'])
+            ->name('api.password.resend.code');
+
+        Route::get('/pass-change/{token}', [AuthController::class, 'showChangePasswordForm'])
+            ->name('password.change.admin');
+
+        Route::post('/api/change-password', [AuthController::class, 'changePasswordAdmin'])
+            ->name('api.change.password.admin');    
+    });
 });
-Route::get('/admin/categories', function () {
-    return view('admin.categories.index');
-});
-Route::get('/admin/categories/create', function () {
-    return view('admin.categories.create');
-});
-Route::get('/admin/categories/edit', function () {
-    return view('admin.categories.edit');
-});
-Route::get('/admin/products', function () {
-    return view('admin.products.index');
-});
-Route::get('/admin/products/create', function () {
-    return view('admin.products.create');
-});
-Route::get('/admin/products/edit', function () {
-    return view('admin.products.edit');
+
+// Tuyến đường hiển thị trang bình luận của sản phẩm
+// Route::get('/products/{productId}/comments', [CommentController::class, 'show'])->name('comments.show');
+
+// Tuyến đường xử lý thêm bình luận
+// Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+Route::get('/test-job/{order_id}', function ($orderId) {
+    $order = Order::find($orderId);
+
+    if (!$order) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Không tìm thấy đơn hàng với ID: ' . $orderId
+        ], 404);
+    }
+
+    // Tạo log trước khi dispatch job
+    JobLog::createLog(
+        'AutoAssignOrderJob',
+        $order->id,
+        'job_dispatched',
+        ['user_initiated' => true],
+        'pending'
+    );
+
+    // Dispatch job
+    dispatch(new AutoAssignOrderJob($order));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Job đã được gửi đi để xử lý đơn hàng ID: ' . $order->id,
+        'order' => $order
+    ]);
 });
 
-Route::get('/admin/users/create', function () {
-    return view('admin.users.create');
+// Route để xem logs của job
+Route::get('/job-logs/{order_id?}', function ($orderId = null) {
+    $query = JobLog::query()->orderBy('created_at', 'desc');
+
+    if ($orderId) {
+        $query->where('related_id', $orderId);
+    }
+
+    $logs = $query->limit(50)->get();
+
+    return response()->json([
+        'success' => true,
+        'logs' => $logs
+    ]);
 });
-Route::get('/admin/users', [UserController::class, 'users'])->name('admin.users');
-Route::delete('/admin/user/{id}/delete', [UserController::class, 'delete_user'])->name('admin.user.delete');
-Route::get('/admin/user/create', [UserController::class, 'create_user'])->name('admin.user.create');
-Route::post('/admin/user/add', [UserController::class, 'add_user'])->name('admin.user.add');
-Route::get('/admin/user/edit/{id}', [UserController::class, 'edit_user'])->name('admin.user.edit');
-Route::put('/admin/user/update', [UserController::class, 'update_user'])->name('admin.user.update');
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+// Route để xóa job logs (thường dùng để test)
+Route::get('/clear-job-logs/{order_id?}', function ($orderId = null) {
+    $query = JobLog::query();
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    if ($orderId) {
+        $query->where('related_id', $orderId);
+    }
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('admin.index')->middleware('admin');
-    Route::get('/', function () {})->name('client.index');
+    $count = $query->count();
+    $query->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Đã xóa ' . $count . ' job logs'
+    ]);
 });

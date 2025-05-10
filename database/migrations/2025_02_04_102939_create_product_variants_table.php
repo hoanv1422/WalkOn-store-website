@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('size_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('color_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('size_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
             $table->string('image')->nullable()->comment('Hình ảnh sản phẩm');
             $table->decimal('price', 15, 2)->comment('Giá biến thể');
+            $table->decimal('price_sale', 15, 2)->nullable()->comment('Giá giảm');
             $table->integer('quantity')->default(0)->comment('Số lượng tồn kho cho biến thể');
             $table->timestamps();
         });

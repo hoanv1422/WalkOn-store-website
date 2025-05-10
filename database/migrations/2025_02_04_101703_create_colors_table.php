@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
             $table->string('color')->comment('Màu sắc');
+            $table->string('slug')->unique()->comment('URL thân thiện');
+            $table->string('code')->unique()->comment('Mã màu');
             $table->timestamps();
         });
     }

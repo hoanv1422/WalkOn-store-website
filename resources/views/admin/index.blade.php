@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'trang chủ')
+@section('title', 'Trang Chủ')
 @section('content')
-@include('admin.dashboard.index')
+{{-- @include('admin.dashboard.index') --}}
 @endsection
